@@ -1,5 +1,7 @@
-require "glare/version"
+require "helix_runtime"
 
-module Glare
-  # Your code goes here...
+begin
+  require "glare/native"
+rescue LoadError
+  warn "Unable to load glare/native. Please run `rake build`"
 end
