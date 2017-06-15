@@ -1,5 +1,7 @@
+
+libs/SketchUp/*
+
 *.vcxproj
-App/App.vcxproj.user
 *.filters
 *.obj
 *.tlog
