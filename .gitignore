@@ -30,14 +30,4 @@ bin/*
 
 .vs 
 
-App/Makefile
-
-Bin/Release/x64/
-
-CLW/Makefile
-
-Calc/Makefile
-
-Gtest/Makefile
-
-Makefile
+*Makefile*
