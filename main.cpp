@@ -1,20 +1,25 @@
-#include <SketchUpAPI/common.h>
-#include <SketchUpAPI/geometry.h>
-#include <SketchUpAPI/initialize.h>
-#include <SketchUpAPI/unicodestring.h>
-#include <SketchUpAPI/model/model.h>
-#include <SketchUpAPI/model/entities.h>
-#include <SketchUpAPI/model/face.h>
-#include <SketchUpAPI/model/edge.h>
-#include <SketchUpAPI/model/vertex.h>
-#include <vector>
+#include <string>
 
-using namespace std;
+#include "./src/glare.h"
+#include "./main.h"
 
-#include <iostream>
 
-int main()
-{
-	cout << "Hello World!";
+
+
+int main(int argc, char* argv[]){	
+	
+	Glare glare;
+
+	if (!glare.parseInputs(argc, argv)) {
+		return 1;
+	}
+
+	if (!glare.solve()) {
+		return 1;
+	}
+
 	return 0;
 }
+
+
+

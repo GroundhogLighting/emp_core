@@ -1,0 +1,2 @@
+
+void earlyQuit(SUModelRef model);
