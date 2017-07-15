@@ -1,5 +1,6 @@
 
-libs/SketchUp/*
+libs/Sketchup/win64/binaries/*
+libs/Sketchup/win64/headers/*
 
 *.vcxproj
 *.filters
@@ -21,13 +22,8 @@ bin/*
 *.db
 *.sln
 *.d
-
 *.o
-
 *.a
-
 *.so
-
 .vs 
-
 *Makefile*
