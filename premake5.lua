@@ -5,7 +5,7 @@ workspace "Glare"
     configurations { "DebugWIN", "WIN", "DebugMACOS", "MACOS", "LINUX", "DebugLINUX" }
 
     includedirs {
-        "./libs/SketchUp/headers"
+        "./libs/SketchUp/win64/headers"
     }
 
     filter "configurations:Debug*"
@@ -14,7 +14,7 @@ workspace "Glare"
     filter "configurations:*WIN*"
         defines { "WIN" }    
         links {
-            "./libs/SketchUp/binaries/sketchup/x64/*"
+            "./libs/SketchUp/win64/binaries/sketchup/x64/*"
         }
 
     filter "configurations:*MAC*"
