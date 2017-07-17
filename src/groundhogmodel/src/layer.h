@@ -12,7 +12,7 @@ private:
 	std::vector <Face * > faces;
 
 public:
-	Layer(std::string layerName);
+	Layer(std::string * layerName);
 	~Layer();
 	bool compareName(std::string layerName);
 	void addFace(Face * face);

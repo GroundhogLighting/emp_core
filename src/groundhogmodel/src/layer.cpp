@@ -1,9 +1,9 @@
 #include "./layer.h"
 #include "../../common/utilities/io.h"
 
-Layer::Layer(std::string layerName) {
-	DEBUG_MSG("Creating layer " + layerName);
-	name = layerName;
+Layer::Layer(std::string * layerName) {
+	DEBUG_MSG("Creating layer " + *layerName);
+	name = *layerName;
 };
 
 Layer::~Layer() {

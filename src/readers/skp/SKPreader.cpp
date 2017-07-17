@@ -216,7 +216,7 @@ bool SKPReader::loadLayers(GroundhogModel * model, bool verbose) {
 			"SUStringRelease",
 			"Releasing SUStringRef of layer name"
 		)) return false;
-		model->addLayer(std::string(cLayerName));
+		model->addLayer(&std::string(cLayerName));
 		inform("Layer " + std::string(cLayerName) + " added",verbose);
 	};
 
@@ -285,7 +285,7 @@ bool SKPReader::loadFaces(GroundhogModel * model, bool verbose) {
 		Face * face = new Face(name);
 		face->setPolygon(polygon);
 
-		if(!model->addFaceToLayer(layerName, face))
+		if(!model->addFaceToLayer(&layerName, face))
 			return false;
 
 	}

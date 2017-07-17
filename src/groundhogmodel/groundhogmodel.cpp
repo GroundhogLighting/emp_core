@@ -15,20 +15,20 @@ GroundhogModel::~GroundhogModel() {
 }
 
 
-void GroundhogModel::addLayer(std::string layerName) {	
-	layers.push_back( new Layer(layerName) );	
-	DEBUG_MSG("Adding layer " + layerName + " to model");
+void GroundhogModel::addLayer(std::string * layerName) {	
+	layers.push_back( new Layer( layerName) );	
+	DEBUG_MSG("Adding layer " + *layerName + " to model");
 }
 
-bool GroundhogModel::addFaceToLayer(std::string layerName, Face * face) {
+bool GroundhogModel::addFaceToLayer(std::string * layerName, Face * face) {
 	for (unsigned layerCount = 0; layerCount < layers.size(); layerCount++) {		
-		if (layers[layerCount]->compareName(layerName)) {
-			DEBUG_MSG("Found layer "+layerName);
+		if (layers[layerCount]->compareName(*layerName)) {
+			DEBUG_MSG("Found layer "+*layerName);
 			layers[layerCount]->addFace(face);
 			return true;
 		}
 	}
-	fatal("Layer " + layerName + " could not be found");
+	fatal("Layer " + *layerName + " could not be found");
 	return false;
 }
 

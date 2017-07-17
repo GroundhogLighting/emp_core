@@ -28,8 +28,8 @@ private:
 public:
 	GroundhogModel();
 	~GroundhogModel();
-	void addLayer(std::string layerName);
-	bool addFaceToLayer(std::string layerName, Face * face);
+	void addLayer(std::string * layerName);
+	bool addFaceToLayer(std::string * layerName, Face * face);
 	size_t getNumLayers();
 	Layer * getLayerRef(unsigned int i);	
 };
