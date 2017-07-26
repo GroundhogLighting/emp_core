@@ -11,9 +11,17 @@ Layer::~Layer() {
 	for (unsigned int i = 0; i < faces.size(); i++) {
 		delete faces[i];
 	}
+	for (unsigned int i = 0; i < instances.size(); i++) {
+		delete instances[i];
+	}
+
 	DEBUG_MSG("Destroying layer " + name);
 
 };
+
+bool Layer::isEmpty() {
+	return (faces.size() == 0 && instances.size() == 0);
+}
 
 std::string Layer::getName() {
 	return name;
@@ -27,6 +35,10 @@ void Layer::addFace(Face * face) {
 	faces.push_back(face);
 }
 
+std::vector <ComponentInstance * > * Layer::getComponentInstancesRef() {
+	return &instances;
+}
+
 std::vector <Face * > * Layer::getFacesRef() {
 	return &faces;
 }
@@ -34,4 +46,9 @@ std::vector <Face * > * Layer::getFacesRef() {
 
 Face * Layer::getFaceRef(size_t i) {
 	return faces[i];
+}
+
+
+ComponentInstance * Layer::getComponentInstanceRef(size_t i) {
+	return instances[i];
 }

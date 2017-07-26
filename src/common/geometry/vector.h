@@ -1,6 +1,5 @@
 #pragma once
 
-#pragma once
 
 class Vector3D {
 
@@ -11,7 +10,9 @@ private:
 
 public:
 	Vector3D(double x, double y, double z);
-	//~Point();
-
+	~Vector3D();
+	double getX();
+	double getY();
+	double getZ();
 
 };

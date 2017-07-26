@@ -1,5 +1,6 @@
 #include "./SKPreader.h"
 #include "../../common/utilities/io.h"
+#include "../../common/utilities/stringutils.h"
 #include "../../groundhogmodel/groundhogmodel.h"
 #include "../../groundhogmodel/src/face.h"
 #include "../../common/geometry/polygon.h"
@@ -15,11 +16,18 @@
 #include <SketchUpAPI/model/entity.h>
 #include <SketchUpAPI/model/attribute_dictionary.h>
 #include <SketchUpAPI/model/loop.h>
+#include <SketchUpAPI/model/component_definition.h>
+#include <SketchUpAPI/model/component_instance.h>
+#include <SketchUpAPI/transformation.h>
+#include <SketchUpAPI/model/scene.h>
+#include <SketchUpAPI/model/camera.h>
+#include <SketchUpAPI/model/shadow_info.h>
 
 #include <vector>
 #include <string>
 #include <iostream>
 #include <fstream>
+
 
 #define GROUNDHOG_DICTIONARY "Groundhog"
 #define WINDOW "Window"
@@ -28,6 +36,7 @@
 
 #define TO_M(x) x*0.0254
 #define TO_M2(x) x*0.00064516
+#define TO_DEGREE(x) x*180/3.141592654 
 
 SKPReader::SKPReader() {
 	DEBUG_MSG("Creating SKPReader");
@@ -127,7 +136,7 @@ bool SKPReader::checkSUResult(SUResult res, std::string functionName, std::strin
 }
 
 
-bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * model, bool verbose){
+bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * modelRef, bool verbose){
 	
 	//initialize
 	SUInitialize();
@@ -140,18 +149,27 @@ bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * model, boo
 	)) return false;
 
 	// Load layers	
-	if(!loadLayers(model, verbose))
+	if(!loadLayers(modelRef, verbose))
 		return false;
 
-	// Load faces, discrimitating between
+	// load components
+	if (!loadComponentDefinitions(modelRef, verbose))
+		return false;
+
+	// Fill layers and load related surfaces, discrimitating between
 	// workplanes, windows, etc.
-	if (!loadFaces(model, verbose))
+	if (!loadLayersContent(modelRef, verbose))
 		return false;
 
 	// Load views
+	if (!loadViews(modelRef, verbose))
+		return false;
 
-	// Load date
 
+	// Load model info (location, date, etc).
+	if (!loadModelInfo(modelRef, verbose))
+		return false;
+	
 	// Load ...
 
 
@@ -159,6 +177,363 @@ bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * model, boo
 	return true;
 };
 
+
+bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, char * value) {
+	SUTypedValueRef suValue = SU_INVALID;
+	if (!checkSUResult(
+		SUTypedValueCreate(&suValue),
+		"SUTypedValueCreate",
+		"Getting string from shadow info"
+	)) return false;
+
+	if (!checkSUResult(
+		SUShadowInfoGetValue(shadowInfo, key, &suValue),
+		"SUShadowInfoGetValue",
+		"Getting string from shadow info"
+	)) return false;
+
+	SUStringRef suString = SU_INVALID;
+
+	if (!checkSUResult(
+		SUStringCreate(&suString),
+		"SUStringCreate",
+		"Getting string from shadow info"
+	)) return false;
+
+	if (!checkSUResult(
+		SUTypedValueGetString(suValue, &suString),
+		"SUTypedValueGetString",
+		"Getting string from shadow info"
+	)) return false;
+
+	char cValue[100];
+	size_t cValueLength;
+
+	if (!checkSUResult(
+		SUStringGetUTF8Length(suString, &cValueLength),
+		"SUStringGetUTF8Length",
+		"Getting string from shadow info"
+	)) return false;
+
+	if (!checkSUResult(
+		SUStringGetUTF8(suString,cValueLength,cValue,&cValueLength),
+		"SUStringSetUTF8",
+		"Getting string from shadow info"
+	)) return false;
+
+	if (!checkSUResult(
+		SUTypedValueRelease(&suValue),
+		"SUTypedValueGetDouble",
+		"Getting string from shadow info"
+	)) return false;
+
+	if (!checkSUResult(
+		SUStringRelease(&suString),
+		"SUStringRelease",
+		"Getting latitude from shadow info"
+	)) return false;
+
+	utf8toASCII(cValue, value, &cValueLength);
+
+	return true;
+}
+
+bool SKPReader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo,char * key, double * value) {
+	SUTypedValueRef suValue= SU_INVALID;
+	if (!checkSUResult(
+		SUTypedValueCreate(&suValue),
+		"SUTypedValueCreate",
+		"Getting double from shadow info"
+	)) return false;
+
+	if (!checkSUResult(
+		SUShadowInfoGetValue(shadowInfo, key, &suValue),
+		"SUShadowInfoGetValue",
+		"Getting double from shadow info"
+	)) return false;
+
+	if (!checkSUResult(
+		SUTypedValueGetDouble(suValue, value),
+		"SUTypedValueGetDouble",
+		"Getting double from shadow info"
+	)) return false;
+
+	if (!checkSUResult(
+		SUTypedValueRelease(&suValue),
+		"SUTypedValueGetDouble",
+		"Getting double from shadow info"
+	)) return false;
+
+	return true;
+}
+
+
+bool SKPReader::getTimeFromShadowInfo(SUShadowInfoRef shadowInfo, int64_t * value) {
+	SUTypedValueRef suValue = SU_INVALID;
+	if (!checkSUResult(
+		SUTypedValueCreate(&suValue),
+		"SUTypedValueCreate",
+		"Getting time from shadow info"
+	)) return false;
+
+	if (!checkSUResult(
+		SUShadowInfoGetValue(shadowInfo, "ShadowTime", &suValue),
+		"SUShadowInfoGetValue",
+		"Getting time from shadow info"
+	)) return false;
+
+	if (!checkSUResult(
+		SUTypedValueGetTime(suValue, value),
+		"SUTypedValueGetTime",
+		"Getting time from shadow info"
+	)) return false;
+
+	if (!checkSUResult(
+		SUTypedValueRelease(&suValue),
+		"SUTypedValueGetDouble",
+		"Getting time from shadow info"
+	)) return false;
+
+	return true;
+}
+
+bool SKPReader::loadModelInfo(GroundhogModel * model, bool verbose) {
+	// load north correction
+	double northC;
+	if (!checkSUResult(
+		SUModelGetNorthCorrection(suModel, &northC),
+		"SUModelGetNorthCorrection",
+		"Getting Model's north correction"
+	)) return false;
+	model->setNorthCorrection(northC);
+
+	// load date, longitude and latitude.
+	SUShadowInfoRef shadowInfo;
+	if (!checkSUResult(
+		SUModelGetShadowInfo(suModel, &shadowInfo),
+		"SUModelGetShadowInfo",
+		"Getting Model's shadow info"
+	)) return false;
+
+	// Set latitude
+	double latitude;
+	getDoubleFromShadowInfo(shadowInfo, "Latitude", &latitude);
+	model->setLatitude(latitude);
+
+	// Set longitude
+	double longitude;
+	getDoubleFromShadowInfo(shadowInfo, "Longitude", &longitude);
+	model->setLongitude(longitude);
+
+	// Set time zone
+	double timeZone;
+	getDoubleFromShadowInfo(shadowInfo, "TZOffset", &timeZone);
+	model->setTimeZone(timeZone);
+	
+	//set city
+	char city[100];
+	getStringFromShadowInfo(shadowInfo, "City", city);
+	model->setCity(std::string(city));
+
+	//set country
+	char country[100];
+	getStringFromShadowInfo(shadowInfo, "Country", country);
+	model->setCountry(std::string(country));
+
+	// set time
+	int64_t epoch;
+	getTimeFromShadowInfo(shadowInfo, &epoch);
+	Date * date = new Date(epoch); //  + timeZone*60*60
+	model->setMonth(date->getMonth());
+	model->setHour(date->getDay());
+	model->setHour(date->getHour());
+	model->setMinute(date->getMinute());
+	delete date;
+
+}
+
+bool SKPReader::SUCameraToView(std::string viewName, SUCameraRef camera, View * view) {
+
+	// set the name
+	view->setName(viewName);
+
+	// get view point and up.
+	SUPoint3D position;
+	SUPoint3D target; //this is useless
+	SUVector3D up;
+	if (!checkSUResult(
+		SUCameraGetOrientation(camera, &position, &target, &up),
+		"SUCameraGetOrientation",
+		"Getting camera orientation"
+	)) return false;
+	view->setViewPoint(new Point3D(TO_M(position.x), TO_M(position.y), TO_M(position.z)));
+	view->setViewUp(new Vector3D(up.x, up.y, up.z));
+
+	// get and set the view direction
+	SUVector3D direction;
+	if (!checkSUResult(
+		SUCameraGetDirection(camera, &direction),
+		"SUCameraGetDirection",
+		"Getting camera view direction"
+	)) return false;
+	view->setViewDirection(new Vector3D(direction.x, direction.y, direction.z));
+
+	// get and set type
+	bool perspective;
+	if (!checkSUResult(
+		SUCameraGetPerspective(camera, &perspective),
+		"SUCameraGetPerspective",
+		"Gettin camera perspective"
+	)) return false;
+
+	int type = perspective ? PERSPECTIVE_VIEW : PARALLEL_VIEW;
+	view->setViewType(type);
+
+	double viewHeight;
+	if (type == PERSPECTIVE_VIEW) {
+		if (!checkSUResult(
+			SUCameraGetPerspectiveFrustumFOV(camera, &viewHeight),
+			"SUCameraGetPerspectiveFrustumFOV",
+			"Gettin perspective camera view height"
+		)) return false;
+	}
+	else { // PARALLEL
+		if (!checkSUResult(
+			SUCameraGetOrthographicFrustumHeight(camera, &viewHeight),
+			"SUCameraGetOrthographicFrustumHeight",
+			"Gettin parallel camera view height"
+		)) return false;
+	}
+	view->setViewVertical(viewHeight);
+
+	// get aspect ratio
+	double aspectRatio;
+	SUResult aspectRatioResult = SUCameraGetAspectRatio(camera, &aspectRatio);
+	
+	// this needs to be checked manually	
+	switch (aspectRatioResult) {
+	case SU_ERROR_NONE:
+		break; // all OK.
+	case SU_ERROR_INVALID_INPUT:
+		fatal("SU_ERROR_INVALID_INPUT when trying to get aspect ratio of view");
+		break;
+	case SU_ERROR_NO_DATA:
+		// the camera uses the screen aspect ratio... will assume the following
+		aspectRatio = 16.0 / 9.0;
+		break;
+	case SU_ERROR_NULL_POINTER_OUTPUT:
+		fatal("SU_ERROR_NULL_POINTER_OUTPUT when trying to get aspect ratio of view");
+		break;
+	}
+	
+
+	view->setViewHorizontal(aspectRatio * viewHeight);
+
+	//return
+	return true;
+}
+
+bool SKPReader::SUViewToView(SUSceneRef suView, View * view) {
+	// get the name of the view
+	
+	SUStringRef viewName = SU_INVALID;
+	if (!checkSUResult(
+		SUStringCreate(&viewName),
+		"SUStringCreate",
+		"Creating View name SUStringRef"
+	)) return false;
+	
+	if (!checkSUResult(
+		SUSceneGetName(suView, &viewName),
+		"SUSceneGetName",
+		"Getting view name"
+	)) return false;
+	
+	size_t stringLength;
+	if (!checkSUResult(
+		SUStringGetUTF8Length(viewName, &stringLength),
+		"SUStringGetUTF8Length",
+		"Getting view name length"
+	)) return false;
+	
+	char cViewName[100];
+	if (!checkSUResult(
+		SUStringGetUTF8(viewName, stringLength, cViewName, &stringLength),
+		"SUStringGetUTF8",
+		"Getting view name"
+	)) return false;
+	
+	if (!checkSUResult(
+		SUStringRelease(&viewName),
+		"SUStringRelease",
+		"Releasing SUStringRef of view name"
+	)) return false;
+	
+	char asciiViewName[100];
+	utf8toASCII(cViewName, asciiViewName, &stringLength);
+	fixString(asciiViewName, stringLength);
+
+
+	// Get the camera
+	SUCameraRef camera = SU_INVALID;
+	if (!checkSUResult(
+		SUSceneGetCamera(suView,&camera),
+		"SUSceneGetCamera",
+		"Gettin view camera"
+	)) return false;
+
+	if (!SUCameraToView(std::string(asciiViewName), camera, view)) {
+		SUCameraRelease(&camera);
+		return false;
+	}
+		
+	return true;
+
+}
+
+bool SKPReader::loadViews(GroundhogModel * model, bool verbose) {
+	
+	// get the current view
+	SUCameraRef activeCamera;
+
+	if (!checkSUResult(
+		SUModelGetCamera(suModel, &activeCamera),
+		"SUModelGetActiveScene",
+		"Retrieving active view"
+	)) return false;
+
+	View * activeView = new View();
+	SUCameraToView("view", activeCamera, activeView);
+	model->addView(activeView);
+
+	// export stored views
+	size_t countScenes;
+
+	if (!checkSUResult(
+		SUModelGetNumScenes(suModel, &countScenes),
+		"SUModelGetNumScenes",
+		"Retrieving number of views"
+	)) return false;
+	
+	if (countScenes == 0) {
+		return true;
+	}
+	std::vector<SUSceneRef> views(countScenes);
+
+	if (!checkSUResult(
+		SUModelGetScenes(suModel, countScenes, &views[0],&countScenes),
+		"SUModelGetScenes",
+		"Retrieving stored views"
+	)) return false;
+
+	for (size_t i = 0; i < countScenes; i++) {
+		View * storedView = new View();
+		SUViewToView(views[i], storedView);
+		model->addView(storedView);
+	}
+
+	return true;
+}
 
 bool SKPReader::loadLayers(GroundhogModel * model, bool verbose) {
 
@@ -216,15 +591,208 @@ bool SKPReader::loadLayers(GroundhogModel * model, bool verbose) {
 			"SUStringRelease",
 			"Releasing SUStringRef of layer name"
 		)) return false;
-		model->addLayer(&std::string(cLayerName));
-		inform("Layer " + std::string(cLayerName) + " added",verbose);
+
+		char asciiLayerName[100];
+		utf8toASCII(cLayerName, asciiLayerName, &stringLength);
+		fixString(asciiLayerName, stringLength);
+
+		model->addLayer(&std::string(asciiLayerName));
+		inform("Layer " + std::string(asciiLayerName) + " added",verbose);
 	};
 
 	return true;
 } // end of Load Layers
 
+bool SKPReader::getSUComponentDefinitionName(SUComponentDefinitionRef definition, std::string * name) {
+	//define a SUString
+	SUStringRef suComponentName = SU_INVALID;
 
-bool SKPReader::loadFaces(GroundhogModel * model, bool verbose) {
+	if (!checkSUResult(
+		SUStringCreate(&suComponentName),
+		"SUStringCreate",
+		"Retrieving name of component definition"
+	)) return false;
+
+	if (!checkSUResult(
+		SUComponentDefinitionGetName(definition, &suComponentName),
+		"SUComponentInstanceGetName",
+		"Retrieving name of component definition"
+	)) return false;
+
+	size_t cStringLength;
+	if (!checkSUResult(
+		SUStringGetUTF8Length(suComponentName, &cStringLength),
+		"SUStringGetUTF8Length",
+		"Retrieving name of component definition"
+	)) return false;
+
+	char cComponentName[100];
+	if (!checkSUResult(
+		SUStringGetUTF8(suComponentName, cStringLength, cComponentName, &cStringLength),
+		"SUStringGetUTF8Length",
+		"Retrieving name of component definition"
+	)) return false;
+
+	if (!checkSUResult(
+		SUStringRelease(&suComponentName),
+		"SUStringRelease",
+		"Retrieving name of component definition"
+	)) return false;
+
+	char asciiComponentName[100];
+	utf8toASCII(cComponentName, asciiComponentName, &cStringLength);
+	fixString(asciiComponentName, cStringLength);
+
+
+	*name = std::string(asciiComponentName);
+	return true;
+}
+
+
+bool SKPReader::addComponentInstanceToVector(std::vector <ComponentInstance * > * dest, SUComponentInstanceRef suComponentInstance, GroundhogModel * model) {
+
+	// get definition
+	SUComponentDefinitionRef definition;
+	if (!checkSUResult(
+		SUComponentInstanceGetDefinition(suComponentInstance, &definition),
+		"SUComponentInstanceGetDefinition",
+		"Retrieving component instance when filling layers"
+	)) return false;
+
+	std::string definitionName;
+	getSUComponentDefinitionName(definition, &definitionName);
+
+	// get the definition
+	ComponentDefinition * definitionRef = model->getComponentDefinitionByName(&definitionName);
+	if (definitionRef == NULL) {
+		fatal("Impossible to find " + definitionName + " when adding an instance... ignoring instance");
+		return false;
+	}
+
+	//create the instance
+	ComponentInstance * instance = new ComponentInstance(definitionRef);
+
+	//Fill the position
+	if(!fillComponentInstanceLocation(instance, suComponentInstance))
+		return false;
+
+	//add and return
+	dest->push_back(instance);
+	return true;
+}
+
+bool SKPReader::addFaceToVector(std::vector <Face * > * dest, SUFaceRef suFace) {
+
+	// build the polygon
+	Polygon3D * polygon = new Polygon3D();
+	if (!SUFaceToPolygon3D(suFace, polygon))
+		return false;
+
+	// get the name of the face
+	std::string name;
+	getSUFaceName(suFace, &name);
+
+	//build the face
+	Face * face = new Face(name);
+	face->setPolygon(polygon);
+
+	//add the component
+	dest->push_back(face);
+
+	return true;
+}
+
+bool SKPReader::bulkFacesIntoVector(std::vector <Face * > * dest, SUEntitiesRef entities) {
+
+	// count faces in these entities
+	size_t numFaces = 0;
+	if (!checkSUResult(
+		SUEntitiesGetNumFaces(entities, &numFaces),
+		"SUEntitiesGetNumFaces",
+		"Counting faces in component definitions"
+	)) return false;
+
+	// get the faces
+	std::vector<SUFaceRef> faces(numFaces);
+	if (!checkSUResult(
+		SUEntitiesGetFaces(entities, numFaces, &faces[0], &numFaces),
+		"SUEntitiesGetFaces",
+		"Retrieving faces from component entities"
+	)) return false;
+
+	// import faces
+	for (size_t i = 0; i < numFaces; i++) {
+		addFaceToVector(dest, faces[i]);
+	}
+	return true;
+}
+
+bool SKPReader::loadComponentDefinition(SUComponentDefinitionRef definition, GroundhogModel * model) {
+	//get the name
+	std::string definitionName;
+	if (!getSUComponentDefinitionName(definition, &definitionName)) {
+		warn("Impossible to get name of component");
+		return false;
+	};
+
+	// get entities
+	SUEntitiesRef entities;
+	if (!checkSUResult(
+		SUComponentDefinitionGetEntities(definition, &entities),
+		"SUComponentDefinitionGetEntities",
+		"Retrieving entities from component definitions"
+	)) return false;
+
+	// Create the definition
+	ComponentDefinition * componentDefinition = new ComponentDefinition(&definitionName);
+
+	model->addComponentDefinition(componentDefinition);
+
+	// Load faces
+	bulkFacesIntoVector(componentDefinition->getFacesRef(), entities);
+
+	// load instances
+	bulkComponentInstancesIntoVector(componentDefinition->getComponentInstancesRef(), entities, model);
+
+	return true;
+}
+
+bool SKPReader::loadComponentDefinitions(GroundhogModel * model, bool verbose) {
+	// count the component definitions
+	size_t countDefinitions = 0;
+	if (!checkSUResult(
+		SUModelGetNumComponentDefinitions(suModel, &countDefinitions),
+		"SUModelGetNumComponentDefinitions",
+		"Counting component definitions"
+	)) return false;
+
+	// return if none
+	if (countDefinitions == 0) {
+		inform("No component definitions in model",verbose);
+		return true; // success
+	}
+	inform(std::to_string(countDefinitions) + " definitions in model",verbose);
+
+	// get the component definitions
+	std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
+	if (!checkSUResult(
+		SUModelGetComponentDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions),
+		"SUModelGetComponentDefinitions",
+		"Retrieving component definitions"
+	)) return false;
+
+	// Now, load One by One
+	for (size_t i = 0; i < countDefinitions; i++) {
+		if (!loadComponentDefinition(definitions[i], model)) {
+			warn("Impossible to load component definition to model");
+			continue;
+		}
+
+	}
+	return true;
+}
+
+bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose) {
 	// Get the entity container of the model.
 	SUEntitiesRef entities = SU_INVALID;
 	if (!checkSUResult(
@@ -232,6 +800,7 @@ bool SKPReader::loadFaces(GroundhogModel * model, bool verbose) {
 		"SUModelGetEntities",
 		"Retrieving entities"
 	)) return false;
+
 
 	// count faces
 	size_t faceCount = 0;
@@ -256,19 +825,9 @@ bool SKPReader::loadFaces(GroundhogModel * model, bool verbose) {
 	)) return false;
 	
 	for (size_t i = 0; i < faceCount; i++) {
-
-		// if ignore
-		//next
-
-		// get the name of the face
-		std::string name;
-		getSUFaceName(faces[i],&name);
-
-		// build the polygon
-		Polygon3D * polygon = new Polygon3D();
 		
-		if (!SUFaceToPolygon3D(faces[i], polygon))
-			return false;
+		// CHECK LABEL OF FACE
+
 		
 		// if it is workplane
 
@@ -277,19 +836,52 @@ bool SKPReader::loadFaces(GroundhogModel * model, bool verbose) {
 
 		// if it is window
 
-		// if has no label (i.e. is geometry face)
+		// if has no label (i.e. is geometry face)		
 		std::string layerName;		
 		if (!getSUFaceLayerName(faces[i],&layerName))
 			return false;
 
-		Face * face = new Face(name);
-		face->setPolygon(polygon);
+		Layer * layerRef = model->getLayerByName(&layerName);
+		if (layerRef == NULL) {
+			return false;
+		}
+		addFaceToVector(layerRef->getFacesRef(), faces[i]);
 
-		if(!model->addFaceToLayer(&layerName, face))
+	} // end of iterating faces
+	
+	// load component instances
+	size_t instanceCount;
+	if (!checkSUResult(
+		SUEntitiesGetNumInstances(entities, &instanceCount),
+		"SUEntitiesGetNumInstances",
+		"Retrieving faces"
+	)) return false;
+
+	std::vector<SUComponentInstanceRef> instances(instanceCount);
+	if (!checkSUResult(
+		SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount),
+		"SUEntitiesGetInstances",
+		"Retrieving model component instances"
+	)) return false;
+
+	// fill layers with the instances
+	for (size_t i = 0; i < instanceCount; i++) {
+		
+		// get name of layer
+		SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instances[i]);
+		std::string layerName;
+		if (!getSUDrawingElementLayerName(drawingElement, &layerName)) 
 			return false;
 
+		Layer * layerRef = model->getLayerByName(&layerName);
+		if (layerRef == NULL) {
+			return false;
+		}
+
+		addComponentInstanceToVector(layerRef->getComponentInstancesRef(), instances[i],model);
+
 	}
-		
+
 	return true;
 } // end of Load Faces
 
@@ -327,7 +919,6 @@ bool SKPReader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon) {
 	// Get and translate those loops, if at least one
 	if (countInnerLoops > 0) {
 		// get them
-
 		std::vector<SULoopRef> innerLoops(countInnerLoops);
 
 		if (!checkSUResult(
@@ -439,7 +1030,11 @@ bool SKPReader::getSUDrawingElementLayerName(SUDrawingElementRef element, std::s
 		"retrieving layer when getting element layer name"
 	)) return false;
 
-	*name = std::string(cLayerName);
+	char asciiLayerName[100];
+	utf8toASCII(cLayerName, asciiLayerName, &layerNameLength);
+	fixString(asciiLayerName, layerNameLength);
+
+	*name = std::string(asciiLayerName);
 	return true;
 };
 
@@ -550,7 +1145,11 @@ bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name) {
 					"SUStringRelease"
 				))return false;
 
-				*name = std::string(cStringEntityName);
+				char asciiEntityName[100];
+				utf8toASCII(cStringEntityName, asciiEntityName, &nameLength);
+				fixString(asciiEntityName, nameLength);
+
+				*name = std::string(asciiEntityName);
 
 				return true;
 			} // end of "if it is Groundhog"
@@ -574,3 +1173,69 @@ bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name) {
 	return false;
 } // end of Get Entity Name
 
+
+bool SKPReader::bulkComponentInstancesIntoVector(std::vector <ComponentInstance * > * dest, SUEntitiesRef  entities, GroundhogModel * model) {
+	// load component instances
+	size_t instanceCount;
+	if (!checkSUResult(
+		SUEntitiesGetNumInstances(entities, &instanceCount),
+		"SUEntitiesGetNumInstances",
+		"Retrieving faces"
+	)) return false;
+
+	if (instanceCount == 0) {
+		return true;
+	}
+
+	std::vector<SUComponentInstanceRef> instances(instanceCount);
+	if (!checkSUResult(
+		SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount),
+		"SUEntitiesGetInstances",
+		"Retrieving component instances"
+	)) return false;
+
+	// fill layers with the instances
+	for (size_t i = 0; i < instanceCount; i++) {
+		// get name of layer
+		SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instances[i]);
+		std::string layerName;
+		if (!getSUDrawingElementLayerName(drawingElement, &layerName))
+			return false;
+		
+		addComponentInstanceToVector(dest, instances[i], model);
+
+	}
+
+	return true;
+}
+
+bool SKPReader::fillComponentInstanceLocation(ComponentInstance * instance, SUComponentInstanceRef suInstance) {
+	
+	SUTransformation transform;
+
+	if (!checkSUResult(
+		SUComponentInstanceGetTransform(suInstance, &transform),
+		"SUEntitiesGetInstances",
+		"Retrieving component instance Transform"
+	)) return false;
+
+	instance->setX(TO_M(transform.values[12]));
+	instance->setY(TO_M(transform.values[13]));
+	instance->setZ(TO_M(transform.values[14]));
+	
+	double rx = atan2(-transform.values[9], transform.values[10]);
+	double c2 = sqrt(transform.values[0] * transform.values[0] + transform.values[4] * transform.values[4]);
+	double ry = atan2(transform.values[8], c2);
+	double rz = atan2(-transform.values[4], transform.values[0]);
+
+	instance->setRotationX(TO_DEGREE(rx));
+	instance->setRotationY(TO_DEGREE(ry));
+	instance->setRotationZ(TO_DEGREE(rz));
+
+	// We rotate then move... how about scaling first, then 
+	//  bringing the origin back to the original origin and then 
+	//  rotating and moving?
+	instance->setScale(1);
+
+	return true;
+}

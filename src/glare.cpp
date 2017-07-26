@@ -1,6 +1,3 @@
-//#include <SketchUpAPI/initialize.h>
-//#include <SketchUpAPI/model/model.h>
-
 #include <string>
 
 #include "./glare.h"
@@ -11,99 +8,96 @@
 
 #include "./writers/rad/radexporter.h"
 
+#define PRINT_USAGE std::cerr << usage << std::endl;
+
 Glare::Glare() {
 	DEBUG_MSG("Creating Glare object");
 	verbose = true;
-	doExport = false;
+	model = NULL;
+	model = new GroundhogModel();
 }
 
 Glare::~Glare() {
 	DEBUG_MSG("Destroying Glare object");
+	delete model;
 }
 
 bool Glare::solve() {
-
-	// Check if any input file
-	if (inputFile.empty()) {
-		fatal("No input file was given.");
-		return false;
-	}
+	
 	// verify that inputFile exists
 	if (!fexists(inputFile)) {
 		fatal("File '" + std::string(inputFile) + "' not found");
 		return false;
 	}
 
-	// PARSE FILE
-	// inputFile is a Sketchup model
-	if (stringInclude(inputFile,".skp")) {
-		SKPReader reader;
-		if (!reader.parseSKPModel(inputFile, &model, verbose)) {
-			fatal("Could not read file '" + std::string(inputFile) + "'");
-			return false;
+	// Check what kind of process is wanted
+	if (!stringInclude(inputFile, ".lua")) {
+		/* STANDARD CALCULATION */
+		// load model
+		loadFile(model, inputFile, verbose);
+
+		/* CHECK IF JUST EXPORT */
+		if (!outputFile.empty()) {
+			if (stringInclude(outputFile, ".ghm")) {
+				fatal("Exporting .GHM file is not yet supported");
+				return false;
+			}
+			else { // no extension, thus: Radiance			
+				RadExporter writer;
+				return writer.exportModel(model, outputFile, verbose);
+			}
 		}
+
+		fatal("calculations are not yet supported");
+		return false;
 	}
-
-	// EXPORT IF REQUIRED
-	if (doExport) {
-		if (stringInclude(outPath,".ghm")) {
-			fatal("Exporting Groundhog Model is not yet supported");
-			return false;
-		}
-		else { // no extension, thus: Radiance			
-			RadExporter writer;
-			writer.setExportDir(outPath);
-			return writer.exportModel(&model, verbose);
-		}		
+	else {
+		// In other case, process the lua script
+		fatal("The Lua API is not yet supported.");
+		return false;
 	}
-
-	// CALCULATE
-
-
-	// POST PROCESS
-	
 
 	return true;
 };
 
+bool Glare::loadFile(GroundhogModel * model, std::string input, bool verbose) {
+	// inputFile is a Sketchup model
+	if (stringInclude(input, ".skp")) {
+		SKPReader reader;
+		if (!reader.parseSKPModel(input, model, verbose)) {
+			fatal("Could not read file '" + std::string(input) + "'");
+			return false;
+		}
+	}
+	return true;
+}
 
 bool Glare::parseInputs(int argc, char* argv[]) {
-	// If nothing was given... return instructions.	
-	if (argc == 1) {
-		inform("No input.... TODO: print usage", true);
+	if (argc == 2) {
+		// Input file... calculation will be performed.
+		// call in the shape of 'Glare inputFile'
+		inputFile = std::string(argv[1]);
+	}
+	else if (argc == 3) {
+		// export... call in the shape of 
+		// 'Glare inputFile outFile
+		inputFile = std::string(argv[1]);
+		outputFile = std::string(argv[2]);
+	}
+	else { // input error
+		PRINT_USAGE
 		return false;
 	}
 
-	// Else, process inputs
-	for (int i = 1; i < argc; i++) {
+	// Check if input file makes sense.
 
-		//transform into string
-		std::string sArg = std::string(argv[i]);
+	char * supportedInputs[] = { ".skp",".lua" };
+	if (!stringIncludeAny(inputFile, supportedInputs,2)) {
+		fatal("Only .SKP and .LUA input files are supported for now");
+		return false;
+	}
 
-		// Found an input file (only SKP supported for now)
-		char * supportedExtensions[] = { ".skp" };
-		if (stringIncludeAny(argv[i], supportedExtensions, 1)) {
-			inputFile = argv[i];			
-			continue;
-		}// end of inputfile process		
-
-			// check if export
-		if (sArg.compare("-e") == 0) {
-			doExport = true;
-			outPath = std::string(argv[++i]);
-			continue;
-		}
-
-
-		// check if verbose
-		if (sArg.compare("-v") == 0) {
-			verbose = false;
-			continue;
-		}
-
-		warn("Unkown argument '" + std::string(argv[i]) + "'");
-	} // END OF ITERATE INPUTS
-
+	
 	return true;
 } // END OF PARSE INPUTS
 		

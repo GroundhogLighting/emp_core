@@ -18,11 +18,8 @@ RadExporter::~RadExporter() {
 }
 
 
-void RadExporter::setExportDir(std::string outDir) {
-	exportDir = outDir;
-}
 
-bool RadExporter::exportModel(GroundhogModel * model, bool verbose) {
+bool RadExporter::exportModel(GroundhogModel * model, std::string exportDir, bool verbose) {
 	inform("Beggining Radiance export", verbose);
 
 	// Check if directory exists
@@ -30,26 +27,168 @@ bool RadExporter::exportModel(GroundhogModel * model, bool verbose) {
 		fatal("Export directory '" + exportDir + "' alredy exists... please delete it.");
 		return false;
 	}
-
 	// Create the directory
 	createdir(exportDir);
 
 	// Write layers
 	writeLayers(model,exportDir);
 
+	// Write component definitions
+	writeComponentDefinitions(model, exportDir);	
+
+	// write views
+	writeViews(model, exportDir);
+
+	// write north correction
+	writeModelInfo(model, exportDir);
 
 	return true;
 }
 
+void RadExporter::writeModelInfo(GroundhogModel * model, std::string exportDir){
+	// create and open file
+	std::ofstream file;
+	file.open(exportDir + "/model_info.txt");
+
+	file << "country," << model->getCountry() << std::endl;
+	file << "city," << model->getCity() << std::endl;
+	file << "latitude," << model->getLatitude() << std::endl;
+	file << "longitude," << model->getLongitude() << std::endl;
+	file << "time zone," << model->getTimeZone() << std::endl;
+	file << "month," << model->getMonth() << std::endl;
+	file << "day," << model->getDay() << std::endl;
+	file << "hour," << model->getHour() << std::endl;
+	file << "minute," << model->getMinute() << std::endl;
+	file << "north correction,"<< model->getNorthCorrection() << std::endl;
+	file.close();
+
+}
+
+bool RadExporter::writeViews(GroundhogModel * model, std::string exportDir) {
+	// create Views directory
+	std::string baseDir = exportDir + "/Views";
+	createdir(baseDir);
+
+	// export each view
+	for (size_t i = 0; i < model->getNumViews(); i++) {
+
+		View * view = model->getViewRef(i);
+
+		std::string vt="   ";
+		switch (view->getViewType()) {
+		case PARALLEL_VIEW:
+			vt = "vtv";
+			break;
+		case PERSPECTIVE_VIEW:
+			vt = "vtl";
+			break;
+		default:
+			fatal("Unkown type of view coded " + view->getViewType());
+			return false;
+		}
+
+		// create and open file
+		std::ofstream file;
+		file.open(baseDir + "/" + view->getName() + ".vf");
+
+		// initialize
+		file << "rvu ";
+
+		// view type
+		file << vt;
+
+		// view point
+		Point3D * vp = view->getViewPoint();
+		file << " -vp " << vp->getX() << " " << vp->getY() << " " << vp->getZ();
+
+		// view direction
+		Vector3D * vd = view->getViewDirection();
+		file << " -vd " << vd->getX() << " " << vd->getY() << " " << vd->getZ();
+
+		// view up
+		Vector3D * up = view->getViewUp();
+		file << " -vu " << up->getX() << " " << up->getY() << " " << up->getZ();
+
+		// view horizontal
+		file << " -vh " << view->getViewHorizontal();
+
+		// view vertical
+		file << " -vv " << view->getViewVertical();
+
+		// close
+		file << std::endl;
+
+		// close file
+		file.close();
+	}
+	return true;
+}
+
+bool RadExporter::writeComponentDefinitions(GroundhogModel * model, std::string exportDir) {
+	// create components directory
+	std::string baseDir = exportDir + "/Components";
+	createdir(baseDir);
+
+	size_t numDefinitions= model->getNumComponentDefinitions();
+	for (unsigned int i = 0; i < numDefinitions; i++) {
+		ComponentDefinition * definition = model->getComponentDefinitionRef(i);
+		size_t numFaces = definition->getNumFaces();
+		std::string componentName = definition->getName();
+
+		// create the file
+		std::ofstream file;
+		file.open(baseDir + "/" + componentName + ".rad");
+
+		// write instances
+		std::vector < ComponentInstance * > * instances = definition->getComponentInstancesRef();
+		size_t numInstances = instances->size();
+		for (unsigned int j = 0; j < numInstances; j++) {
+			writeComponentInstance(&file, definition->getComponentInstanceRef(j));
+		}
+		file << std::endl << std::endl;
+
+		// export faces
+		if (numFaces < 1 && numInstances < 1) {
+			warn("Empty component '" + componentName + "'");
+			continue;
+		}
+		for (unsigned int j = 0; j < numFaces; j++) {
+			writeFace(&file, definition->getFaceRef(j));
+		}// end of iterating faces
+
+		// Close the file
+		file.close();
+	} // end of iterating definitions
+	return true;
+}
+
 bool RadExporter::writeLayers(GroundhogModel * model, std::string exportDir) {
+
 	// create geometry directory
 	std::string baseDir = exportDir + "/Geometry";
 	createdir(baseDir);
 	size_t numLayers = model->getNumLayers();
+	
 	for (unsigned int i = 0; i < numLayers; i++) {
 		// get the layer
-		Layer * layer = model->getLayerRef(i);		
+		Layer * layer = model->getLayerRef(i);	
+		if (layer->isEmpty()) {
+			warn("Skipping layer '" + layer->getName() + "' when writing, because it is empty.");
+			continue;
+		}
 		std::string layerName = layer->getName();
+
+		// create the file
+		std::ofstream file;
+		file.open(baseDir + "/" + layerName + ".rad");
+		
+		// write instances
+		std::vector < ComponentInstance * > * instances = layer->getComponentInstancesRef();
+		size_t numInstances = instances->size();
+		for (unsigned int j = 0; j < numInstances; j++) {
+			writeComponentInstance(&file, layer->getComponentInstanceRef(j));
+		}
+		file << std::endl << std::endl;
 
 		// check if there are faces... continue if not.
 		std::vector < Face * > * faces = layer->getFacesRef();
@@ -58,20 +197,33 @@ bool RadExporter::writeLayers(GroundhogModel * model, std::string exportDir) {
 			warn("Empty layer '" + layerName + "'");
 			continue;
 		}
-
-		// create the file
-		std::ofstream file;
-		file.open(baseDir + "/" + layerName + ".rad");
-
+	
 		// write all faces
 		for (unsigned int j = 0; j < numFaces; j++) {
 			writeFace(&file, layer->getFaceRef(j));
 		}
-
+		
 		// Close the file
 		file.close();
 	}
 	return true;
+}
+
+
+void RadExporter::writeComponentInstance(std::ofstream * file, ComponentInstance * instance) {	
+	ComponentDefinition * definition = instance->getDefinitionRef();
+	if (definition == NULL) {
+		warn("Trying to export an instance with NULL definition... instance ignored.");
+		return;
+	}
+	*file << "!xform";  
+	*file << " -s " << instance->getScale(); 
+	*file << " -rz " << instance->getRotationZ(); 
+	*file << " -ry " << instance->getRotationY(); 
+	*file << " -rx " << instance->getRotationX(); 
+	*file << " -t " << instance->getX() << " " << instance->getY() << " " << instance->getZ(); 	
+	*file << " ./Geometry/" << instance->getDefinitionRef()->getName() << ".rad"; 
+	*file << std::endl;
 }
 
 void RadExporter::writeLoop(std::ofstream * file, Loop * loop) {

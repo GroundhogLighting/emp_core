@@ -27,3 +27,4 @@ bin/*
 *.so
 .vs 
 *Makefile*
+*.skb

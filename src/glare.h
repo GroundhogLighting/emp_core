@@ -6,11 +6,14 @@
 class Glare {
 
 private:
+	std::string usage = "usage v1: Glare inputFile outFile --> exports file\nusage v2: Glare inputFile --> performs standard calculation \nusage v3: Glare inputFile.lua --> performs custom calculations\n";
+	
 	std::string inputFile;
+	std::string outputFile;
+	
 	bool verbose;
-	bool doExport;
-	std::string outPath;
-	GroundhogModel model;
+
+	GroundhogModel * model;
 
 public:
 	Glare();
@@ -18,5 +21,6 @@ public:
 	
 	bool solve();
 	bool parseInputs(int argc, char* argv[]);
-	
+	bool loadFile(GroundhogModel * model, std::string inputFile, bool verbose);
+
 }; // END OF GLARE CLASS
