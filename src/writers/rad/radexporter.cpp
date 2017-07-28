@@ -7,19 +7,25 @@
 
 #define TAB "\t"
 
-RadExporter::RadExporter() {
+RadExporter::RadExporter(GroundhogModel * the_model, std::string the_exportDir, bool the_verbose) 
+{
+	model = the_model;
+	exportDir = the_exportDir;
+	verbose = the_verbose;
 	DEBUG_MSG("Creating Rad Exporter");
 
 }
 
-RadExporter::~RadExporter() {
+RadExporter::~RadExporter() 
+{
 
 	DEBUG_MSG("Destroying Rad Exporter");
 }
 
 
 
-bool RadExporter::exportModel(GroundhogModel * model, std::string exportDir, bool verbose) {
+bool RadExporter::exportModel() 
+{
 	inform("Beggining Radiance export", verbose);
 
 	// Check if directory exists
@@ -31,21 +37,22 @@ bool RadExporter::exportModel(GroundhogModel * model, std::string exportDir, boo
 	createdir(exportDir);
 
 	// Write layers
-	writeLayers(model,exportDir);
+	writeLayers();
 
 	// Write component definitions
-	writeComponentDefinitions(model, exportDir);	
+	writeComponentDefinitions();	
 
 	// write views
-	writeViews(model, exportDir);
+	writeViews();
 
 	// write north correction
-	writeModelInfo(model, exportDir);
+	writeModelInfo();
 
 	return true;
 }
 
-void RadExporter::writeModelInfo(GroundhogModel * model, std::string exportDir){
+void RadExporter::writeModelInfo()
+{
 	// create and open file
 	std::ofstream file;
 	file.open(exportDir + "/model_info.txt");
@@ -64,7 +71,8 @@ void RadExporter::writeModelInfo(GroundhogModel * model, std::string exportDir){
 
 }
 
-bool RadExporter::writeViews(GroundhogModel * model, std::string exportDir) {
+bool RadExporter::writeViews() 
+{
 	// create Views directory
 	std::string baseDir = exportDir + "/Views";
 	createdir(baseDir);
@@ -124,7 +132,8 @@ bool RadExporter::writeViews(GroundhogModel * model, std::string exportDir) {
 	return true;
 }
 
-bool RadExporter::writeComponentDefinitions(GroundhogModel * model, std::string exportDir) {
+bool RadExporter::writeComponentDefinitions() 
+{
 	// create components directory
 	std::string baseDir = exportDir + "/Components";
 	createdir(baseDir);
@@ -162,7 +171,8 @@ bool RadExporter::writeComponentDefinitions(GroundhogModel * model, std::string 
 	return true;
 }
 
-bool RadExporter::writeLayers(GroundhogModel * model, std::string exportDir) {
+bool RadExporter::writeLayers() 
+{
 
 	// create geometry directory
 	std::string baseDir = exportDir + "/Geometry";
@@ -210,7 +220,8 @@ bool RadExporter::writeLayers(GroundhogModel * model, std::string exportDir) {
 }
 
 
-void RadExporter::writeComponentInstance(std::ofstream * file, ComponentInstance * instance) {	
+void RadExporter::writeComponentInstance(std::ofstream * file, ComponentInstance * instance) 
+{	
 	ComponentDefinition * definition = instance->getDefinitionRef();
 	if (definition == NULL) {
 		warn("Trying to export an instance with NULL definition... instance ignored.");
@@ -226,12 +237,13 @@ void RadExporter::writeComponentInstance(std::ofstream * file, ComponentInstance
 	*file << std::endl;
 }
 
-void RadExporter::writeLoop(std::ofstream * file, Loop * loop) {
+void RadExporter::writeLoop(std::ofstream * file, Loop * loop) 
+{
 	// Print the loop
-	size_t numVertices = loop->getNumVertices();
+	size_t numVertices = loop->size();
 
 	for (int i = 0; i < numVertices; i++) {
-		Point3D * point = loop->getVertex(i);
+		Point3D * point = loop->getVertexRef(i);
 
 		*file << TAB;
 		*file << point->getX() << TAB;
@@ -240,7 +252,8 @@ void RadExporter::writeLoop(std::ofstream * file, Loop * loop) {
 	}
 }
 
-void RadExporter::writeClosedFace(std::ofstream * file, Face * face) {
+void RadExporter::writeClosedFace(std::ofstream * file, Face * face) 
+{
 	// get the name of the face
 	std::string faceName = face->getName();
 
@@ -258,7 +271,7 @@ void RadExporter::writeClosedFace(std::ofstream * file, Face * face) {
 	*file << "Default_material" << TAB << "polygon" << TAB << faceName << std::endl;
 	*file << "0" << std::endl;
 	*file << "0" << std::endl;
-	*file << std::to_string(3 * finalLoop->getNumVertices()) << std::endl;
+	*file << std::to_string(3 * finalLoop->size()) << std::endl;
 	writeLoop(file, finalLoop);
 
 	*file << std::endl;
@@ -267,7 +280,8 @@ void RadExporter::writeClosedFace(std::ofstream * file, Face * face) {
 	}
 }
 
-void RadExporter::writeFace(std::ofstream * file, Face * face) {
+void RadExporter::writeFace(std::ofstream * file, Face * face) 
+{
 	if (face->hasTooManyInnerLoops()) {
 		warn("Ignoring face '" + face->getName() + "' because it has TOO MANY inner loops.");
 		// writeTriangulatedFace(file,face);

@@ -3,7 +3,8 @@
 
 
 
-GroundhogModel::GroundhogModel() {
+GroundhogModel::GroundhogModel()
+{
 	DEBUG_MSG("Creating GroundhogModel");
 	layers = std::vector<Layer *>();
 	definitions = std::vector<ComponentDefinition *>();
@@ -12,7 +13,8 @@ GroundhogModel::GroundhogModel() {
 	location = new Location();
 };
 
-GroundhogModel::~GroundhogModel() {
+GroundhogModel::~GroundhogModel()
+{
 	//destroy layers
 	for (size_t i = 0; i < layers.size(); i++) {
 		delete layers[i];
@@ -33,16 +35,18 @@ GroundhogModel::~GroundhogModel() {
 }
 
 
-void GroundhogModel::addLayer(std::string * layerName) {	
+void GroundhogModel::addLayer(std::string * layerName)
+{	
 	layers.push_back( new Layer( layerName) );	
 	DEBUG_MSG("Adding layer " + *layerName + " to model");
 }
 
-bool GroundhogModel::addFaceToLayer(std::string * layerName, Face * face) {
+bool GroundhogModel::addFaceToLayer(std::string * layerName, Face * face)
+{
 	for (unsigned layerCount = 0; layerCount < layers.size(); layerCount++) {		
 		if (layers[layerCount]->compareName(*layerName)) {
 			DEBUG_MSG("Found layer "+*layerName);
-			addFace(layers[layerCount]->getFacesRef(), face);
+			addFaceToVector(layers[layerCount]->getFacesRef(), face);
 			return true;
 		}
 	}
@@ -51,11 +55,12 @@ bool GroundhogModel::addFaceToLayer(std::string * layerName, Face * face) {
 }
 
 
-bool GroundhogModel::addComponentInstanceToLayer(std::string * layerName, ComponentInstance * instance) {
+bool GroundhogModel::addComponentInstanceToLayer(std::string * layerName, ComponentInstance * instance)
+{
 	for (unsigned layerCount = 0; layerCount < layers.size(); layerCount++) {
 		if (layers[layerCount]->compareName(*layerName)) {
 			DEBUG_MSG("Found layer " + *layerName);
-			addComponentInstance(layers[layerCount]->getComponentInstancesRef(), instance);
+			addComponentInstanceToVector(layers[layerCount]->getComponentInstancesRef(), instance);
 			return true;
 		}
 	}
@@ -63,38 +68,46 @@ bool GroundhogModel::addComponentInstanceToLayer(std::string * layerName, Compon
 	return false;
 }
 
-void GroundhogModel::addFace(std::vector <Face *> * faces, Face * face) {
+void GroundhogModel::addFaceToVector(std::vector <Face *> * faces, Face * face)
+{
 	faces->push_back(face);
 }
 
-void GroundhogModel::addComponentInstance(std::vector <ComponentInstance *> * instances, ComponentInstance * instance) {
+void GroundhogModel::addComponentInstanceToVector(std::vector <ComponentInstance *> * instances, ComponentInstance * instance)
+{
 	instances->push_back(instance);
 }
 
 
-size_t GroundhogModel::getNumLayers() {
+size_t GroundhogModel::getNumLayers()
+{
 	return layers.size();
 }
 
-size_t GroundhogModel::getNumComponentDefinitions() {
+size_t GroundhogModel::getNumComponentDefinitions()
+{
 	return definitions.size();
 }
 
-Layer * GroundhogModel::getLayerRef(size_t i) {
+Layer * GroundhogModel::getLayerRef(size_t i)
+{
 	return layers[i];
 }
 
-ComponentDefinition * GroundhogModel::getComponentDefinitionRef(size_t i) {
+ComponentDefinition * GroundhogModel::getComponentDefinitionRef(size_t i)
+{
 	return definitions[i];
 }
 
-void GroundhogModel::addComponentDefinition(ComponentDefinition * componentDefinition) {
+void GroundhogModel::addComponentDefinition(ComponentDefinition * componentDefinition)
+{
 	definitions.push_back(componentDefinition);
 	DEBUG_MSG("Adding component definition to model");
 }
 
 
-ComponentDefinition *  GroundhogModel::getComponentDefinitionByName(std::string * definitionName) {
+ComponentDefinition *  GroundhogModel::getComponentDefinitionByName(std::string * definitionName)
+{
 	for (size_t i = 0; i < definitions.size(); i++) {
 		if (*definitionName == definitions[i]->getName()) {
 			DEBUG_MSG("Found definition" + *definitionName);
@@ -105,7 +118,8 @@ ComponentDefinition *  GroundhogModel::getComponentDefinitionByName(std::string 
 	return NULL;
 }
 
-Layer *  GroundhogModel::getLayerByName(std::string * layerName) {
+Layer *  GroundhogModel::getLayerByName(std::string * layerName)
+{
 	for (size_t i = 0; i < layers.size(); i++) {
 		if (*layerName == layers[i]->getName()) {
 			DEBUG_MSG("Found layer" + *layerName);
@@ -116,89 +130,117 @@ Layer *  GroundhogModel::getLayerByName(std::string * layerName) {
 	return NULL;
 }
 
-void GroundhogModel::addView(View * view) {
+void GroundhogModel::addView(View * view)
+{
 	views.push_back(view);
 }
 
-View * GroundhogModel::getViewRef(size_t i) {
+View * GroundhogModel::getViewRef(size_t i)
+{
 	return views[i];
 }
 
-size_t GroundhogModel::getNumViews() {
+size_t GroundhogModel::getNumViews()
+{
 	return views.size();
 }
 
-void GroundhogModel::setNorthCorrection(double nC) {
+void GroundhogModel::setNorthCorrection(double nC)
+{
 	northCorrection = nC;
 }
-double GroundhogModel::getNorthCorrection() {
+double GroundhogModel::getNorthCorrection()
+{
 	return northCorrection;
 }
 
-void GroundhogModel::setLatitude(double l) {
+void GroundhogModel::setLatitude(double l)
+{
 	location->setLatitude(l);
 }
 
-void GroundhogModel::setLongitude(double l) {
+void GroundhogModel::setLongitude(double l)
+{
 	location->setLongitude(l);
 }
 
-void GroundhogModel::setTimeZone(double t) {
+void GroundhogModel::setTimeZone(double t)
+{
 	location->setTimezone(t);
 }
 
-void GroundhogModel::setMonth(int m) {
+void GroundhogModel::setMonth(int m)
+{
 	date->setMonth(m);
 }
 
-void GroundhogModel::setDay(int d) {
+void GroundhogModel::setDay(int d)
+{
 	date->setDay(d);
 }
-void GroundhogModel::setHour(int h) {
+
+void GroundhogModel::setHour(int h)
+{
 	date->setHour(h);
 }
-void GroundhogModel::setMinute(int min) {
+
+void GroundhogModel::setMinute(int min)
+{
 	date->setMinute(min);
 }
 
-double GroundhogModel::getLatitude() {
+double GroundhogModel::getLatitude()
+{
 	return location->getLatitude();
 }
 
-double GroundhogModel::getLongitude() {
+double GroundhogModel::getLongitude()
+{
 	return location->getLongitude();
 }
 
-double GroundhogModel::getTimeZone() {
+double GroundhogModel::getTimeZone()
+{
 	return location->getTimezone();
 }
 
-int GroundhogModel::getMonth() {
+int GroundhogModel::getMonth()
+{
 	return date->getMonth();
 }
 
-int GroundhogModel::getDay() {
+int GroundhogModel::getDay()
+{
 	return date->getDay();
 }
 
-int GroundhogModel::getHour() {
+int GroundhogModel::getHour()
+{
 	return date->getHour();
 }
 
-int GroundhogModel::getMinute() {
+int GroundhogModel::getMinute()
+{
 	return date->getMinute();
 }
 
 
-void GroundhogModel::setCity(std::string c) {
+void GroundhogModel::setCity(std::string c)
+{
 	location->setCity(c);
 }
-std::string GroundhogModel::getCity() {
+
+std::string GroundhogModel::getCity()
+{
 	return location->getCity();
 }
-void GroundhogModel::setCountry(std::string c) {
+
+void GroundhogModel::setCountry(std::string c)
+{
 	location->setCountry(c);
 }
-std::string GroundhogModel::getCountry() {
+
+std::string GroundhogModel::getCountry()
+{
 	return location->getCountry();
 }

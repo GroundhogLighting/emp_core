@@ -5,6 +5,15 @@
 ComponentInstance::ComponentInstance(ComponentDefinition * definitionRef) {
 	DEBUG_MSG("Creating component instance");
 	definition = definitionRef;	
+	rotationX = 0; 
+	rotationY = 0; 
+	rotationZ = 0; 
+
+	scale = 1; 
+
+	x = 0; 
+	y = 0; 
+	z = 0; 
 }
 
 

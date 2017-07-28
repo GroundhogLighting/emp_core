@@ -1,18 +1,20 @@
 #include "./face.h"
 
 #include "../../common/utilities/io.h"
+#include "../../config_constants.h"
 
-#define TOO_MANY_LOOPS 40
-
-Face::Face(std::string faceName) {
+Face::Face(std::string faceName) 
+{
 	DEBUG_MSG("Creating face " + faceName);
 
 	name = faceName;
+	polygon = new Polygon3D();
 
 
 }
 
-Face::~Face() {
+Face::~Face() 
+{
 
 	//destroy polygon
 	delete polygon;
@@ -21,27 +23,34 @@ Face::~Face() {
 }
 
 
-std::string Face::getName() {
+std::string Face::getName() 
+{
 	return name;
 }
 
 
-void Face::setPolygon(Polygon3D * newPolygon) {
+void Face::setPolygon(Polygon3D * newPolygon) 
+{
+	delete polygon;
 	polygon = newPolygon;
 }
 
-bool Face::hasInnerLoops() {
+bool Face::hasInnerLoops() 
+{
 	return polygon->hasInnerLoops();
 }
 
-bool Face::hasTooManyInnerLoops() {
+bool Face::hasTooManyInnerLoops() 
+{
 	return polygon->countInnerLoops() > TOO_MANY_LOOPS;
 }
 
-Loop * Face::getOuterLoopRef() {
+Loop * Face::getOuterLoopRef() 
+{
 	return polygon->getOuterLoopRef();
 }
 
-Loop * Face::getClosedLoop() {
+Loop * Face::getClosedLoop() 
+{
 	return polygon->getClosedLoop();
 }

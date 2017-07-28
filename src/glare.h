@@ -3,24 +3,80 @@
 #include <SketchUpAPI/model/model.h>
 #include "./groundhogmodel/groundhogmodel.h"
 
+//! This is the main class within Glare. It manages the Read, Write, Calculate process.
+
+
 class Glare {
 
 private:
-	std::string usage = "usage v1: Glare inputFile outFile --> exports file\nusage v2: Glare inputFile --> performs standard calculation \nusage v3: Glare inputFile.lua --> performs custom calculations\n";
-	
-	std::string inputFile;
-	std::string outputFile;
-	
-	bool verbose;
 
-	GroundhogModel * model;
+	const std::string usage =	"usage v1: Glare inputFile outFile --> exports file\n"
+								"usage v2: Glare inputFile --> performs standard calculation \n"
+								"usage v3: Glare inputFile.lua --> performs custom calculations\n"; /*!< This is the string representing the usage intructions.*/
+	
+	std::string inputFile; //!< The file that is being read
+
+	std::string outputFile; //!< The file (or directory) that will be written
+	
+	bool verbose; //!< An option that controls what sort of things will be "informed" or not
+	
+	GroundhogModel * model; //!< The Groundhog Model being handled
 
 public:
+	//! Creates a Glare object.
+	/*! 
+	Defaults the 'verbose' option to TRUE, and model to an empty GroundhogModel
+	*/
 	Glare();
+	
+	//! Destroys the Glare object
+	/*! 
+	Deletes all its members as well. Each member should delete its own members (i.e. the model deletes
+	layers, views, etc.)
+
+	@author German Molina
+	*/
 	~Glare();
 	
-	bool solve();
+	//! Parses the inputs provided through the command line
+	/*!
+	The first function to be called. Will return TRUE if all the inputs were
+	consistent and valid. Will return FALSE in any other case.
+
+	The inputs are basically the same as in the main() function.
+
+	@author German Molina 
+	@param[in] argc the number of arguments
+	@param[in] argv arguments
+	@return success 
+	*/
 	bool parseInputs(int argc, char* argv[]);
+	
+
+	//! Decides what needs to be done and call everything else to do it.
+	/*! 
+	This is the second and last function to be called by the main() function.
+	From this function, all other functions are called.
+
+	Will return TRUE if everything went well, and false in any other case.
+
+	@author German Molina
+	@return success
+	*/
+	bool solve();
+	
+
+	//! Loads the input file
+	/*!
+	Checks the file extension, creates the corresponding Reader and loads
+	it as a GroundhogModel.
+
+	@author German Molina
+	@param[out] model the GroundhogModel where the inputFile will be loaded
+	@param[in] inputFile the file to be loaded
+	@param[in] verbose inform progres?
+	@return success
+	*/
 	bool loadFile(GroundhogModel * model, std::string inputFile, bool verbose);
 
 }; // END OF GLARE CLASS

@@ -1,4 +1,5 @@
 #include "./SKPreader.h"
+#include "../../config_constants.h"
 #include "../../common/utilities/io.h"
 #include "../../common/utilities/stringutils.h"
 #include "../../groundhogmodel/groundhogmodel.h"
@@ -29,22 +30,18 @@
 #include <fstream>
 
 
-#define GROUNDHOG_DICTIONARY "Groundhog"
-#define WINDOW "Window"
-#define WORKPLANE "Workplane"
-#define ILLUM "Illum"
-
-#define TO_M(x) x*0.0254
-#define TO_M2(x) x*0.00064516
-#define TO_DEGREE(x) x*180/3.141592654 
 
 SKPReader::SKPReader() {
 	DEBUG_MSG("Creating SKPReader");
+
+	//initialize API
+	SUInitialize();
+
 	suModel = SU_INVALID;
 
-	groundhogDictionary = SU_INVALID;
+	groundhogDictionaryName = SU_INVALID;
 	checkSUResult(
-		SUStringCreateFromUTF8(&groundhogDictionary, GROUNDHOG_DICTIONARY),
+		SUStringCreateFromUTF8(&groundhogDictionaryName, GROUNDHOG_DICTIONARY),
 		"SUStringCreateFromUTF8",
 		"initializing SKPReader"
 	);
@@ -55,7 +52,7 @@ SKPReader::~SKPReader() {
 	
 	//release dictionary
 	checkSUResult(
-		SUStringRelease(&groundhogDictionary),
+		SUStringRelease(&groundhogDictionaryName),
 		"SUStringRelease",
 		"destroying SKP reader"
 	);
@@ -136,11 +133,7 @@ bool SKPReader::checkSUResult(SUResult res, std::string functionName, std::strin
 }
 
 
-bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * modelRef, bool verbose){
-	
-	//initialize
-	SUInitialize();
-
+bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * modelRef, bool verbose){		
 	//Load model
 	if (!checkSUResult(
 		SUModelCreateFromFile(&suModel, inputFile.c_str()),
@@ -206,7 +199,7 @@ bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, 
 		"Getting string from shadow info"
 	)) return false;
 
-	char cValue[100];
+	char cValue[MAX_STRING_LENGTH];
 	size_t cValueLength;
 
 	if (!checkSUResult(
@@ -233,7 +226,7 @@ bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, 
 		"Getting latitude from shadow info"
 	)) return false;
 
-	utf8toASCII(cValue, value, &cValueLength);
+	utf8toASCII(cValue, cValueLength, value, &cValueLength);
 
 	return true;
 }
@@ -331,12 +324,12 @@ bool SKPReader::loadModelInfo(GroundhogModel * model, bool verbose) {
 	model->setTimeZone(timeZone);
 	
 	//set city
-	char city[100];
+	char city[MAX_STRING_LENGTH];
 	getStringFromShadowInfo(shadowInfo, "City", city);
 	model->setCity(std::string(city));
 
 	//set country
-	char country[100];
+	char country[MAX_STRING_LENGTH];
 	getStringFromShadowInfo(shadowInfo, "Country", country);
 	model->setCountry(std::string(country));
 
@@ -350,6 +343,7 @@ bool SKPReader::loadModelInfo(GroundhogModel * model, bool verbose) {
 	model->setMinute(date->getMinute());
 	delete date;
 
+	return true;
 }
 
 bool SKPReader::SUCameraToView(std::string viewName, SUCameraRef camera, View * view) {
@@ -456,7 +450,7 @@ bool SKPReader::SUViewToView(SUSceneRef suView, View * view) {
 		"Getting view name length"
 	)) return false;
 	
-	char cViewName[100];
+	char cViewName[MAX_STRING_LENGTH];
 	if (!checkSUResult(
 		SUStringGetUTF8(viewName, stringLength, cViewName, &stringLength),
 		"SUStringGetUTF8",
@@ -469,8 +463,8 @@ bool SKPReader::SUViewToView(SUSceneRef suView, View * view) {
 		"Releasing SUStringRef of view name"
 	)) return false;
 	
-	char asciiViewName[100];
-	utf8toASCII(cViewName, asciiViewName, &stringLength);
+	char asciiViewName[MAX_STRING_LENGTH];
+	utf8toASCII(cViewName, stringLength, asciiViewName, &stringLength);
 	fixString(asciiViewName, stringLength);
 
 
@@ -579,7 +573,7 @@ bool SKPReader::loadLayers(GroundhogModel * model, bool verbose) {
 			"Getting layer name length"
 		)) return false;
 
-		char cLayerName[100];		
+		char cLayerName[MAX_STRING_LENGTH];		
 		if(!checkSUResult(
 			SUStringGetUTF8(layerName,	stringLength, cLayerName, &stringLength),
 			"SUStringGetUTF8",
@@ -592,8 +586,8 @@ bool SKPReader::loadLayers(GroundhogModel * model, bool verbose) {
 			"Releasing SUStringRef of layer name"
 		)) return false;
 
-		char asciiLayerName[100];
-		utf8toASCII(cLayerName, asciiLayerName, &stringLength);
+		char asciiLayerName[MAX_STRING_LENGTH];
+		utf8toASCII(cLayerName, stringLength, asciiLayerName, &stringLength);
 		fixString(asciiLayerName, stringLength);
 
 		model->addLayer(&std::string(asciiLayerName));
@@ -626,7 +620,7 @@ bool SKPReader::getSUComponentDefinitionName(SUComponentDefinitionRef definition
 		"Retrieving name of component definition"
 	)) return false;
 
-	char cComponentName[100];
+	char cComponentName[MAX_STRING_LENGTH];
 	if (!checkSUResult(
 		SUStringGetUTF8(suComponentName, cStringLength, cComponentName, &cStringLength),
 		"SUStringGetUTF8Length",
@@ -639,8 +633,8 @@ bool SKPReader::getSUComponentDefinitionName(SUComponentDefinitionRef definition
 		"Retrieving name of component definition"
 	)) return false;
 
-	char asciiComponentName[100];
-	utf8toASCII(cComponentName, asciiComponentName, &cStringLength);
+	char asciiComponentName[MAX_STRING_LENGTH];
+	utf8toASCII(cComponentName, cStringLength, asciiComponentName, &cStringLength);
 	fixString(asciiComponentName, cStringLength);
 
 
@@ -886,7 +880,7 @@ bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose) {
 } // end of Load Faces
 
 bool SKPReader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon) {
-	std::string moment = "transforming face to Polygon3D";
+	const std::string moment = "transforming face to Polygon3D";
 	// get area
 	double area;
 	if (!checkSUResult(
@@ -905,7 +899,7 @@ bool SKPReader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon) {
 	)) return false;
 
 	// translate outer loop
-	if (!SULoopToLoop(suOuterLoop, polygon->getOuterLoopReference()))
+	if (!SULoopToLoop(suOuterLoop, polygon->getOuterLoopRef()))
 		return false;
 
 	// get number of inner loops
@@ -1016,7 +1010,7 @@ bool SKPReader::getSUDrawingElementLayerName(SUDrawingElementRef element, std::s
 	)) return false;
 
 
-	char cLayerName[100];
+	char cLayerName[MAX_STRING_LENGTH];
 	if (!checkSUResult(
 		SUStringGetUTF8(layerName, layerNameLength, cLayerName, &layerNameLength),
 		"SUStringGetUTF8",
@@ -1030,8 +1024,8 @@ bool SKPReader::getSUDrawingElementLayerName(SUDrawingElementRef element, std::s
 		"retrieving layer when getting element layer name"
 	)) return false;
 
-	char asciiLayerName[100];
-	utf8toASCII(cLayerName, asciiLayerName, &layerNameLength);
+	char asciiLayerName[MAX_STRING_LENGTH];
+	utf8toASCII(cLayerName, layerNameLength, asciiLayerName, &layerNameLength);
 	fixString(asciiLayerName, layerNameLength);
 
 	*name = std::string(asciiLayerName);
@@ -1076,7 +1070,7 @@ bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name) {
 			
 			int result;
 			if(!checkSUResult(
-				SUStringCompare(dictionaryName, groundhogDictionary, &result),
+				SUStringCompare(dictionaryName, groundhogDictionaryName, &result),
 				"SUStringCompare",
 				"Checking if dictionary matches " + std::string(GROUNDHOG_DICTIONARY)
 			)) return false;
@@ -1131,7 +1125,7 @@ bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name) {
 				)) return false;
 
 				
-				char cStringEntityName[100];
+				char cStringEntityName[MAX_STRING_LENGTH];
 				if (!checkSUResult(
 					SUStringGetUTF8(suStringEntityName, nameLength,cStringEntityName,&nameLength),
 					"SUStringGetUTF8",
@@ -1145,8 +1139,8 @@ bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name) {
 					"SUStringRelease"
 				))return false;
 
-				char asciiEntityName[100];
-				utf8toASCII(cStringEntityName, asciiEntityName, &nameLength);
+				char asciiEntityName[MAX_STRING_LENGTH];
+				utf8toASCII(cStringEntityName, nameLength, asciiEntityName, &nameLength);
 				fixString(asciiEntityName, nameLength);
 
 				*name = std::string(asciiEntityName);

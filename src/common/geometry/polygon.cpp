@@ -2,14 +2,16 @@
 
 #include "../utilities/io.h"
 
-Polygon3D::Polygon3D() {
+Polygon3D::Polygon3D() 
+{
 	DEBUG_MSG("Creating polygon");
 	area = -1;
 	outerLoop = new Loop();
 	innerLoops = std::vector< Loop * >();
 };
 
-Polygon3D::~Polygon3D() {
+Polygon3D::~Polygon3D() 
+{
 
 	//remove exterior loop
 	delete outerLoop;
@@ -23,40 +25,44 @@ Polygon3D::~Polygon3D() {
 }
 
 
-Loop * Polygon3D::getOuterLoopReference() {
+Loop * Polygon3D::getOuterLoopRef()
+{
 	return outerLoop;
 }
 
-Loop * Polygon3D::addInnerLoop() {
+Loop * Polygon3D::addInnerLoop() 
+{
 	Loop * newLoop = new Loop();
 	innerLoops.push_back(newLoop);
 	return newLoop;
 }
 
-double Polygon3D::getArea() {
+double Polygon3D::getArea() 
+{
 	return area;
 }
 
-void Polygon3D::setArea(double newArea) {
+void Polygon3D::setArea(double newArea) 
+{
 	area = newArea;
 }
 
 
-bool Polygon3D::hasInnerLoops() {
+bool Polygon3D::hasInnerLoops() 
+{
 	return innerLoops.size() > 0;
 }
 
 
-Loop * Polygon3D::getOuterLoopRef() {
-	return outerLoop;
-}
 
-size_t Polygon3D::countInnerLoops() {
+size_t Polygon3D::countInnerLoops() 
+{
 	return innerLoops.size();
 }
 
 
-Loop * Polygon3D::getClosedLoop() {
+Loop * Polygon3D::getClosedLoop() 
+{
 	//get the number of interior loops
 	size_t numInnerLoops = innerLoops.size();
 	
@@ -83,9 +89,9 @@ Loop * Polygon3D::getClosedLoop() {
 		int minExtVertexID;
 		int minIntVertexID;
 
-		size_t numExtVertex = loop->getNumVertices();		
+		size_t numExtVertex = loop->size();		
 		for (int j = 0; j < numExtVertex; j++) {
-			Point3D * extVertex = loop->getVertex(j);
+			Point3D * extVertex = loop->getVertexRef(j);
 			for (int k = 0; k < numInnerLoops; k++) {
 				// continue if already processed
 				if (std::find(processedLoops.begin(), processedLoops.end(), k) != processedLoops.end()) {
@@ -93,9 +99,9 @@ Loop * Polygon3D::getClosedLoop() {
 				}
 
 				Loop * innerLoop = innerLoops[k];
-				size_t numInnerVertices = innerLoop->getNumVertices();
+				size_t numInnerVertices = innerLoop->size();
 				for (int l = 0; l < numInnerVertices; l++) {					
-					Point3D * innerVertex = innerLoop->getVertex(l);
+					Point3D * innerVertex = innerLoop->getVertexRef(l);
 
 					// we work with squared distances... the result is
 					// the same but the calculation is faster.
@@ -121,19 +127,19 @@ Loop * Polygon3D::getClosedLoop() {
 		Loop * aux = new Loop();
 		for (int i = 0; i < numExtVertex; i++) {
 
-			Point3D * extVertex = loop->getVertex(i);
+			Point3D * extVertex = loop->getVertexRef(i);
 			aux->addVertex(new Point3D(extVertex));
 			
 			if ( i == minExtVertexID) {			
 				// add the loop
-				size_t numInnerLoopVertices =  innerLoops[minInnerLoopID]->getNumVertices();
+				size_t numInnerLoopVertices =  innerLoops[minInnerLoopID]->size();
 				for (size_t j = 0; j < numInnerLoopVertices; j++) {				
 					int vertexToAdd = (vertexID++ % numInnerLoopVertices);					
-					Point3D * newVertex = new Point3D(innerLoops[minInnerLoopID]->getVertex(vertexToAdd));					
+					Point3D * newVertex = new Point3D(innerLoops[minInnerLoopID]->getVertexRef(vertexToAdd));					
 					aux->addVertex(newVertex);
 				}
 				//add the first vertex again
-				aux->addVertex(new Point3D(innerLoops[minInnerLoopID]->getVertex(minIntVertexID)));
+				aux->addVertex(new Point3D(innerLoops[minInnerLoopID]->getVertexRef(minIntVertexID)));
 				//return to exterior loop
 				aux->addVertex(new Point3D(extVertex));
 			}

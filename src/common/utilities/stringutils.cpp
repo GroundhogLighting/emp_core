@@ -1,24 +1,29 @@
+#include "./stringutils.h"
 #include "../../common/utilities/io.h"
 
+#include <sstream>
 #include <string>
 #include <algorithm> 
 
-#define NULL_CHAR '-'
 
-bool stringInclude(std::string word, std::string substring) {
+bool stringInclude(std::string word, std::string substring) 
+{
 	return word.find(substring) != -1;
 }
 
-bool stringInclude(char * word, std::string substring) {
+bool stringInclude(char * word, std::string substring) 
+{
 	return std::string(word).find(substring) != -1;
 }
 
-bool stringInclude(char * word, char * substring) {
+bool stringInclude(char * word, char * substring) 
+{
 	return std::string(word).find(substring) != -1;
 }
 
 
-bool stringIncludeAny(std::string word, char ** substringArray, int nItems) {
+bool stringIncludeAny(std::string word, char ** substringArray, int nItems) 
+{
 	for (int i = 0; i < nItems; i++) {
 		if (stringInclude(word, substringArray[i])) {
 			return true;
@@ -28,16 +33,18 @@ bool stringIncludeAny(std::string word, char ** substringArray, int nItems) {
 }
 
 
-bool stringIncludeAny(char * word, char ** substringArray, int nItems) {
+bool stringIncludeAny(char * word, char ** substringArray, int nItems) 
+{
 	return stringIncludeAny(std::string(word), substringArray, nItems);
 }
 
 
-void utf8toASCII(char * input, char * output, size_t * inputLength) {
+void utf8toASCII(char * input, size_t inputLength, char * output, size_t * outputLength) 
+{
 	
 	size_t i = 0;
 	size_t added = 0;
-	while( i < *inputLength && input[i] != '\0' ) {
+	while( i < inputLength && input[i] != '\0' ) {
 		added++;
 		unsigned char c = (unsigned char)input[i];
 		if (c < 127) {
@@ -62,13 +69,14 @@ void utf8toASCII(char * input, char * output, size_t * inputLength) {
 		}
 	}
 	output[added] = '\0'; // close the string
-	*inputLength = added;
+	*outputLength = added;
 	
 
 }
 
 
-void fixString(char * s, size_t stringLength) {	
+void fixString(char * s, size_t stringLength) 
+{	
 	
 	for(size_t i=0; i<stringLength; i++)
 	{		
@@ -95,8 +103,16 @@ void fixString(char * s, size_t stringLength) {
 			continue;
 		}
 		else {
-			s[i] = NULL_CHAR;			
+			s[i] = DEFAULT_CHAR;			
 		}
 	}
 
+}
+
+
+std::string size_tToString(size_t sz) 
+{
+	std::stringstream ss;
+	ss << sz;
+	return ss.str();
 }

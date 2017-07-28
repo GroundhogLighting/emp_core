@@ -10,7 +10,8 @@
 #include "./file.h"
 #include "./io.h"
 
-bool createdir(std::string dirname) {
+bool createdir(std::string dirname) 
+{
 	if (dexist(dirname) && isDir(dirname)) {
 		fatal("Impossible to create '"+dirname+"'. It already exists");
 		return false;
@@ -32,7 +33,8 @@ bool dexist(std::string dirname)
 	return _access(dirname.c_str(), 0) == 0;
 }
 
-bool isDir(std::string dirname) {
+bool isDir(std::string dirname) 
+{
 	if (_access(dirname.c_str(), 0) == 0) {
 		struct stat status;
 		stat(dirname.c_str(), &status);

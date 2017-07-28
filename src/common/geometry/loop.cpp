@@ -1,21 +1,24 @@
 #include "./loop.h"
 #include "../utilities/io.h"
 
-Loop::Loop() {
+Loop::Loop() 
+{
 	DEBUG_MSG("Creating loop");
 	//vertices.reserve(3);
 	vertices = std::vector < Point3D * >();
 }
 
-Loop::Loop(Loop * loop) {
+Loop::Loop(Loop * loop) 
+{
 	vertices = std::vector < Point3D * >();
-	size_t numVertices = loop->getNumVertices();
+	size_t numVertices = loop->size();
 	for (int i = 0; i < numVertices; i++) {
-		addVertex(new Point3D(loop->getVertex(i)));
+		addVertex(new Point3D(loop->getVertexRef(i)));
 	}
 }
 
-Loop::~Loop() {
+Loop::~Loop() 
+{
 
 	for (unsigned i = 0; i < vertices.size(); i++) {
 		delete vertices[i];
@@ -24,17 +27,20 @@ Loop::~Loop() {
 	DEBUG_MSG("Destroying loop");
 }
 
-void Loop::addVertex(Point3D * point) {
+void Loop::addVertex(Point3D * point) 
+{
 	vertices.push_back(point);
 }
 
 
-size_t Loop::getNumVertices() {
+size_t Loop::size() 
+{
 	return vertices.size();
 }
 
 
-Point3D * Loop::getVertex(size_t i) {
+Point3D * Loop::getVertexRef(size_t i) 
+{
 	return vertices[i];
 }
 
