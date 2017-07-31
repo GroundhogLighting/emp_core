@@ -16,6 +16,8 @@ libs/Sketchup/win64/headers/*
 *.idb
 *.user
 bin/*
+obj/*
+debug/*
 *.dll
 *.exe
 *.opendb
@@ -28,4 +30,3 @@ bin/*
 .vs 
 *Makefile*
 *.skb
-*.vcxproj*
