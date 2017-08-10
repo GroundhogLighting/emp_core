@@ -1,6 +1,7 @@
 var searchData=
 [
   ['scale',['scale',['../class_component_instance.html#aaa60656edaf47c926434db68d234ecdf',1,'ComponentInstance']]],
+  ['segment',['Segment',['../class_segment.html',1,'Segment'],['../class_segment.html#a456300a130ccdf53ae2158e709fa5c49',1,'Segment::Segment()']]],
   ['setarea',['setArea',['../class_polygon3_d.html#a378d7b4b2e78b583e88edb97b398c328',1,'Polygon3D']]],
   ['setcity',['setCity',['../class_groundhog_model.html#ac0adc57175e9ff932acf01633305bf11',1,'GroundhogModel::setCity()'],['../class_location.html#a7682ba7a6bc3387d7fe69b55687da398',1,'Location::setCity()']]],
   ['setcountry',['setCountry',['../class_groundhog_model.html#acf6ef7e39832fadb049ab7b64ec4a8ab',1,'GroundhogModel::setCountry()'],['../class_location.html#ac089ac93053f9afe1ecfdee192821200',1,'Location::setCountry()']]],
@@ -17,7 +18,7 @@ var searchData=
   ['setrotationy',['setRotationY',['../class_component_instance.html#a591a32a4a5bf975ab0dc5e1b5a54b151',1,'ComponentInstance']]],
   ['setrotationz',['setRotationZ',['../class_component_instance.html#a260e9cee1219677913758ba746c9c5b9',1,'ComponentInstance']]],
   ['setscale',['setScale',['../class_component_instance.html#a2d590d042d36b066818aec151081d02f',1,'ComponentInstance']]],
-  ['settimezone',['setTimezone',['../class_location.html#a17e3a6cfa14da13fdb6ea19c93b8681a',1,'Location::setTimezone()'],['../class_groundhog_model.html#a04dd2c91a12740c27567918a44ad3ef8',1,'GroundhogModel::setTimeZone()']]],
+  ['settimezone',['setTimeZone',['../class_groundhog_model.html#a04dd2c91a12740c27567918a44ad3ef8',1,'GroundhogModel::setTimeZone()'],['../class_location.html#a17e3a6cfa14da13fdb6ea19c93b8681a',1,'Location::setTimezone()']]],
   ['setviewdirection',['setViewDirection',['../class_view.html#af779e6ba5dc45662e5baccf44c294464',1,'View']]],
   ['setviewhorizontal',['setViewHorizontal',['../class_view.html#aa435aaf5e55f00cfbe8e1df725ea584e',1,'View']]],
   ['setviewpoint',['setViewPoint',['../class_view.html#a9556a59ec9b4031feef0b5c5a03f2d84',1,'View']]],
@@ -32,6 +33,7 @@ var searchData=
   ['skpreader',['SKPReader',['../class_s_k_p_reader.html',1,'SKPReader'],['../class_s_k_p_reader.html#afc3cb6f06e5dd3c1c33f489beb1b01f2',1,'SKPReader::SKPReader()']]],
   ['solve',['solve',['../class_glare.html#a8672f01bfa56789d541448e8f85253c9',1,'Glare']]],
   ['squareddistanceto',['squaredDistanceTo',['../class_point3_d.html#aaf2ffed758eb509f958abcd0e36cbf9c',1,'Point3D']]],
+  ['start',['start',['../class_segment.html#af6ac7623ff0c500168e931c9bd62485d',1,'Segment']]],
   ['stringinclude',['stringInclude',['../group__string_utils.html#ga77de7503d68fc9b0f4675427bb79aa88',1,'stringInclude(std::string word, std::string substring):&#160;stringutils.cpp'],['../group__string_utils.html#gad50ee2631b0ac4f5961ed53393866256',1,'stringInclude(char *word, std::string substring):&#160;stringutils.cpp'],['../group__string_utils.html#ga4c31487a804bbcd6c3437e167d7f4b9b',1,'stringInclude(char *word, char *substring):&#160;stringutils.cpp'],['../group__string_utils.html#ga77de7503d68fc9b0f4675427bb79aa88',1,'stringInclude(std::string word, std::string substring):&#160;stringutils.cpp'],['../group__string_utils.html#gad50ee2631b0ac4f5961ed53393866256',1,'stringInclude(char *word, std::string substring):&#160;stringutils.cpp'],['../group__string_utils.html#ga4c31487a804bbcd6c3437e167d7f4b9b',1,'stringInclude(char *word, char *substring):&#160;stringutils.cpp']]],
   ['stringincludeany',['stringIncludeAny',['../group__string_utils.html#ga2cdc7da8283e8832cddcf2e1d679694d',1,'stringIncludeAny(std::string word, char **substringArray, int nItems):&#160;stringutils.cpp'],['../group__string_utils.html#gadb9a4d65b0bc2f10001497993429d13b',1,'stringIncludeAny(char *word, char **substringArray, int nItems):&#160;stringutils.cpp'],['../group__string_utils.html#ga2cdc7da8283e8832cddcf2e1d679694d',1,'stringIncludeAny(std::string word, char **substringArray, int nItems):&#160;stringutils.cpp'],['../group__string_utils.html#gadb9a4d65b0bc2f10001497993429d13b',1,'stringIncludeAny(char *word, char **substringArray, int nItems):&#160;stringutils.cpp']]],
   ['string_20utilities',['String utilities',['../group__string_utils.html',1,'']]],

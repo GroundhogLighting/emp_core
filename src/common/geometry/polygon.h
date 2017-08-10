@@ -1,8 +1,28 @@
+/*****************************************************************************
+	Glare
+
+    Copyright (C) 2017  German Molina (germolinal@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*****************************************************************************/
+
 #pragma once
 
 #include <vector>
 
-#include "./point.h"
+#include "./point3d.h"
 #include "./vector.h"
 #include "./loop.h"
 
@@ -22,6 +42,7 @@ private:
 	Loop * outerLoop; //!< The outer loop
 	std::vector < Loop * > innerLoops; //!< A vector with all the interior loops
 	double area; //!< The are of the polygon (assumed to be in m2)
+	Vector3D * normal;
 
 public:
 
@@ -99,4 +120,35 @@ public:
 	@return The reference to the closed loop
 	*/
 	Loop * getClosedLoop();
+
+	//! Cleans all the loops.
+	/*!
+	See Loop::clean()
+
+	@author German Molina
+	@return success
+	*/
+	bool clean();
+
+	//! Retrieves the referente to a certain interior loop
+	/*!
+	@author German Molina
+	@return The pointer
+	*/
+	Loop * getInnerLoopRef(size_t i);
+
+	//! Sets the normal
+	/*!
+	@author German Molina	
+	@param normal The normal of the Polygon3D
+	*/
+	void setNormal(Vector3D * normal);
+
+	//! Retrieves the normal
+	/*!
+	@author German Molina
+	@return the normal reference
+	*/
+	Vector3D * getNormal();
+
 };

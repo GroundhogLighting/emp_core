@@ -1,3 +1,24 @@
+
+/*****************************************************************************
+	Glare
+
+    Copyright (C) 2017  German Molina (germolinal@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*****************************************************************************/
+
 #pragma once
 
 #include "../../groundhogmodel/groundhogmodel.h"
@@ -11,10 +32,13 @@
 
 
 
-#define GROUNDHOG_DICTIONARY "Groundhog"
-#define WINDOW "Window"
-#define WORKPLANE "Workplane"
-#define ILLUM "Illum"
+#define SKP_GROUNDHOG_DICTIONARY "Groundhog"
+#define SKP_LABEL "Label"
+#define SKP_WINDOW "window"
+#define SKP_WORKPLANE "workplane"
+#define SKP_ILLUM "illum"
+#define SKP_NAME "Name"
+#define SKP_VALUE "Value"
 
 #define TO_M(x) x*0.0254
 #define TO_M2(x) x*0.00064516
@@ -248,8 +272,8 @@ public:
 	//! Transforms a SUFaceRef into a Polygon3D
 	/*!
 	Creates a polygon with the same vertex (Point3D) and Loop as the
-	SUFaceRef object. It also fills the area of the face.
-
+	SUFaceRef object, except that it cleans them (see Loop::clean()). 
+	It also fills the area of the face.
 
 	The SketchUp API is in inches, so everything is transformed into
 	meters and squared meters.
@@ -331,8 +355,39 @@ public:
 	*/
 	bool fillComponentInstanceLocation(ComponentInstance * instance, SUComponentInstanceRef suInstance);
 
+	//! Retrieves the label of a SUFaceRef
+	/*!
+	Will return TRUE if the face does have a label; false if not.
+	
+	@author German Molina
+	@param[in] face The SUFaceRef to retrieve the label from
+	@param[out] name The object to put the name into
+	@return false if the face does not have a label, true otherwise
+	*/
+	bool getSUFaceLabel(SUFaceRef face, std::string * name);
 
+	//! Retrieves the label of a SUEntityRef
+	/*!
+	Will return TRUE if the entity does have a label; false if not.
 
+	@author German Molina
+	@param[in] entity The SUEntityRef to retrieve the label from
+	@param[out] name The object to put the name into
+	@return false if the entity does not have a label, true otherwise
+	@todo Change all labels to numbers.
+	*/
+	bool getSUEntityLabel(SUEntityRef entity, std::string * name);
 
+	//! Adds a workplane face to a model.
+	/*!
+	Gets the name of the face and adds it to the model. The model
+	automatically creates a workplane if it does not already exist.
+
+	@author German Molina
+	@param[in] face The face to treat as a workplane	
+	@param[out] model The model to add the workplane to
+	@return success
+	*/
+	bool addWorkplaneToModel(SUFaceRef face, GroundhogModel * model);
 
 };

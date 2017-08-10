@@ -1,3 +1,24 @@
+/*****************************************************************************
+	Glare
+
+    Copyright (C) 2017  German Molina (germolinal@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*****************************************************************************/
+
+
 #pragma once
 
 //! The main object for exporting a GroundhogModel in Radiance format.
@@ -116,4 +137,30 @@ public:
 	*/
 	void writeFace(std::ofstream * file, Face * face);
 
+	//! Writes all the window groups in Radiance format
+	/*!
+	@author German Molina
+	@return success
+	*/
+	bool writeWindows();
+
+	//! Writes all the Workplanes in Radiance format
+	/*!
+	@author German Molina
+	@return success
+	*/
+	bool writeWorkplanes();
+
+	//! Writes a Polygon3D that represents a Workplane
+	/*!
+	This method takes a Polygon3D with holes, triangulates it and writes
+	the files required.
+
+	@author German Molina
+	@param[in] ptsFile The file where the points (sensors) get written
+	@param[in] pxlFile The file where the pixels (i.e. triangles) get written
+	@param[in] wp The Polygon3D to triangulate and write
+	@return success
+	*/
+	bool writeWorkplane(std::ofstream * ptsFile, std::ofstream * pxlFile, Polygon3D * wp);
 };

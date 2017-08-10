@@ -1,3 +1,24 @@
+/*****************************************************************************
+	Glare
+
+    Copyright (C) 2017  German Molina (germolinal@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*****************************************************************************/
+
+
 #include "./SKPreader.h"
 #include "../../config_constants.h"
 #include "../../common/utilities/io.h"
@@ -31,7 +52,8 @@
 
 
 
-SKPReader::SKPReader() {
+SKPReader::SKPReader() 
+{
 	DEBUG_MSG("Creating SKPReader");
 
 	//initialize API
@@ -41,13 +63,14 @@ SKPReader::SKPReader() {
 
 	groundhogDictionaryName = SU_INVALID;
 	checkSUResult(
-		SUStringCreateFromUTF8(&groundhogDictionaryName, GROUNDHOG_DICTIONARY),
+		SUStringCreateFromUTF8(&groundhogDictionaryName, SKP_GROUNDHOG_DICTIONARY),
 		"SUStringCreateFromUTF8",
 		"initializing SKPReader"
 	);
 };
 
-SKPReader::~SKPReader() {
+SKPReader::~SKPReader() 
+{
 	DEBUG_MSG("Destroying SKPReader");
 	
 	//release dictionary
@@ -65,7 +88,8 @@ SKPReader::~SKPReader() {
 };
 
 
-bool SKPReader::checkSUResult(SUResult res, std::string functionName, std::string location) {
+bool SKPReader::checkSUResult(SUResult res, std::string functionName, std::string location) 
+{
 	if (res == SU_ERROR_NONE) {
 		return true;
 	}
@@ -133,7 +157,8 @@ bool SKPReader::checkSUResult(SUResult res, std::string functionName, std::strin
 }
 
 
-bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * modelRef, bool verbose){		
+bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * modelRef, bool verbose)
+{		
 	//Load model
 	if (!checkSUResult(
 		SUModelCreateFromFile(&suModel, inputFile.c_str()),
@@ -171,7 +196,8 @@ bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * modelRef, 
 };
 
 
-bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, char * value) {
+bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, char * value) 
+{
 	SUTypedValueRef suValue = SU_INVALID;
 	if (!checkSUResult(
 		SUTypedValueCreate(&suValue),
@@ -231,7 +257,8 @@ bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, 
 	return true;
 }
 
-bool SKPReader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo,char * key, double * value) {
+bool SKPReader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo,char * key, double * value) 
+{
 	SUTypedValueRef suValue= SU_INVALID;
 	if (!checkSUResult(
 		SUTypedValueCreate(&suValue),
@@ -261,7 +288,8 @@ bool SKPReader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo,char * key, d
 }
 
 
-bool SKPReader::getTimeFromShadowInfo(SUShadowInfoRef shadowInfo, int64_t * value) {
+bool SKPReader::getTimeFromShadowInfo(SUShadowInfoRef shadowInfo, int64_t * value) 
+{
 	SUTypedValueRef suValue = SU_INVALID;
 	if (!checkSUResult(
 		SUTypedValueCreate(&suValue),
@@ -290,7 +318,8 @@ bool SKPReader::getTimeFromShadowInfo(SUShadowInfoRef shadowInfo, int64_t * valu
 	return true;
 }
 
-bool SKPReader::loadModelInfo(GroundhogModel * model, bool verbose) {
+bool SKPReader::loadModelInfo(GroundhogModel * model, bool verbose) 
+{
 	// load north correction
 	double northC;
 	if (!checkSUResult(
@@ -346,7 +375,8 @@ bool SKPReader::loadModelInfo(GroundhogModel * model, bool verbose) {
 	return true;
 }
 
-bool SKPReader::SUCameraToView(std::string viewName, SUCameraRef camera, View * view) {
+bool SKPReader::SUCameraToView(std::string viewName, SUCameraRef camera, View * view) 
+{
 
 	// set the name
 	view->setName(viewName);
@@ -427,7 +457,8 @@ bool SKPReader::SUCameraToView(std::string viewName, SUCameraRef camera, View * 
 	return true;
 }
 
-bool SKPReader::SUViewToView(SUSceneRef suView, View * view) {
+bool SKPReader::SUViewToView(SUSceneRef suView, View * view) 
+{
 	// get the name of the view
 	
 	SUStringRef viewName = SU_INVALID;
@@ -485,7 +516,8 @@ bool SKPReader::SUViewToView(SUSceneRef suView, View * view) {
 
 }
 
-bool SKPReader::loadViews(GroundhogModel * model, bool verbose) {
+bool SKPReader::loadViews(GroundhogModel * model, bool verbose) 
+{
 	
 	// get the current view
 	SUCameraRef activeCamera;
@@ -500,7 +532,7 @@ bool SKPReader::loadViews(GroundhogModel * model, bool verbose) {
 	SUCameraToView("view", activeCamera, activeView);
 	model->addView(activeView);
 
-	// export stored views
+	// load stored views
 	size_t countScenes;
 
 	if (!checkSUResult(
@@ -529,7 +561,8 @@ bool SKPReader::loadViews(GroundhogModel * model, bool verbose) {
 	return true;
 }
 
-bool SKPReader::loadLayers(GroundhogModel * model, bool verbose) {
+bool SKPReader::loadLayers(GroundhogModel * model, bool verbose) 
+{
 
 	// count layers
 	size_t countLayers = 0;
@@ -597,7 +630,8 @@ bool SKPReader::loadLayers(GroundhogModel * model, bool verbose) {
 	return true;
 } // end of Load Layers
 
-bool SKPReader::getSUComponentDefinitionName(SUComponentDefinitionRef definition, std::string * name) {
+bool SKPReader::getSUComponentDefinitionName(SUComponentDefinitionRef definition, std::string * name) 
+{
 	//define a SUString
 	SUStringRef suComponentName = SU_INVALID;
 
@@ -643,7 +677,8 @@ bool SKPReader::getSUComponentDefinitionName(SUComponentDefinitionRef definition
 }
 
 
-bool SKPReader::addComponentInstanceToVector(std::vector <ComponentInstance * > * dest, SUComponentInstanceRef suComponentInstance, GroundhogModel * model) {
+bool SKPReader::addComponentInstanceToVector(std::vector <ComponentInstance * > * dest, SUComponentInstanceRef suComponentInstance, GroundhogModel * model) 
+{
 
 	// get definition
 	SUComponentDefinitionRef definition;
@@ -675,7 +710,8 @@ bool SKPReader::addComponentInstanceToVector(std::vector <ComponentInstance * > 
 	return true;
 }
 
-bool SKPReader::addFaceToVector(std::vector <Face * > * dest, SUFaceRef suFace) {
+bool SKPReader::addFaceToVector(std::vector <Face * > * dest, SUFaceRef suFace) 
+{
 
 	// build the polygon
 	Polygon3D * polygon = new Polygon3D();
@@ -684,7 +720,7 @@ bool SKPReader::addFaceToVector(std::vector <Face * > * dest, SUFaceRef suFace) 
 
 	// get the name of the face
 	std::string name;
-	getSUFaceName(suFace, &name);
+	getSUFaceName(suFace, &name); // this will allways put something
 
 	//build the face
 	Face * face = new Face(name);
@@ -696,7 +732,8 @@ bool SKPReader::addFaceToVector(std::vector <Face * > * dest, SUFaceRef suFace) 
 	return true;
 }
 
-bool SKPReader::bulkFacesIntoVector(std::vector <Face * > * dest, SUEntitiesRef entities) {
+bool SKPReader::bulkFacesIntoVector(std::vector <Face * > * dest, SUEntitiesRef entities) 
+{
 
 	// count faces in these entities
 	size_t numFaces = 0;
@@ -721,7 +758,8 @@ bool SKPReader::bulkFacesIntoVector(std::vector <Face * > * dest, SUEntitiesRef 
 	return true;
 }
 
-bool SKPReader::loadComponentDefinition(SUComponentDefinitionRef definition, GroundhogModel * model) {
+bool SKPReader::loadComponentDefinition(SUComponentDefinitionRef definition, GroundhogModel * model) 
+{
 	//get the name
 	std::string definitionName;
 	if (!getSUComponentDefinitionName(definition, &definitionName)) {
@@ -751,7 +789,8 @@ bool SKPReader::loadComponentDefinition(SUComponentDefinitionRef definition, Gro
 	return true;
 }
 
-bool SKPReader::loadComponentDefinitions(GroundhogModel * model, bool verbose) {
+bool SKPReader::loadComponentDefinitions(GroundhogModel * model, bool verbose) 
+{
 	// count the component definitions
 	size_t countDefinitions = 0;
 	if (!checkSUResult(
@@ -786,7 +825,8 @@ bool SKPReader::loadComponentDefinitions(GroundhogModel * model, bool verbose) {
 	return true;
 }
 
-bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose) {
+bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose) 
+{
 	// Get the entity container of the model.
 	SUEntitiesRef entities = SU_INVALID;
 	if (!checkSUResult(
@@ -821,15 +861,24 @@ bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose) {
 	for (size_t i = 0; i < faceCount; i++) {
 		
 		// CHECK LABEL OF FACE
-
+		std::string faceLabel;
+		bool hasLabel = getSUFaceLabel(faces[i], &faceLabel);
 		
-		// if it is workplane
+		if ( hasLabel ) {
+			// if it is workplane
+			if (faceLabel == SKP_WORKPLANE) {
+				addWorkplaneToModel(faces[i],model);
+			}
+			else if (faceLabel == SKP_ILLUM) {
+			// if it is illum
 
-		// if it is illum
+			}
+			else if (faceLabel == SKP_WINDOW) {
+			// if it is window
 
-
-		// if it is window
-
+			}
+		}
+		
 		// if has no label (i.e. is geometry face)		
 		std::string layerName;		
 		if (!getSUFaceLayerName(faces[i],&layerName))
@@ -843,6 +892,7 @@ bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose) {
 
 	} // end of iterating faces
 	
+
 	// load component instances
 	size_t instanceCount;
 	if (!checkSUResult(
@@ -850,6 +900,9 @@ bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose) {
 		"SUEntitiesGetNumInstances",
 		"Retrieving faces"
 	)) return false;
+
+	if (instanceCount == 0)
+		return true;
 
 	std::vector<SUComponentInstanceRef> instances(instanceCount);
 	if (!checkSUResult(
@@ -879,8 +932,9 @@ bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose) {
 	return true;
 } // end of Load Faces
 
-bool SKPReader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon) {
-	const std::string moment = "transforming face to Polygon3D";
+bool SKPReader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon) 
+{
+	const std::string moment = "SUFaceToPolygon3D";
 	// get area
 	double area;
 	if (!checkSUResult(
@@ -890,6 +944,15 @@ bool SKPReader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon) {
 	)) return false;
 	polygon->setArea(TO_M2(area));
 	
+	// Get the normal
+	SUVector3D normal;
+	if (!checkSUResult(
+		SUFaceGetNormal(face, &normal),
+		"SUFaceGetArea",
+		moment
+	)) return false;
+	polygon->setNormal(new Vector3D(normal.x, normal.y, normal.z));
+
 	// get the outer loop
 	SULoopRef suOuterLoop = SU_INVALID;
 	if (!checkSUResult(
@@ -929,10 +992,15 @@ bool SKPReader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon) {
 
 	} // end of if there is an inner loop
 
+	// clean the polygon
+	if (!polygon->clean())
+		return false;
+
 	return true;
 }
 
-bool SKPReader::SULoopToLoop(SULoopRef suLoop, Loop * loop) {
+bool SKPReader::SULoopToLoop(SULoopRef suLoop, Loop * loop) 
+{
 	std::string moment = "converting SULoop into Loop";
 
 	// First, count vertices
@@ -969,15 +1037,18 @@ bool SKPReader::SULoopToLoop(SULoopRef suLoop, Loop * loop) {
 	return true;
 }
 
-bool SKPReader::getSUFaceName(SUFaceRef face, std::string * name) {
+bool SKPReader::getSUFaceName(SUFaceRef face, std::string * name) 
+{
 	return getSUEntityName(SUFaceToEntity(face), name);
 }
 
-bool SKPReader::getSUFaceLayerName(SUFaceRef face, std::string * name) {	
+bool SKPReader::getSUFaceLayerName(SUFaceRef face, std::string * name) 
+{	
 	return getSUDrawingElementLayerName( SUFaceToDrawingElement(face), name);
 }
 
-bool SKPReader::getSUDrawingElementLayerName(SUDrawingElementRef element, std::string * name) {
+bool SKPReader::getSUDrawingElementLayerName(SUDrawingElementRef element, std::string * name) 
+{
 	SULayerRef layer = SU_INVALID;
 	if (!checkSUResult(
 		SUDrawingElementGetLayer(element,&layer),
@@ -1032,7 +1103,8 @@ bool SKPReader::getSUDrawingElementLayerName(SUDrawingElementRef element, std::s
 	return true;
 };
 
-bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name) {
+bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name) 
+{
 	// check how many dictionaries
 	size_t dictionaryCount;
 	if (!checkSUResult(
@@ -1072,14 +1144,14 @@ bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name) {
 			if(!checkSUResult(
 				SUStringCompare(dictionaryName, groundhogDictionaryName, &result),
 				"SUStringCompare",
-				"Checking if dictionary matches " + std::string(GROUNDHOG_DICTIONARY)
+				"Checking if dictionary matches " + std::string(SKP_GROUNDHOG_DICTIONARY)
 			)) return false;
 
 			if (!checkSUResult(
 				SUStringRelease(&dictionaryName),
 				"SUStringRelease",
 				"releasing dictionary name"
-			))return false;
+			)) return false;
 
 			if (result == 0) {
 			
@@ -1088,64 +1160,68 @@ bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name) {
 				if (!checkSUResult(
 					SUTypedValueCreate(&value),
 					"SUTypedValueCreate",
-					"retrieving value from "+ std::string(GROUNDHOG_DICTIONARY)+" dictionary"
+					"retrieving value from "+ std::string(SKP_GROUNDHOG_DICTIONARY)+" dictionary"
 				)) return false;
 
-				
-				if (!checkSUResult(
-					SUAttributeDictionaryGetValue(dictionaries[i],"Name",&value),
-					"SUAttributeDictionaryGetValue",
-					"retrieving value from " + std::string(GROUNDHOG_DICTIONARY) + " dictionary"
-				)) return false;
+				SUResult hasName = SUAttributeDictionaryGetValue(dictionaries[i], SKP_NAME, &value);
+				if (hasName == SU_ERROR_NONE) {
+					//does have its own name
+					if (!checkSUResult(
+						hasName,
+						"SUAttributeDictionaryGetValue",
+						"retrieving value from " + std::string(SKP_GROUNDHOG_DICTIONARY) + " dictionary"
+					)) return false;
 
-				
-				SUStringRef suStringEntityName = SU_INVALID;
-				if(!checkSUResult(
-					SUStringCreate(&suStringEntityName),
-					"SUStringCreate",
-					"initializing initializing"
-				)) return false;
-				
-				
-				if (!checkSUResult(
-					SUTypedValueGetString(value, &suStringEntityName),
-					"SUTypedValueGetString",
-					"retrieving string from SUString"
-				)) {					
-					SUStringRelease(&suStringEntityName);
-					return false;
-				} 
 
-				
-				size_t nameLength;
-				if (!checkSUResult(
-					SUStringGetUTF8Length(suStringEntityName,&nameLength),
-					"SUStringGetUTF8Length",
-					"SUStringGetUTF8Length"
-				)) return false;
+					SUStringRef suStringEntityName = SU_INVALID;
+					if (!checkSUResult(
+						SUStringCreate(&suStringEntityName),
+						"SUStringCreate",
+						"initializing initializing"
+					)) return false;
 
-				
-				char cStringEntityName[MAX_STRING_LENGTH];
-				if (!checkSUResult(
-					SUStringGetUTF8(suStringEntityName, nameLength,cStringEntityName,&nameLength),
-					"SUStringGetUTF8",
-					"SUStringGetUTF8"
-				)) return false;
 
-				
-				if(!checkSUResult(
-					SUStringRelease(&suStringEntityName),
-					"SUStringRelease",
-					"SUStringRelease"
-				))return false;
+					if (!checkSUResult(
+						SUTypedValueGetString(value, &suStringEntityName),
+						"SUTypedValueGetString",
+						"retrieving string from SUString"
+					)) {
+						SUStringRelease(&suStringEntityName);
+						return false;
+					}
 
-				char asciiEntityName[MAX_STRING_LENGTH];
-				utf8toASCII(cStringEntityName, nameLength, asciiEntityName, &nameLength);
-				fixString(asciiEntityName, nameLength);
 
-				*name = std::string(asciiEntityName);
+					size_t nameLength;
+					if (!checkSUResult(
+						SUStringGetUTF8Length(suStringEntityName, &nameLength),
+						"SUStringGetUTF8Length",
+						"SUStringGetUTF8Length"
+					)) return false;
 
-				return true;
+
+					char cStringEntityName[MAX_STRING_LENGTH];
+					if (!checkSUResult(
+						SUStringGetUTF8(suStringEntityName, nameLength, cStringEntityName, &nameLength),
+						"SUStringGetUTF8",
+						"SUStringGetUTF8"
+					)) return false;
+
+
+					if (!checkSUResult(
+						SUStringRelease(&suStringEntityName),
+						"SUStringRelease",
+						"SUStringRelease"
+					))return false;
+
+					char asciiEntityName[MAX_STRING_LENGTH];
+					utf8toASCII(cStringEntityName, nameLength, asciiEntityName, &nameLength);
+					fixString(asciiEntityName, nameLength);
+
+					*name = std::string(asciiEntityName);
+
+					return true;
+
+				} // enf of "hasName == SU_ERROR_NONE"		
 			} // end of "if it is Groundhog"
 		} //end of iterating through dictionaries				
 	}
@@ -1231,5 +1307,157 @@ bool SKPReader::fillComponentInstanceLocation(ComponentInstance * instance, SUCo
 	//  rotating and moving?
 	instance->setScale(1);
 
+	return true;
+}
+
+
+bool SKPReader::getSUFaceLabel(SUFaceRef face, std::string * name)
+{
+	return getSUEntityLabel(SUFaceToEntity(face), name);
+}
+
+
+bool SKPReader::getSUEntityLabel(SUEntityRef entity, std::string * name)
+{
+	// check how many dictionaries
+	size_t dictionaryCount;
+	if (!checkSUResult(
+		SUEntityGetNumAttributeDictionaries(entity, &dictionaryCount),
+		"SUEntityGetNumAttributeDictionaries",
+		"Counting dictionaries of face"
+	)) return false;
+
+	// if there are no dictionaries, then return.
+	if (dictionaryCount == 0)
+		return false;
+
+	//retrieve dictionaries
+	std::vector <SUAttributeDictionaryRef> dictionaries(dictionaryCount);
+	if (!checkSUResult(
+		SUEntityGetAttributeDictionaries(entity, dictionaryCount, &dictionaries[0], &dictionaryCount),
+		"SUEntityGetAttributeDictionaries",
+		"Retrieving dictionaries for getting entity name"
+	)) return false;
+
+	// Check if it has a Groundhog dictionary
+	for (int i = 0; i < dictionaryCount; i++) {
+
+		SUStringRef dictionaryName = SU_INVALID;
+		if (!checkSUResult(
+			SUStringCreate(&dictionaryName),
+			"SUStringCreate",
+			"initializing dictionary name"
+		)) return false;
+
+		if (!checkSUResult(
+			SUAttributeDictionaryGetName(dictionaries[i], &dictionaryName),
+			"SUAttributeDictionaryGetName",
+			"Getting dictionary name on getting entitiy name"
+		)) return false;
+
+		int result;
+		if (!checkSUResult(
+			SUStringCompare(dictionaryName, groundhogDictionaryName, &result),
+			"SUStringCompare",
+			"Checking if dictionary matches " + std::string(SKP_GROUNDHOG_DICTIONARY)
+		)) return false;
+
+		if (!checkSUResult(
+			SUStringRelease(&dictionaryName),
+			"SUStringRelease",
+			"releasing dictionary name"
+		)) return false;
+
+		if (result == 0) { // then, it is a Groundhog dictionary
+
+			//retrieve the value
+			SUTypedValueRef value = SU_INVALID;
+			if (!checkSUResult(
+				SUTypedValueCreate(&value),
+				"SUTypedValueCreate",
+				"retrieving label from " + std::string(SKP_GROUNDHOG_DICTIONARY) + " dictionary"
+			)) return false;
+
+			SUResult hasValue = SUAttributeDictionaryGetValue(dictionaries[i], SKP_LABEL, &value);
+			if (hasValue == SU_ERROR_NO_DATA) {
+				return false; // No error... only, not any label
+			}
+			if (!checkSUResult(
+				hasValue,
+				"SUAttributeDictionaryGetValue",
+				"retrieving label from " + std::string(SKP_GROUNDHOG_DICTIONARY) + " dictionary"
+			)) return false;
+
+
+			SUStringRef suStringEntityLabel= SU_INVALID;
+			if (!checkSUResult(
+				SUStringCreate(&suStringEntityLabel),
+				"SUStringCreate",
+				"initializing initializing"
+			)) return false;
+
+
+			if (!checkSUResult(
+				SUTypedValueGetString(value, &suStringEntityLabel),
+				"SUTypedValueGetString",
+				"retrieving string from SUString"
+			)) {
+				SUStringRelease(&suStringEntityLabel);
+				return false;
+			}
+
+
+			size_t nameLength;
+			if (!checkSUResult(
+				SUStringGetUTF8Length(suStringEntityLabel, &nameLength),
+				"SUStringGetUTF8Length",
+				"SUStringGetUTF8Length"
+			)) return false;
+
+
+			char cStringEntityName[MAX_STRING_LENGTH];
+			if (!checkSUResult(
+				SUStringGetUTF8(suStringEntityLabel, nameLength, cStringEntityName, &nameLength),
+				"SUStringGetUTF8",
+				"SUStringGetUTF8"
+			)) return false;
+
+
+			if (!checkSUResult(
+				SUStringRelease(&suStringEntityLabel),
+				"SUStringRelease",
+				"SUStringRelease"
+			)) return false;
+
+			char asciiEntityName[MAX_STRING_LENGTH];
+			utf8toASCII(cStringEntityName, nameLength, asciiEntityName, &nameLength);
+			fixString(asciiEntityName, nameLength);
+
+			*name = std::string(asciiEntityName);
+
+			return true;
+		} // end of "if it is Groundhog"
+	} //end of iterating through dictionaries		
+
+	return false; // return false if there was no Groundhog dictionary
+	
+}
+
+bool SKPReader::addWorkplaneToModel(SUFaceRef suFace, GroundhogModel * model) {
+
+	// get the name of the face
+	std::string name;
+	bool hasName = getSUFaceName(suFace, &name);
+	if (!hasName) {
+		fatal("Invalid workplane: has no name");
+		return false;
+	}
+
+	// Build the polygon
+	Polygon3D * polygon = new Polygon3D();
+	if (!SUFaceToPolygon3D(suFace, polygon))
+		return false;
+
+	model->addPolygonToWorkplane(&name, polygon);
 	return true;
 }

@@ -1,3 +1,24 @@
+/*****************************************************************************
+	Glare
+
+    Copyright (C) 2017  German Molina (germolinal@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*****************************************************************************/
+
+
 #include "./groundhogmodel.h"
 #include "../common/utilities/io.h"
 
@@ -243,4 +264,51 @@ void GroundhogModel::setCountry(std::string c)
 std::string GroundhogModel::getCountry()
 {
 	return location->getCountry();
+}
+
+
+void GroundhogModel::addPolygonToWorkplane(std::string * workplaneName, Polygon3D * polygon) {
+	for (unsigned i = 0; i < workplanes.size(); i++) {
+		if (workplanes[i]->compareName(workplaneName)) {
+			DEBUG_MSG("Found workplane " + *workplaneName);
+			workplanes[i]->addPolygon(polygon);
+		}
+	}
+
+	// Workplane not found... lets create one.
+	Workplane * wp = new Workplane(*workplaneName);
+	wp->addPolygon(polygon);
+	workplanes.push_back(wp);	
+}
+
+
+void GroundhogModel::addWindowToGroup(std::string * windowGroupName, Face * face) {
+	for (unsigned i = 0; i < windowGroups.size(); i++) {
+		if (windowGroups[i]->compareName(windowGroupName)) {
+			DEBUG_MSG("Found window group " + *windowGroupName);
+			windowGroups[i]->addFace(face);
+		}
+	}
+
+	// Workplane not found... lets create one.
+	WindowGroup * wg = new WindowGroup(*windowGroupName);
+	wg->addFace(face);
+	windowGroups.push_back(wg);
+}
+
+size_t GroundhogModel::getNumWindowGroups() {
+	return windowGroups.size();
+}
+
+size_t GroundhogModel::getNumWorkplanes() {
+	return workplanes.size();
+}
+
+
+WindowGroup * GroundhogModel::getWindowGroupRef(size_t i) {
+	return windowGroups[i];
+}
+
+Workplane * GroundhogModel::getWorkplaneRef(size_t i) {
+	return workplanes[i];
 }

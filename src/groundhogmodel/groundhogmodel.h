@@ -1,10 +1,32 @@
+/*****************************************************************************
+	Glare
+
+    Copyright (C) 2017  German Molina (germolinal@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*****************************************************************************/
+
+
 #pragma once
 
 #include <vector>
 
-
+#include "./src/windowgroup.h"
 #include "./src/material.h"
 #include "./src/layer.h"
+#include "./src/workplane.h"
 #include "./src/componentdefinition.h"
 #include "./src/view.h"
 #include "../common/utilities/date.h"
@@ -21,13 +43,13 @@ class GroundhogModel {
 
 private:
 	//Objectives // **
-	std::vector <Layer *> layers; //!< Containins all the geometry that represents physical objects
-	//Workplanes // **
+	std::vector <Layer *> layers; //!< Contains all the geometry that represents physical objects
+	std::vector <Workplane *> workplanes; //!< Contains the workplanes
 	//Photosensors // **
 	//std::vector <Material *> materials;
 	std::vector <View *> views; //!< Contains all the views that are saved in the model
 	std::vector <ComponentDefinition *> definitions; //!< Contains all the Component Definitions in the model
-	//WindowGroups
+	std::vector <WindowGroup *> windowGroups; //!< Contains the window group
 	//Weather
 	//Luminaires
 	Location * location; //!< The location (i.e. longitude, latitude, timezone, etc.)
@@ -324,4 +346,58 @@ public:
 	*/
 	int getMinute();
 
+	//! Adds a new polygon to a certain workplane
+	/*!
+	Searches for the corresponding workplane, and adds the polygon
+	at the end of it. If it does not exist, it will create one with 
+	the provided name
+
+	@author German Molina
+	@param[in] workplaneName The name of the workplane
+	@param[in] polygon The Polygon3D to add
+	*/
+	void addPolygonToWorkplane(std::string * workplaneName, Polygon3D * polygon);
+
+	//! Adds a new window to a certain Window Group
+	/*!
+	Searches for the corresponding window group, and adds the Faces
+	at the end of it. If it does not exist, it will create one with
+	the provided name
+
+	@author German Molina
+	@param[in] windowGroupName The name of the workplane
+	@param[in] face The Face to add
+	*/
+	void addWindowToGroup(std::string * windowGroupName, Face * face);
+
+
+	//! Retrieves the number of window groups
+	/*!
+	@author German molina
+	@return The number of window groups
+	*/
+	size_t getNumWindowGroups();
+
+	//! Retrieves the number of workplanes
+	/*!
+	@author German Molina
+	@return The number of workplanes
+	*/
+	size_t getNumWorkplanes();
+
+	//! Retrieves the reference to a certain WindowGroup
+	/*!
+	@author German Molina
+	@param[in] i The index of the WindowGroup
+	@return The reference to the WindowGroup
+	*/
+	WindowGroup * getWindowGroupRef(size_t i);
+
+	//! Retrieves the reference to a certain Workplane
+	/*!
+	@author German Molina
+	@param[in] i The index of the Workplane
+	@return The reference to the Workplane
+	*/
+	Workplane * getWorkplaneRef(size_t i);
 };

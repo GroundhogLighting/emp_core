@@ -266,7 +266,7 @@ FILE_PATTERNS          = *.c \
 
 RECURSIVE              = YES
 
-#EXCLUDE                =
+EXCLUDE                = ./src/3rdparty
 
 EXCLUDE_SYMLINKS       = NO
 

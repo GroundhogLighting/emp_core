@@ -1,29 +1,21 @@
 -- premake5.lua
+
 workspace "Glare"
     architecture "x86_64"
 
     configurations { "DebugWIN", "WIN", "DebugMACOS", "MACOS", "LINUX", "DebugLINUX" }
 
-    includedirs {
-        "./libs/SketchUp/win64/headers"
-    }
+    project "GoogleTest"
+        kind "StaticLib"
+        files { "googletest/googletest/src/gtest-all.cc" }
+        includedirs { "googletest/googletest/include", "googletest/googletest" }
+        targetdir "googletest/build/%{cfg.buildcfg}"        
 
-    filter "configurations:Debug*"
-        defines { "DEBUG" }
-    
-    filter "configurations:*WIN*"
-        defines { "WIN" }    
-        links {
-            "./libs/SketchUp/win64/binaries/sketchup/x64/*"
-        }
 
-    filter "configurations:*MAC*"
-        defines { "MACOS" }  
- 
-    filter "configurations:*LINUX*"
-        defines { "LINUX" }                          
+                   
 
-project "Glare"
+
+project "glare"
    kind "ConsoleApp"
    language "C++"
    targetdir "bin/%{cfg.buildcfg}"
@@ -34,4 +26,23 @@ project "Glare"
        "src/**"
     }
 
-   
+    includedirs {
+        "./src/3rdparty/SketchUp/win64/headers"
+    }
+
+    links { "GoogleTest" }
+
+    filter "configurations:Debug*"
+        defines { "DEBUG" }
+    
+    filter "configurations:*WIN*"
+        defines { "WIN" }    
+        links {
+            "./src/3rdparty/SketchUp/win64/binaries/sketchup/x64/*"
+        }
+
+    filter "configurations:*MAC*"
+        defines { "MACOS" }  
+ 
+    filter "configurations:*LINUX*"
+        defines { "LINUX" }       

@@ -6,5 +6,6 @@ var searchData=
   ['instances',['instances',['../class_component_definition.html#af196825cbeb496aa6b5e09381a162ea1',1,'ComponentDefinition::instances()'],['../class_layer.html#a5d140acad6ad35aa2c71b1194f4c5650',1,'Layer::instances()']]],
   ['i_2fo_20utilities',['I/O utilities',['../group__io_utils.html',1,'']]],
   ['isdir',['isDir',['../group__file.html#ga5aded8ff675ba5474f88f1557caadea5',1,'isDir(std::string dirname):&#160;file.cpp'],['../group__file.html#ga5aded8ff675ba5474f88f1557caadea5',1,'isDir(std::string dirname):&#160;file.cpp']]],
-  ['isempty',['isEmpty',['../class_layer.html#ac93c5fa396e5b3b66c78d1d580072fc0',1,'Layer']]]
+  ['isempty',['isEmpty',['../class_layer.html#ac93c5fa396e5b3b66c78d1d580072fc0',1,'Layer']]],
+  ['isequal',['isEqual',['../class_segment.html#a0bca28d7a5dc36b6a7b3ca17458d993e',1,'Segment']]]
 ];
