@@ -74,7 +74,7 @@ public:
 	@param[in] v The other vector
 	@return The dot product
 	*/
-	double operator*(Vector3D * v);
+	double operator*(Vector3D v);
 
 	//! Cross product
 	/*!
@@ -92,7 +92,7 @@ public:
 	@return True if they are parallel
 	@note One can be oposite to the other.
 	*/
-	bool  isParallel(Vector3D * v);
+	bool  isParallel(Vector3D v);
 
 	//! Checks if two vectors go in the same direction
 	/*!
@@ -100,7 +100,7 @@ public:
 	@param[in] v The other vector
 	@return True if they are the same direction
 	*/
-	bool  sameDirection(Vector3D * v);
+	bool  sameDirection(Vector3D v);
 
 	//! Checks if a vector can be considered Zero
 	/*!
@@ -108,4 +108,12 @@ public:
 	@return True or False
 	*/
 	bool isZero();
+
+	//! Checks if a vector can be considered equal to another
+	/*!
+	@author German Molina
+	@param[in] v The other vector
+	@return True or False
+	*/
+	bool isEqual(Vector3D v);
 };

@@ -53,68 +53,68 @@ double Vector3D::getZ()
 }
 
 
-double Vector3D::operator*(Vector3D * v)
+double Vector3D::operator*(Vector3D v)
 {
-	return x*v->getX() + y*v->getY() + z*v->getZ();
+	return x*v.x + y*v.y + z*v.z;
 }
 
 Vector3D Vector3D::operator%(Vector3D v)
 {
-	double dX = y*v.getZ() - z*v.getY();
-	double dY = z*v.getX() - x*v.getZ();
-	double dZ = x*v.getY() - y*v.getX();
+	double dX = y*v.z - z*v.y;
+	double dY = z*v.x - x*v.z;
+	double dZ = x*v.y - y*v.x;
 	return Vector3D(dX, dY, dZ);
 }
 
-bool  Vector3D::isParallel(Vector3D * v)
+bool  Vector3D::isParallel(Vector3D v)
 {
 
-	if (v->isZero() || isZero()){
+	if (v.isZero() || isZero()){
 		warn("Trying to compare Zero vectors in isParallel");
 		return false;
 	}
 
 	// If they point in the same direction, K should be the same in all cases.
 	double k;
-	if(std::abs(v->getX()) > TINY)
-		k = x / v->getX();
+	if(std::abs(v.x) > TINY)
+		k = x / v.x;
 
 	// compare Y
-	if (std::abs(v->getY()) < TINY) {
+	if (std::abs(v.y) < TINY) {
 		if (std::abs(y) > TINY)
 			return false;
 	}
 	else {
-		if (std::abs(k - y/v->getY()) > TINY)
+		if (std::abs(k - y/v.y) > TINY)
 			return true;
 	}
 	
 	// compare Z
-	if (std::abs(v->getZ()) < TINY) {
+	if (std::abs(v.z) < TINY) {
 		if (std::abs(z) > TINY)
 			return false;
 	}
 	else {
-		if (std::abs(k - z / v->getZ()) > TINY)
+		if (std::abs(k - z / v.z) > TINY)
 			return true;
 	}
 
 	return true;
 }
 
-bool Vector3D::sameDirection(Vector3D * v)
+bool Vector3D::sameDirection(Vector3D v)
 {
 	if (!isParallel(v))
 		return false;
 
-	if (std::abs(v->getX()) > TINY) {
-		return x / v->getX() > 0;
+	if (std::abs(v.x) > TINY) {
+		return x / v.x > 0;
 	}
-	else if (std::abs(v->getY()) > TINY) {
-		return y / v->getY() > 0;
+	else if (std::abs(v.y) > TINY) {
+		return y / v.y > 0;
 	}
-	else if (std::abs(v->getZ()) > TINY) {
-		return z / v->getZ() > 0;
+	else if (std::abs(v.z) > TINY) {
+		return z / v.z > 0;
 	}
 	return false;
 
@@ -123,4 +123,9 @@ bool Vector3D::sameDirection(Vector3D * v)
 bool Vector3D::isZero()
 {
 	return (std::abs(x) < TINY &&  std::abs(y) < TINY && std::abs(z) < TINY);
+}
+
+bool Vector3D::isEqual(Vector3D v)
+{
+	return (std::abs(x - v.x) < TINY &&  std::abs(y - v.y) < TINY && std::abs(z - v.z) < TINY);
 }

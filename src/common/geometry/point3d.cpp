@@ -19,6 +19,7 @@
 *****************************************************************************/
 #include<cmath>
 
+#include "../../config_constants.h"
 #include "./point3d.h"
 
 Point3D::Point3D(double new_x, double new_y, double new_z) 
@@ -51,23 +52,28 @@ double Point3D::getZ() {
 }
 
 
-double Point3D::squaredDistanceTo(Point3D * point) 
+double Point3D::squaredDistanceTo(Point3D point) 
 {
-	double dx = (x - point->x)*(x - point->x);
-	double dy = (y - point->y)*(y - point->y);
-	double dz = (z - point->z)*(z - point->z);
+	double dx = (x - point.x)*(x - point.x);
+	double dy = (y - point.y)*(y - point.y);
+	double dz = (z - point.z)*(z - point.z);
 	return dx + dy + dz;
 }
 
 
 
-double Point3D::distanceTo(Point3D * point) 
+double Point3D::distanceTo(Point3D point) 
 {	
 	return sqrt(squaredDistanceTo(point));
 }
 
 
-Vector3D Point3D::operator-(Point3D * p)
+Vector3D Point3D::operator-(Point3D p)
 {
-	return Vector3D(x-p->getX(), y - p->getY(), z - p->getZ());
+	return Vector3D(x-p.x, y - p.y, z - p.z);
+}
+
+bool Point3D::isEqual(Point3D p)
+{
+	return (std::abs(x - p.x) < TINY &&  std::abs(y - p.y) < TINY && std::abs(z - p.z) < TINY);
 }

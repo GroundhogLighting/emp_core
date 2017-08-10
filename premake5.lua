@@ -13,8 +13,6 @@ workspace "Glare"
 
 
                    
-
-
 project "glare"
    kind "ConsoleApp"
    language "C++"
@@ -25,24 +23,44 @@ project "glare"
        "main.h",
        "src/**"
     }
-
-    includedirs {
-        "./src/3rdparty/SketchUp/win64/headers"
-    }
-
-    links { "GoogleTest" }
-
+    
     filter "configurations:Debug*"
         defines { "DEBUG" }
     
     filter "configurations:*WIN*"
         defines { "WIN" }    
         links {
-            "./src/3rdparty/SketchUp/win64/binaries/sketchup/x64/*"
+            "./src/3rdparty/SketchUp/WIN/binaries/sketchup/x64/*"
+        }
+        includedirs {
+            "./src/3rdparty/SketchUp/WIN/headers"
         }
 
     filter "configurations:*MAC*"
         defines { "MACOS" }  
+        includedirs {
+            "./src/3rdparty/SketchUp/MACOS/headers"
+        }
  
     filter "configurations:*LINUX*"
         defines { "LINUX" }       
+
+project "glare_test"
+    kind "ConsoleApp"
+
+    links {
+            "./src/3rdparty/SketchUp/WIN/binaries/sketchup/x64/*",
+            "./googletest/build/%{cfg.buildcfg}/*"
+    }
+
+    includedirs { 
+        "googletest/googletest/include", 
+        "./src/3rdparty/SketchUp/WIN/headers" 
+    }
+
+    files { 
+        "main_test.cpp",
+        "main_test.h",
+        "src/**",
+        "tests/*.h"
+    }

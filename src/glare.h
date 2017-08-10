@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include <SketchUpAPI/model/model.h>
 #include "./groundhogmodel/groundhogmodel.h"
 
 //! This is the main class within Glare. It manages the Read, Write, Calculate process.

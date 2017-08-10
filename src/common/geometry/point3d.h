@@ -89,7 +89,7 @@ public:
 	@param[in] point the point to calculate the distance to
 	@return the square of the distance
 	*/
-	double squaredDistanceTo(Point3D * point);
+	double squaredDistanceTo(Point3D point);
 
 	//! Calculates the distance to another point
 	/*!
@@ -97,7 +97,7 @@ public:
 	@param[in] point the point to calculate the distance to
 	@return the distance 
 	*/
-	double distanceTo(Point3D * point);
+	double distanceTo(Point3D point);
 
 	//! Point sustraction, returns a Vector3D
 	/*!
@@ -106,5 +106,13 @@ public:
 	@return The vector
 	@note The resulting vector should be deleted when no longer needed
 	*/
-	Vector3D operator-(Point3D * p);
+	Vector3D operator-(Point3D p);
+
+	//! Checks if a Point3D can be consideret equal to another
+	/*!
+	@author German Molina
+	@param[in] p The Point3D to compare with
+	@return True or false
+	*/
+	bool isEqual(Point3D p);
 };

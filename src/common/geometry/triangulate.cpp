@@ -44,7 +44,7 @@ Triangulation::Triangulation(Polygon3D * aPolygon)
 	// Fill constraints
 	Loop * outerLoop = polygon->getOuterLoopRef();
 	addContraintsFromLoop(outerLoop);
-	
+
 	for (size_t i = 0; i < polygon->countInnerLoops(); i++) {
 		addContraintsFromLoop(polygon->getInnerLoopRef(i));
 	}
@@ -72,6 +72,11 @@ bool Triangulation::setSuperRectangle()
 	double max_y = bbox->max_y;
 	double min_z = bbox->min_z;
 	double max_z = bbox->max_z;
+
+	if (min_x == max_x && min_y == max_y && min_z == max_z ) {
+		fatal("Trying to set superRectangle of singular polygon");
+		return false;
+	}
 
 	Loop * outerLoop = polygon->getOuterLoopRef();
 
@@ -184,11 +189,11 @@ bool Triangulation::pointInTriangle(Triangle * t, Point3D * p, int * code)
 	Vector3D v2 = *p - a;
 
 		// Compute dot products
-	double dot00 = v0 * &v0;
-	double dot01 = v0 * &v1;
-	double dot02 = v0 * &v2;
-	double dot11 = v1 * &v1;
-	double dot12 = v1 * &v2;
+	double dot00 = v0 * v0;
+	double dot01 = v0 * v1;
+	double dot02 = v0 * v2;
+	double dot11 = v1 * v1;
+	double dot12 = v1 * v2;
 
 	// Compute barycentric coordinates
 	double invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
@@ -339,7 +344,7 @@ void Triangulation::flipDiagonal(size_t index, int i, bool constraint)
 bool Triangulation::isConvex(Point3D * a, Point3D * b, Point3D * c, Point3D * d)
 {
 
-	Vector3D s1 = *b - a;
+	Vector3D s1 = *b - a;	
 	Vector3D s2 = *c - b;
 	Vector3D n12 = s1%s2;
 	
@@ -347,32 +352,33 @@ bool Triangulation::isConvex(Point3D * a, Point3D * b, Point3D * c, Point3D * d)
 		return false;
 
 	Vector3D s3 = *d - c;
+
 	Vector3D n23 = s2%s3;
 
 	if (n23.isZero()) // points are collinear
 		return false;
 	
 
-	if (!n12.sameDirection(&n23)) 
+	if (!n12.sameDirection(n23)) 
 		return false;
-	
+
 	Vector3D s4 = *a - d;
 	Vector3D n34 = s3%s4;
-	
+
 	if (n34.isZero()) // points are collinear
 		return false;
-		
-	if (!n12.sameDirection(&n34)) 
+
+	if (!n12.sameDirection(n34)) 
 		return false;
 	
 
 	Vector3D n41= s4%s1;
 	if (n41.isZero()) // points are collinear		
 		return false;
-	
-	if (!n12.sameDirection(&n41)) 		
+
+	if (!n12.sameDirection(n41)) 		
 		return false;
-	
+
 	return true;
 }
 

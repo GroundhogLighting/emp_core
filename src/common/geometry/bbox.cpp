@@ -18,6 +18,7 @@
 
 *****************************************************************************/
 
+#include "../utilities/io.h"
 #include "./bbox.h"
 
 BBox::BBox(Polygon3D * polygon)
@@ -28,8 +29,25 @@ BBox::BBox(Polygon3D * polygon)
 	max_y = MINUS_HUGE;
 	min_z = HUGE;
 	max_z = MINUS_HUGE;	
-	
+		
+
 	Loop * loop = polygon->getOuterLoopRef();
+	
+	if (loop->size() == 0) {
+		min_x = 0;
+		max_x = 0;
+		min_y = 0;
+		max_y = 0;
+		min_z = 0;
+		max_z = 0;
+		c_x = 0;
+		c_y = 0;
+		c_z = 0;
+
+		warn("Creating a BBOX of a Polygon with an empty outer loop");
+		return;
+	}
+
 	for (size_t i = 0; i < loop->size(); i++) {
 		Point3D * p = loop->getVertexRef(i);
 		double x = p->getX(); 
