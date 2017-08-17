@@ -36,12 +36,12 @@ private:
 	std::vector < Segment * > constraints; //!< The contraints to apply
 	std::vector < Triangle * > triangles; //!< The current triangles
 	Polygon3D * polygon; //!< The polygon to triangulate
-	size_t nTriangles = 0;
+	size_t nTriangles = 0; //!< The number of triangles available
 
 public:
 
-
 	Triangulation(Polygon3D * polygon);
+
 	~Triangulation();
 
 	size_t addTriangle(Triangle * t);
@@ -55,9 +55,6 @@ public:
 
 	bool addPoint(Point3D * point);
 
-
-	bool pointInTriangle(Triangle * t, Point3D * p, int * code);
-
 	bool doDT();
 
 
@@ -65,8 +62,7 @@ public:
 
 	bool splitTriangle(size_t i, Point3D * p);
 
-	bool splitEdge(size_t i, Point3D * p, int code);
-
+	bool splitEdge(size_t i, Point3D * p, int code, bool constraint);
 
 	Point3D * getOpositeVertex(Triangle * t, int i);
 
@@ -79,11 +75,21 @@ public:
 
 	bool isConvex(Point3D * a, Point3D * b, Point3D * c, Point3D * d);
 
-	void applyConstrain(Segment * s);
+	void applyConstraint(Segment * s);
 
 
 	bool addPointToTriangle(size_t index, Point3D * point, int code);
+
 	bool doCDT();
 
+	void clean();
 
+
+	void refine(double maxLength);
+
+	bool mesh(double maxArea);
+
+	bool applyConstraintToTriangle(Triangle * tri, Segment * constraint);
+
+	bool mergeIfPossible(Triangle * tri, int neighbor);
 };

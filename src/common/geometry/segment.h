@@ -68,4 +68,11 @@ public:
 	*/
 	bool intersect(Segment * input, Point3D * output);
 	
+	//! Returns the midpoint of the segment
+	/*!
+	@author German Molina
+	@return The midpoint
+	*/
+	Point3D midpoint();
+
 };

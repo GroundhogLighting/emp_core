@@ -82,8 +82,18 @@ bool Segment::intersect(Segment * input, Point3D * output)
 	}
 
 	if (tA >= 0 && tA <= 1 && tB >= 0 && tB <= 1) {
-		*output = Point3D(start->getX() + tA * a.getX() , start->getY() + tA * a.getY(), start->getZ() + tA * a.getZ());
+		if (output != NULL) {
+			*output = Point3D(start->getX() + tA * a.getX() , start->getY() + tA * a.getY(), start->getZ() + tA * a.getZ());
+		}
 		return true;
 	}
 	return false;
+}
+
+
+Point3D Segment::midpoint() {
+	double dX = start->getX() + end->getX();
+	double dY = start->getY() + end->getY();
+	double dZ = start->getZ() + end->getZ();
+	return Point3D(dX/2,dY/2,dZ/2);
 }

@@ -21,7 +21,7 @@
 
 #include "../../common/utilities/io.h"
 #include "../../common/utilities/file.h"
-#include "../../common/geometry/triangulate.h"
+#include "../../common/geometry/triangulation.h"
 #include "../../groundhogmodel/groundhogmodel.h"
 #include "./radexporter.h"
 
@@ -51,7 +51,7 @@ bool RadExporter::exportModel()
 
 	// Check if directory exists
 	if ((dexist(exportDir) && isDir(exportDir))) {
-		fatal("Export directory '" + exportDir + "' alredy exists... please delete it.");
+		fatal("Export directory '" + exportDir + "' alredy exists... please delete it.", __LINE__, __FILE__);
 		return false;
 	}
 	// Create the directory
@@ -118,7 +118,7 @@ bool RadExporter::writeViews()
 			vt = "vtl";
 			break;
 		default:
-			fatal("Unkown type of view coded " + view->getViewType());
+			fatal("Unkown type of view coded " + view->getViewType(), __LINE__, __FILE__);
 			return false;
 		}
 
@@ -272,6 +272,9 @@ void RadExporter::writeLoop(std::ofstream * file, Loop * loop)
 	for (int i = 0; i < numVertices; i++) {
 		Point3D * point = loop->getVertexRef(i);
 
+		if (point == NULL)
+			continue;
+
 		*file << TAB;
 		*file << point->getX() << TAB;
 		*file << point->getY() << TAB;
@@ -407,15 +410,14 @@ bool RadExporter::writeWorkplanes() {
 }
 
 bool RadExporter::writeWorkplane(std::ofstream * ptsFile, std::ofstream * pxlFile, Polygon3D * wp) {
-	Vector3D * normal = wp->getNormal();
-	double nx = normal->getX();
-	double ny = normal->getY();
-	double nz = normal->getZ();
+	Vector3D normal = wp->getNormal();
+	double nx = normal.getX();
+	double ny = normal.getY();
+	double nz = normal.getZ();
 
 	Triangulation * t = new Triangulation(wp);
-	// Calculate Delaunay
-	t->doCDT();
-	
+	t->mesh(0.25);
+
 	size_t nTriangles = t->getNumTriangles();
 	
 	for (size_t i = 0; i < nTriangles; i ++ ) {

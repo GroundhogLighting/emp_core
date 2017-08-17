@@ -152,7 +152,7 @@ bool SKPReader::checkSUResult(SUResult res, std::string functionName, std::strin
 		error = "Unrecognized error....";
 	}
 
-	fatal("function '" + functionName + "' returned '" + error + "' when " + location);
+	fatal("function '" + functionName + "' returned '" + error + "' when " + location, __LINE__, __FILE__);
 	return false;
 }
 
@@ -439,14 +439,14 @@ bool SKPReader::SUCameraToView(std::string viewName, SUCameraRef camera, View * 
 	case SU_ERROR_NONE:
 		break; // all OK.
 	case SU_ERROR_INVALID_INPUT:
-		fatal("SU_ERROR_INVALID_INPUT when trying to get aspect ratio of view");
+		fatal("SU_ERROR_INVALID_INPUT when trying to get aspect ratio of view", __LINE__, __FILE__);
 		break;
 	case SU_ERROR_NO_DATA:
 		// the camera uses the screen aspect ratio... will assume the following
 		aspectRatio = 16.0 / 9.0;
 		break;
 	case SU_ERROR_NULL_POINTER_OUTPUT:
-		fatal("SU_ERROR_NULL_POINTER_OUTPUT when trying to get aspect ratio of view");
+		fatal("SU_ERROR_NULL_POINTER_OUTPUT when trying to get aspect ratio of view", __LINE__, __FILE__);
 		break;
 	}
 	
@@ -694,7 +694,7 @@ bool SKPReader::addComponentInstanceToVector(std::vector <ComponentInstance * > 
 	// get the definition
 	ComponentDefinition * definitionRef = model->getComponentDefinitionByName(&definitionName);
 	if (definitionRef == NULL) {
-		fatal("Impossible to find " + definitionName + " when adding an instance... ignoring instance");
+		fatal("Impossible to find " + definitionName + " when adding an instance... ignoring instance", __LINE__, __FILE__);
 		return false;
 	}
 
@@ -951,7 +951,7 @@ bool SKPReader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon)
 		"SUFaceGetArea",
 		moment
 	)) return false;
-	polygon->setNormal(new Vector3D(normal.x, normal.y, normal.z));
+	polygon->setNormal(Vector3D(normal.x, normal.y, normal.z));
 
 	// get the outer loop
 	SULoopRef suOuterLoop = SU_INVALID;
@@ -993,9 +993,8 @@ bool SKPReader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon)
 	} // end of if there is an inner loop
 
 	// clean the polygon
-	if (!polygon->clean())
-		return false;
-
+	polygon->clean();
+	
 	return true;
 }
 
@@ -1449,7 +1448,7 @@ bool SKPReader::addWorkplaneToModel(SUFaceRef suFace, GroundhogModel * model) {
 	std::string name;
 	bool hasName = getSUFaceName(suFace, &name);
 	if (!hasName) {
-		fatal("Invalid workplane: has no name");
+		fatal("Invalid workplane: has no name", __LINE__, __FILE__);
 		return false;
 	}
 

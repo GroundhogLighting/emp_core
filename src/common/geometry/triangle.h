@@ -35,7 +35,7 @@ private:
 	double aspectRatio = -1; //!< The ratio of the Circumradius and the smallest edge
 	Triangle * neighbors[3] = {NULL,NULL,NULL}; //!< Neighboring triangles
 	bool constraints[3] = { NULL,NULL,NULL }; //!< Which edges are constraints
-	size_t index; //!< The index on the Triangulation
+	size_t index = 0; //!< The index on the Triangulation
 
 public:
 	//! Initializes a Triangle, adding segments and vertices
@@ -98,6 +98,15 @@ public:
 	*/
 	bool setConstraint(int i);
 
+	//! Checks if an edge is a constraint
+	/*!
+	@author German Molina
+	@param[in] i The index of the constraint
+	@return constraint
+	*/
+	bool isContraint(int i);
+
+
 	//! Retrieves one neighbor Triangle
 	/*!
 	@author German Molina
@@ -139,4 +148,56 @@ public:
 	@return the index
 	*/
 	size_t getIndex();
+
+	//! Returns the center of a triangle (Point3D)
+	/*!
+	@author German Molina
+	@return the center
+	*/
+	Point3D getCenter();
+
+	//! Returns the circumcenter of a triangle (Point3D)
+	/*!
+	Obtained from: 
+	https://gamedev.stackexchange.com/questions/60630/how-do-i-find-the-circumcenter-of-a-triangle-in-3d
+
+	@author German Molina
+	@return the circumcenter
+	*/
+	Point3D getCircumCenter();
+
+	//! Returns the area of a triangle (Point3D)
+	/*!
+	Calculated using Solon's equation
+
+	@author German Molina
+	@return the area
+	*/
+	double getArea();
+
+	//! Prints the triangle vertices on the screen
+	/*!
+	@author German Molina	
+	*/
+	void print();
+
+	
+	//! Tests if a Point3D is inside the Triangle
+	/*!
+	This function tests if a Triangle contains a certain Point3D, 
+	considering the edges as "inside" the Triangle.
+
+	The "Code" generated will vary according to the position of the
+	Point3D in the Triangle. A code of -1 is returned when the Point3D
+	is not in the Triangle; 0,1,2 when the Point3D is on vertices 0,1 
+	or 2, respectively; 3, 4 and 5 mean that the Point3D is on edges
+	0,1 and 2, respectively; and a code of 6 means that the Point3D
+	is inside the Triangle.
+
+	@author German Molina
+	@param[in] p The point to test
+	@param[out] code The position of the point in the triangle
+	@return is in triangle
+	*/
+	bool testPoint(Point3D * p, int * code);
 };

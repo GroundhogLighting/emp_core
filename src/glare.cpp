@@ -69,7 +69,7 @@ bool Glare::parseInputs(int argc, char* argv[])
 
 	char * supportedInputs[] = { ".skp",".lua" };
 	if (!stringIncludeAny(inputFile, supportedInputs,2)) {
-		fatal("Only .SKP and .LUA input files are supported for now");
+		fatal("Only .SKP and .LUA input files are supported for now", __LINE__, __FILE__);
 		return false;
 	}
 
@@ -85,7 +85,7 @@ bool Glare::solve()
 	
 	// verify that inputFile exists
 	if (!fexists(inputFile)) {
-		fatal("File '" + std::string(inputFile) + "' not found");
+		fatal("File '" + std::string(inputFile) + "' not found", __LINE__, __FILE__);
 		return false;
 	}
 
@@ -98,7 +98,7 @@ bool Glare::solve()
 		/* CHECK IF JUST EXPORT */
 		if (!outputFile.empty()) {
 			if (stringInclude(outputFile, ".ghm")) {
-				fatal("Exporting .GHM file is not yet supported");
+				fatal("Exporting .GHM file is not yet supported", __LINE__, __FILE__);
 				return false;
 			}
 			else { // no extension, thus: Radiance			
@@ -109,12 +109,12 @@ bool Glare::solve()
 			}
 		}
 
-		fatal("calculations are not yet supported");
+		fatal("calculations are not yet supported", __LINE__, __FILE__);
 		return false;
 	}
 	else {
 		// In other case, process the lua script
-		fatal("The Lua API is not yet supported.");
+		fatal("The Lua API is not yet supported.", __LINE__, __FILE__);
 		return false;
 	}
 
@@ -129,7 +129,7 @@ bool Glare::loadFile(GroundhogModel * model, std::string input, bool verbose)
 	if (stringInclude(input, ".skp")) {
 		SKPReader reader;
 		if (!reader.parseSKPModel(input, model, verbose)) {
-			fatal("Could not read file '" + std::string(input) + "'");
+			fatal("Could not read file '" + std::string(input) + "'", __LINE__, __FILE__);
 			return false;
 		}
 	}

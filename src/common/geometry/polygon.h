@@ -41,8 +41,8 @@ class Polygon3D {
 private:
 	Loop * outerLoop; //!< The outer loop
 	std::vector < Loop * > innerLoops; //!< A vector with all the interior loops
-	double area; //!< The are of the polygon (assumed to be in m2)
-	Vector3D * normal;
+	double area = -1; //!< The are of the polygon (assumed to be in m2)
+	Vector3D normal = Vector3D(0,0,0);
 
 public:
 
@@ -51,7 +51,7 @@ public:
 	Assigns an area of -1 (which makes no sense, so it makes clear that it
 	has not been calculated), an empty exterior loop and an empty array 
 	of interior loops.
-
+	
 	@author German Molina
 	*/
 	Polygon3D();
@@ -116,19 +116,19 @@ public:
 	with holes into one without holes.
 
 	@author German Molina
-	@note this loop needs to be deleted after its use
+	@note this loop needs to be deleted after its use.
+	@todo THIS FUNCTION CANNOT BE USED ON POLYGONS WITH NULL VERTEX (i.e. cleaned())
 	@return The reference to the closed loop
 	*/
 	Loop * getClosedLoop();
 
-	//! Cleans all the loops.
+	//! Cleans all the Loop in a Polygon3D.
 	/*!
 	See Loop::clean()
 
 	@author German Molina
-	@return success
 	*/
-	bool clean();
+	void clean();
 
 	//! Retrieves the referente to a certain interior loop
 	/*!
@@ -142,13 +142,21 @@ public:
 	@author German Molina	
 	@param normal The normal of the Polygon3D
 	*/
-	void setNormal(Vector3D * normal);
+	void setNormal(Vector3D normal);
 
 	//! Retrieves the normal
 	/*!
 	@author German Molina
 	@return the normal reference
 	*/
-	Vector3D * getNormal();
+	Vector3D getNormal();
+
+	//! Tests if a point is inside or outside a polygon
+	/*!
+	@author German Molina
+	@param[in] p The point to test
+	@return true or false
+	*/
+	bool testPoint(Point3D p);
 
 };

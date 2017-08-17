@@ -102,11 +102,19 @@ public:
 	//! Point sustraction, returns a Vector3D
 	/*!
 	@author German Molina
-	@param[in] p The other poing
+	@param[in] p The other point
 	@return The vector
-	@note The resulting vector should be deleted when no longer needed
 	*/
 	Vector3D operator-(Point3D p);
+
+	//! Point3D + Vector3D a Point3D
+	/*!
+	@author German Molina
+	@param[in] v The vector to add
+	@return The result
+	*/
+	Point3D operator+(Vector3D v);
+
 
 	//! Checks if a Point3D can be consideret equal to another
 	/*!
@@ -115,4 +123,17 @@ public:
 	@return True or false
 	*/
 	bool isEqual(Point3D p);
+
+	//! Transforms a Point3D into a Vector3D (i.e. returns the position)
+	/*!
+	@author German Molina
+	@return The vector with the same components as the point
+	*/
+	Vector3D position();
+
+	//! Prints a point on the screen
+	/*!
+	@author German Molina
+	*/
+	void print();
 };

@@ -34,7 +34,7 @@
 bool createdir(std::string dirname) 
 {
 	if (dexist(dirname) && isDir(dirname)) {
-		fatal("Impossible to create '"+dirname+"'. It already exists");
+		fatal("Impossible to create '"+dirname+"'. It already exists", __LINE__, __FILE__);
 		return false;
 	}
 	else {
@@ -67,7 +67,7 @@ bool isDir(std::string dirname)
 		}
 	}
 	else {
-		fatal("Directory does not exist");
+		fatal("Directory does not exist", __LINE__, __FILE__);
 		return false;
 	}
 }

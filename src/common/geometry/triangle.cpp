@@ -33,7 +33,8 @@ Triangle::Triangle(Point3D * a, Point3D * b, Point3D * c)
 
 	segments[0] = new Segment(a, b);
 	segments[1] = new Segment(b, c);
-	segments[2] = new Segment(c, a);	
+	segments[2] = new Segment(c, a);
+
 }
 
 Triangle::~Triangle()
@@ -46,7 +47,7 @@ Triangle::~Triangle()
 Point3D * Triangle::getVertex(int i)
 {	
 	if (i < 0 || i > 3) {
-		fatal("Impossible index when getting Vertex... index was '" + std::to_string(i) + "'");
+		fatal("Impossible index when getting Vertex... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
 		return NULL;
 	}
 	return vertices[i];
@@ -67,8 +68,6 @@ double Triangle::getCircumradius()
 
 double Triangle::getAspectRatio()
 {
-	warn("ASPECT RATIO TO BE CALC");
-	warn("Aspect ratio = " + std::to_string(aspectRatio));
 	if (aspectRatio > 0)
 		return aspectRatio;
 
@@ -78,10 +77,6 @@ double Triangle::getAspectRatio()
 			minSegment = segments[i]->getLength();
 		}
 	}
-	warn("Minimum length of triangle is " + std::to_string(minSegment));
-	warn("circumradius is " + std::to_string(getCircumradius()));
-	warn("Aspect ratio is " + std::to_string(getCircumradius() / minSegment));
-
 	aspectRatio = getCircumradius() / minSegment;
 	return aspectRatio;
 }
@@ -89,7 +84,7 @@ double Triangle::getAspectRatio()
 bool Triangle::setNeighbor(Triangle * t, int i,bool reciprocity) 
 {
 	if (i < 0 || i > 2) {
-		fatal("Impossible index when Setting neighbor... index was '" + std::to_string(i) + "'");
+		fatal("Impossible index when Setting neighbor... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
 		return false;
 	}
 	neighbors[i] = t;
@@ -106,7 +101,7 @@ bool Triangle::setNeighbor(Triangle * t, int i,bool reciprocity)
 Segment * Triangle::getSegment(int i)
 {
 	if (i < 0 || i > 2) {
-		fatal("Impossible index when getting segment... index was '" + std::to_string(i) + "'");
+		fatal("Impossible index when getting segment... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
 		return NULL;
 	}
 	return segments[i];
@@ -116,7 +111,7 @@ Segment * Triangle::getSegment(int i)
 Triangle * Triangle::getNeighbor(int i)
 {
 	if (i < 0 || i > 2) {
-		fatal("Impossible index when getting neighbor... index was '" + std::to_string(i) + "'");
+		fatal("Impossible index when getting neighbor... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
 		return NULL;
 	}
 	return neighbors[i];
@@ -125,18 +120,14 @@ Triangle * Triangle::getNeighbor(int i)
 
 int Triangle::getEdgeIndexByPoints(Point3D * a, Point3D * b)
 {	
-	warn("Looking for points"); 
-	warn("....." + std::to_string(a->getX()) + "," + std::to_string(a->getY()) + "," + std::to_string(a->getZ()));
-	warn("....." + std::to_string(b->getX()) + "," + std::to_string(b->getY()) + "," + std::to_string(b->getZ()));
 	for (int i = 0; i < 3; i++) {
-		if (a == segments[i]->start && b == segments[i]->end) {
+		if (a->isEqual(segments[i]->start) && b->isEqual(segments[i]->end)) {
 			return i;
 		}
-		if (b == segments[i]->start && a == segments[i]->end) {
+		if (b->isEqual(segments[i]->start) && a->isEqual(segments[i]->end)) {
 			return i;
 		}
 	}
-	fatal("Segment not found!");
 	return -1;
 }
 
@@ -156,8 +147,130 @@ size_t Triangle::getIndex()
 bool Triangle::setConstraint(int i)
 {
 	if (i < 0 || i > 2) {
-		fatal("Impossible index when setting constraint... index was '" + std::to_string(i) + "'");
+		fatal("Impossible index when setting constraint... index was '" + std::to_string(i) + "'", __LINE__,__FILE__);
 		return false;
 	}
+
 	constraints[i] = true;
+	// reciprocate
+	Segment * s = segments[i];
+	int aux = neighbors[i]->getEdgeIndexByPoints(s->start, s->end);
+	if(neighbors[i] != NULL)
+		neighbors[i]->constraints[aux] = true;
+
+	return true;
+}
+
+
+bool Triangle::isContraint(int i)
+{
+	if (i < 0 || i > 2) {
+		fatal("Impossible index when getting constraint... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
+		return false;
+	}	
+	return constraints[i];
+}
+
+Point3D Triangle::getCenter()
+{
+	double dX = 0;
+	double dY = 0;
+	double dZ = 0;
+	for (int i = 0; i < 3; i++) {
+dX += vertices[i]->getX();
+dY += vertices[i]->getY();
+dZ += vertices[i]->getZ();
+	}
+	return Point3D(dX / 3, dY / 3, dZ / 3);
+}
+
+
+Point3D Triangle::getCircumCenter()
+{
+	Vector3D ab = *vertices[1] - *vertices[0];
+	Vector3D ac = *vertices[2] - *vertices[0];
+	Vector3D bc = *vertices[2] - *vertices[1];
+
+	Vector3D abXac = ab%ac;
+
+	Vector3D aCenter = ((abXac%ab)*ac.getSquaredLength() + ac%abXac * ab.getSquaredLength())*(1 / (2 * abXac.getSquaredLength()));
+
+	return *vertices[0] + aCenter;
+
+}
+
+double Triangle::getArea()
+{
+	double a = segments[0]->getLength();
+	double b = segments[1]->getLength();
+	double c = segments[2]->getLength();
+
+	return sqrt((c + b + a)*((c + b + a) / 2 - a)*((c + b + a) / 2 - b)*((c + b + a) / 2 - c) / 2);
+}
+
+void Triangle::print()
+{
+	for (int i = 0; i < 3; i++) {
+		std::cerr << ".... Vertex " << i << ": ";
+		vertices[i]->print();
+	}
+}
+
+bool Triangle::testPoint(Point3D * p, int * code)
+{
+	/*
+	Source: http://blackpawn.com/texts/pointinpoly/
+	*/
+	// get vertices
+	Point3D * a = vertices[0];
+	Point3D * b = vertices[1];
+	Point3D * c = vertices[2];
+
+	// Compute vectors        
+	Vector3D v0 = *c - a;
+	Vector3D v1 = *b - a;
+	Vector3D v2 = *p - a;
+
+	// Compute dot products
+	double dot00 = v0 * v0;
+	double dot01 = v0 * v1;
+	double dot02 = v0 * v2;
+	double dot11 = v1 * v1;
+	double dot12 = v1 * v2;
+
+	// Compute barycentric coordinates
+	double invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+	double u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+	double v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+	double w = 1 - u - v;
+
+	// Check if point is in triangle
+	if (u >= MINUS_TINY && v >= MINUS_TINY && w >= MINUS_TINY) {
+		// Somewhere in the triangle
+		if (u <= TINY && v <= TINY) {
+			*code = 0; // vertex a
+		}
+		else if (u <= TINY && w <= TINY) {
+			*code = 1; // vertex b
+		}
+		else if (v <= TINY && w <= TINY) {
+			*code = 2; // vertex c
+		}
+		else if (u <= TINY) {
+			*code = 3; // edge AB
+		}
+		else if (w <= TINY) {
+			*code = 4; // edge BC
+		}
+		else if (v <= TINY) {
+			*code = 5; // edge AC
+		}
+		else {
+			*code = 6; // inside the triangle
+		}
+		return true;
+	}
+	*code = -1;
+	return false;
+
 }

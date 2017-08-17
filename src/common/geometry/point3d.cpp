@@ -18,7 +18,7 @@
 
 *****************************************************************************/
 #include<cmath>
-
+#include <iostream>
 #include "../../config_constants.h"
 #include "./point3d.h"
 
@@ -73,7 +73,26 @@ Vector3D Point3D::operator-(Point3D p)
 	return Vector3D(x-p.x, y - p.y, z - p.z);
 }
 
+Point3D Point3D::operator+(Vector3D v)
+{
+	return Point3D(x+v.getX(), y + v.getY(), z + v.getZ());
+}
+
 bool Point3D::isEqual(Point3D p)
 {
 	return (std::abs(x - p.x) < TINY &&  std::abs(y - p.y) < TINY && std::abs(z - p.z) < TINY);
+}
+
+
+Vector3D Point3D::position()
+{
+	return Vector3D(x, y, z);
+}
+
+void Point3D::print()
+{
+	std::cerr << "Point3D(";
+	std::cerr << x << ",";
+	std::cerr << y << ",";
+	std::cerr << z << ")" << std::endl;
 }

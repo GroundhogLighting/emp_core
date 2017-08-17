@@ -58,6 +58,21 @@ double Vector3D::operator*(Vector3D v)
 	return x*v.x + y*v.y + z*v.z;
 }
 
+Vector3D Vector3D::operator*(double s)
+{
+	return Vector3D(x*s,y*s,z*s);
+}
+
+Vector3D Vector3D::operator+(Vector3D v)
+{
+	return Vector3D(x + v.x, y + v.y, z + v.z);
+}
+
+Vector3D Vector3D::operator-(Vector3D v)
+{
+	return Vector3D(x - v.x, y - v.y, z - v.z);
+}
+
 Vector3D Vector3D::operator%(Vector3D v)
 {
 	double dX = y*v.z - z*v.y;
@@ -128,4 +143,22 @@ bool Vector3D::isZero()
 bool Vector3D::isEqual(Vector3D v)
 {
 	return (std::abs(x - v.x) < TINY &&  std::abs(y - v.y) < TINY && std::abs(z - v.z) < TINY);
+}
+
+
+double Vector3D::getLength()
+{
+	return sqrt(x*x+y*y+z*z);
+}
+
+
+double Vector3D::getSquaredLength()
+{
+	return (x*x + y*y + z*z);
+}
+
+void Vector3D::normalize()
+{
+	double l = getLength();
+	x /= l; y /= l; z /= l;
 }

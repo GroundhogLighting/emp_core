@@ -6,7 +6,9 @@
 #include "./tests/point3d_test.h"
 #include "./tests/vector3d_test.h"
 #include "./tests/segment_test.h"
-#include "./tests/triangulate_test.h"
+#include "./tests/triangulation_test.h"
+#include "./tests/polygon_test.h"
+#include "./tests/triangle_test.h"
 
 int main(int argc, char* argv[]){	
 	

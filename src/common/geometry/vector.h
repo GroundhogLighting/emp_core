@@ -76,6 +76,31 @@ public:
 	*/
 	double operator*(Vector3D v);
 
+	//! Scaling (i.e. product by a constant)
+	/*!
+	@author German Molina
+	@param[in] s The scaling factor
+	@return The result
+	*/
+	Vector3D operator*(double s);
+
+
+	//! Vector addition
+	/*!
+	@author German Molina
+	@param[in] v The other vector
+	@return The addition 
+	*/
+	Vector3D operator+(Vector3D v);
+
+	//! Vector sustraction
+	/*!
+	@author German Molina
+	@param[in] v The other vector
+	@return The result
+	*/
+	Vector3D operator-(Vector3D v);
+
 	//! Cross product
 	/*!
 	@author German Molina
@@ -116,4 +141,24 @@ public:
 	@return True or False
 	*/
 	bool isEqual(Vector3D v);
+
+	//! Calculates the length of a vector
+	/*!
+	@author German Molina
+	@return length
+	*/
+	double getLength();
+
+	//! Calculates the squared length of a vector
+	/*!
+	@author German Molina
+	@return length
+	*/
+	double getSquaredLength();
+
+	//! Normalizes a Vector3D
+	/*!
+	@author German Molina	
+	*/
+	void normalize();
 };

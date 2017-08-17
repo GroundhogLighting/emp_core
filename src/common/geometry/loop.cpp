@@ -21,6 +21,8 @@
 
 #include "./loop.h"
 #include "../utilities/io.h"
+#include "../../config_constants.h"
+#include "./segment.h"
 
 Loop::Loop() 
 {
@@ -65,8 +67,145 @@ Point3D * Loop::getVertexRef(size_t i)
 	return vertices[i];
 }
 
-bool Loop::clean() {	
-	return true;
+void Loop::clean() {	
+	
+	// Checks for colinear points
+	size_t nVertex = size();
+	
+	Point3D * prevPoint;
+	Point3D * thisPoint;
+	Point3D * nextPoint;
+
+	size_t aux = 1; // how many vertex before is the previous non-NULL one? 
+	for (size_t i = 1; i < nVertex+1; i++) {
+		
+		// This may be re-cleaning.
+		if (vertices[i%nVertex] == NULL) {
+			aux += 1;
+			continue;
+		}
+
+		prevPoint = vertices[(i-aux)%nVertex];
+		thisPoint = vertices[(i)%nVertex];
+		nextPoint = vertices[(i+1) % nVertex];
+
+		size_t j = (i + 1) % nVertex;
+		while (nextPoint == NULL) {			
+			nextPoint = vertices[++j % nVertex];
+		}
+
+		Vector3D a = *thisPoint - *prevPoint;
+		Vector3D b = *nextPoint - *thisPoint;
+
+		bool areCollinear = (a%b).isZero();		
+
+		if (areCollinear) {
+			delete vertices[i%nVertex];
+			vertices[i%nVertex] = NULL; 
+			aux += 1;
+		}
+		else {
+			aux = 1; // reset aux
+		}
+	}
+
 }
 
+
+bool Loop::testPoint(Point3D p, Vector3D * normal)
+{
+	
+	Point3D * firstPoint = vertices[0];
+	// in case firstPoint is NULL
+	size_t nVertex = size();
+	size_t j = 0;
+	while (j < nVertex) {
+		if (vertices[j] != NULL) {
+			firstPoint = vertices[j];
+			break;
+		}
+		j++;
+	}
+
+	// Get the relative axes
+	normal->normalize();
+	Vector3D xp = *firstPoint-p;
+	xp.normalize();
+	Vector3D yp = *normal % xp; 
+	// yp and normal are unit vectors, thus yp also
+	
+	// Check if coplanar
+	if (std::abs(*normal*xp) > TINY) {
+		warn("Testing a Point3D on Loop: Point3D is not coplanar with Loop");
+		return false;
+	}
+	
+
+	/*
+		Alciatore, D., & Miranda, R. (1995). 
+		A winding number and point-in-polygon algorithm. 
+		Glaxo Virtual Anatomy Project Research Report, 
+		Department of Mechanical Engineering, Colorado State University.
+	*/
+
+	// 1. Initialize the winding number to zero
+	double wNumber = 0; 
+	double previousY = 0;
+	double previousX = xp*(*firstPoint - p);
+	
+	// 2. For each segment of the polygon
+	for (size_t i = j+1; i < nVertex+1; i++) {
+		Point3D * vertex = getVertexRef(i%nVertex);
+
+		// in case it was cleaned
+		if (vertex == NULL)
+			continue;
+
+		// 2.1 Determine whether the segment crosses 'dir'	
+		Vector3D v = *vertex - p;
+
+		// determine x and y
+		double y = v*yp;
+		double x = v*xp;
+		
+		if (std::abs(y)<TINY && std::abs(previousY)<TINY) {
+			continue; // no rotation! Moving along the X-axis
+		}
+		else if (previousY*y < MINUS_TINY) {
+			// Crosses the axis
+			double r = previousX + previousY*(x - previousX) / (previousY-y);
+			if (r > 0) { // if crosses on the correct side
+				if (previousY < 0) {
+					// crosses positive
+					wNumber += 1;
+				}
+				else {
+					wNumber -= 1;
+				}
+			}
+		}
+		else if (std::abs(previousY) < TINY && previousX > 0) {
+			// previous V was on the positive X-axis
+			if (y > 0) {
+				wNumber += 0.5;
+			}
+			else {
+				wNumber -= 0.5;
+			}
+		}
+		else if (std::abs(y) < TINY && x > 0) {
+			// current V is on positive X-axis
+			if (previousY < 0) {
+				wNumber += 0.5;
+			}
+			else {
+				wNumber -= 0.5;
+			}
+		}
+		previousY = y;
+		previousX = x;
+	}
+
+	return wNumber != 0;
+}
 

@@ -48,11 +48,15 @@ TEST(SegmentTest, intersect) {
 
 	Point3D az = Point3D(0, 0, -1);
 	Point3D bz = Point3D(0, 0, 1);
+	Point3D offsetAz = Point3D(1, 0, -1);
+	Point3D offsetBz = Point3D(1, 0, 1);
 
 	Segment xAxis = Segment(&ax, &bx);
 	Segment yAxis = Segment(&ay, &by);
 	Segment zAxis = Segment(&az, &bz);
 	Segment offsetX = Segment(&offsetAx, &offsetBx);
+	Segment offsetZ = Segment(&offsetAz, &offsetBz);
+	Segment semiZ = Segment(&origin, &bz);
 
 	Point3D intersection = Point3D(-1,-1,-1);
 	bool doIntersect;
@@ -80,5 +84,19 @@ TEST(SegmentTest, intersect) {
 	doIntersect = offsetX.intersect(&zAxis, &intersection);
 	ASSERT_TRUE(doIntersect);
 	ASSERT_TRUE(intersection.isEqual(Point3D(0,0,1)));
+
+	// OFFSET-Z OFFSET-X
+	doIntersect = offsetX.intersect(&offsetZ, &intersection);
+	ASSERT_TRUE(doIntersect);
+	ASSERT_TRUE(intersection.isEqual(Point3D(1, 0, 1)));
+
+	// Semi-z / X
+	doIntersect = xAxis.intersect(&semiZ, &intersection);
+	ASSERT_TRUE(doIntersect);
+	ASSERT_TRUE(intersection.isEqual(origin));
+
+	// colinear
+	doIntersect = xAxis.intersect(&xAxis, &intersection);
+	ASSERT_FALSE(doIntersect);
 
 }

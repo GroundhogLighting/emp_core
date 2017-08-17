@@ -25,7 +25,6 @@
 Polygon3D::Polygon3D() 
 {
 	DEBUG_MSG("Creating polygon");
-	area = -1;
 	outerLoop = new Loop();
 	innerLoops = std::vector< Loop * >();
 };
@@ -112,6 +111,7 @@ Loop * Polygon3D::getClosedLoop()
 		size_t numExtVertex = loop->size();		
 		for (int j = 0; j < numExtVertex; j++) {
 			Point3D * extVertex = loop->getVertexRef(j);
+			
 			for (int k = 0; k < numInnerLoops; k++) {
 				// continue if already processed
 				if (std::find(processedLoops.begin(), processedLoops.end(), k) != processedLoops.end()) {
@@ -154,7 +154,7 @@ Loop * Polygon3D::getClosedLoop()
 				// add the loop
 				size_t numInnerLoopVertices =  innerLoops[minInnerLoopID]->size();
 				for (size_t j = 0; j < numInnerLoopVertices; j++) {				
-					int vertexToAdd = (vertexID++ % numInnerLoopVertices);					
+					int vertexToAdd = (vertexID-- % numInnerLoopVertices);					
 					Point3D * newVertex = new Point3D(innerLoops[minInnerLoopID]->getVertexRef(vertexToAdd));					
 					aux->addVertex(newVertex);
 				}
@@ -175,13 +175,12 @@ Loop * Polygon3D::getClosedLoop()
 	return loop;
 } //end of close face function
 
-bool Polygon3D::clean() {
+void Polygon3D::clean() {
 	for (size_t i = 0; i < innerLoops.size(); i++) {
-		if(! innerLoops[i]->clean())
-			return false;
+		innerLoops[i]->clean();			
 	}
 
-	return outerLoop->clean();
+	outerLoop->clean();
 }
 
 
@@ -191,12 +190,31 @@ Loop * Polygon3D::getInnerLoopRef(size_t i)
 }
 
 
-void Polygon3D::setNormal(Vector3D * newNormal)
+void Polygon3D::setNormal(Vector3D newNormal)
 {
 	normal = newNormal;
 }
 
-Vector3D * Polygon3D::getNormal()
+Vector3D Polygon3D::getNormal()
 {
 	return normal;
+}
+
+
+bool Polygon3D::testPoint(Point3D p)
+{		
+	if (normal.isZero()) {
+		fatal("Trying to test a point in a polygon without normal", __LINE__, __FILE__);
+		return false;
+	}
+	Loop * outerLoop = getOuterLoopRef();
+	if (!outerLoop->testPoint(p, &normal))
+		return false;
+
+	for (size_t i = 0; i < countInnerLoops(); i++) {
+		// if it lies inside any of the holes, return false
+		if (getInnerLoopRef(i)->testPoint(p, &normal))			
+			return false;		
+	}
+	return true;
 }

@@ -87,7 +87,20 @@ public:
 	polygon
 
 	@author German Molina
-	@todo Write it it!
 	*/
-	bool clean();
+	void clean();
+
+	//! Tests a point in the Loop. 
+	/*!
+	This methos uses the Winding Number, inspired on what is said 
+	in " Alciatore, D., & Miranda, R. (1995). 
+		A winding number and point-in-polygon algorithm. 
+		Glaxo Virtual Anatomy Project Research Report, 
+		Department of Mechanical Engineering, Colorado State University."
+
+	@author German Molina
+	@param[in] p The point to test
+	@param[in] normal The normal of the Loop
+	*/
+	bool testPoint(Point3D p, Vector3D * normal);
 };

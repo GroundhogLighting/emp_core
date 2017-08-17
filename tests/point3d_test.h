@@ -108,3 +108,32 @@ TEST(Point3DTest, genericSubstraction)
 	ASSERT_EQ(v.getZ(), z1-z2);
 
 }
+
+
+TEST(Point3DTest, genericAddition)
+{
+	double x1, y1, z1;
+	x1 = 23; y1 = 10; z1 = 32;
+
+	Point3D p1 = Point3D(x1, y1, z1);
+	double x2, y2, z2;
+
+	x2 = 2; y2 = 10; z2 = 32;
+	Vector3D v = Vector3D(x2, y2, z2);
+
+	Point3D p2 = p1 + v;
+	ASSERT_EQ(p2.getX(), x1 + x2);
+	ASSERT_EQ(p2.getY(), y1 + y2);
+	ASSERT_EQ(p2.getZ(), z1 + z2);
+
+}
+
+TEST(Point3DTest, position)
+{
+	Point3D p = Point3D(4, 6, 1);
+	Vector3D v = p.position();
+
+	ASSERT_EQ(p.getX(), v.getX());
+	ASSERT_EQ(p.getY(), v.getY());
+	ASSERT_EQ(p.getZ(), v.getZ());
+}

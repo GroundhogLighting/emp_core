@@ -2,6 +2,7 @@
 
 #include <cmath>
 
+#include "../src/config_constants.h"
 #include "../src/common/geometry/vector.h"
 
 
@@ -50,6 +51,38 @@ TEST(Vector3DTest, dotProduct)
 	ASSERT_EQ(v45*e1, l);
 }
 
+TEST(Vector3DTest, length) {
+	ASSERT_EQ(5, Vector3D(3, 4, 0).getLength());
+}
+
+
+TEST(Vector3DTest, squaredLength) {
+	ASSERT_EQ(25, Vector3D(3, 4, 0).getSquaredLength());
+}
+
+
+TEST(Vector3DTest, normalize)
+{	
+	Vector3D v = Vector3D(12, 32, 211);
+	v.normalize();
+	ASSERT_TRUE(std::abs(v.getLength()-1) < TINY);
+}
+
+TEST(Vector3DTest, scaling)
+{
+	double x = 10;
+	double y = 31;
+	double z = 131;
+	double scale = 3.2132;
+	Vector3D v = Vector3D(x,y,z);
+
+	Vector3D v2 = v * scale;
+
+	ASSERT_EQ(x*scale, v2.getX());
+	ASSERT_EQ(y*scale, v2.getY());
+	ASSERT_EQ(z*scale, v2.getZ());
+
+}
 
 TEST(Vector3DTest, crossProduct)
 {

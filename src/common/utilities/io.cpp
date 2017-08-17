@@ -39,8 +39,8 @@ void inform(std::string message, bool verbose)
 	std::cout << "     ... " << message << std::endl;
 }
 
-void fatal(std::string message) 
+void fatal(std::string message, int ln, char * file) 
 {	
-	std::cerr << "Fatal: " << message << std::endl;
+	std::cerr << "Fatal: " << message << " -- Line " << ln << " of File " << file<< std::endl;
 }
 

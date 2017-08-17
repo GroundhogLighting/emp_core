@@ -71,7 +71,7 @@ bool GroundhogModel::addFaceToLayer(std::string * layerName, Face * face)
 			return true;
 		}
 	}
-	fatal("Layer " + *layerName + " could not be found");
+	fatal("Layer " + *layerName + " could not be found", __LINE__, __FILE__);
 	return false;
 }
 
@@ -85,7 +85,7 @@ bool GroundhogModel::addComponentInstanceToLayer(std::string * layerName, Compon
 			return true;
 		}
 	}
-	fatal("Layer " + *layerName + " could not be found");
+	fatal("Layer " + *layerName + " could not be found", __LINE__, __FILE__);
 	return false;
 }
 
@@ -135,7 +135,7 @@ ComponentDefinition *  GroundhogModel::getComponentDefinitionByName(std::string 
 			return definitions[i];
 		}
 	}
-	fatal("Component Definition " + *definitionName + " could not be found");
+	fatal("Component Definition " + *definitionName + " could not be found", __LINE__, __FILE__);
 	return NULL;
 }
 
@@ -147,7 +147,7 @@ Layer *  GroundhogModel::getLayerByName(std::string * layerName)
 			return layers[i];
 		}
 	}
-	fatal("Layer " + *layerName + " could not be found");
+	fatal("Layer " + *layerName + " could not be found", __LINE__, __FILE__);
 	return NULL;
 }
 

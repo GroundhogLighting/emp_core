@@ -62,7 +62,7 @@ Should be used when something fatal happens. Usually, something will go wrong.
 @author German Molina
 @param[in] message the message
 */
-void fatal(std::string message);
+void fatal(std::string message, int ln, char * file);
 
 //! Informs something
 /*!
