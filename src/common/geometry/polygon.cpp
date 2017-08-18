@@ -19,6 +19,7 @@
 *****************************************************************************/
 
 #include "./polygon.h"
+#include "../../config_constants.h"
 
 #include "../utilities/io.h"
 
@@ -204,7 +205,7 @@ Vector3D Polygon3D::getNormal()
 bool Polygon3D::testPoint(Point3D p)
 {		
 	if (normal.isZero()) {
-		fatal("Trying to test a point in a polygon without normal", __LINE__, __FILE__);
+		fatal("Trying to test a point in a polygon without normal", __LINE__, __FILE__);		
 		return false;
 	}
 	Loop * outerLoop = getOuterLoopRef();
@@ -216,5 +217,157 @@ bool Polygon3D::testPoint(Point3D p)
 		if (getInnerLoopRef(i)->testPoint(p, &normal))			
 			return false;		
 	}
+	return true;
+}
+
+
+Polygon3D * Polygon3D::get2DPolygon()
+{
+	Vector3D i = Vector3D(0, 0, 0); 
+	Vector3D j = Vector3D(0, 0, 0);
+	Vector3D k = Vector3D(0, 0, 0);
+
+	if (!getAuxiliarAxes(normal,&i, &j, &k))
+		return NULL;
+
+
+	// Create returning object
+	Polygon3D * ret = new Polygon3D();
+
+	// Add outer loop
+	Loop * ol = ret->getOuterLoopRef();
+	for (size_t p = 0; p < outerLoop->size(); p++) {
+		ol->addVertex(new Point3D(outerLoop->getVertexRef(p)->transform(i,j,k)));
+	}
+
+	// Add inner loops
+	for (size_t p = 0; p < countInnerLoops(); p++) {
+		Loop * il = ret->addInnerLoop();
+		
+		for (size_t q = 0; q < getInnerLoopRef(p)->size(); q++) {
+			il->addVertex(new Point3D(getInnerLoopRef(p)->getVertexRef(q)->transform(i, j, k)));
+		}
+	}
+
+	return ret;
+}
+
+
+Polygon3D * Polygon3D::restore3DPolygon(Vector3D normal)
+{	
+	Vector3D i = Vector3D(0, 0, 0);
+	Vector3D j = Vector3D(0, 0, 0);
+	Vector3D k = Vector3D(0, 0, 0);
+	if (!getInverseAuxiliarAxes(normal, &i, &j, &k))
+		return NULL;
+	
+	// Create returning object
+	Polygon3D * ret = new Polygon3D();
+
+	// Add outer loop
+	Loop * ol = ret->getOuterLoopRef();
+	for (size_t p = 0; p < outerLoop->size(); p++) {
+		ol->addVertex(new Point3D(outerLoop->getVertexRef(p)->transform(i, j, k)));
+	}
+
+	// Add inner loops
+	for (size_t p = 0; p < countInnerLoops(); p++) {
+		Loop * il = ret->addInnerLoop();
+
+		for (size_t q = 0; q < getInnerLoopRef(p)->size(); q++) {
+			il->addVertex(new Point3D(getInnerLoopRef(p)->getVertexRef(q)->transform(i, j, k)));
+		}
+	}
+
+	return ret;
+}
+
+
+bool Polygon3D::getInverseAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * auxj, Vector3D * auxk)
+{
+	Vector3D i = Vector3D(0, 0, 0);
+	Vector3D j = Vector3D(0, 0, 0);
+	Vector3D k = Vector3D(0, 0, 0);
+
+	if (!getAuxiliarAxes(normal, &i, &j, &k))
+		return false;
+
+	double det = i.getX()*(j.getY()*k.getZ() - j.getZ()*k.getY())
+		- i.getY()*(j.getX()*k.getZ() - j.getZ()*k.getX())
+		+ i.getZ()*(j.getX()*k.getY() - j.getY()*k.getX());
+
+	if (det == 0) {
+		fatal("Determinant is zero when trying to ", __LINE__, __FILE__);
+		normal.print();
+		return NULL;
+	}
+
+	// CALCULATE INVERSE MATRIX
+	*auxi = Vector3D(
+		j.getY()*k.getZ() - j.getZ()*k.getY(),
+		i.getZ()*k.getY() - i.getY()*k.getZ(),
+		i.getY()*j.getZ() - i.getZ()*j.getY()
+	) / det;
+
+	*auxj = Vector3D(
+		j.getZ()*k.getX() - j.getX()*k.getZ(),
+		i.getX()*k.getZ() - i.getZ()*k.getX(),
+		i.getZ()*j.getX() - i.getX()*j.getZ()
+	) / det;
+	*auxk = Vector3D(
+		j.getX()*k.getY() - j.getY()*k.getX(),
+		i.getY()*k.getX() - i.getX()*k.getY(),
+		i.getX()*j.getY() - i.getY()*j.getX()
+	) / det;
+
+	return true;
+}
+
+bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * auxj, Vector3D * auxk)
+{
+	if (normal.isZero()) {
+		fatal("Trying to get auxiliar axes with a Zero normal", __LINE__, __FILE__);
+		return false;
+	}
+		
+	Vector3D k = normal;
+	k.normalize();
+	Vector3D i = Vector3D(0, 0, 0);
+	Vector3D j = i;
+
+	double nx = k.getX();
+	double ny = k.getY();
+	double nz = k.getZ();	
+	
+	if (nz < TINY) {
+		// Vertical planes	
+		i = Vector3D(0, 0, 1);
+		j = k%i;	
+	}
+	else {
+		// "normal" planes
+		if (nx != 0) {
+			i = Vector3D(1, 0, -nz / nx);
+			i.normalize();
+			j = k%i;
+		}
+		else if (ny != 0) {
+			j = Vector3D(0, 1, -nz / ny);
+			j.normalize();
+			i = j%k;
+		}else if(nx == 0 && ny == 0){
+			i = Vector3D(1, 0, 0);
+			j = Vector3D(0, 1, 0);
+		}
+		else {
+			fatal("Not considered situation when calculating auxiliar axes of polygon", __LINE__, __FILE__);
+			normal.print();
+			return false;
+		}
+	}
+	
+	// set values
+	*auxi = i; *auxj = j; *auxk = k;
+	
 	return true;
 }

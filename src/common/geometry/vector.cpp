@@ -63,6 +63,11 @@ Vector3D Vector3D::operator*(double s)
 	return Vector3D(x*s,y*s,z*s);
 }
 
+Vector3D Vector3D::operator/(double s)
+{
+	return Vector3D(x / s, y / s, z / s);
+}
+
 Vector3D Vector3D::operator+(Vector3D v)
 {
 	return Vector3D(x + v.x, y + v.y, z + v.z);
@@ -160,5 +165,19 @@ double Vector3D::getSquaredLength()
 void Vector3D::normalize()
 {
 	double l = getLength();
+	if (l == 0) {
+		fatal("Normalizing vector with Zero length",__LINE__,__FILE__);
+		return;
+	}
+
 	x /= l; y /= l; z /= l;
+}
+
+
+void Vector3D::print()
+{
+	std::cerr << "Vector3D(";
+	std::cerr << x << ",";
+	std::cerr << y << ",";
+	std::cerr << z << ")" << std::endl;
 }

@@ -209,3 +209,14 @@ bool Loop::testPoint(Point3D p, Vector3D * normal)
 	return wNumber != 0;
 }
 
+
+
+Loop * Loop::transform(Vector3D i, Vector3D j, Vector3D k)
+{
+	Loop * ret = new Loop();
+	for (size_t v = 0; v < size(); v++) {
+		Point3D p = vertices[v]->transform(i, j, k);
+		ret->addVertex(new Point3D(&p));
+	}
+	return ret;
+}

@@ -19,6 +19,8 @@
 *****************************************************************************/
 #include<cmath>
 #include <iostream>
+
+#include "../../common/utilities/io.h"
 #include "../../config_constants.h"
 #include "./point3d.h"
 
@@ -95,4 +97,36 @@ void Point3D::print()
 	std::cerr << x << ",";
 	std::cerr << y << ",";
 	std::cerr << z << ")" << std::endl;
+}
+
+Point3D Point3D::transform(Vector3D i, Vector3D j, Vector3D k)
+{
+
+#ifdef DEBUG
+	// Check if they are normal... debugging
+	if (std::abs(1 - i.getLength()) > TINY || std::abs(1 - j.getLength()) > TINY || std::abs(1 - k.getLength()) > TINY) {
+		warn("Trying to transform a point with non normalized vectors");
+		std::cerr << "i length: " << i.getLength() << " -- j length: " << j.getLength() << " -- k length: " << k.getLength() << std::endl;
+	}
+
+	if (std::abs(i*j) > TINY || std::abs(j*k) > TINY || std::abs(i*k) > TINY) {
+		warn("Transforming a point with non orthogonal vectors");
+		std::cerr << "   i: ";
+		i.print(); 
+		std::cerr << "   j: ";
+		j.print();
+		std::cerr << "   k: ";
+		k.print();
+
+		std::cerr << "   i*j: " << std::abs(i*j) << std::endl;
+		std::cerr << "   j*k: " << std::abs(j*k) << std::endl;
+		std::cerr << "   i*k: " << std::abs(i*k) << std::endl;
+	}
+#endif
+	
+	double rx = i.getX()*x + i.getY()*y + i.getZ()*z;
+	double ry = j.getX()*x + j.getY()*y + j.getZ()*z;
+	double rz = k.getX()*x + k.getY()*y + k.getZ()*z;
+
+	return Point3D(rx, ry, rz);
 }

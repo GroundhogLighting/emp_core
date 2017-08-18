@@ -5,11 +5,11 @@ workspace "Glare"
 
     configurations { "DebugWIN", "WIN", "DebugMACOS", "MACOS", "LINUX", "DebugLINUX" }
 
-    project "GoogleTest"
-        kind "StaticLib"
-        files { "googletest/googletest/src/gtest-all.cc" }
-        includedirs { "googletest/googletest/include", "googletest/googletest" }
-        targetdir "googletest/build/%{cfg.buildcfg}"        
+project "GoogleTest"
+    kind "StaticLib"
+    files { "googletest/googletest/src/gtest-all.cc" }
+    includedirs { "googletest/googletest/include", "googletest/googletest" }
+    targetdir "googletest/build/%{cfg.buildcfg}"        
 
 
                    

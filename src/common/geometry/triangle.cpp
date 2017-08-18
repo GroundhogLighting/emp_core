@@ -152,6 +152,7 @@ bool Triangle::setConstraint(int i)
 	}
 
 	constraints[i] = true;
+	return true;
 	// reciprocate
 	Segment * s = segments[i];
 	int aux = neighbors[i]->getEdgeIndexByPoints(s->start, s->end);
@@ -273,4 +274,15 @@ bool Triangle::testPoint(Point3D * p, int * code)
 	*code = -1;
 	return false;
 
+}
+
+
+bool Triangle::isEqual(MPEPolyTriangle * triangle)
+{
+	MPEPolyPoint* PointA = triangle->Points[0];
+	MPEPolyPoint* PointB = triangle->Points[1];
+	MPEPolyPoint* PointC = triangle->Points[2];
+
+	return true;
+	//Point3D a = Point3D()
 }

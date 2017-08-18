@@ -19,10 +19,130 @@
 *****************************************************************************/
 
 
+#include <bitset>
+
+#include "../../common/utilities/stringutils.h"
+
 #include "./triangulation.h"
 #include "./bbox.h"
 #include "../utilities/io.h"
 
+#define MPE_POLY2TRI_IMPLEMENTATION
+#include "../../3rdparty/fast-poly2tri/MPE_fastpoly2tri.h"
+
+
+void Triangulation::poly2tri() {
+
+	// Create a 2D version of this polygon
+	Polygon3D * polygon2D = polygon->get2DPolygon();
+
+	// Prepare data for restoring 3D
+	Vector3D i = Vector3D(0, 0, 0);
+	Vector3D j = Vector3D(0, 0, 0);
+	Vector3D k = Vector3D(0, 0, 0);
+
+	if (!polygon2D->getInverseAuxiliarAxes(polygon->getNormal(), &i, &j, &k)) {
+		fatal("Impossible to triangulate because of an error in calculating inverse of auxiliar axes", __LINE__, __FILE__);		
+		return ;
+	}
+
+	// The maximum number of points you expect to need
+	// This value is used by the library to calculate
+	// working memory required
+	uint32_t MaxPointCount = MAX_POINTS_IN_WORKPLANE;
+
+	// Request how much memory (in bytes) you should
+	// allocate for the library
+	size_t MemoryRequired = MPE_PolyMemoryRequired(MaxPointCount);
+
+	// Allocate a void* memory block of size MemoryRequired
+	// IMPORTANT: The memory must be zero initialized
+	void* Memory = calloc(MemoryRequired, 1);
+
+	// Initialize the poly context by passing the memory pointer,
+	// and max number of points from before
+	MPEPolyContext PolyContext;
+	if (MPE_PolyInitContext(&PolyContext, Memory, MaxPointCount))
+	{
+
+		// Add exterior loop
+		Loop * outerLoop = polygon2D->getOuterLoopRef();
+
+		// This value is lost in translation... so store it here
+		double z = outerLoop->getVertexRef(0)->getZ(); 
+
+		for (size_t i=0; i < outerLoop->size(); i++)
+		{
+			Point3D * p = outerLoop->getVertexRef(i);
+
+			if (p == NULL)
+				continue;
+
+			// TRANSFORM TO 2D;
+			// for now we assume the plane is on the XZ plane
+			MPEPolyPoint* Point = MPE_PolyPushPoint(&PolyContext);
+			Point->X = p->getX();
+			Point->Y = p->getY();
+		}
+
+		
+		// Add the polyline for the edge. This will consume all points added so far.
+		MPE_PolyAddEdge(&PolyContext);
+
+		// add holes to the shape 
+		for(size_t i=0; i < polygon2D->countInnerLoops(); i++)
+		{
+			Loop * innerLoop = polygon2D->getInnerLoopRef(i);
+			MPEPolyPoint* Hole = MPE_PolyPushPointArray(&PolyContext, innerLoop->size());
+			
+			for (size_t j = 0; j < innerLoop->size(); j++) {
+				Point3D * p = innerLoop->getVertexRef(j);	
+				if (p == NULL)
+					continue;
+				Hole[j].X = p->getX(); 
+				Hole[j].Y = p->getY();				
+			}			
+			
+			MPE_PolyAddHole(&PolyContext);
+		}
+
+		// Triangulate the shape
+		MPE_PolyTriangulate(&PolyContext);
+
+		// The resulting triangles can be used like so
+		for (uxx TriangleIndex = 0; TriangleIndex < PolyContext.TriangleCount; ++TriangleIndex)
+		{
+			MPEPolyTriangle* polytriangle = PolyContext.Triangles[TriangleIndex];
+			MPEPolyPoint* PointA = polytriangle->Points[0];
+			MPEPolyPoint* PointB = polytriangle->Points[1];
+			MPEPolyPoint* PointC = polytriangle->Points[2];
+
+			// add a Triangle, transformed back into 3D			
+			Point3D a2d = Point3D(PointA->X, PointA->Y, z);
+			Point3D b2d = Point3D(PointB->X, PointB->Y, z);
+			Point3D c2d = Point3D(PointC->X, PointC->Y, z);
+			Point3D * a = new Point3D(a2d.transform(i,j,k));
+			Point3D * b = new Point3D(b2d.transform(i, j, k));
+			Point3D * c = new Point3D(c2d.transform(i, j, k));
+			Triangle * t = new Triangle(a, b, c);
+			
+			// Set constraints.... this was reversed engineered; so I am not sure 
+			// it will work ALL the time.
+			for (size_t i = 0; i < 3; i++) {
+				MPEPolyTriangle * polyneighbor = polytriangle->Neighbors[(i + 2) % 3];
+				// If there is no neighbor
+				if (polyneighbor != NULL && (polyneighbor ->Flags) < 256)
+					t->setConstraint(i);				
+			}						
+			addTriangle(t);			
+		}
+	}
+
+	// delete this.
+	delete polygon2D;
+}
+
+/*
 void Triangulation::addContraintsFromLoop(Loop * loop)
 {
 	// register exterior loop	
@@ -32,25 +152,26 @@ void Triangulation::addContraintsFromLoop(Loop * loop)
 		constraints.push_back(new Segment(loop->getVertexRef(i), loop->getVertexRef((i + 1) % nPoints)));
 	}
 }
+*/
 
 Triangulation::Triangulation(Polygon3D * aPolygon)
 {
 	// initialize without points
 	polygon = aPolygon;
-	points = std::vector < Point3D * >();
-	constraints = std::vector < Segment * >();
+	//points = std::vector < Point3D * >();
+	//constraints = std::vector < Segment * >();
 	triangles = std::vector < Triangle * >();
 
 	// Fill constraints
-	Loop * outerLoop = polygon->getOuterLoopRef();
-	addContraintsFromLoop(outerLoop);
+	//Loop * outerLoop = polygon->getOuterLoopRef();
+	//addContraintsFromLoop(outerLoop);
 
-	for (size_t i = 0; i < polygon->countInnerLoops(); i++) {
-		addContraintsFromLoop(polygon->getInnerLoopRef(i));
-	}
+	//for (size_t i = 0; i < polygon->countInnerLoops(); i++) {
+	//	addContraintsFromLoop(polygon->getInnerLoopRef(i));
+	//}
 
 	// Calculate the maximum and minimum X,Y,Z
-	setSuperRectangle();	
+	//setSuperRectangle();	
 }
 
 Triangulation::~Triangulation()
@@ -61,11 +182,14 @@ Triangulation::~Triangulation()
 
 		delete triangles[i];
 	}
+	/*
 	for (size_t i = 0; i < constraints.size(); i++) {
 		delete constraints[i];
 	}
+	*/
 }
 
+/*
 bool Triangulation::setSuperRectangle()
 {
 	BBox * bbox = new BBox(polygon);
@@ -131,7 +255,8 @@ bool Triangulation::setSuperRectangle()
 
 	return true;
 }
-
+*/
+/*
 bool Triangulation::doCDT()
 {
 	DEBUG_MSG("Starting Constrained Delaunay Triangulation");
@@ -152,8 +277,9 @@ bool Triangulation::doCDT()
 
 	return true;
 }
+*/
 
-
+/*
 bool Triangulation::doDT()
 {
 	DEBUG_MSG("Starting Delaunay Triangulation");
@@ -179,6 +305,7 @@ bool Triangulation::doDT()
 	DEBUG_MSG("ENDED Delaunay Triangulation");
 	return true;
 }
+*/
 
 
 
@@ -199,15 +326,13 @@ bool Triangulation::addPointToTriangle(size_t index, Point3D * point, int code)
 					// do nothing... the point has already been added.
 		return true;
 	}
-	else if (code < 6) { // Point in an edge				
+	else if (code < 6) { // Point in an edge			
 		splitEdge(index, point, code,false);
 		return true;
 	}
 	else { // Point inside the triangle (code == 6)
 		return splitTriangle(index, point);
 	}
-
-
 }
 
 bool Triangulation::addPoint(Point3D * point)
@@ -221,11 +346,11 @@ bool Triangulation::addPoint(Point3D * point)
 			continue;
 		
 		if (triangles[i]->testPoint( point, &code))
-			return addPointToTriangle(i, point, code);
+			addPointToTriangle(i, point, code);
 					
 	}
 	fatal("Point is not in any triangle",__LINE__,__FILE__);
-	return false; // triangle not found
+	return true; // triangle not found
 }
 
 void Triangulation::flipDiagonal(size_t index, int edge, bool constraint)
@@ -425,12 +550,12 @@ double Triangulation::getBestAspectRatio(Triangle * t, int i, bool * changed)
 	return currentMin;
 }
 
-
+/*
 bool Triangulation::mergeIfPossible(Triangle * tri, int neighbor)
 {
 	if (neighbor < 0 || neighbor > 2) {
 		fatal("Impossible index trying to merge triangles... index was '" + std::to_string(neighbor) + "'", __LINE__, __FILE__);
-		return -1;
+		return false;
 	}
 	Triangle * nei = tri->getNeighbor(neighbor);
 	warn("merge 1");
@@ -580,13 +705,13 @@ bool Triangulation::mergeIfPossible(Triangle * tri, int neighbor)
 
 	warn("merge 15");
 
-	/*
-	int oNotMIndex = nei->getEdgeIndexByPoints(notM, o);
-	if (tri->isContraint(cNotMIndex) && nei->isContraint(oNotMIndex)) {
-		merge->setConstraint(0);
-	}
-	warn("merge 16");
-	*/
+	
+	//int oNotMIndex = nei->getEdgeIndexByPoints(notM, o);
+	//if (tri->isContraint(cNotMIndex) && nei->isContraint(oNotMIndex)) {
+	//	merge->setConstraint(0);
+	//}
+	//warn("merge 16");
+	
 
 	if (nei->isContraint(omIndex))
 		merge->setConstraint(1);
@@ -606,6 +731,7 @@ bool Triangulation::mergeIfPossible(Triangle * tri, int neighbor)
 
 	return true;
 }
+*/
 
 void Triangulation::restoreDelaunay()
 {	
@@ -624,17 +750,8 @@ void Triangulation::restoreDelaunay()
 		// Check if it is worth flipping
 		int bestNeighbor = -1;
 		double bestAspectRatio = HUGE;
-		bool merged = false;
 		// Found an ugly triangle
-		for (int j = 0; j < 3; j++) { // Check three edges for flipping or merging
-			
-			// check if it is worth merging with neighbor
-			if (mergeIfPossible(triangles[i], j)) {
-				warn("........... MERGED TRIANGLE");
-				merged = true;
-				break;
-			}
-
+		for (int j = 0; j < 3; j++) { // Check three edges for flipping or merging						
 			// calculate possible aspect ratio
 			bool c;
 			double ar = getBestAspectRatio(triangles[i], j, &c);
@@ -647,12 +764,6 @@ void Triangulation::restoreDelaunay()
 			}		
 		}
 
-		// if we merged, don't flip
-		if (merged)
-			continue;
-
-
-		warn("........... WILL SEE IF FLIP");
 		// Flip if needed.
 		if (bestNeighbor >= 0 ) { 
 			// if at least one of them is better than the current
@@ -753,7 +864,8 @@ bool Triangulation::splitEdge(size_t i, Point3D * p, int code, bool constraint)
 
 	warn(".............SE3");
 	// retrieve neighbor (will be deleted)
-	Triangle * neighbor = triangles[i]->getNeighbor(code % 3);
+	//Triangle * neighbor = triangles[i]->getNeighbor(code % 3);
+	Triangle * neighbor = NULL;
 
 	warn(".............SE4");
 	// Create and add the new triangles.
@@ -921,7 +1033,7 @@ void Triangulation::deleteTriangle(size_t i) {
 	delete triangles[i];
 	triangles[i] = NULL;
 }
-
+/*
 void Triangulation::applyConstraint(Segment * s)
 {
 	addPoint(s->start);
@@ -936,6 +1048,7 @@ void Triangulation::applyConstraint(Segment * s)
 		applyConstraintToTriangle(triangles[i], s);		
 	}
 }
+*/
 
 void Triangulation::clean()
 {
@@ -951,7 +1064,6 @@ void Triangulation::clean()
 
 void Triangulation::refine(double maxArea)
 {	
-	return;
 	for (size_t i = 0; i < nTriangles; i++) {
 		if (triangles[i] == NULL)
 			continue;
@@ -961,20 +1073,21 @@ void Triangulation::refine(double maxArea)
 			Point3D c = triangles[i]->getCircumCenter();
 			addPoint(new Point3D(c.getX(), c.getY(), c.getZ()));
 		}
-		//restoreDelaunay();
+		restoreDelaunay();
 	}
 }
 
 
 bool Triangulation::mesh(double maxArea)
-{
-	doCDT();
-	//restoreDelaunay();
-	//refine(maxArea);
+{	
+
+	// Create a constrained delaunay triangulation
+	poly2tri();
+	refine(maxArea);
 	return true;
 }
 
-
+/*
 bool Triangulation::applyConstraintToTriangle(Triangle * tri, Segment * constraint)
 {
 	// Identify where is the triangle intersected
@@ -1047,3 +1160,4 @@ bool Triangulation::applyConstraintToTriangle(Triangle * tri, Segment * constrai
 
 	return true;
 }
+*/

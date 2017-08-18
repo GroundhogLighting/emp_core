@@ -21,6 +21,7 @@
 #pragma once
 
 #include "./segment.h"
+#include "../../3rdparty/fast-poly2tri/MPE_fastpoly2tri.h"
 
 // Represents a Triangle.
 /*!
@@ -200,4 +201,12 @@ public:
 	@return is in triangle
 	*/
 	bool testPoint(Point3D * p, int * code);
+
+	//! Checks if a Glar triangle is equal to a fast-poly2tri triangle
+	/*!
+	@author German Molina
+	@param triangle The MPEPolyTriangle to compare with
+	@return is equal
+	*/
+	bool isEqual(MPEPolyTriangle * triangle);
 };

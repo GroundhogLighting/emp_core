@@ -195,3 +195,42 @@ TEST(LoopTests, clean2)
 	}
 }
 
+/*
+TEST(LoopTests, transform)
+{
+	Loop loop = Loop();
+	Point3D a = Point3D(0, -1, -1);
+	Point3D b = Point3D(0, 1, -1);
+	Point3D c = Point3D(0, 1, 1);
+	Point3D d = Point3D(0, -1, 1);
+	loop.addVertex(&a);
+	loop.addVertex(&b);
+	loop.addVertex(&c);
+	loop.addVertex(&d);
+
+	// Identity transform
+	Vector3D i = Vector3D(1, 0, 0);
+	Vector3D j = Vector3D(0, 1, 0);
+	Vector3D k = Vector3D(0, 0,	1);
+
+	Loop * tr = loop.transform(i, j, k);
+	
+	for (size_t p = 0; p < loop.size(); p++) {		
+		ASSERT_EQ(tr->getVertexRef(p)->getX(), loop.getVertexRef(p)->getX());
+		ASSERT_EQ(tr->getVertexRef(p)->getY(), loop.getVertexRef(p)->getY());
+		ASSERT_EQ(tr->getVertexRef(p)->getZ(), loop.getVertexRef(p)->getZ());
+	}
+	delete tr;
+
+	// ROTATE TO XY PLANE
+	i = Vector3D(0, 0, 1);
+	j = Vector3D(0, 1, 0);
+	k = Vector3D(1, 0, 0);
+	Loop * tr2 = loop.transform(i, j, k);
+	for (size_t p = 0; p < loop.size(); p++) {
+		ASSERT_EQ(tr2->getVertexRef(p)->getX(), loop.getVertexRef(p)->getZ());
+		ASSERT_EQ(tr2->getVertexRef(p)->getY(), loop.getVertexRef(p)->getY());
+	}
+	delete tr2;
+}
+*/

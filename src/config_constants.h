@@ -51,5 +51,8 @@ This module defines constants that are used in the rest of the program.
 /// Minus tiny number
 #define MINUS_TINY -TINY //!< This is a very small number that may be used by several sections of the program
 
+/// Maximum number of points in a triangulation before refining
+#define MAX_POINTS_IN_WORKPLANE 10000 //!< This number is required on the poly2tri function
+
 
 /* @} */

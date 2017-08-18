@@ -136,4 +136,28 @@ public:
 	@author German Molina
 	*/
 	void print();
+
+	//! Transforms a Point3D
+	/*!
+	The returned point is the product of the
+	matrix M by the current point (return = M*p).
+	The matrix M is a 3x3 matrix built from the 
+	Vector3D provided (i.e. M = [[ix,iy,iz],[jx,jy,jz],[kx,ky,kz]])
+
+	retX = i*point
+	retY = j*point
+	retZ = k*point
+
+	The reson to write this function in such way is because
+	it can be used to change reference axis.
+
+	@author German Molina
+	@return the transformed Point3D
+	@param[in] i Vector3D i
+	@param[in] j Vector3D j
+	@param[in] k Vector3D k
+	*/
+	Point3D transform(Vector3D i, Vector3D j, Vector3D k);
+
+
 };

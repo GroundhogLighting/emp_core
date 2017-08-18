@@ -103,4 +103,20 @@ public:
 	@param[in] normal The normal of the Loop
 	*/
 	bool testPoint(Point3D p, Vector3D * normal);
+
+	//! Transforms all the points in a Loop.
+	/*!
+	The returned Loop will contain Point3D corresponding
+	to the product of the matrix M by the corresponding 
+	point (return = M*p).
+	
+	The matrix M is a 3x3 matrix built from the 
+	vector provided (i.e. M = [i,j,k])
+
+	@author German Molina
+	@return The 2D loop instance
+	@param[in] i see Point3D::transform() for info.
+	@note Delete the returned loop after use
+	*/
+	Loop * transform(Vector3D i, Vector3D j, Vector3D k);
 };

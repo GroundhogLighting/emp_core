@@ -84,6 +84,13 @@ public:
 	*/
 	Vector3D operator*(double s);
 
+	//! Inverse scaling (i.e. division by a constant)
+	/*!
+	@author German Molina
+	@param[in] s The scaling factor
+	@return The result
+	*/
+	Vector3D operator/(double s);
 
 	//! Vector addition
 	/*!
@@ -161,4 +168,10 @@ public:
 	@author German Molina	
 	*/
 	void normalize();
+
+	//! Prints the Vector to the stdout
+	/*!
+	@author German Molina
+	*/
+	void print();
 };

@@ -45,17 +45,17 @@ public:
 	~Triangulation();
 
 	size_t addTriangle(Triangle * t);
-	void addContraintsFromLoop(Loop * loop);
+	//void addContraintsFromLoop(Loop * loop);
 
 
-	bool setSuperRectangle();
+	//bool setSuperRectangle();
 
 	size_t getNumTriangles();
 	Triangle * getTriangleRef(size_t i);
 
 	bool addPoint(Point3D * point);
 
-	bool doDT();
+	//bool doDT();
 
 
 	void restoreDelaunay();
@@ -75,12 +75,12 @@ public:
 
 	bool isConvex(Point3D * a, Point3D * b, Point3D * c, Point3D * d);
 
-	void applyConstraint(Segment * s);
+	//void applyConstraint(Segment * s);
 
 
 	bool addPointToTriangle(size_t index, Point3D * point, int code);
 
-	bool doCDT();
+	//bool doCDT();
 
 	void clean();
 
@@ -89,7 +89,9 @@ public:
 
 	bool mesh(double maxArea);
 
-	bool applyConstraintToTriangle(Triangle * tri, Segment * constraint);
+	//bool applyConstraintToTriangle(Triangle * tri, Segment * constraint);
 
-	bool mergeIfPossible(Triangle * tri, int neighbor);
+	//bool mergeIfPossible(Triangle * tri, int neighbor);
+
+	void poly2tri();
 };
