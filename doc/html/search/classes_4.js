@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['layer',['Layer',['../class_layer.html',1,'']]],
-  ['location',['Location',['../class_location.html',1,'']]],
-  ['loop',['Loop',['../class_loop.html',1,'']]]
+  ['glare',['Glare',['../class_glare.html',1,'']]],
+  ['groundhogmodel',['GroundhogModel',['../class_groundhog_model.html',1,'']]]
 ];

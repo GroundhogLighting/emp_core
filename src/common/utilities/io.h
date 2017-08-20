@@ -61,6 +61,8 @@ Should be used when something fatal happens. Usually, something will go wrong.
 
 @author German Molina
 @param[in] message the message
+@param[in] ln The line number where this function was called
+@param[in] file The file name where this function was called
 */
 void fatal(std::string message, int ln, char * file);
 

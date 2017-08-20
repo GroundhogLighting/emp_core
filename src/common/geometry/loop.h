@@ -116,6 +116,8 @@ public:
 	@author German Molina
 	@return The 2D loop instance
 	@param[in] i see Point3D::transform() for info.
+	@param[in] j see Point3D::transform() for info.
+	@param[in] k see Point3D::transform() for info.
 	@note Delete the returned loop after use
 	*/
 	Loop * transform(Vector3D i, Vector3D j, Vector3D k);

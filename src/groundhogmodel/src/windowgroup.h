@@ -25,6 +25,15 @@
 
 #include "./face.h"
 
+//! Represents groups of windows, that may contain one or more objects
+/*!
+Sometimes the user wants to group Windows, which is useful for some simulation
+methods.
+
+In any case, every window in the model is put in a Window Group... some of them
+will be made of 1 window (i.e. ungrouped windows) and some of several.
+*/
+
 class WindowGroup {
 private:
 	std::string name; //!< The name of the group

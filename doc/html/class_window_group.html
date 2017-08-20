@@ -70,14 +70,19 @@ $(function() {
 <div class="title">WindowGroup Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents groups of windows, that may contain one or more objects.  
+ <a href="class_window_group.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="windowgroup_8h_source.html">windowgroup.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a29c25b1ecb615a6a7db4449eb16bd3cc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_window_group.html#a29c25b1ecb615a6a7db4449eb16bd3cc">WindowGroup</a> (std::string <a class="el" href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">name</a>)</td></tr>
-<tr class="memdesc:a29c25b1ecb615a6a7db4449eb16bd3cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="class_window_group.html">WindowGroup</a>.  <a href="#a29c25b1ecb615a6a7db4449eb16bd3cc">More...</a><br /></td></tr>
+<tr class="memdesc:a29c25b1ecb615a6a7db4449eb16bd3cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="class_window_group.html" title="Represents groups of windows, that may contain one or more objects. ">WindowGroup</a>.  <a href="#a29c25b1ecb615a6a7db4449eb16bd3cc">More...</a><br /></td></tr>
 <tr class="separator:a29c25b1ecb615a6a7db4449eb16bd3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60f85b3d6eec1f91c07ecfbf39fc9815"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_window_group.html#a60f85b3d6eec1f91c07ecfbf39fc9815">~WindowGroup</a> ()</td></tr>
-<tr class="memdesc:a60f85b3d6eec1f91c07ecfbf39fc9815"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a <a class="el" href="class_window_group.html">WindowGroup</a>.  <a href="#a60f85b3d6eec1f91c07ecfbf39fc9815">More...</a><br /></td></tr>
+<tr class="memdesc:a60f85b3d6eec1f91c07ecfbf39fc9815"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a <a class="el" href="class_window_group.html" title="Represents groups of windows, that may contain one or more objects. ">WindowGroup</a>.  <a href="#a60f85b3d6eec1f91c07ecfbf39fc9815">More...</a><br /></td></tr>
 <tr class="separator:a60f85b3d6eec1f91c07ecfbf39fc9815"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50601c8267b18864aa349d01a017a35d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_window_group.html#a50601c8267b18864aa349d01a017a35d">addFace</a> (<a class="el" href="class_face.html">Face</a> *face)</td></tr>
 <tr class="memdesc:a50601c8267b18864aa349d01a017a35d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a <a class="el" href="class_face.html" title="The integration of a Polygon3D and a Material. ">Face</a> to the window group.  <a href="#a50601c8267b18864aa349d01a017a35d">More...</a><br /></td></tr>
@@ -106,7 +111,11 @@ std::vector&lt; <a class="el" href="class_face.html">Face</a> * &gt;&#160;</td><
 <tr class="memdesc:ae33f07fbba3f4dcf9a235d9b812479d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the faces in the window group. <br /></td></tr>
 <tr class="separator:ae33f07fbba3f4dcf9a235d9b812479d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents groups of windows, that may contain one or more objects. </p>
+<p>Sometimes the user wants to group Windows, which is useful for some simulation methods.</p>
+<p>In any case, every window in the model is put in a Window Group... some of them will be made of 1 window (i.e. ungrouped windows) and some of several. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a29c25b1ecb615a6a7db4449eb16bd3cc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a29c25b1ecb615a6a7db4449eb16bd3cc">&#9670;&nbsp;</a></span>WindowGroup()</h2>
 
@@ -123,7 +132,7 @@ std::vector&lt; <a class="el" href="class_face.html">Face</a> * &gt;&#160;</td><
       </table>
 </div><div class="memdoc">
 
-<p>Creates a new <a class="el" href="class_window_group.html">WindowGroup</a>. </p>
+<p>Creates a new <a class="el" href="class_window_group.html" title="Represents groups of windows, that may contain one or more objects. ">WindowGroup</a>. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -131,7 +140,7 @@ std::vector&lt; <a class="el" href="class_face.html">Face</a> * &gt;&#160;</td><
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                                            {</div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">name</a> = groupName;</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Creating Window Group &quot;</span> + groupName);</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}</div><div class="ttc" id="class_window_group_html_a634d7176765d608cd6a7ef2b18d8234e"><div class="ttname"><a href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">WindowGroup::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:30</div></div>
+<div class="fragment"><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                                            {</div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">name</a> = groupName;</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Creating Window Group &quot;</span> + groupName);</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}</div><div class="ttc" id="class_window_group_html_a634d7176765d608cd6a7ef2b18d8234e"><div class="ttname"><a href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">WindowGroup::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:39</div></div>
 <div class="ttc" id="group__io_utils_html_gaf1206b4d3bda8c4c8c9257f369a9e9e1"><div class="ttname"><a href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a></div><div class="ttdeci">#define DEBUG_MSG(str)</div><div class="ttdoc">A debug message function. Only reports in DEBUG releases. </div><div class="ttdef"><b>Definition:</b> io.h:42</div></div>
 </div><!-- fragment -->
 </div>
@@ -151,10 +160,10 @@ std::vector&lt; <a class="el" href="class_face.html">Face</a> * &gt;&#160;</td><
       </table>
 </div><div class="memdoc">
 
-<p>Destroys a <a class="el" href="class_window_group.html">WindowGroup</a>. </p>
+<p>Destroys a <a class="el" href="class_window_group.html" title="Represents groups of windows, that may contain one or more objects. ">WindowGroup</a>. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
-<div class="fragment"><div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                          {</div><div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Destroying Window Group &quot;</span> + <a class="code" href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">name</a>);</div><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; <a class="code" href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">windows</a>.size(); i++) {</div><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">delete</span> <a class="code" href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">windows</a>[i];</div><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    }</div><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div><div class="ttc" id="class_window_group_html_ae33f07fbba3f4dcf9a235d9b812479d7"><div class="ttname"><a href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">WindowGroup::windows</a></div><div class="ttdeci">std::vector&lt; Face * &gt; windows</div><div class="ttdoc">Contains the faces in the window group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:31</div></div>
-<div class="ttc" id="class_window_group_html_a634d7176765d608cd6a7ef2b18d8234e"><div class="ttname"><a href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">WindowGroup::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:30</div></div>
+<div class="fragment"><div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                          {</div><div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Destroying Window Group &quot;</span> + <a class="code" href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">name</a>);</div><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; <a class="code" href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">windows</a>.size(); i++) {</div><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">delete</span> <a class="code" href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">windows</a>[i];</div><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    }</div><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div><div class="ttc" id="class_window_group_html_ae33f07fbba3f4dcf9a235d9b812479d7"><div class="ttname"><a href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">WindowGroup::windows</a></div><div class="ttdeci">std::vector&lt; Face * &gt; windows</div><div class="ttdoc">Contains the faces in the window group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:40</div></div>
+<div class="ttc" id="class_window_group_html_a634d7176765d608cd6a7ef2b18d8234e"><div class="ttname"><a href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">WindowGroup::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:39</div></div>
 <div class="ttc" id="group__io_utils_html_gaf1206b4d3bda8c4c8c9257f369a9e9e1"><div class="ttname"><a href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a></div><div class="ttdeci">#define DEBUG_MSG(str)</div><div class="ttdoc">A debug message function. Only reports in DEBUG releases. </div><div class="ttdef"><b>Definition:</b> io.h:42</div></div>
 </div><!-- fragment -->
 </div>
@@ -184,7 +193,7 @@ std::vector&lt; <a class="el" href="class_face.html">Face</a> * &gt;&#160;</td><
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                                     {</div><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">windows</a>.push_back(face);</div><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}</div><div class="ttc" id="class_window_group_html_ae33f07fbba3f4dcf9a235d9b812479d7"><div class="ttname"><a href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">WindowGroup::windows</a></div><div class="ttdeci">std::vector&lt; Face * &gt; windows</div><div class="ttdoc">Contains the faces in the window group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:31</div></div>
+<div class="fragment"><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                                     {</div><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">windows</a>.push_back(face);</div><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}</div><div class="ttc" id="class_window_group_html_ae33f07fbba3f4dcf9a235d9b812479d7"><div class="ttname"><a href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">WindowGroup::windows</a></div><div class="ttdeci">std::vector&lt; Face * &gt; windows</div><div class="ttdoc">Contains the faces in the window group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:40</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -213,7 +222,7 @@ std::vector&lt; <a class="el" href="class_face.html">Face</a> * &gt;&#160;</td><
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Is the same name; </dd></dl>
-<div class="fragment"><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                                                   {</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">name</a> == *otherName;</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div><div class="ttc" id="class_window_group_html_a634d7176765d608cd6a7ef2b18d8234e"><div class="ttname"><a href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">WindowGroup::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:30</div></div>
+<div class="fragment"><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                                                   {</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">name</a> == *otherName;</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div><div class="ttc" id="class_window_group_html_a634d7176765d608cd6a7ef2b18d8234e"><div class="ttname"><a href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">WindowGroup::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:39</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -234,7 +243,7 @@ std::vector&lt; <a class="el" href="class_face.html">Face</a> * &gt;&#160;</td><
 
 <p>Retrieves the name. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
-<div class="fragment"><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                               {</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">name</a>;</div><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div><div class="ttc" id="class_window_group_html_a634d7176765d608cd6a7ef2b18d8234e"><div class="ttname"><a href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">WindowGroup::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:30</div></div>
+<div class="fragment"><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                               {</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">name</a>;</div><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div><div class="ttc" id="class_window_group_html_a634d7176765d608cd6a7ef2b18d8234e"><div class="ttname"><a href="class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e">WindowGroup::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:39</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -256,7 +265,7 @@ std::vector&lt; <a class="el" href="class_face.html">Face</a> * &gt;&#160;</td><
 <p>Retrieves the number of winows in the group. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of windows </dd></dl>
-<div class="fragment"><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                                  {</div><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">windows</a>.size();</div><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div><div class="ttc" id="class_window_group_html_ae33f07fbba3f4dcf9a235d9b812479d7"><div class="ttname"><a href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">WindowGroup::windows</a></div><div class="ttdeci">std::vector&lt; Face * &gt; windows</div><div class="ttdoc">Contains the faces in the window group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:31</div></div>
+<div class="fragment"><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                                  {</div><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">windows</a>.size();</div><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div><div class="ttc" id="class_window_group_html_ae33f07fbba3f4dcf9a235d9b812479d7"><div class="ttname"><a href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">WindowGroup::windows</a></div><div class="ttdeci">std::vector&lt; Face * &gt; windows</div><div class="ttdoc">Contains the faces in the window group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:40</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -285,7 +294,7 @@ std::vector&lt; <a class="el" href="class_face.html">Face</a> * &gt;&#160;</td><
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference </dd></dl>
-<div class="fragment"><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                                         {</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">windows</a>[i];</div><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div><div class="ttc" id="class_window_group_html_ae33f07fbba3f4dcf9a235d9b812479d7"><div class="ttname"><a href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">WindowGroup::windows</a></div><div class="ttdeci">std::vector&lt; Face * &gt; windows</div><div class="ttdoc">Contains the faces in the window group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:31</div></div>
+<div class="fragment"><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                                         {</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">windows</a>[i];</div><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div><div class="ttc" id="class_window_group_html_ae33f07fbba3f4dcf9a235d9b812479d7"><div class="ttname"><a href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">WindowGroup::windows</a></div><div class="ttdeci">std::vector&lt; Face * &gt; windows</div><div class="ttdoc">Contains the faces in the window group. </div><div class="ttdef"><b>Definition:</b> windowgroup.h:40</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -297,7 +306,7 @@ std::vector&lt; <a class="el" href="class_face.html">Face</a> * &gt;&#160;</td><
 <!-- HTML footer for doxygen 1.8.13-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Aug 1 2017 12:57:12 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
+Generated on Sun Aug 20 2017 12:17:44 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
 </a> 1.8.13
 </small></address>
 </body>

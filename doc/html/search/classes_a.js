@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['vector3d',['Vector3D',['../class_vector3_d.html',1,'']]],
-  ['view',['View',['../class_view.html',1,'']]]
+  ['triangle',['Triangle',['../class_triangle.html',1,'']]],
+  ['triangulation',['Triangulation',['../class_triangulation.html',1,'']]]
 ];

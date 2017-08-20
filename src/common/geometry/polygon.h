@@ -42,7 +42,7 @@ private:
 	Loop * outerLoop; //!< The outer loop
 	std::vector < Loop * > innerLoops; //!< A vector with all the interior loops
 	double area = -1; //!< The are of the polygon (assumed to be in m2)
-	Vector3D normal = Vector3D(0,0,0);
+	Vector3D normal = Vector3D(0,0,0); //!< The normal of the Polygon3D... has to be set manually
 
 public:
 
@@ -199,9 +199,9 @@ public:
 	/*!
 	@author German Molina
 	@param[in] normal The normal of the plane
-	@param[out] i The auxiliar i axis
-	@param[out] j The auxiliar j axis
-	@param[out] k The auxiliar k axis
+	@param[out] auxi The auxiliar i axis
+	@param[out] auxj The auxiliar j axis
+	@param[out] auxk The auxiliar k axis
 	@return success
 	*/
 	bool getInverseAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * auxj, Vector3D * auxk);

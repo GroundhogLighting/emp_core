@@ -8,11 +8,15 @@ var searchData=
   ['addfacetovector',['addFaceToVector',['../class_groundhog_model.html#aad46634abcb32f73c34627818661777d',1,'GroundhogModel::addFaceToVector()'],['../class_s_k_p_reader.html#aaa5e034ee218d735941e21b6bde0372d',1,'SKPReader::addFaceToVector()']]],
   ['addinnerloop',['addInnerLoop',['../class_polygon3_d.html#ac7536e4c325f3197e431ec21d18fd143',1,'Polygon3D']]],
   ['addlayer',['addLayer',['../class_groundhog_model.html#a44457477e895a8b1d8dd173aedb6150e',1,'GroundhogModel']]],
+  ['addpoint',['addPoint',['../class_triangulation.html#aaac7694cce66acedfca5395a79d8c75d',1,'Triangulation']]],
+  ['addpointtotriangle',['addPointToTriangle',['../class_triangulation.html#a200316a017501a0f788091f9f4eccac7',1,'Triangulation']]],
   ['addpolygon',['addPolygon',['../class_workplane.html#ac620892e63368b0fc3da3a83939aa607',1,'Workplane']]],
   ['addpolygontoworkplane',['addPolygonToWorkplane',['../class_groundhog_model.html#aca82eb5699bbadbac6a7c356125d50ae',1,'GroundhogModel']]],
+  ['addtriangle',['addTriangle',['../class_triangulation.html#ad978aca5ecd54d1f01892961f8a98551',1,'Triangulation']]],
   ['addvertex',['addVertex',['../class_loop.html#adafec98f20697586a9fa010a67375940',1,'Loop']]],
   ['addview',['addView',['../class_groundhog_model.html#a320668192977e4c450ac529d819e519d',1,'GroundhogModel']]],
   ['addwindowtogroup',['addWindowToGroup',['../class_groundhog_model.html#ae05bbc809c6c5a33faeb4657e15fade2',1,'GroundhogModel']]],
   ['addworkplanetomodel',['addWorkplaneToModel',['../class_s_k_p_reader.html#a45943837d5b0be9c462ea7a5d3fa4c91',1,'SKPReader']]],
-  ['area',['area',['../class_polygon3_d.html#abba84853688468a258cb2ad369ab84df',1,'Polygon3D']]]
+  ['area',['area',['../class_polygon3_d.html#abba84853688468a258cb2ad369ab84df',1,'Polygon3D']]],
+  ['aspectratio',['aspectRatio',['../class_triangle.html#a0bf955a425781db138d90118a6176caa',1,'Triangle']]]
 ];

@@ -81,9 +81,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gaf07f2c9fa66e59ef91c679d45bcebe5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#gaf07f2c9fa66e59ef91c679d45bcebe5d">warn</a> (std::string message)</td></tr>
 <tr class="memdesc:gaf07f2c9fa66e59ef91c679d45bcebe5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Warn something.  <a href="#gaf07f2c9fa66e59ef91c679d45bcebe5d">More...</a><br /></td></tr>
 <tr class="separator:gaf07f2c9fa66e59ef91c679d45bcebe5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga53aac715e79160a50c4e2884e409aeb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#ga53aac715e79160a50c4e2884e409aeb8">fatal</a> (std::string message)</td></tr>
-<tr class="memdesc:ga53aac715e79160a50c4e2884e409aeb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report fatal error.  <a href="#ga53aac715e79160a50c4e2884e409aeb8">More...</a><br /></td></tr>
-<tr class="separator:ga53aac715e79160a50c4e2884e409aeb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8afab6dfaa6023e1c28faf8299acefac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#ga8afab6dfaa6023e1c28faf8299acefac">fatal</a> (std::string message, int ln, char *file)</td></tr>
+<tr class="memdesc:ga8afab6dfaa6023e1c28faf8299acefac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report fatal error.  <a href="#ga8afab6dfaa6023e1c28faf8299acefac">More...</a><br /></td></tr>
+<tr class="separator:ga8afab6dfaa6023e1c28faf8299acefac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5788248e6b10fb7cf115b0e885ef3842"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#ga5788248e6b10fb7cf115b0e885ef3842">inform</a> (std::string message, bool verbose)</td></tr>
 <tr class="memdesc:ga5788248e6b10fb7cf115b0e885ef3842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Informs something.  <a href="#ga5788248e6b10fb7cf115b0e885ef3842">More...</a><br /></td></tr>
 <tr class="separator:ga5788248e6b10fb7cf115b0e885ef3842"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -113,8 +113,8 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga53aac715e79160a50c4e2884e409aeb8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga53aac715e79160a50c4e2884e409aeb8">&#9670;&nbsp;</a></span>fatal()</h2>
+<a id="ga8afab6dfaa6023e1c28faf8299acefac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8afab6dfaa6023e1c28faf8299acefac">&#9670;&nbsp;</a></span>fatal()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -123,8 +123,24 @@ Functions</h2></td></tr>
           <td class="memname">void fatal </td>
           <td>(</td>
           <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>message</em></td><td>)</td>
+          <td class="paramname"><em>message</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ln</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>file</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -136,10 +152,12 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">message</td><td>the message </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ln</td><td>The line number where this function was called </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">file</td><td>The file name where this function was called </td></tr>
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{   </div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Fatal: &quot;</span> &lt;&lt; message &lt;&lt; std::endl;</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div></div><!-- fragment -->
+<div class="fragment"><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{   </div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Fatal: &quot;</span> &lt;&lt; message &lt;&lt; <span class="stringliteral">&quot; -- Line &quot;</span> &lt;&lt; ln &lt;&lt; <span class="stringliteral">&quot; of File &quot;</span> &lt;&lt; file&lt;&lt; std::endl;</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
 <a id="ga5788248e6b10fb7cf115b0e885ef3842"></a>
@@ -215,7 +233,7 @@ Functions</h2></td></tr>
 <!-- HTML footer for doxygen 1.8.13-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Aug 1 2017 12:57:10 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
+Generated on Sun Aug 20 2017 12:17:43 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
 </a> 1.8.13
 </small></address>
 </body>

@@ -25,6 +25,18 @@
 
 #include "../../common/geometry/polygon.h"
 
+
+
+// Represents a Polygon3D where some lighting metrics will be calculated
+/*!
+This class correspond to Workplanes, which are surfaces that do not represent
+real geometry, but areas where we want to calculate lighting metrics.
+
+They are transformed in Triangulation objects before being exported or used, and 
+are written or used as sensor grids 
+
+*/
+
 class Workplane {
 private:
 	std::string name; //!< Name of the workplane

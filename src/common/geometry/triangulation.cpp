@@ -46,134 +46,34 @@ Triangulation::~Triangulation()
 	}
 }
 
-/*
-bool Triangulation::setSuperRectangle()
-{
-	BBox * bbox = new BBox(polygon);
-	double min_x = bbox->min_x;
-	double max_x = bbox->max_x;
-	double min_y = bbox->min_y;
-	double max_y = bbox->max_y;
-	double min_z = bbox->min_z;
-	double max_z = bbox->max_z;
 
-	if (min_x == max_x && min_y == max_y && min_z == max_z ) {
-		fatal("Trying to set superRectangle of singular polygon", __LINE__, __FILE__);
-		return false;
-	}
 
-	Loop * outerLoop = polygon->getOuterLoopRef();
-
-	// Calculate 4 points that represent the superrectangle 
-	Vector3D normal = polygon->getNormal();
-	double nx = normal.getX();
-	double ny = normal.getY();
-	double nz = normal.getZ();
-
-	Point3D * firstPoint = outerLoop->getVertexRef(0);
-	double cx = firstPoint->getX();
-	double cy = firstPoint->getY();
-	double cz = firstPoint->getZ();
-
-	double d = nx*cx + ny*cy + nz*cz;
-	if ( std::abs(nz) > TINY) {
-		points.push_back( new Point3D(min_x, min_y, (d - nx*min_x - ny*min_y) / nz) );				
-		points.push_back( new Point3D(min_x, max_y, (d - nx*min_x - ny*max_y) / nz) );
-		points.push_back( new Point3D(max_x, max_y, (d - nx*max_x - ny*max_y) / nz) );				
-		points.push_back( new Point3D(max_x, min_y, (d - nx*max_x - ny*min_y) / nz) );
-	}
-	else if(std::abs(ny) > TINY) {
-		points.push_back(new Point3D(min_x, (d - nx*min_x - nz*min_z) / ny, min_z));
-		points.push_back(new Point3D(min_x, (d - nx*min_x - nz*max_z) / ny, max_z));
-		points.push_back(new Point3D(max_x, (d - nx*max_x - nz*max_z) / ny, max_z));
-		points.push_back(new Point3D(max_x, (d - nx*max_x - nz*min_z) / ny, min_z));
-	}
-	else if (std::abs(nx) > TINY) {
-		points.push_back(new Point3D((d - nx*min_y - nz*min_z) / ny, min_y, min_z));
-		points.push_back(new Point3D((d - nx*min_y - nz*max_z) / ny, min_y, max_z));
-		points.push_back(new Point3D((d - nx*max_y - nz*max_z) / ny, max_y, max_z));
-		points.push_back(new Point3D((d - nx*max_y - nz*min_z) / ny, max_y, min_z));
-	}
-	else {
-		fatal("Normal is (0,0,0) when adding superrectangle", __LINE__, __FILE__);
-		return false;
-	}
-
-	// set the neighborhood
-	Triangle * lower = new Triangle(points[0], points[1], points[2]);
-	Triangle * upper = new Triangle(points[0], points[2], points[3]);
+size_t Triangulation::addTriangle(Triangle * t) {
+	t->setIndex(nTriangles);
+	triangles.push_back(t);
 	
-	// add the two triangles
-	addTriangle(lower);
-	addTriangle(upper);
-
-	lower->setNeighbor(upper, 2, true);
-	upper->setNeighbor(lower, 0, true);
-
-	return true;
+	nTriangles += 1;
+	return nTriangles;
 }
-*/
-/*
-bool Triangulation::doCDT()
+
+
+size_t Triangulation::getNumTriangles()
 {
-	DEBUG_MSG("Starting Constrained Delaunay Triangulation");
-	
-	// add outer loop
-	Loop * outerLoop = polygon->getOuterLoopRef();
-	for (size_t i = 0; i < constraints.size(); i++) {
-		warn(".................Applying constraint " + std::to_string(i));
-		applyConstraint(constraints[i]);
-	}
-
-	restoreDelaunay();
-
-	DEBUG_MSG("ENDED Constrained Delaunay Triangulation");
-		
-	// delete triangles that are not part of the polygon	
-	//clean();
-
-	return true;
+	return nTriangles;
 }
-*/
 
-/*
-bool Triangulation::doDT()
+
+Triangle * Triangulation::getTriangleRef(size_t i)
 {
-	DEBUG_MSG("Starting Delaunay Triangulation");
-	// add outer loop
-	Loop * outerLoop = polygon->getOuterLoopRef();
-	for (size_t i = 0; i < outerLoop->size(); i++) {
-		if (!addPoint(outerLoop->getVertexRef(i)))
-			return false;
-	}
-
-	// add inner loops
-	for (size_t i = 0; i < polygon->countInnerLoops(); i++) {
-		Loop * loop = polygon->getInnerLoopRef(i);
-		for (size_t j = 0; j < loop->size(); j++) {
-			if (!addPoint(loop->getVertexRef(j)))
-				return false;
-		}
-	}
-
-
-	restoreDelaunay();
-
-	DEBUG_MSG("ENDED Delaunay Triangulation");
-	return true;
+	return triangles[i];
 }
-*/
-
-
-
-
-
 
 bool Triangulation::addPointToTriangle(size_t index, Point3D * point, int code)
 {
+#ifdef DEBUG
 	warn("........... Adding point");
 	point->print();
-
+#endif
 	if (triangles[index] == NULL) {
 		fatal("Trying to add point into an obsolete triangle", __LINE__, __FILE__);
 		return false;
@@ -184,7 +84,7 @@ bool Triangulation::addPointToTriangle(size_t index, Point3D * point, int code)
 		return true;
 	}
 	else if (code < 6) { // Point in an edge			
-		splitEdge(index, point, code,false);
+		splitEdge(index, point, code);
 		return true;
 	}
 	else { // Point inside the triangle (code == 6)
@@ -194,7 +94,6 @@ bool Triangulation::addPointToTriangle(size_t index, Point3D * point, int code)
 
 bool Triangulation::addPoint(Point3D * point)
 {
-	warn("..... adding point "); point->print();
 	// Iterate through triangles to check
 	int code;
 	for (size_t i = 0; i < triangles.size(); i++) {
@@ -203,21 +102,21 @@ bool Triangulation::addPoint(Point3D * point)
 			continue;
 		
 		if (triangles[i]->testPoint( point, &code))
-			addPointToTriangle(i, point, code);
+			return addPointToTriangle(i, point, code);
 					
 	}
 	fatal("Point is not in any triangle",__LINE__,__FILE__);
-	return true; // triangle not found
+	return false; // triangle not found
 }
 
-void Triangulation::flipDiagonal(size_t index, int edge, bool constraint)
+
+void Triangulation::flipDiagonal(size_t index, int edge)
 {
 	if (edge < 0 || edge > 2) {
 		fatal("Impossible index when flipping digonal... index was '" + std::to_string(edge) + "'", __LINE__, __FILE__);
 	}
 	
 	// get neighbor
-	DEBUG_MSG("..... will look for neighbor in flipDiagonal");
 	Triangle * neighbor = triangles[index]->getNeighbor(edge);
 
 	if (neighbor == NULL) {
@@ -241,78 +140,44 @@ void Triangulation::flipDiagonal(size_t index, int edge, bool constraint)
 	addTriangle(flipped1);
 	addTriangle(flipped2);
 
-	//set constraints if needed
-	if (constraint) {
-		flipped1->setConstraint(1);
-		flipped2->setConstraint(0);
-	}
+	
 
 	// Set neighbors
-	DEBUG_MSG(".... line 313");
-	std::cout << "TRIANGLE " << std::endl;
-	triangles[index]->print();
-	std::cout << "Neighbor " << std::endl;
-	neighbor->print();
-	std::cout << "Point OPOSITE = ";
-	oposite->print();
-	warn("ABCACBACBCABC");
 	int aux1 = neighbor->getEdgeIndexByPoints(oposite, a);
-	warn("ABCACBACBCABC ----- 2");
 	if (aux1 < 0) {
 		fatal("Inconsistent neighborhood when flipping edge", __LINE__, __FILE__);
 		return;
 	}
-	warn("ABCACBACBCABC------------- 3");
 	Triangle * aux2 = neighbor->getNeighbor(aux1);
-	warn("ABCACBACBCABC---------- 4 ");
 	if (aux2 != NULL) {
 		size_t aux3 = aux2->getIndex();
 		flipped1->setNeighbor(triangles[aux3], 0, true);
 	}
 
-	warn("ABCACBACBCABC --------- 5");
 	flipped1->setNeighbor(flipped2, 1,true);
-
-	warn("ABCACBACBCABC ---------- 6");
 	flipped1->setNeighbor(triangles[index]->getNeighbor((edge+2)%3),2,true);
-
-	warn("ABCACBACBCABC ------------ 7");
 	// flipped2->setNeighbor(flipped2, 0,false); // THIS IS DONE BY RECIPROCITY... PUT HERE TO MAKE IT EXPLICIT
 
 	
-	DEBUG_MSG(".... line 327");
 	int aux12 = neighbor->getEdgeIndexByPoints(oposite, b);
-	warn("........ Flipping 1.1");
 	if (aux12 < 0) {
 		fatal("Inconsistent neighborhood when flipping edge -- Line", __LINE__, __FILE__);
 		return;
 	}
-	warn("........ Flipping 1.2");
-
+	
 	Triangle * aux22 = neighbor->getNeighbor(aux12);
-
-	warn("........ Flipping 1.3");
+	
 	if (aux22 != NULL) {
 		size_t aux3 = aux22->getIndex();
-		warn(" ................... AUX3 = " + std::to_string(aux3));
 		flipped2->setNeighbor(triangles[aux3], 1, true);
 	}
 
-	warn("........ Flipping 1.4");
-	
 	flipped2->setNeighbor(triangles[index]->getNeighbor((edge + 1) % 3), 2, true);
-
-	warn("........ Flipping 1.5");
 
 	// delete obsolete triangles
 	deleteTriangle(index);
 
-	warn("........ Flipping 1.6");
 	deleteTriangle(neighbor->getIndex());
-
-	warn("........ Flipping 1.7");
-	
-
 }
 
 
@@ -357,7 +222,8 @@ bool Triangulation::isConvex(Point3D * a, Point3D * b, Point3D * c, Point3D * d)
 	return true;
 }
 
-double Triangulation::getBestAspectRatio(Triangle * t, int i, bool * changed)
+
+double Triangulation::getBestAspectRatio(Triangle * t, int i)
 {
 	if (i < 0 || i > 2) {
 		fatal("Impossible index when getting best aspect ratio... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
@@ -386,8 +252,7 @@ double Triangulation::getBestAspectRatio(Triangle * t, int i, bool * changed)
 	}
 
 	// get current situation
-	*changed = false;
-
+	
 	double tAspect = t->getAspectRatio();
 	double nAspect = neighbor->getAspectRatio();
 	double currentMin = (tAspect > nAspect) ? tAspect : nAspect; // the max of the two
@@ -400,195 +265,12 @@ double Triangulation::getBestAspectRatio(Triangle * t, int i, bool * changed)
 	double flippedMin = (f1Aspect > f2Aspect) ? f1Aspect : f2Aspect;
 	
 	if (flippedMin < currentMin) {
-		*changed = true;
 		return flippedMin;
 	}
 
 	return currentMin;
 }
 
-/*
-bool Triangulation::mergeIfPossible(Triangle * tri, int neighbor)
-{
-	if (neighbor < 0 || neighbor > 2) {
-		fatal("Impossible index trying to merge triangles... index was '" + std::to_string(neighbor) + "'", __LINE__, __FILE__);
-		return false;
-	}
-	Triangle * nei = tri->getNeighbor(neighbor);
-	warn("merge 1");
-	if (nei == NULL)
-		return false;
-
-	Segment * s = tri->getSegment(neighbor);
-	warn("merge 2");
-	Point3D * a = s->start;
-	Point3D * b = s->end;
-	warn("merge 3");
-	Point3D * o = getOpositeVertex(tri, neighbor);
-	warn(" === Point o:");
-	o->print();
-	warn("merge 4");
-	int abIndex = nei->getEdgeIndexByPoints(a, b);
-	if (abIndex == -1) {
-		fatal(" <<<<<<<<<<<<<<<<<<<< abIndex == -1",__LINE__,__FILE__);
-		warn("==== A:"); a->print();
-		warn("==== B:"); b->print();
-		nei->print();
-		warn("==============================");
-		return false;
-	}
-	warn("merge 5");
-	Point3D * c = getOpositeVertex(nei, abIndex);
-	warn("==== Point C:"); c->print();
-
-	warn("merge 6");
-
-	// A, B and Oposite are collinear
-	warn("==== Point B:"); b->print();
-	warn("==== Point A:"); a->print();
-	Vector3D ca = *a - *c;
-	warn("merge 6.1");
-	
-	Vector3D ao = *o - *a;
-	warn("merge 6.2");
-	Point3D * m = b;
-	Point3D * notM = a;
-	// Try to merge via CAO
-	if (!(ca%ao).isZero()) { 
-		// CAO not colinear... try to merge via CBO
-		Vector3D cb = *b - *c;
-		Vector3D bo = *o - *b;
-
-		if (!(cb%bo).isZero()) {
-			// CBO non colinear... Impossible to merge
-			return false;
-		}
-		m = a;
-		notM = b;
-	}
-		
-
-	warn("merge 7");
-	// check if there is something 'below' 	
-	int cNotMIndex = tri->getEdgeIndexByPoints(c,notM);
-	if (cNotMIndex == -1) {
-		c->print();
-		notM->print();
-		tri->print();
-	}
-	warn("merge 7.0.1");
-	Triangle * triLowerNeighbor = tri->getNeighbor(cNotMIndex);
-	warn("merge 7.0.2");
-	int notMOIndex = nei->getEdgeIndexByPoints(o, notM);
-	warn("merge 7.0.3");
-	Triangle * neiLowerNeighbor = nei->getNeighbor(notMOIndex);
-	warn("merge 7.0.4");
-	Point3D * opp = NULL;
-
-	warn("merge 7.1");
-	if (triLowerNeighbor != NULL) {
-		if (neiLowerNeighbor == NULL) {
-			return false; // cannot merge this situation
-		}
-		opp = getOpositeVertex(tri, cNotMIndex);
-		if (neiLowerNeighbor->getEdgeIndexByPoints(opp,notM) < 0) {
-			return false; // Cannot merge this situation either
-		}
-	}
-	else {
-		if (neiLowerNeighbor != NULL)
-			return false;
-	}
-
-	warn("merge 8");
-	// Create new triangle
-	Triangle * merge = new Triangle(c, o, m);
-	addTriangle(merge);
-
-	Triangle * merge2 = NULL;
-	if (opp != NULL) {
-		merge2 = new Triangle(c, opp, o);
-		addTriangle(merge2);
-	}	
-
-	// add it
-	warn("merge 8.1");
-
-
-	warn("merge 9");
-	warn("merge 10");
-
-	// neighbors and constraints
-	if (merge2 != NULL) {
-		merge->setNeighbor(merge2, 0, true); 
-
-		warn("merge 10.1");
-		int coppIndex = triLowerNeighbor->getEdgeIndexByPoints(c, opp);
-		if (coppIndex == -1) {
-			warn("COPP INDEX == -1");
-			c->print(); opp->print(); triLowerNeighbor->print();
-		}
-		warn("merge 10.2");
-		merge2->setNeighbor(triLowerNeighbor->getNeighbor(coppIndex), 0,true);
-
-		warn("merge 10.3");
-		int ooppIndex = neiLowerNeighbor->getEdgeIndexByPoints(o, opp);
-
-		warn("merge 10.4");
-		merge2->setNeighbor(neiLowerNeighbor->getNeighbor(ooppIndex), 1, true);
-
-		warn("merge 10.5");
-		// constraints
-		if (triLowerNeighbor->isContraint(coppIndex))
-			merge2->setConstraint(0);
-
-		if (neiLowerNeighbor->isContraint(ooppIndex))
-			merge2->setConstraint(1);
-
-	}
-	warn("merge 11");
-
-	int omIndex = nei->getEdgeIndexByPoints(m,o);
-	warn("merge 12");
-	
-	warn("merge 13");
-	o->print(); c->print();
-	merge->setNeighbor(nei->getNeighbor(omIndex), 1, true);
-	warn("merge 14");
-
-
-	int mcIndex = tri->getEdgeIndexByPoints(m, c);
-	merge->setNeighbor(tri->getNeighbor(mcIndex), 2, true);
-
-	warn("merge 15");
-
-	
-	//int oNotMIndex = nei->getEdgeIndexByPoints(notM, o);
-	//if (tri->isContraint(cNotMIndex) && nei->isContraint(oNotMIndex)) {
-	//	merge->setConstraint(0);
-	//}
-	//warn("merge 16");
-	
-
-	if (nei->isContraint(omIndex))
-		merge->setConstraint(1);
-
-	if (tri->isContraint(mcIndex))
-		merge->setConstraint(2);
-
-
-
-	warn("merge 17");
-
-	warn("merge 18");
-
-	// delete old triangles	
-	deleteTriangle(nei->getIndex());
-	deleteTriangle(tri->getIndex());
-
-	return true;
-}
-*/
 
 void Triangulation::restoreDelaunay()
 {	
@@ -609,9 +291,8 @@ void Triangulation::restoreDelaunay()
 		double bestAspectRatio = HUGE;
 		// Found an ugly triangle
 		for (int j = 0; j < 3; j++) { // Check three edges for flipping or merging						
-			// calculate possible aspect ratio
-			bool c;
-			double ar = getBestAspectRatio(triangles[i], j, &c);
+			// calculate possible aspect ratio		
+			double ar = getBestAspectRatio(triangles[i], j);
 			if (ar == -1) // Null neighbor or constraint
 				continue;
 			
@@ -624,87 +305,68 @@ void Triangulation::restoreDelaunay()
 		// Flip if needed.
 		if (bestNeighbor >= 0 ) { 
 			// if at least one of them is better than the current
-			flipDiagonal(i, bestNeighbor, false);
+			flipDiagonal(i, bestNeighbor);
 		} // else... do nothing
 
 	}
-}
-
-size_t Triangulation::getNumTriangles() 
-{
-	return nTriangles;
-}
-
-Triangle * Triangulation::getTriangleRef(size_t i)
-{
-	return triangles[i];
 }
 
 
 bool Triangulation::splitTriangle(size_t i, Point3D * p)
 {	
 
-	warn(".............ST1");
 	// get vertices
 	Point3D * a = triangles[i]->getVertex(0);
 	Point3D * b = triangles[i]->getVertex(1);
 	Point3D * c = triangles[i]->getVertex(2);
 
-	warn(".............ST2");
 	// add the new ones.
 	Triangle * ab = new Triangle(a, b, p);
 	Triangle * ac = new Triangle(a, p, c);
 	Triangle * bc = new Triangle(b, c, p);
 
-	warn(".............ST3");
 	// set neighbors of AB
 	ab->setNeighbor(triangles[i]->getNeighbor(0), 0, true);
 	ab->setNeighbor(bc, 1, true);
 	ab->setNeighbor(ac, 2, true);
 
-	warn(".............ST4");
 	// set neighbors of AC
 	ac->setNeighbor(ab, 0, true);
 	ac->setNeighbor(bc, 1, true);
 	ac->setNeighbor(triangles[i]->getNeighbor(2), 2, true);
 
-	warn(".............ST5");
 	// set neighbors of BC
 	bc->setNeighbor(triangles[i]->getNeighbor(1), 0, true);
 	bc->setNeighbor(ac, 1, true);
 	bc->setNeighbor(ab, 2, true);
 
-	warn(".............ST6");
 	// Inherit constraint category
 	if (triangles[i]->isContraint(0)) {
 		ab->setConstraint(0);
 	}
-	warn(".............ST7");
+	
 	if (triangles[i]->isContraint(1)) {
 		bc->setConstraint(0);
 	}
-	warn(".............ST8");
+	
 	if (triangles[i]->isContraint(2)) {
 		bc->setConstraint(2);
 	}
 
-	warn(".............ST9");
 	// add the three new triangles
 	addTriangle(ab);
 	addTriangle(ac);
 	addTriangle(bc);
 
-	warn(".............ST10");
 	// delete the old one
 	deleteTriangle(i);
-
 
 	return true;
 }
 
 
 
-bool Triangulation::splitEdge(size_t i, Point3D * p, int code, bool constraint)
+bool Triangulation::splitEdge(size_t i, Point3D * p, int code)
 {	
 	if (triangles[i] == NULL)
 		warn("Trying to split edge of NULL triangle "+std::to_string(i));
@@ -748,11 +410,7 @@ bool Triangulation::splitEdge(size_t i, Point3D * p, int code, bool constraint)
 	// HERE TO MAKE IT EXPLICIT
 	//bc->setNeighbor(ac, 2, true);
 	
-	// Set constraints
-	if (constraint) {
-		ac->setConstraint(1);
-		bc->setConstraint(2);
-	}
+	
 
 	// inherit constraint category
 	if (triangles[i]->isContraint(code % 3)) {
@@ -818,9 +476,9 @@ bool Triangulation::splitEdge(size_t i, Point3D * p, int code, bool constraint)
 	return true;
 }
 
-Point3D * Triangulation::getOpositeVertex(Triangle * t, int i) {
+Point3D * Triangulation::getOpositeVertex(Triangle * t, int nei) {
 	
-	Triangle * neighbor = t->getNeighbor(i);
+	Triangle * neighbor = t->getNeighbor(nei);
 	if (neighbor == NULL)
 		return NULL;
 
@@ -840,21 +498,6 @@ Point3D * Triangulation::getOpositeVertex(Triangle * t, int i) {
 }
 
 
-size_t Triangulation::addTriangle(Triangle * t) {		
-	warn("adding triangle "+std::to_string(triangles.size()));
-	t->setIndex(nTriangles);
-	triangles.push_back(t);
-	
-	t->print();
-/*	
-#ifdef DEBUG
-	
-#endif
-*/
-	nTriangles += 1;
-	return nTriangles;
-}
-
 
 void Triangulation::deleteTriangle(size_t i) {
 
@@ -867,22 +510,6 @@ void Triangulation::deleteTriangle(size_t i) {
 	delete triangles[i];
 	triangles[i] = NULL;
 }
-/*
-void Triangulation::applyConstraint(Segment * s)
-{
-	addPoint(s->start);
-	addPoint(s->end);
-
-	for (size_t i = 0; i < nTriangles; i++) {
-
-		warn("............ Checking triangle " + std::to_string(i));
-		if (triangles[i] == NULL)
-			continue;
-
-		applyConstraintToTriangle(triangles[i], s);		
-	}
-}
-*/
 
 void Triangulation::clean()
 {
@@ -936,88 +563,13 @@ bool Triangulation::mesh(double maxArea)
 {	
 
 	// Create a constrained delaunay triangulation
-	poly2tri();
+	doCDT();
 	refine(maxArea);
 	return true;
 }
 
-/*
-bool Triangulation::applyConstraintToTriangle(Triangle * tri, Segment * constraint)
-{
-	// Identify where is the triangle intersected
-	Point3D * i1 = NULL;
-	Point3D * i2 = NULL;
 
-	for (int i = 0; i < 3; i++) {
-		Point3D inter = Point3D(0, 0, 0);
-		if (tri->getSegment(i)->intersect(constraint,&inter)) {
-			if (i1 == NULL) {
-				i1 = new Point3D(inter);				
-			}
-			else if(i2 == NULL) {
-				i2 = new Point3D(inter);
-			}
-		}
-	}
-
-	if (i1 == NULL || i2 == NULL) {
-		// Does not intersect
-		return true;
-	}
-
-	// Check where do they intersect
-	int code1 = -1;
-	tri->testPoint(i1, &code1);
-	int code2 = -1;
-	tri->testPoint(i2, &code2);
-
-	// Split
-	if (code1 < 3 && code2 < 3) {
-		// Both are vertices... transform such edge in constraint
-		int minCode = code2 > code1 ? code1 : code2;
-		int maxCode = code2 < code1 ? code1 : code2;
-		int c;
-		if (minCode == 0 && maxCode == 1) {
-			c = 0;
-		}
-		else if (minCode == 1 && maxCode == 2) {
-			c = 1;
-		}
-		else if (minCode == 0 && maxCode == 2) {
-			c = 2;
-		}
-		else {
-			return true;
-			//fatal("Impossible combination of code1 (" + std::to_string(code1) + ") and code2 " + "(" + std::to_string(code2) + ")", __LINE__, __FILE__);
-		}
-		return tri->setConstraint(c);
-	}
-	else if (code1 >= 3 && code2 < 3) {
-		//i1 is on an edge, i2 on a vertex... split edge 
-		splitEdge(tri->getIndex(), i1, code1,true);		
-	}
-	else if (code2 >= 3 && code1 < 3) {
-		//i2 is on an edge, i1 on a vertex... split edge
-		splitEdge(tri->getIndex(), i2, code2, true);
-	}
-	else if (code1 >= 3 && code2 >= 3) {
-		// both are on edges... split edge twice
-		addPoint(i1);
-		addPoint(i2);
-		Segment aux = Segment(i1, i2);
-		applyConstraint(&aux);
-	}
-	else {
-		fatal("Something wrong when applying constraint to triangle", __LINE__, __FILE__);
-		return false;
-	}
-
-	return true;
-}
-*/
-
-
-void Triangulation::poly2tri() {
+void Triangulation::doCDT() {
 
 	// Create a 2D version of this polygon
 	Polygon3D * polygon2D = polygon->get2DPolygon();
