@@ -32,10 +32,10 @@ Segment::Segment(Point3D * a, Point3D * b)
 
 bool Segment::isEqual(Segment * anotherSegment) 
 {
-	if (start == anotherSegment->start && end == anotherSegment->end) {
+	if (start->isEqual(anotherSegment->start) && end->isEqual(anotherSegment->end)) {
 		return true;
 	}
-	else if (end == anotherSegment->start && start == anotherSegment->end) {
+	else if (end->isEqual(anotherSegment->start) && start->isEqual(anotherSegment->end)) {
 		return true;
 	}
 	return false;

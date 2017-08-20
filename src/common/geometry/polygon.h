@@ -159,4 +159,51 @@ public:
 	*/
 	bool testPoint(Point3D p);
 
+	//! Returns a 2D version of the Polygon3D
+	/*!
+		Most meshing algorithms and libraries are
+		designed for 2D polygons. Accordingly, we
+		need to transform our Polygon3D into other
+		Polygon3D on which all the Z components of 
+		its Point3D are equal (i.e. it now lies on 
+		on the XY plane)
+
+	@author German Molina
+	@return the transformed polygon
+	@note remember to delete the returned Polygon3D after using it.
+	*/
+	Polygon3D * get2DPolygon();
+
+	//! Reverses what was done on the Polygon3D::get2DPolygon() function
+	/*!
+
+	@author German Molina
+	@return the transformed polygon
+	@param[in] normal The normal of the original Polygon3D
+	@note remember to delete the returned Polygon3D after using it.
+	*/
+	Polygon3D * restore3DPolygon(Vector3D normal);
+
+	//! Returns auxiliar axes for Polygon3D::get2DPolygon()
+	/*!
+	@author German Molina
+	@param[in] normal The normal of the plane
+	@param[out] i The auxiliar i axis
+	@param[out] j The auxiliar j axis
+	@param[out] k The auxiliar k axis
+	@return success
+	*/
+	bool getAuxiliarAxes(Vector3D normal, Vector3D * i, Vector3D * j, Vector3D * k);
+
+	//! Returns inverse auxiliar axes for Polygon3D::get2DPolygon()
+	/*!
+	@author German Molina
+	@param[in] normal The normal of the plane
+	@param[out] i The auxiliar i axis
+	@param[out] j The auxiliar j axis
+	@param[out] k The auxiliar k axis
+	@return success
+	*/
+	bool getInverseAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * auxj, Vector3D * auxk);
+
 };

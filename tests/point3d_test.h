@@ -137,3 +137,35 @@ TEST(Point3DTest, position)
 	ASSERT_EQ(p.getY(), v.getY());
 	ASSERT_EQ(p.getZ(), v.getZ());
 }
+
+TEST(Point3DTest, transform)
+{
+	// Identity transform
+	double x, y, z;
+	x = 0; y = 0; z = 0;
+	Point3D p = Point3D(x, y, z);
+	Vector3D i = Vector3D(1, 0, 0);
+	Vector3D j = Vector3D(0, 1, 0);
+	Vector3D k = Vector3D(0, 0, 1);
+
+	ASSERT_EQ(p.transform(i, j, k).getX(), x);
+	ASSERT_EQ(p.transform(i, j, k).getY(), y);
+	ASSERT_EQ(p.transform(i, j, k).getZ(), z);
+
+	x = 123; y = -21; z = 1;
+	p = Point3D(x, y, z); 
+	ASSERT_EQ(p.transform(i, j, k).getX(), x);
+	ASSERT_EQ(p.transform(i, j, k).getY(), y);
+	ASSERT_EQ(p.transform(i, j, k).getZ(), z);
+
+	// Non identity
+	i = Vector3D(1, 2, -1);
+	j = Vector3D(2, 4, 6);
+	k = Vector3D(-11, -2, -43);
+
+	p = Point3D(1, 1, 1);
+	ASSERT_EQ(p.transform(i, j, k).getX(), -8);
+	ASSERT_EQ(p.transform(i, j, k).getY(), 4);
+	ASSERT_EQ(p.transform(i, j, k).getZ(), -38);
+
+}

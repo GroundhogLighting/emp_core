@@ -135,3 +135,109 @@ TEST(PolygonTest, testPoint)
 	ASSERT_FALSE(p.testPoint(out)); // outside outer loop
 	ASSERT_TRUE(p.testPoint(in)); // Inside outer loop but out of holes
 }
+
+
+TEST(PolygonTest, get2DXYPlane)
+{
+	// On XY Plane
+	Polygon3D * polygon = new Polygon3D();
+	polygon->setNormal(Vector3D(0,0,1));
+
+	Loop * ol = polygon->getOuterLoopRef();
+	ol->addVertex(new Point3D(-1,-1,0));
+	ol->addVertex(new Point3D(1, -1, 0));
+	ol->addVertex(new Point3D(1, 1, 0));
+	ol->addVertex(new Point3D(-1, 1, 0));
+
+	Polygon3D * tr = polygon->get2DPolygon();
+	Loop * trOuterLoop = tr->getOuterLoopRef();
+
+	for (size_t i = 0; i < ol->size(); i++) {
+		ASSERT_EQ(trOuterLoop->getVertexRef(i)->getX(), ol->getVertexRef(i)->getX());
+		ASSERT_EQ(trOuterLoop->getVertexRef(i)->getY(), ol->getVertexRef(i)->getY());
+		ASSERT_EQ(trOuterLoop->getVertexRef(i)->getZ(), ol->getVertexRef(i)->getZ());
+	}
+
+	delete tr;
+	delete polygon;
+}
+
+
+TEST(PolygonTest, get2DXZPlane)
+{
+	// On XZ Plane
+	Polygon3D * polygon = new Polygon3D();
+	polygon->setNormal(Vector3D(0, 1, 0));
+
+	Loop * ol = polygon->getOuterLoopRef();
+	ol->addVertex(new Point3D(-1, 0, -1));
+	ol->addVertex(new Point3D(1, 0, -1));
+	ol->addVertex(new Point3D(1, 0, 1));
+	ol->addVertex(new Point3D(-1, 0, 1));
+
+	Polygon3D * tr = polygon->get2DPolygon();
+	Loop * trOuterLoop = tr->getOuterLoopRef();
+
+	double z = trOuterLoop->getVertexRef(0)->getZ();
+	for (size_t i = 0; i < ol->size(); i++) {
+		ASSERT_EQ(trOuterLoop->getVertexRef(i)->getZ(), z);
+	}
+
+	delete tr;
+	delete polygon;
+}
+
+
+TEST(PolygonTest, get2DYZPlane)
+{
+	// On YZ Plane
+	Polygon3D * polygon = new Polygon3D();
+	polygon->setNormal(Vector3D(1, 0, 0));
+
+	Loop * ol = polygon->getOuterLoopRef();
+	ol->addVertex(new Point3D(0, -1, -1));
+	ol->addVertex(new Point3D(0, 1, -1));
+	ol->addVertex(new Point3D(0, 1, 1));
+	ol->addVertex(new Point3D(0, -1, 1));
+
+	Polygon3D * tr = polygon->get2DPolygon();
+	Loop * trOuterLoop = tr->getOuterLoopRef();
+
+	double z = trOuterLoop->getVertexRef(0)->getZ();
+	for (size_t i = 0; i < ol->size(); i++) {
+		ASSERT_EQ(trOuterLoop->getVertexRef(i)->getZ(), z);
+	}
+
+	delete tr;
+	delete polygon;
+}
+
+
+TEST(PolygonTest, restore3D)
+{
+	// Build a polygon
+	Polygon3D * polygon = new Polygon3D();
+	polygon->setNormal(Vector3D(1, 0, 0));
+
+	Loop * ol = polygon->getOuterLoopRef();
+	ol->addVertex(new Point3D(0, -1, -1));
+	ol->addVertex(new Point3D(0, 1, -1));
+	ol->addVertex(new Point3D(0, 1, 1));
+	ol->addVertex(new Point3D(0, -1, 1));
+
+	// transform it
+	Polygon3D * tr = polygon->get2DPolygon();	
+
+	// restore it
+	Polygon3D * restored = tr->restore3DPolygon(polygon->getNormal());
+
+	// Check if the original and the restored are equal
+	Loop * restoredOL = restored->getOuterLoopRef();
+	for (size_t i = 0; i < ol->size(); i++) {
+		Point3D * p1 = ol->getVertexRef(i);
+		Point3D *  p2 = restoredOL->getVertexRef(i);
+		ASSERT_TRUE(p1->isEqual(p2));
+	}
+
+	delete tr; delete polygon; delete restored;
+}

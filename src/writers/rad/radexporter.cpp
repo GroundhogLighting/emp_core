@@ -416,7 +416,7 @@ bool RadExporter::writeWorkplane(std::ofstream * ptsFile, std::ofstream * pxlFil
 	double nz = normal.getZ();
 
 	Triangulation * t = new Triangulation(wp);
-	t->mesh(0.25);
+	t->mesh(0.5);
 
 	size_t nTriangles = t->getNumTriangles();
 	
