@@ -152,12 +152,14 @@ bool Triangle::setConstraint(int i)
 	}
 
 	constraints[i] = true;
-	return true;
+	
 	// reciprocate
 	Segment * s = segments[i];
-	int aux = neighbors[i]->getEdgeIndexByPoints(s->start, s->end);
-	if(neighbors[i] != NULL)
+	if (neighbors[i] != NULL) {
+		int aux = neighbors[i]->getEdgeIndexByPoints(s->start, s->end);
 		neighbors[i]->constraints[aux] = true;
+	}
+	
 
 	return true;
 }

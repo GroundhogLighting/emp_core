@@ -94,4 +94,6 @@ public:
 	//bool mergeIfPossible(Triangle * tri, int neighbor);
 
 	void poly2tri();
+
+	void resetNeighborhoods();
 };

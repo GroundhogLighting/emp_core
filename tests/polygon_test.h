@@ -153,8 +153,7 @@ TEST(PolygonTest, get2DXYPlane)
 	Loop * trOuterLoop = tr->getOuterLoopRef();
 
 	for (size_t i = 0; i < ol->size(); i++) {
-		trOuterLoop->getVertexRef(i)->print();
-		ASSERT_EQ(trOuterLoop->getVertexRef(i)->getX(),ol->getVertexRef(i)->getX());
+		ASSERT_EQ(trOuterLoop->getVertexRef(i)->getX(), ol->getVertexRef(i)->getX());
 		ASSERT_EQ(trOuterLoop->getVertexRef(i)->getY(), ol->getVertexRef(i)->getY());
 		ASSERT_EQ(trOuterLoop->getVertexRef(i)->getZ(), ol->getVertexRef(i)->getZ());
 	}
@@ -181,7 +180,6 @@ TEST(PolygonTest, get2DXZPlane)
 
 	double z = trOuterLoop->getVertexRef(0)->getZ();
 	for (size_t i = 0; i < ol->size(); i++) {
-		trOuterLoop->getVertexRef(i)->print();
 		ASSERT_EQ(trOuterLoop->getVertexRef(i)->getZ(), z);
 	}
 
@@ -207,7 +205,6 @@ TEST(PolygonTest, get2DYZPlane)
 
 	double z = trOuterLoop->getVertexRef(0)->getZ();
 	for (size_t i = 0; i < ol->size(); i++) {
-		trOuterLoop->getVertexRef(i)->print();
 		ASSERT_EQ(trOuterLoop->getVertexRef(i)->getZ(), z);
 	}
 
