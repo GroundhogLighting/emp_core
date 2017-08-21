@@ -195,7 +195,7 @@ TEST(LoopTests, clean2)
 	}
 }
 
-/*
+
 TEST(LoopTests, transform)
 {
 	Loop loop = Loop();
@@ -233,4 +233,3 @@ TEST(LoopTests, transform)
 	}
 	delete tr2;
 }
-*/

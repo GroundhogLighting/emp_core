@@ -332,8 +332,8 @@ bool RadExporter::writeWindows() {
 	std::string baseDir = exportDir + "/Windows";
 	createdir(baseDir);
 	std::ofstream mainFile;
-	mainFile.open(baseDir + "windows.rad");
-	for (size_t i = 0; numGroups; i++) {
+	mainFile.open(baseDir + "/windows.rad");
+	for (size_t i = 0; i < numGroups; i++) {
 		
 		WindowGroup * group = model->getWindowGroupRef(i);
 		std::string name = group->getName();
@@ -350,7 +350,7 @@ bool RadExporter::writeWindows() {
 		std::ofstream file;
 		file.open(fileName);
 
-		mainFile << "!xform " << fileName << std::endl;
+		mainFile << "!xform ./Windows/" << name << ".wingroup" << std::endl;
 
 		for (size_t j = 0; j < numWindows; j++) {
 			Face * window = group->getWindowRef(j);
@@ -358,7 +358,9 @@ bool RadExporter::writeWindows() {
 		}
 
 		file.close();
+
 	}
+
 	mainFile.close();
 	return true;
 }

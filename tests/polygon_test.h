@@ -25,10 +25,10 @@ TEST(PolygonTest, getClosedLoop)
 	
 	p.addInnerLoop();
 	Loop * innerLoop = p.getInnerLoopRef(0);
-	innerLoop->addVertex(new Point3D(-1, -1, 0));
-	innerLoop->addVertex(new Point3D( 1, -1, 0));
-	innerLoop->addVertex(new Point3D( 1,  1, 0));
 	innerLoop->addVertex(new Point3D(-1,  1, 0));
+	innerLoop->addVertex(new Point3D( 1,  1, 0));
+	innerLoop->addVertex(new Point3D( 1, -1, 0));
+	innerLoop->addVertex(new Point3D(-1, -1, 0));
 
 	Loop * closed = p.getClosedLoop();
 
@@ -67,16 +67,19 @@ TEST(PolygonTest, getClosedLoopWithClean)
 
 	p.addInnerLoop();
 	Loop * innerLoop = p.getInnerLoopRef(0);
-	innerLoop->addVertex(new Point3D(-1, -1, 0));
-	innerLoop->addVertex(new Point3D(1, -1, 0));
-	innerLoop->addVertex(new Point3D(1, 1, 0));
-	innerLoop->addVertex(new Point3D(-1, 1, 0));
+	innerLoop->addVertex(new Point3D(1, 1, 0)); // 0
+	innerLoop->addVertex(new Point3D(1, -1, 0)); // 1
+	innerLoop->addVertex(new Point3D(0, -1, 0)); // 2. colinear point
+	innerLoop->addVertex(new Point3D(-1, -1, 0)); // 3
+	innerLoop->addVertex(new Point3D(-1, 1, 0)); // 4
+	innerLoop->addVertex(new Point3D(0, 1, 0)); // 5. colinear point
+
 
 	p.clean();
 
 	Loop * closed = p.getClosedLoop();
 
-	ASSERT_EQ(closed->size(), 11);
+	ASSERT_EQ(closed->size(), 10);
 
 	// First one
 	int i = -1;
@@ -93,10 +96,12 @@ TEST(PolygonTest, getClosedLoopWithClean)
 	ASSERT_TRUE(closed->getVertexRef(++i)->isEqual(Point3D(-2, -2, 0)));
 
 	//Now, exterior
-	ASSERT_TRUE(closed->getVertexRef(++i) == NULL );
+	//ASSERT_TRUE(closed->getVertexRef(++i) == NULL ); // NULLs are not passed
 	ASSERT_TRUE(closed->getVertexRef(++i)->isEqual(Point3D(6, -2, 0)));
 	ASSERT_TRUE(closed->getVertexRef(++i)->isEqual(Point3D(6, 6, 0)));
 	ASSERT_TRUE(closed->getVertexRef(++i)->isEqual(Point3D(-2, 6, 0)));
+
+	delete closed;
 }
 
 

@@ -39,6 +39,7 @@
 #define SKP_ILLUM "illum"
 #define SKP_NAME "Name"
 #define SKP_VALUE "Value"
+#define SKP_WINGROUP "Win_Group"
 
 #define TO_M(x) x*0.0254
 #define TO_M2(x) x*0.00064516
@@ -85,9 +86,9 @@ public:
 	@author German Molina
 	@param[in] res The SUResult to check
 	@param[in] functionName The name of the function
-	@param[in] location The 'place' where this is called
+	@param[in] ln The line where the function is called
 	*/
-	bool checkSUResult(SUResult res, std::string functionName, std::string location);
+	bool checkSUResult(SUResult res, std::string functionName, int ln);
 
 	//! Reads the SKP model and fills a GroundhogModel
 	/*!
@@ -390,4 +391,55 @@ public:
 	*/
 	bool addWorkplaneToModel(SUFaceRef face, GroundhogModel * model);
 
+	//! Adds a Window to the model.
+	/*!
+	Gets the name (and Window Group name) of the face and adds it to 
+	the model. The model will create a new Window Group if needed.
+
+	@author German Molina
+	@param[in] face The face to treat as a workplane
+	@param[out] model The model to add the workplane to
+	@return success
+	*/
+	bool addWindowToModel(SUFaceRef face, GroundhogModel * model);
+
+	//! Retrieves an entity ID
+	/*!
+	@author German Molina
+	@param entity The entity whose ID will be retrieved
+	@return the ID
+	*/
+	int32_t getEntityID(SUEntityRef entity);
+
+	//! Retrieves a SUTypedValue from an SUEntity Groundhog's dictionary
+	/*!
+	Will return SU_ERROR_NONE or SU_ERROR_NO_DATA, depending on the 
+	availability of such value.
+
+	@author German Molina
+	@return Was any value or not
+	@param[in] entity The SUEntityRef
+	@param[in] key The key to retrieve from the dictionary
+	@param[out] value The SUTypedValue retrieved
+	*/
+	bool getValueFromEntityGHDictionary(SUEntityRef entity, char * key, SUTypedValueRef * value);
+
+
+	//! Transforms a SUStringRef into an ASCII std::string
+	/*!
+	@author German Molina
+	@param[in] suString The original SUSTringRef
+	@param[out] string The resulting std::string
+	@return success
+	*/
+	bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string);
+
+	//! Retrieves a std::string from a SUTypedValue object
+	/*!
+	@author German Molina
+	@param[in] suValue The SUTypedValueRef object
+	@param[out] value The returned string
+	@return success
+	*/
+	bool getStringFromSUTypedValue(SUTypedValueRef suValue, std::string * value);
 };

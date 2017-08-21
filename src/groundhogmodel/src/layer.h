@@ -65,7 +65,7 @@ public:
 	@param[in] layerName The name to check
 	@return is the Layer name equivalent to layerName ?
 	*/
-	bool compareName(std::string layerName);
+	bool compareName(std::string * layerName);
 
 	//! Adds a Face to the Layer
 	/*!

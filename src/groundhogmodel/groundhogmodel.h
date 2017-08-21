@@ -41,20 +41,20 @@ Components, Weather, Luminaires, and more (see its private members for more info
 
 class GroundhogModel {
 
-private:
+private:	
 	//Objectives // **
-	std::vector <Layer *> layers; //!< Contains all the geometry that represents physical objects
+	std::vector <Layer *> layers = std::vector<Layer *>(); //!< Contains all the geometry that represents physical objects
 	std::vector <Workplane *> workplanes; //!< Contains the workplanes
 	//Photosensors // **
-	//std::vector <Material *> materials;
-	std::vector <View *> views; //!< Contains all the views that are saved in the model
-	std::vector <ComponentDefinition *> definitions; //!< Contains all the Component Definitions in the model
+	std::vector <Material *> materials;
+	std::vector <View *> views = std::vector<View *>(); //!< Contains all the views that are saved in the model
+	std::vector <ComponentDefinition *> definitions = std::vector<ComponentDefinition *>(); //!< Contains all the Component Definitions in the model
 	std::vector <WindowGroup *> windowGroups; //!< Contains the window group
 	//Weather
 	//Luminaires
-	Location * location; //!< The location (i.e. longitude, latitude, timezone, etc.)
+	Location * location = new Location(); //!< The location (i.e. longitude, latitude, timezone, etc.)
 
-	Date * date; //!< The current date
+	Date * date = new Date(1, 1, 12, 0); //!< The current date
 	//Options
 	//Observers // **	
 	double northCorrection; //!< The north correction (i.e. the model should be rotated when calculating)

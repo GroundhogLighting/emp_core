@@ -26,12 +26,7 @@
 
 GroundhogModel::GroundhogModel()
 {
-	DEBUG_MSG("Creating GroundhogModel");
-	layers = std::vector<Layer *>();
-	definitions = std::vector<ComponentDefinition *>();
-	views = std::vector<View *>();
-	date = new Date(1, 1, 12, 0);
-	location = new Location();
+	DEBUG_MSG("Creating GroundhogModel");	
 };
 
 GroundhogModel::~GroundhogModel()
@@ -65,7 +60,7 @@ void GroundhogModel::addLayer(std::string * layerName)
 bool GroundhogModel::addFaceToLayer(std::string * layerName, Face * face)
 {
 	for (unsigned layerCount = 0; layerCount < layers.size(); layerCount++) {		
-		if (layers[layerCount]->compareName(*layerName)) {
+		if (layers[layerCount]->compareName(layerName)) {
 			DEBUG_MSG("Found layer "+*layerName);
 			addFaceToVector(layers[layerCount]->getFacesRef(), face);
 			return true;
@@ -79,7 +74,7 @@ bool GroundhogModel::addFaceToLayer(std::string * layerName, Face * face)
 bool GroundhogModel::addComponentInstanceToLayer(std::string * layerName, ComponentInstance * instance)
 {
 	for (unsigned layerCount = 0; layerCount < layers.size(); layerCount++) {
-		if (layers[layerCount]->compareName(*layerName)) {
+		if (layers[layerCount]->compareName(layerName)) {
 			DEBUG_MSG("Found layer " + *layerName);
 			addComponentInstanceToVector(layers[layerCount]->getComponentInstancesRef(), instance);
 			return true;
@@ -272,6 +267,7 @@ void GroundhogModel::addPolygonToWorkplane(std::string * workplaneName, Polygon3
 		if (workplanes[i]->compareName(workplaneName)) {
 			DEBUG_MSG("Found workplane " + *workplaneName);
 			workplanes[i]->addPolygon(polygon);
+			return;
 		}
 	}
 
@@ -283,10 +279,11 @@ void GroundhogModel::addPolygonToWorkplane(std::string * workplaneName, Polygon3
 
 
 void GroundhogModel::addWindowToGroup(std::string * windowGroupName, Face * face) {
-	for (unsigned i = 0; i < windowGroups.size(); i++) {
+	for (size_t i = 0; i < windowGroups.size(); i++) {
 		if (windowGroups[i]->compareName(windowGroupName)) {
 			DEBUG_MSG("Found window group " + *windowGroupName);
 			windowGroups[i]->addFace(face);
+			return;
 		}
 	}
 

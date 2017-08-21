@@ -42,9 +42,9 @@ Layer::~Layer()
 
 };
 
-bool Layer::compareName(std::string layerName) 
+bool Layer::compareName(std::string * layerName) 
 {
-	return name == layerName;
+	return name == *layerName;
 }
 
 void Layer::addFace(Face * face) 

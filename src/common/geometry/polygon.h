@@ -32,6 +32,9 @@
 Polygons are geometrical abstraction containing a single exterior Loop and 
 (optionally) one or more interior loops (holes). 
 
+It should be noted that Glare will define the external Loop counter clock wise
+(i.e. right hand rule), and the holes in the oposite direction.
+
 The area may or may not 
 be assigned. It is not used by ray-traing process.
 */
@@ -117,7 +120,6 @@ public:
 
 	@author German Molina
 	@note this loop needs to be deleted after its use.
-	@todo THIS FUNCTION CANNOT BE USED ON POLYGONS WITH NULL VERTEX (i.e. cleaned())
 	@return The reference to the closed loop
 	*/
 	Loop * getClosedLoop();

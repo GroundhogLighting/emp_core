@@ -36,6 +36,9 @@ Loop::Loop(Loop * loop)
 	vertices = std::vector < Point3D * >();
 	size_t numVertices = loop->size();
 	for (int i = 0; i < numVertices; i++) {
+		if (loop->getVertexRef(i) == NULL)
+			continue;
+
 		addVertex(new Point3D(loop->getVertexRef(i)));
 	}
 }
