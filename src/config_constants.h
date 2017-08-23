@@ -33,26 +33,50 @@ This module defines constants that are used in the rest of the program.
 
 /* @{ */
 
+
+/// The separator used when writing files
+#define GLARE_TAB "\t" //!< This is the separator used when writing Radiance files
+
 /// Maximum interior loops
-#define TOO_MANY_LOOPS 40 //!< The number of interior loops that are considered too many in a face
+#define GLARE_TOO_MANY_LOOPS 40 //!< The number of interior loops that are considered too many in a face
  
 /// Maximum string length
-#define MAX_STRING_LENGTH 100 //!< The number of characters that the char * are allowed to have by default
+#define GLARE_MAX_STRING_LENGTH 1000 //!< The number of characters that the char * are allowed to have by default
 
 /// Huge number
-#define HUGE 9e9 //!< This is a huge number that may be used by several sections of the program
+#define GLARE_HUGE 9e9 //!< This is a huge number that may be used by several sections of the program
 
 /// Minus huge number
-#define MINUS_HUGE -HUGE //!< This is a negative huge number that may be used by several sections of the program
+#define GLARE_MINUS_HUGE -GLARE_HUGE //!< This is a negative huge number that may be used by several sections of the program
 
 /// Tiny number
-#define TINY 1e-9 //!< This is a very small number that may be used by several sections of the program
+#define GLARE_TINY 1e-9 //!< This is a very small number that may be used by several sections of the program
 
 /// Minus tiny number
-#define MINUS_TINY -TINY //!< This is a very small number that may be used by several sections of the program
+#define GLARE_MINUS_TINY -GLARE_TINY //!< This is a very small number that may be used by several sections of the program
 
 /// Maximum number of points in a triangulation before refining
-#define MAX_POINTS_IN_WORKPLANE 10000 //!< This number is required on the poly2tri function
+#define GLARE_MAX_POINTS_IN_WORKPLANE 10000 //!< This number is required on the poly2tri function
 
+/// Subfolder to export Layer objects
+#define GLARE_LAYERS_SUBFOLDER "Geometry" //!< The default subfolder where the Layer objects will be exported
+
+/// Subfolder to export ComponentDefinition objects
+#define GLARE_COMPONENTS_SUBFOLDER "Components" //!< The default subfolder where the ComponentInstance objects will be exported
+
+/// Subfolder to export View objects
+#define GLARE_VIEWS_SUBFOLDER "Views" //!< The default subfolder where the View objects will be exported
+
+/// Subfolder to export ComponentDefinition objects
+#define GLARE_WINDOWS_SUBFOLDER "Windows" //!< The default subfolder where the WindowGroup objects will be exported
+
+/// Subfolder to export Workplane objects
+#define GLARE_WORKPLANES_SUBFOLDER "Workplanes" //!< The default subfolder where the Workplane objects will be exported
+
+/// Subfolder to export Material objects
+#define GLARE_MATERIALS_SUBFOLDER "Materials" //!< The default subfolder where the Workplane objects will be exported
+
+/// Name of the file with the model info
+#define GLARE_MODEL_INFO_FILE "model_info.txt" //!< The default subfolder where the WindowGroup objects will be exported
 
 /* @} */

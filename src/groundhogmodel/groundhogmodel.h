@@ -24,13 +24,19 @@
 #include <vector>
 
 #include "./src/windowgroup.h"
-#include "./src/material.h"
 #include "./src/layer.h"
 #include "./src/workplane.h"
 #include "./src/componentdefinition.h"
 #include "./src/view.h"
 #include "../common/utilities/date.h"
 #include "./src/location.h"
+
+#include "./src/material.h"
+#include "./src/materials/glass.h"
+#include "./src/materials/plastic.h"
+
+#include "../3rdparty/json/json.hpp"
+using nlohmann::json;
 
 //! The main class, that contains all the Layer, Workplane and much more
 
@@ -46,15 +52,14 @@ private:
 	std::vector <Layer *> layers = std::vector<Layer *>(); //!< Contains all the geometry that represents physical objects
 	std::vector <Workplane *> workplanes; //!< Contains the workplanes
 	//Photosensors // **
-	std::vector <Material *> materials;
+	std::vector <Material *> materials; //!< Contains all the Materials in the model
 	std::vector <View *> views = std::vector<View *>(); //!< Contains all the views that are saved in the model
 	std::vector <ComponentDefinition *> definitions = std::vector<ComponentDefinition *>(); //!< Contains all the Component Definitions in the model
 	std::vector <WindowGroup *> windowGroups; //!< Contains the window group
 	//Weather
 	//Luminaires
-	Location * location = new Location(); //!< The location (i.e. longitude, latitude, timezone, etc.)
-
-	Date * date = new Date(1, 1, 12, 0); //!< The current date
+	Location location = Location(); //!< The location (i.e. longitude, latitude, timezone, etc.)
+	Date date = Date(1, 1, 12, 0); //!< The current date
 	//Options
 	//Observers // **	
 	double northCorrection; //!< The north correction (i.e. the model should be rotated when calculating)
@@ -400,4 +405,41 @@ public:
 	@return The reference to the Workplane
 	*/
 	Workplane * getWorkplaneRef(size_t i);
+
+	//! Adds a Material to the Groundhogmodel
+	/*!
+	@author German Molina
+	@param[in] j The json that represents a material
+	@return The pointer to the new Material
+	*/
+	Material * addMaterial(json j);
+
+	//! Add the default material
+	/*!
+	@author German Molina
+	@return the pointer to the Default Material
+	*/
+	Material * addDefaultMaterial();
+
+	//! Add the default Glass (default Material for windows)
+	/*!
+	@author German Molina
+	@return the pointer to the Default Gaterial
+	*/
+	Material * addDefaultGlass();
+
+	//! Retrieves the number of Material objects
+	/*!
+	@author German Molina
+	@return the number of Material
+	*/
+	size_t getNumMaterials();
+
+	//! Retrieves the the pointer to a Material 
+	/*!
+	@author German Molina
+	@param[in] The index of the Material
+	@return the pointer to the Material
+	*/
+	Material * getMaterialRef(size_t i);
 };

@@ -18,3 +18,45 @@
 
 *****************************************************************************/
 
+#include "./material.h"
+#include "../../common/utilities/io.h"
+
+#include "../../3rdparty/json/json.hpp"
+
+Material::Material()
+{	
+	DEBUG_MSG("Creating a new material");
+
+}
+
+Material::~Material()
+{
+	DEBUG_MSG("Destroying material " + name);
+}
+
+std::string Material::getName()
+{
+	return name;
+}
+
+std::string Material::getType()
+{
+	return type;
+}
+
+bool Material::compareName(std::string * otherName)
+{
+	return (name == *otherName);
+}
+
+void Material::getBasicData(json j)
+{
+	name = j.at("name").get<std::string>();
+	type = j.at("class").get<std::string>();
+}
+
+
+bool Material::writeRadianceDefinition(std::string * dir)
+{
+	return true;
+}

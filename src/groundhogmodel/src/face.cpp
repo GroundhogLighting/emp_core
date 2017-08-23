@@ -63,7 +63,7 @@ bool Face::hasInnerLoops()
 
 bool Face::hasTooManyInnerLoops() 
 {
-	return polygon->countInnerLoops() > TOO_MANY_LOOPS;
+	return polygon->countInnerLoops() > GLARE_TOO_MANY_LOOPS;
 }
 
 Loop * Face::getOuterLoopRef() 
@@ -74,4 +74,14 @@ Loop * Face::getOuterLoopRef()
 Loop * Face::getClosedLoop() 
 {
 	return polygon->getClosedLoop();
+}
+
+Material * Face::getMaterial()
+{
+	return material;
+}
+
+void Face::setMaterial(Material * mat)
+{
+	material = mat;
 }

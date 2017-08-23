@@ -40,7 +40,7 @@ private:
 	
 	bool verbose; //!< An option that controls what sort of things will be "informed" or not
 	
-	GroundhogModel * model; //!< The Groundhog Model being handled
+	GroundhogModel model = GroundhogModel(); //!< The Groundhog Model being handled
 
 public:
 	//! Creates a Glare object.
@@ -92,11 +92,9 @@ public:
 	it as a GroundhogModel.
 
 	@author German Molina
-	@param[out] model the GroundhogModel where the inputFile will be loaded
 	@param[in] inputFile the file to be loaded
-	@param[in] verbose inform progres?
 	@return success
 	*/
-	bool loadFile(GroundhogModel * model, std::string inputFile, bool verbose);
+	bool loadFile(std::string inputFile);
 
 }; // END OF GLARE CLASS

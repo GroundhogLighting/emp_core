@@ -1,8 +1,14 @@
 var searchData=
 [
-  ['name',['name',['../class_component_definition.html#aa0ec8666c8ba802f11efbc64c861f0bf',1,'ComponentDefinition::name()'],['../class_face.html#a82ab5020c75ed957daaf66199a765089',1,'Face::name()'],['../class_layer.html#a2071349b5667273725ae7f05a42db7a6',1,'Layer::name()'],['../class_view.html#a022afa3176e7ab8b738bb1af95546226',1,'View::name()'],['../class_window_group.html#a634d7176765d608cd6a7ef2b18d8234e',1,'WindowGroup::name()'],['../class_workplane.html#a2162189d3c91dbc05988ed39a444c879',1,'Workplane::name()']]],
-  ['neighbors',['neighbors',['../class_triangle.html#a37db801776abe0929a6ed6901d07f72b',1,'Triangle']]],
-  ['normal',['normal',['../class_polygon3_d.html#a209f1da8d5b27a9fbaf1538ed7964957',1,'Polygon3D']]],
-  ['northcorrection',['northCorrection',['../class_groundhog_model.html#adac44640efed060259678960cb7783dc',1,'GroundhogModel']]],
-  ['ntriangles',['nTriangles',['../class_triangulation.html#ac3d442a773c997c42ba4fbf5d6ae6d3b',1,'Triangulation']]]
+  ['material',['material',['../class_face.html#a545ad144826cde8f119277a0447ad8c3',1,'Face']]],
+  ['materials',['materials',['../class_groundhog_model.html#a75d6a6b2df2a4c188cee75724a1e1988',1,'GroundhogModel']]],
+  ['max_5fx',['max_x',['../class_b_box.html#a0a61c023ccd84e52daae1ec6a168f5ce',1,'BBox']]],
+  ['max_5fy',['max_y',['../class_b_box.html#ab3240247c785e2609e270041e21341f3',1,'BBox']]],
+  ['max_5fz',['max_z',['../class_b_box.html#ac27021b6883c0e4a06f735d410bf11d9',1,'BBox']]],
+  ['min_5fx',['min_x',['../class_b_box.html#aa542e0204933053c09d86a398d84958a',1,'BBox']]],
+  ['min_5fy',['min_y',['../class_b_box.html#a537a07cef24b2b700edac1d86ab67af8',1,'BBox']]],
+  ['min_5fz',['min_z',['../class_b_box.html#abcbf82791a72edbd5f6798ab2bb2a1ef',1,'BBox']]],
+  ['minute',['minute',['../class_date.html#a0c4d2495e3da7ac1e7d3e19ecda210a2',1,'Date']]],
+  ['model',['model',['../class_glare.html#acc7b759719f9fa02fc5f6a32fa8e4fa8',1,'Glare::model()'],['../class_s_k_p_reader.html#a3d2c507e431bd34c268857677e906d95',1,'SKPReader::model()'],['../class_rad_exporter.html#aedde4450ed7a6bd873d46edcc9e96b3c',1,'RadExporter::model()']]],
+  ['month',['month',['../class_date.html#a533843e07c6ac8d19fee9b16f5336ba2',1,'Date']]]
 ];

@@ -587,7 +587,7 @@ void Triangulation::doCDT() {
 	// The maximum number of points you expect to need
 	// This value is used by the library to calculate
 	// working memory required
-	uint32_t MaxPointCount = MAX_POINTS_IN_WORKPLANE;
+	uint32_t MaxPointCount = GLARE_MAX_POINTS_IN_WORKPLANE;
 
 	// Request how much memory (in bytes) you should
 	// allocate for the library

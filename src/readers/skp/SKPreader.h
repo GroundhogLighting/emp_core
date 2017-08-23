@@ -31,6 +31,8 @@
 #include <vector>
 
 
+#include "../../3rdparty/json/json.hpp"
+using nlohmann::json;
 
 #define SKP_GROUNDHOG_DICTIONARY "Groundhog"
 #define SKP_LABEL "Label"
@@ -40,6 +42,8 @@
 #define SKP_NAME "Name"
 #define SKP_VALUE "Value"
 #define SKP_WINGROUP "Win_Group"
+#define SKP_MATERIAL "rad_material"
+#define SKP_VALUE "Value"
 
 #define TO_M(x) x*0.0254
 #define TO_M2(x) x*0.00064516
@@ -58,6 +62,8 @@ class SKPReader {
 private:
 	SUModelRef suModel; //!< The SketchUp model to be read.
 	SUStringRef groundhogDictionaryName; //!< The Groundhog Dictionary name (in SketchUp format)
+	GroundhogModel * model; //!< The model to be populated
+	bool verbose = true; //!< Should we inform progress?
 
 public:
 
@@ -67,8 +73,10 @@ public:
 	object with the correct name to find the information and initializes the SketchUp API
 
 	@author German Molina
+	@param[in] model The GroundhogModel to populate
+	@param[in] verbose Option for inform progress
 	*/
-	SKPReader();
+	SKPReader(GroundhogModel * model, bool verbose);
 
 	//! Destroys a SKPReader object
 	/*!
@@ -94,12 +102,10 @@ public:
 	/*!
 	@author German Molina
 	@param[in] inputFile The name of the SKP file to read
-	@param[out] model The GroundhogModel to be filled
-	@param verbose Should we inform progress?
 
 	@return success
 	*/
-	bool parseSKPModel(std::string inputFile, GroundhogModel * model, bool verbose);
+	bool parseSKPModel(std::string inputFile);
 
 	//! Retrieves a string from a SUShadowInfoRef object.
 	/*!
@@ -109,7 +115,7 @@ public:
 	@param[out] value The string where the value will be placed
 	@return success
 	*/
-	bool getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, char * value);
+	bool getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, std::string * value);
 
 	//! Retrieves a double from a SUShadowInfoRef object.
 	/*!
@@ -136,11 +142,9 @@ public:
 	City Name, Country Name and Current Date
 
 	@author German Molina
-	@param[out] model The GroundhogModel to fill with the info
-	@param verbose Should we inform progress?
 	@return success
 	*/
-	bool loadModelInfo(GroundhogModel * model, bool verbose);
+	bool loadModelInfo();
 
 	//! Transforms a SUCameraRef into a View
 	/*!
@@ -176,11 +180,9 @@ public:
 	'Current View' will be stored as 'view'
 
 	@author German Molina
-	@param[out] model The GroundhogModel object to fill
-	@param verbose Should we inform progress?
 	@return success
 	*/
-	bool loadViews(GroundhogModel * model, bool verbose);
+	bool loadViews();
 
 	//! Loads the information in the SULayerRef objects into the model
 	/*!
@@ -189,12 +191,10 @@ public:
 	the SKPReader::loadLayersContent() has to be called.
 
 	@author German Molina
-	@param[out] model The GroundhogModel to fill
-	@param verbose Inform progress?
 	@return success
 	@note After this function, the SKPReader::loadLayersContent() has to be called.
 	*/
-	bool loadLayers(GroundhogModel * model, bool verbose);
+	bool loadLayers();
 
 	//! Retrieves a SUComponentDefinitionRef name
 	/*!
@@ -214,23 +214,11 @@ public:
 	@author German Molina
 	@param[out] dest The ComponentInstance vector to which the instance will be added
 	@param[in] suComponentInstance The SUComponentInstanceRef object to add
-	@param[in] model The GroundhogModel where the ComponentDefinition of the instance is located
 	@return success
 	*/
-	bool addComponentInstanceToVector(std::vector <ComponentInstance * > * dest, SUComponentInstanceRef suComponentInstance, GroundhogModel * model);
+	bool addComponentInstanceToVector(std::vector <ComponentInstance * > * dest, SUComponentInstanceRef suComponentInstance);
 
-	//! Creates a Face from a SUFaceRef and adds it to the destination vector
-	/*!
-	Creates a Face from a SUFaceRef and adds it to the destination vector.
-	The destination is a vector within a ComponentDefinition or a Layer.
-
-	@author German Molina
-	@param[out] dest The Face vector to which the instance will be added
-	@param[in] face The SUFaceRef object to add
-	@return success
-	*/
-	bool addFaceToVector(std::vector <Face * > * dest, SUFaceRef face);
-
+	
 	//! Retrieves all the SUFaceRef objects in entities and loads them into a Face vector
 	/*!
 	@author German Molina
@@ -244,19 +232,16 @@ public:
 	/*!
 	@author German Molina
 	@param[in] definition The SUComponentDefinitionRef to transform and import to model
-	@param[out] model The GroundhogModel where the ComponentDefinition will be added
 	@return success
 	*/
-	bool loadComponentDefinition(SUComponentDefinitionRef definition, GroundhogModel * model);
+	bool loadComponentDefinition(SUComponentDefinitionRef definition);
 
 	//! Loads all the SUComponentDefinitionRef in the suModel into a GroundhogModel
 	/*!
 	@author German Molina
-	@param[in] model The GroundhogModel to be filled
-	@param verbose Inform progress?
 	@return success
 	*/
-	bool loadComponentDefinitions(GroundhogModel * model, bool verbose);
+	bool loadComponentDefinitions();
 
 	//! Loads the contents of the SULayerRef in the suModel
 	/*!
@@ -264,11 +249,9 @@ public:
 	by loading all the SUComponentInstanceRef (as ComponentInstance)
 
 	@author German Molina
-	@param[in] model The GroundhogModel to be filled
-	@param verbose Inform progress?
 	@return success
 	*/
-	bool loadLayersContent(GroundhogModel * model, bool verbose);
+	bool loadLayersContent();
 
 	//! Transforms a SUFaceRef into a Polygon3D
 	/*!
@@ -342,10 +325,9 @@ public:
 	@author German Molina
 	@param[out] dest The ComponentInstance vector where all the SUComponentInstanceRef in entities will be bulked
 	@param[in] entities The SUEntitiesRef object containing the SUComponentInstanceRef
-	@param[in] model The GroundhogModel where the required ComponentDefinitions are located
 	@return success
 	*/
-	bool bulkComponentInstancesIntoVector(std::vector <ComponentInstance * > * dest, SUEntitiesRef  entities, GroundhogModel * model);
+	bool bulkComponentInstancesIntoVector(std::vector <ComponentInstance * > * dest, SUEntitiesRef  entities);
 
 	//! Fills the location (rotation, translation and scale) of a ComponentInstance based on a suInstance
 	/*!
@@ -373,11 +355,11 @@ public:
 
 	@author German Molina
 	@param[in] entity The SUEntityRef to retrieve the label from
-	@param[out] name The object to put the name into
+	@param[out] label The object to put the name into
 	@return false if the entity does not have a label, true otherwise
 	@todo Change all labels to numbers.
 	*/
-	bool getSUEntityLabel(SUEntityRef entity, std::string * name);
+	bool getSUEntityLabel(SUEntityRef entity, std::string * label);
 
 	//! Adds a workplane face to a model.
 	/*!
@@ -386,10 +368,9 @@ public:
 
 	@author German Molina
 	@param[in] face The face to treat as a workplane	
-	@param[out] model The model to add the workplane to
 	@return success
 	*/
-	bool addWorkplaneToModel(SUFaceRef face, GroundhogModel * model);
+	bool addWorkplaneToModel(SUFaceRef face);
 
 	//! Adds a Window to the model.
 	/*!
@@ -398,10 +379,9 @@ public:
 
 	@author German Molina
 	@param[in] face The face to treat as a workplane
-	@param[out] model The model to add the workplane to
 	@return success
 	*/
-	bool addWindowToModel(SUFaceRef face, GroundhogModel * model);
+	bool addWindowToModel(SUFaceRef face);
 
 	//! Retrieves an entity ID
 	/*!
@@ -442,4 +422,59 @@ public:
 	@return success
 	*/
 	bool getStringFromSUTypedValue(SUTypedValueRef suValue, std::string * value);
+
+	//! Adds a Material to the Groundhogmodel
+	/*!
+	Will add the material unless another material with the same name exists
+	@author German Molina
+	@param[in] The material to parse and add
+	@return The pointer to the added material
+	*/
+	Material * addMaterialToModel(SUMaterialRef material);
+
+	//! Retrieves a String value from a SUEntityRef
+	/*!
+	@author German Molina
+	@param[in] entity The entity to retrieve the value from
+	@param[out] value The value
+	@return success
+	*/
+	bool getGHValueFromEntity(SUEntityRef entity, std::string * value);
+
+	//! Guesses a material from its SketchUp properties.
+	/*!
+	@author German Molina
+	@param[in] material the SUMaterialRef to guess
+	@param[out] j The JSON that represents the guessed material
+	@return success
+	@note it will warn the user, since guessing materials is definetly not recommended
+	*/
+	bool guessMaterial(SUMaterialRef material, json * j);
+
+	//! Retrieves the SUFaceRef material
+	/*!
+	Will prioritize the front RAD material. If it does not exist
+	or it is not a RAD material, the back material will be tested. 
+	If still no material, the material will be guessed. 
+
+	If no material at all is available, the default material
+	will be assigned.
+	
+	@author German Molina
+	@param[in] face The SUFaceRef to retrieve the material from
+	@param[out] The retrieved SUMaterialRef
+	@return true if a material was returned, false if not.
+	*/
+	bool getFaceMaterial(SUFaceRef face, SUMaterialRef * mat);
+
+
+	//! Transforms a SUFaceRef into a Face
+	/*!
+	The Material of the face will be added to the model
+
+	@author German Molina
+	@param[in] suFace The SUFaceRef to transform
+	@return The pointer to the new Face
+	*/
+	Face * SUFaceToFace(SUFaceRef suFace);
 };

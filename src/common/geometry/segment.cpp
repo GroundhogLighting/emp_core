@@ -65,17 +65,17 @@ bool Segment::intersect(Segment * input, Point3D * output)
 	double det;
 
 	// Check for intersection.
-	if (std::abs(normal.getZ()) > TINY) {
+	if (std::abs(normal.getZ()) > GLARE_TINY) {
 		det = a.getY()*b.getX() - a.getX()*b.getY();
 		tA = (b.getY()*delta.getX() - b.getX()*delta.getY()) / det;
 		tB = (a.getY()*delta.getX() - a.getX()*delta.getY()) / det;
 	} 
-	else if (std::abs(normal.getX()) > TINY) {
+	else if (std::abs(normal.getX()) > GLARE_TINY) {
 		det = a.getY()*b.getZ() - a.getZ()*b.getY();
 		tA = (b.getY()*delta.getZ() - b.getZ()*delta.getY()) / det;
 		tB = (a.getY()*delta.getZ() - a.getZ()*delta.getY()) / det;
 	}
-	else if (std::abs(normal.getY()) > TINY) {
+	else if (std::abs(normal.getY()) > GLARE_TINY) {
 		det = a.getX()*b.getZ() - a.getZ()*b.getX();
 		tA = (b.getX()*delta.getZ() - b.getZ()*delta.getX()) / det;
 		tB = (a.getX()*delta.getZ() - a.getZ()*delta.getX()) / det;

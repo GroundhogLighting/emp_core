@@ -44,6 +44,7 @@
 #include <SketchUpAPI/model/scene.h>
 #include <SketchUpAPI/model/camera.h>
 #include <SketchUpAPI/model/shadow_info.h>
+#include <SketchUpAPI/model/material.h>
 
 #include <vector>
 #include <string>
@@ -52,7 +53,7 @@
 
 
 
-SKPReader::SKPReader() 
+SKPReader::SKPReader(GroundhogModel * ghmodel, bool newVerbose) 
 {
 	DEBUG_MSG("Creating SKPReader");
 
@@ -67,11 +68,15 @@ SKPReader::SKPReader()
 		"SUStringCreateFromUTF8",
 		__LINE__
 	);
+
+	model = ghmodel;
+	verbose = newVerbose;
 };
 
 SKPReader::~SKPReader() 
 {
 	DEBUG_MSG("Destroying SKPReader");
+	
 	
 	//release dictionary
 	checkSUResult(
@@ -161,7 +166,7 @@ bool SKPReader::checkSUResult(SUResult res, std::string functionName, int ln)
 }
 
 
-bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * modelRef, bool verbose)
+bool SKPReader::parseSKPModel(std::string inputFile)
 {		
 	//Load model
 	if (!checkSUResult(
@@ -171,25 +176,25 @@ bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * modelRef, 
 	)) return false;
 
 	// Load layers	
-	if(!loadLayers(modelRef, verbose))
+	if(!loadLayers())
 		return false;
 
 	// load components
-	if (!loadComponentDefinitions(modelRef, verbose))
+	if (!loadComponentDefinitions())
 		return false;
 
 	// Fill layers and load related surfaces, discrimitating between
 	// workplanes, windows, etc.
-	if (!loadLayersContent(modelRef, verbose))
+	if (!loadLayersContent())
 		return false;
 
 	// Load views
-	if (!loadViews(modelRef, verbose))
+	if (!loadViews())
 		return false;
 
 
 	// Load model info (location, date, etc).
-	if (!loadModelInfo(modelRef, verbose))
+	if (!loadModelInfo())
 		return false;
 	
 	// Load ...
@@ -200,7 +205,7 @@ bool SKPReader::parseSKPModel(std::string inputFile, GroundhogModel * modelRef, 
 };
 
 
-bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, char * value) 
+bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, std::string * value) 
 {
 	SUTypedValueRef suValue = SU_INVALID;
 	if (!checkSUResult(
@@ -229,35 +234,10 @@ bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, 
 		__LINE__
 	)) return false;
 
-	char cValue[MAX_STRING_LENGTH];
-	size_t cValueLength;
-
-	if (!checkSUResult(
-		SUStringGetUTF8Length(suString, &cValueLength),
-		"SUStringGetUTF8Length",
-		__LINE__
-	)) return false;
-
-	if (!checkSUResult(
-		SUStringGetUTF8(suString,cValueLength,cValue,&cValueLength),
-		"SUStringSetUTF8",
-		__LINE__
-	)) return false;
-
-	if (!checkSUResult(
-		SUTypedValueRelease(&suValue),
-		"SUTypedValueGetDouble",
-		__LINE__
-	)) return false;
-
-	if (!checkSUResult(
-		SUStringRelease(&suString),
-		"SUStringRelease",
-		__LINE__
-	)) return false;
-
-	utf8toASCII(cValue, cValueLength, value, &cValueLength);
-
+	
+	if (!SUStringtoString(suString, value))
+		return false;
+	
 	return true;
 }
 
@@ -322,7 +302,7 @@ bool SKPReader::getTimeFromShadowInfo(SUShadowInfoRef shadowInfo, int64_t * valu
 	return true;
 }
 
-bool SKPReader::loadModelInfo(GroundhogModel * model, bool verbose) 
+bool SKPReader::loadModelInfo() 
 {
 	// load north correction
 	double northC;
@@ -357,24 +337,23 @@ bool SKPReader::loadModelInfo(GroundhogModel * model, bool verbose)
 	model->setTimeZone(timeZone);
 	
 	//set city
-	char city[MAX_STRING_LENGTH];
-	getStringFromShadowInfo(shadowInfo, "City", city);
-	model->setCity(std::string(city));
+	std::string city;
+	getStringFromShadowInfo(shadowInfo, "City", &city);
+	model->setCity(city);
 
 	//set country
-	char country[MAX_STRING_LENGTH];
-	getStringFromShadowInfo(shadowInfo, "Country", country);
-	model->setCountry(std::string(country));
+	std::string country;
+	getStringFromShadowInfo(shadowInfo, "Country", &country);
+	model->setCountry(country);
 
 	// set time
 	int64_t epoch;
 	getTimeFromShadowInfo(shadowInfo, &epoch);
-	Date * date = new Date(epoch); //  + timeZone*60*60
-	model->setMonth(date->getMonth());
-	model->setHour(date->getDay());
-	model->setHour(date->getHour());
-	model->setMinute(date->getMinute());
-	delete date;
+	Date date = Date(epoch); //  + timeZone*60*60
+	model->setMonth(date.getMonth());
+	model->setHour(date.getDay());
+	model->setHour(date.getHour());
+	model->setMinute(date.getMinute());	
 
 	return true;
 }
@@ -465,42 +444,23 @@ bool SKPReader::SUViewToView(SUSceneRef suView, View * view)
 {
 	// get the name of the view
 	
-	SUStringRef viewName = SU_INVALID;
+	SUStringRef suViewName = SU_INVALID;
 	if (!checkSUResult(
-		SUStringCreate(&viewName),
+		SUStringCreate(&suViewName),
 		"SUStringCreate",
 		__LINE__
 	)) return false;
 	
 	if (!checkSUResult(
-		SUSceneGetName(suView, &viewName),
+		SUSceneGetName(suView, &suViewName),
 		"SUSceneGetName", 
 		__LINE__
 	)) return false;
 	
-	size_t stringLength;
-	if (!checkSUResult(
-		SUStringGetUTF8Length(viewName, &stringLength),
-		"SUStringGetUTF8Length",
-		__LINE__
-	)) return false;
-	
-	char cViewName[MAX_STRING_LENGTH];
-	if (!checkSUResult(
-		SUStringGetUTF8(viewName, stringLength, cViewName, &stringLength),
-		"SUStringGetUTF8",
-		__LINE__
-	)) return false;
-	
-	if (!checkSUResult(
-		SUStringRelease(&viewName),
-		"SUStringRelease",
-		__LINE__
-	)) return false;
-	
-	char asciiViewName[MAX_STRING_LENGTH];
-	utf8toASCII(cViewName, stringLength, asciiViewName, &stringLength);
-	fixString(asciiViewName, stringLength);
+	std::string viewName;
+
+	if (!SUStringtoString(suViewName,&viewName))
+		return false;
 
 
 	// Get the camera
@@ -511,16 +471,15 @@ bool SKPReader::SUViewToView(SUSceneRef suView, View * view)
 		__LINE__
 	)) return false;
 
-	if (!SUCameraToView(std::string(asciiViewName), camera, view)) {
+	if (!SUCameraToView(viewName, camera, view)) {
 		SUCameraRelease(&camera);
 		return false;
 	}
 		
 	return true;
-
 }
 
-bool SKPReader::loadViews(GroundhogModel * model, bool verbose) 
+bool SKPReader::loadViews() 
 {
 	
 	// get the current view
@@ -565,12 +524,11 @@ bool SKPReader::loadViews(GroundhogModel * model, bool verbose)
 	return true;
 }
 
-bool SKPReader::loadLayers(GroundhogModel * model, bool verbose) 
+bool SKPReader::loadLayers() 
 {
 
 	// count layers
 	size_t countLayers = 0;
-	size_t retrievedLayers = 0;
 	if(!checkSUResult(
 		SUModelGetNumLayers(suModel, &countLayers),
 		"SUModelGetNumLayers",
@@ -590,46 +548,28 @@ bool SKPReader::loadLayers(GroundhogModel * model, bool verbose)
 
 	// create and load the layers
 	for (unsigned int i = 0; i < layers.size(); i++) {		
-		SUStringRef layerName = SU_INVALID;		
+		SUStringRef suLayerName = SU_INVALID;		
 		if(!checkSUResult(
-			SUStringCreate(&layerName),
+			SUStringCreate(&suLayerName),
 			"SUStringCreate",
 			__LINE__
 		)) return false;
 
-		if(!checkSUResult(
-			SULayerGetName(layers[i], &layerName),
-			"SULayerGetName",
-			__LINE__
-		)) return false;
 
-		size_t stringLength;
-		if(!checkSUResult(
-			SUStringGetUTF8Length(layerName, &stringLength),
-			"SUStringGetUTF8Length",
-			__LINE__
-		)) return false;
-
-		char cLayerName[MAX_STRING_LENGTH];		
-		if(!checkSUResult(
-			SUStringGetUTF8(layerName,	stringLength, cLayerName, &stringLength),
-			"SUStringGetUTF8",
-			__LINE__
-		)) return false;
-		
-		if(!checkSUResult(
-			SUStringRelease(&layerName),
+		if (!checkSUResult(
+			SULayerGetName(layers[i],&suLayerName),
 			"SUStringRelease",
 			__LINE__
 		)) return false;
 
-		char asciiLayerName[MAX_STRING_LENGTH];
-		utf8toASCII(cLayerName, stringLength, asciiLayerName, &stringLength);
-		fixString(asciiLayerName, stringLength);
+		std::string layerName;
 
-		model->addLayer(&std::string(asciiLayerName));
-		inform("Layer " + std::string(asciiLayerName) + " added",verbose);
-	};
+		if (!SUStringtoString(suLayerName,&layerName))
+			return false;
+		
+		model->addLayer(&layerName);
+		inform("Layer " + layerName + " added",verbose);
+	};	
 
 	return true;
 } // end of Load Layers
@@ -651,37 +591,16 @@ bool SKPReader::getSUComponentDefinitionName(SUComponentDefinitionRef definition
 		__LINE__
 	)) return false;
 
-	size_t cStringLength;
-	if (!checkSUResult(
-		SUStringGetUTF8Length(suComponentName, &cStringLength),
-		"SUStringGetUTF8Length",
-		__LINE__
-	)) return false;
+	std::string componentName;
+	if (!SUStringtoString(suComponentName,&componentName))
+		return false;
 
-	char cComponentName[MAX_STRING_LENGTH];
-	if (!checkSUResult(
-		SUStringGetUTF8(suComponentName, cStringLength, cComponentName, &cStringLength),
-		"SUStringGetUTF8Length",
-		__LINE__
-	)) return false;
-
-	if (!checkSUResult(
-		SUStringRelease(&suComponentName),
-		"SUStringRelease",
-		__LINE__
-	)) return false;
-
-	char asciiComponentName[MAX_STRING_LENGTH];
-	utf8toASCII(cComponentName, cStringLength, asciiComponentName, &cStringLength);
-	fixString(asciiComponentName, cStringLength);
-
-
-	*name = std::string(asciiComponentName);
+	*name = componentName;
 	return true;
 }
 
 
-bool SKPReader::addComponentInstanceToVector(std::vector <ComponentInstance * > * dest, SUComponentInstanceRef suComponentInstance, GroundhogModel * model) 
+bool SKPReader::addComponentInstanceToVector(std::vector <ComponentInstance * > * dest, SUComponentInstanceRef suComponentInstance) 
 {
 
 	// get definition
@@ -714,27 +633,6 @@ bool SKPReader::addComponentInstanceToVector(std::vector <ComponentInstance * > 
 	return true;
 }
 
-bool SKPReader::addFaceToVector(std::vector <Face * > * dest, SUFaceRef suFace) 
-{
-
-	// build the polygon
-	Polygon3D * polygon = new Polygon3D();
-	if (!SUFaceToPolygon3D(suFace, polygon))
-		return false;
-
-	// get the name of the face
-	std::string name;
-	if (!getSUFaceName(suFace, &name)) // this will allways put something
-		return false;
-	//build the face
-	Face * face = new Face(name);
-	face->setPolygon(polygon);
-
-	//add the component
-	dest->push_back(face);
-
-	return true;
-}
 
 bool SKPReader::bulkFacesIntoVector(std::vector <Face * > * dest, SUEntitiesRef entities) 
 {
@@ -756,13 +654,18 @@ bool SKPReader::bulkFacesIntoVector(std::vector <Face * > * dest, SUEntitiesRef 
 	)) return false;
 
 	// import faces
-	for (size_t i = 0; i < numFaces; i++) {
-		addFaceToVector(dest, faces[i]);
+	for (size_t i = 0; i < numFaces; i++) {	
+		Face * f = SUFaceToFace(faces[i]);
+
+		if (f == NULL)
+			return false;
+
+		dest->push_back(f);
 	}
 	return true;
 }
 
-bool SKPReader::loadComponentDefinition(SUComponentDefinitionRef definition, GroundhogModel * model) 
+bool SKPReader::loadComponentDefinition(SUComponentDefinitionRef definition) 
 {
 	//get the name
 	std::string definitionName;
@@ -788,12 +691,12 @@ bool SKPReader::loadComponentDefinition(SUComponentDefinitionRef definition, Gro
 	bulkFacesIntoVector(componentDefinition->getFacesRef(), entities);
 
 	// load instances
-	bulkComponentInstancesIntoVector(componentDefinition->getComponentInstancesRef(), entities, model);
+	bulkComponentInstancesIntoVector(componentDefinition->getComponentInstancesRef(), entities);
 
 	return true;
 }
 
-bool SKPReader::loadComponentDefinitions(GroundhogModel * model, bool verbose) 
+bool SKPReader::loadComponentDefinitions() 
 {
 	// count the component definitions
 	size_t countDefinitions = 0;
@@ -820,7 +723,7 @@ bool SKPReader::loadComponentDefinitions(GroundhogModel * model, bool verbose)
 
 	// Now, load One by One
 	for (size_t i = 0; i < countDefinitions; i++) {
-		if (!loadComponentDefinition(definitions[i], model)) {
+		if (!loadComponentDefinition(definitions[i])) {
 			warn("Impossible to load component definition to model");
 			continue;
 		}
@@ -829,7 +732,7 @@ bool SKPReader::loadComponentDefinitions(GroundhogModel * model, bool verbose)
 	return true;
 }
 
-bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose) 
+bool SKPReader::loadLayersContent() 
 {
 	// Get the entity container of the model.
 	SUEntitiesRef entities = SU_INVALID;
@@ -863,15 +766,16 @@ bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose)
 	)) return false;
 	
 	for (size_t i = 0; i < faceCount; i++) {
-		
+
 		// CHECK LABEL OF FACE
 		std::string faceLabel;
 		bool hasLabel = getSUFaceLabel(faces[i], &faceLabel);
 		
 		if ( hasLabel ) {
+
 			// if it is workplane
 			if (faceLabel == SKP_WORKPLANE) {
-				addWorkplaneToModel(faces[i],model);
+				addWorkplaneToModel(faces[i]);
 			}
 			else if (faceLabel == SKP_ILLUM) {
 			// if it is illum
@@ -879,7 +783,7 @@ bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose)
 			}
 			else if (faceLabel == SKP_WINDOW) {
 			// if it is window
-				addWindowToModel(faces[i], model);
+				addWindowToModel(faces[i]);
 			}
 			continue;
 		}
@@ -893,7 +797,13 @@ bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose)
 		if (layerRef == NULL) {
 			return false;
 		}
-		addFaceToVector(layerRef->getFacesRef(), faces[i]);
+		
+		Face * face = SUFaceToFace(faces[i]);
+		if (face == NULL)
+			return false;		
+
+		// add the face
+		layerRef->getFacesRef()->push_back(face);
 
 	} // end of iterating faces
 	
@@ -930,7 +840,7 @@ bool SKPReader::loadLayersContent(GroundhogModel * model, bool verbose)
 			return false;
 		}
 
-		addComponentInstanceToVector(layerRef->getComponentInstancesRef(), instances[i],model);
+		addComponentInstanceToVector(layerRef->getComponentInstancesRef(), instances[i]);
 
 	}
 
@@ -1100,7 +1010,7 @@ bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name)
 } // end of Get Entity Name
 
 
-bool SKPReader::bulkComponentInstancesIntoVector(std::vector <ComponentInstance * > * dest, SUEntitiesRef  entities, GroundhogModel * model) {
+bool SKPReader::bulkComponentInstancesIntoVector(std::vector <ComponentInstance * > * dest, SUEntitiesRef  entities) {
 	// load component instances
 	size_t instanceCount;
 	if (!checkSUResult(
@@ -1128,7 +1038,7 @@ bool SKPReader::bulkComponentInstancesIntoVector(std::vector <ComponentInstance 
 		if (!getSUDrawingElementLayerName(drawingElement, &layerName))
 			return false;
 		
-		addComponentInstanceToVector(dest, instances[i], model);
+		addComponentInstanceToVector(dest, instances[i]);
 
 	}
 
@@ -1185,7 +1095,7 @@ bool SKPReader::getSUEntityLabel(SUEntityRef entity, std::string * name)
 	return true;
 }
 
-bool SKPReader::addWorkplaneToModel(SUFaceRef suFace, GroundhogModel * model) {
+bool SKPReader::addWorkplaneToModel(SUFaceRef suFace) {
 
 	// get the name of the face
 	std::string name;
@@ -1204,7 +1114,7 @@ bool SKPReader::addWorkplaneToModel(SUFaceRef suFace, GroundhogModel * model) {
 	return true;
 }
 
-bool SKPReader::addWindowToModel(SUFaceRef suFace, GroundhogModel * model)
+bool SKPReader::addWindowToModel(SUFaceRef suFace)
 {
 	// get the name of the face
 	std::string name;
@@ -1229,16 +1139,10 @@ bool SKPReader::addWindowToModel(SUFaceRef suFace, GroundhogModel * model)
 	}
 
 	// Create the face
-
-	// ..... build the polygon
-	Polygon3D * polygon = new Polygon3D();
-	if (!SUFaceToPolygon3D(suFace, polygon))
+	Face * face = SUFaceToFace(suFace);
+	if (face == NULL)
 		return false;
-
-	//build the face
-	Face * face = new Face(name);
-	face->setPolygon(polygon);
-
+		
 	// Add the window
 	model->addWindowToGroup(&winGroup, face);
 	return true;
@@ -1355,14 +1259,17 @@ bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string)
 		__LINE__
 	)) return false;
 
+	if (stringLength > GLARE_MAX_STRING_LENGTH) {
+		fatal("String excedes the maximum accepted length", __LINE__, __FILE__);
+		return false;
+	}
 
-	char cString[MAX_STRING_LENGTH];
+	char cString[GLARE_MAX_STRING_LENGTH];
 	if (!checkSUResult(
 		SUStringGetUTF8(suString, stringLength, cString, &stringLength),
 		"SUStringGetUTF8",
 		__LINE__
 	)) return false;
-
 
 	if (!checkSUResult(
 		SUStringRelease(&suString),
@@ -1370,7 +1277,8 @@ bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string)
 		__LINE__
 	)) return false;
 
-	char asciiString[MAX_STRING_LENGTH];
+	char asciiString[GLARE_MAX_STRING_LENGTH];
+
 	utf8toASCII(cString, stringLength, asciiString, &stringLength);
 
 	fixString(asciiString, stringLength);
@@ -1400,6 +1308,195 @@ bool SKPReader::getStringFromSUTypedValue(SUTypedValueRef suValue, std::string *
 		SUStringRelease(&suString);
 		return false;
 	}
+	SUStringtoString(suString, value);
+	
+	return true;
+}
 
-	return SUStringtoString(suString,value);
+
+Material * SKPReader::addMaterialToModel(SUMaterialRef material)
+{	
+	
+	// create the json
+	json j;
+
+	SUEntityRef entityMat = SUMaterialToEntity(material);
+
+	// Check if it is a Radiance Material
+	std::string label;
+	if (getSUEntityLabel(entityMat, &label)) {
+
+		// it is a Radiance material
+		if(label != SKP_MATERIAL){
+			fatal("Material with weird label " + label,__LINE__,__FILE__);
+			return NULL;
+		}
+
+		std::string value;
+		if (!getGHValueFromEntity(entityMat, &value)) {
+			return NULL;
+		}
+		
+		j = json::parse(value);
+	}
+	else {
+		guessMaterial(material, &j);
+	}
+
+	// Add the material and return
+	return model->addMaterial(j);
+}
+
+bool SKPReader::getGHValueFromEntity(SUEntityRef entity, std::string * value)
+{
+	SUTypedValueRef suValue = SU_INVALID;
+	if (!getValueFromEntityGHDictionary(entity, SKP_VALUE, &suValue))
+		return false;
+
+	if (!getStringFromSUTypedValue(suValue, value))
+		return false;
+
+	return true;
+}
+
+bool SKPReader::guessMaterial(SUMaterialRef material, json * j)
+{
+	SUStringRef suName = SU_INVALID;
+
+	if (!checkSUResult(
+		SUStringCreate(&suName),
+		"SUStringCreate",
+		__LINE__
+	)) return false;
+
+	if (!checkSUResult(
+		SUMaterialGetName(material, &suName),
+		"SUMaterialGetName", __LINE__
+	)) return false;
+
+	std::string name;
+
+	// this fixes the name as well
+	if (!SUStringtoString(suName, &name))
+		return false;
+
+	warn("Guessing material " + name);
+	
+	// set the name
+	(*j)["name"] = name;
+
+	// set alpha
+	double alpha;
+	if (!checkSUResult(
+		SUMaterialGetOpacity(material,&alpha),
+		"SUMaterialGetOpacity", __LINE__
+	)) return false;
+
+	(*j)["alpha"] = alpha;
+
+	// set type
+	(*j)["class"] = (alpha < 1 ? "glass" : "plastic");
+
+	// set color
+	SUColor color;
+	if (!checkSUResult(
+		SUMaterialGetColor(material, &color),
+		"SUMaterialGetColor", __LINE__
+	)) return false;
+
+	(*j)["color"] = {color.red, color.green, color.blue};
+
+	if (alpha < 1) {
+
+		(*j)["rad"] = "void glass %MATERIAL_NAME% 0 0 3 " + std::to_string(alpha*color.red / 255) + " " + std::to_string(alpha*color.green / 255) + " " + std::to_string(alpha*color.blue / 255) ;
+	}
+	else {
+		(*j)["rad"] = "void plastic %MATERIAL_NAME% 0 0 5 " + std::to_string(color.red / 255) + " " + std::to_string(color.green / 255) + " " + std::to_string(color.blue / 255) + " 0 0";
+	}
+	return true;
+}
+
+bool SKPReader::getFaceMaterial(SUFaceRef face, SUMaterialRef * mat)
+{
+	// Check the front material
+	SUMaterialRef frontMat;
+	SUResult frontRes = SUFaceGetFrontMaterial(face, &frontMat);
+	if (frontRes == SU_ERROR_NONE) { // it has front material
+		// Check if it has physical information 
+		std::string label;
+		if (getSUEntityLabel(SUMaterialToEntity(frontMat), &label)) {
+			// if it has, do not bother and return.
+			if (label != SKP_MATERIAL) {
+				fatal("Weird material label "+label,__LINE__,__FILE__);
+				return false;
+			}
+
+			*mat = frontMat;
+			return true; 
+		}
+	}
+
+	// Check the back material
+	SUMaterialRef backMat;
+	SUResult backRes = SUFaceGetFrontMaterial(face, &backMat);
+	if (backRes == SU_ERROR_NONE) { // it has back material
+		// Check if it has physical information 
+		std::string label;
+		if (getSUEntityLabel(SUMaterialToEntity(backMat), &label)) {
+			if (label != SKP_MATERIAL) {
+				fatal("Weird material label " + label, __LINE__, __FILE__);
+				return false;
+			}
+			*mat = backMat;
+			return true;
+		}
+	}
+
+	// There was no Radiance material... prioritize the front one.
+	if (frontRes == SU_ERROR_NONE) {
+		*mat = frontMat;	
+		return true;
+	}
+	else if (backRes == SU_ERROR_NONE) {
+		*mat = backMat;	
+		return true;
+	}
+	
+	return false;
+}
+
+
+Face * SKPReader::SUFaceToFace(SUFaceRef suFace)
+{
+
+	// build the polygon
+	Polygon3D * polygon = new Polygon3D();
+	if (!SUFaceToPolygon3D(suFace, polygon))
+		return NULL;
+
+	// get the name of the face
+	std::string name;
+
+	if (!getSUFaceName(suFace, &name)) // this will allways put something
+		return NULL;
+
+	//build the face
+	Face * face = new Face(name);
+	face->setPolygon(polygon);	
+
+	// retrieve and set the material
+	SUMaterialRef suMat;
+	Material * mat;
+	if (getFaceMaterial(suFace, &suMat)) {
+		// add this material.
+		mat = addMaterialToModel(suMat);
+	}
+	else {
+		// add default material
+		mat = model->addDefaultMaterial();
+	}
+
+	face->setMaterial(mat);
+
+	return face;
 }

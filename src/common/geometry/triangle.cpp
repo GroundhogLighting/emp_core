@@ -248,24 +248,24 @@ bool Triangle::testPoint(Point3D * p, int * code)
 	double w = 1 - u - v;
 
 	// Check if point is in triangle
-	if (u >= MINUS_TINY && v >= MINUS_TINY && w >= MINUS_TINY) {
+	if (u >= GLARE_MINUS_TINY && v >= GLARE_MINUS_TINY && w >= GLARE_MINUS_TINY) {
 		// Somewhere in the triangle
-		if (u <= TINY && v <= TINY) {
+		if (u <= GLARE_TINY && v <= GLARE_TINY) {
 			*code = 0; // vertex a
 		}
-		else if (u <= TINY && w <= TINY) {
+		else if (u <= GLARE_TINY && w <= GLARE_TINY) {
 			*code = 1; // vertex b
 		}
-		else if (v <= TINY && w <= TINY) {
+		else if (v <= GLARE_TINY && w <= GLARE_TINY) {
 			*code = 2; // vertex c
 		}
-		else if (u <= TINY) {
+		else if (u <= GLARE_TINY) {
 			*code = 3; // edge AB
 		}
-		else if (w <= TINY) {
+		else if (w <= GLARE_TINY) {
 			*code = 4; // edge BC
 		}
-		else if (v <= TINY) {
+		else if (v <= GLARE_TINY) {
 			*code = 5; // edge AC
 		}
 		else {

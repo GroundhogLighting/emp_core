@@ -84,9 +84,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1b1ba4804451dfe6cc357194e42762ae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_layer.html#a1b1ba4804451dfe6cc357194e42762ae">~Layer</a> ()</td></tr>
 <tr class="memdesc:a1b1ba4804451dfe6cc357194e42762ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a <a class="el" href="class_layer.html" title="A Layer is the main group of geometry in a GroundhogModel. ">Layer</a> object.  <a href="#a1b1ba4804451dfe6cc357194e42762ae">More...</a><br /></td></tr>
 <tr class="separator:a1b1ba4804451dfe6cc357194e42762ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71b358847c19526d72c6a28d52407973"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_layer.html#a71b358847c19526d72c6a28d52407973">compareName</a> (std::string layerName)</td></tr>
-<tr class="memdesc:a71b358847c19526d72c6a28d52407973"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the <a class="el" href="class_layer.html" title="A Layer is the main group of geometry in a GroundhogModel. ">Layer</a> has a certain name.  <a href="#a71b358847c19526d72c6a28d52407973">More...</a><br /></td></tr>
-<tr class="separator:a71b358847c19526d72c6a28d52407973"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b978ea482572e6c4548b2d1c49b454d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_layer.html#a7b978ea482572e6c4548b2d1c49b454d">compareName</a> (std::string *layerName)</td></tr>
+<tr class="memdesc:a7b978ea482572e6c4548b2d1c49b454d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the <a class="el" href="class_layer.html" title="A Layer is the main group of geometry in a GroundhogModel. ">Layer</a> has a certain name.  <a href="#a7b978ea482572e6c4548b2d1c49b454d">More...</a><br /></td></tr>
+<tr class="separator:a7b978ea482572e6c4548b2d1c49b454d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af63250e30d101f8cf23d5117f57c32ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_layer.html#af63250e30d101f8cf23d5117f57c32ed">addFace</a> (<a class="el" href="class_face.html">Face</a> *face)</td></tr>
 <tr class="memdesc:af63250e30d101f8cf23d5117f57c32ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a <a class="el" href="class_face.html" title="The integration of a Polygon3D and a Material. ">Face</a> to the <a class="el" href="class_layer.html" title="A Layer is the main group of geometry in a GroundhogModel. ">Layer</a>.  <a href="#af63250e30d101f8cf23d5117f57c32ed">More...</a><br /></td></tr>
 <tr class="separator:af63250e30d101f8cf23d5117f57c32ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -212,8 +212,8 @@ std::vector&lt; <a class="el" href="class_component_instance.html">ComponentInst
 </div><!-- fragment -->
 </div>
 </div>
-<a id="a71b358847c19526d72c6a28d52407973"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71b358847c19526d72c6a28d52407973">&#9670;&nbsp;</a></span>compareName()</h2>
+<a id="a7b978ea482572e6c4548b2d1c49b454d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b978ea482572e6c4548b2d1c49b454d">&#9670;&nbsp;</a></span>compareName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -221,7 +221,7 @@ std::vector&lt; <a class="el" href="class_component_instance.html">ComponentInst
         <tr>
           <td class="memname">bool Layer::compareName </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">std::string *&#160;</td>
           <td class="paramname"><em>layerName</em></td><td>)</td>
           <td></td>
         </tr>
@@ -237,7 +237,7 @@ std::vector&lt; <a class="el" href="class_component_instance.html">ComponentInst
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>is the <a class="el" href="class_layer.html" title="A Layer is the main group of geometry in a GroundhogModel. ">Layer</a> name equivalent to layerName ? </dd></dl>
-<div class="fragment"><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;{</div><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_layer.html#a2071349b5667273725ae7f05a42db7a6">name</a> == layerName;</div><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div><div class="ttc" id="class_layer_html_a2071349b5667273725ae7f05a42db7a6"><div class="ttname"><a href="class_layer.html#a2071349b5667273725ae7f05a42db7a6">Layer::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">Name of the Layer. </div><div class="ttdef"><b>Definition:</b> layer.h:39</div></div>
+<div class="fragment"><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;{</div><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_layer.html#a2071349b5667273725ae7f05a42db7a6">name</a> == *layerName;</div><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div><div class="ttc" id="class_layer_html_a2071349b5667273725ae7f05a42db7a6"><div class="ttname"><a href="class_layer.html#a2071349b5667273725ae7f05a42db7a6">Layer::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">Name of the Layer. </div><div class="ttdef"><b>Definition:</b> layer.h:39</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -395,7 +395,7 @@ std::vector&lt; <a class="el" href="class_component_instance.html">ComponentInst
 <!-- HTML footer for doxygen 1.8.13-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Aug 20 2017 12:17:43 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
+Generated on Tue Aug 22 2017 23:45:24 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
 </a> 1.8.13
 </small></address>
 </body>

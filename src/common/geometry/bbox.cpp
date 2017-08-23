@@ -23,12 +23,12 @@
 
 BBox::BBox(Polygon3D * polygon)
 {
-	min_x = HUGE;
-	max_x = MINUS_HUGE;
-	min_y = HUGE;
-	max_y = MINUS_HUGE;
-	min_z = HUGE;
-	max_z = MINUS_HUGE;	
+	min_x = GLARE_HUGE;
+	max_x = GLARE_MINUS_HUGE;
+	min_y = GLARE_HUGE;
+	max_y = GLARE_MINUS_HUGE;
+	min_z = GLARE_HUGE;
+	max_z = GLARE_MINUS_HUGE;
 		
 
 	Loop * loop = polygon->getOuterLoopRef();

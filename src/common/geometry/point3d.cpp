@@ -82,7 +82,7 @@ Point3D Point3D::operator+(Vector3D v)
 
 bool Point3D::isEqual(Point3D p)
 {
-	return (std::abs(x - p.x) < TINY &&  std::abs(y - p.y) < TINY && std::abs(z - p.z) < TINY);
+	return (std::abs(x - p.x) < GLARE_TINY &&  std::abs(y - p.y) < GLARE_TINY && std::abs(z - p.z) < GLARE_TINY);
 }
 
 
@@ -104,12 +104,12 @@ Point3D Point3D::transform(Vector3D i, Vector3D j, Vector3D k)
 
 #ifdef DEBUG
 	// Check if they are normal... debugging
-	if (std::abs(1 - i.getLength()) > TINY || std::abs(1 - j.getLength()) > TINY || std::abs(1 - k.getLength()) > TINY) {
+	if (std::abs(1 - i.getLength()) > GLARE_TINY || std::abs(1 - j.getLength()) > GLARE_TINY || std::abs(1 - k.getLength()) > GLARE_TINY) {
 		warn("Trying to transform a point with non normalized vectors");
 		std::cerr << "i length: " << i.getLength() << " -- j length: " << j.getLength() << " -- k length: " << k.getLength() << std::endl;
 	}
 
-	if (std::abs(i*j) > TINY || std::abs(j*k) > TINY || std::abs(i*k) > TINY) {
+	if (std::abs(i*j) > GLARE_TINY || std::abs(j*k) > GLARE_TINY || std::abs(i*k) > GLARE_TINY) {
 		warn("Transforming a point with non orthogonal vectors");
 		std::cerr << "   i: ";
 		i.print(); 

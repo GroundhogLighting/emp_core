@@ -346,7 +346,7 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 	double ny = k.getY();
 	double nz = k.getZ();	
 	
-	if (nz < TINY) {
+	if (nz < GLARE_TINY) {
 		// Vertical planes	
 		i = Vector3D(0, 0, 1);
 		j = k%i;	

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['polygon',['polygon',['../class_triangulation.html#a00de79c0bafec91439796f12b694acb3',1,'Triangulation::polygon()'],['../class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014',1,'Face::polygon()']]],
-  ['polygons',['polygons',['../class_workplane.html#a8ced4fd92ce27966106fdfcdfa8064d9',1,'Workplane']]]
+  ['outerloop',['outerLoop',['../class_polygon3_d.html#abe54d3de83476fa97b2796cb16f2c2e3',1,'Polygon3D']]],
+  ['outputfile',['outputFile',['../class_glare.html#aebb9395263a933c88fe741e6786e98ba',1,'Glare']]]
 ];

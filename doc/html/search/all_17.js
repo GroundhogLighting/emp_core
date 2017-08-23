@@ -9,6 +9,7 @@ var searchData=
   ['_7elayer',['~Layer',['../class_layer.html#a1b1ba4804451dfe6cc357194e42762ae',1,'Layer']]],
   ['_7elocation',['~Location',['../class_location.html#af5be2c6550bbd96137cbb3144ec3c529',1,'Location']]],
   ['_7eloop',['~Loop',['../class_loop.html#ac25ba52a46e689c85e2720718615d767',1,'Loop']]],
+  ['_7ematerial',['~Material',['../class_material.html#a2c19452d71f54075df8f5405b03129f4',1,'Material']]],
   ['_7epolygon3d',['~Polygon3D',['../class_polygon3_d.html#ad4afcc8035cd09e34c597cfe6c6456f5',1,'Polygon3D']]],
   ['_7eradexporter',['~RadExporter',['../class_rad_exporter.html#af6c3b05ab9ee2e26d55c4f42fb7d3d33',1,'RadExporter']]],
   ['_7eskpreader',['~SKPReader',['../class_s_k_p_reader.html#a407fb80ed7fe0f512a2d0970fefd910d',1,'SKPReader']]],

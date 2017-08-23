@@ -65,8 +65,9 @@ public:
 
 	@author German Molina
 	@return success
+	@param[in] filename The subdirectory to export
 	*/
-	void writeModelInfo();
+	bool writeModelInfo(char * filename);
 	
 	//! Writes all the views in Radiance format in different files
 	/*!
@@ -74,8 +75,9 @@ public:
 
 	@author German Molina
 	@return success
+	@param[in] dir The subdirectory to export
 	*/
-	bool writeViews();
+	bool writeViews(char * dir);
 
 	//! Writes all the component definitions in different files
 	/*!
@@ -87,8 +89,9 @@ public:
 
 	@author German Molina
 	@return success
+	@param[in] dir The subdirectory to export
 	*/
-	bool writeComponentDefinitions();
+	bool writeComponentDefinitions(char * dir);
 	
 	//! Writes all the layers in different files
 	/*!
@@ -100,14 +103,15 @@ public:
 
 	@author German Molina
 	@return success
+	@param[in] dir The subdirectory to export
 	*/
-	bool writeLayers();
+	bool writeLayers(char * dir);
 
 	//! Writes a ComponentInstance in Radiance format
 	/*!
 	@author German Molina
 	@param[in] file The file to write this in
-	@param instance The ComponentInstance to write
+	@param[in] instance The ComponentInstance to write
 	*/
 	void writeComponentInstance(std::ofstream * file, ComponentInstance * instance);
 	
@@ -115,7 +119,7 @@ public:
 	/*!
 	@author German Molina
 	@param[in] file The file to write this in
-	@param loop The Loop to write
+	@param[in] loop The Loop to write
 	*/
 	void writeLoop(std::ofstream * file, Loop * loop);
 	
@@ -125,7 +129,7 @@ public:
 
 	@author German Molina
 	@param[in] file The file to write this in
-	@param face The Face to write
+	@param[in] face The Face to write
 	*/
 	void writeClosedFace(std::ofstream * file, Face * face);
 
@@ -133,7 +137,8 @@ public:
 	/*!
 	@author German Molina
 	@param[in] file The file to write this in
-	@param face The Face to write
+	@param[in] face The Face to write
+	@todo Support faces with many holes
 	*/
 	void writeFace(std::ofstream * file, Face * face);
 
@@ -141,15 +146,17 @@ public:
 	/*!
 	@author German Molina
 	@return success
+	@param[in] dir The subdirectory to export
 	*/
-	bool writeWindows();
+	bool writeWindows(char * dir);
 
 	//! Writes all the Workplanes in Radiance format
 	/*!
 	@author German Molina
 	@return success
+	@param[in] dir The subdirectory to export
 	*/
-	bool writeWorkplanes();
+	bool writeWorkplanes(char * dir);
 
 	//! Writes a Polygon3D that represents a Workplane
 	/*!
@@ -163,4 +170,12 @@ public:
 	@return success
 	*/
 	bool writeWorkplane(std::ofstream * ptsFile, std::ofstream * pxlFile, Polygon3D * wp);
+
+	//! Writes all the Material objects in Radiance format
+	/*!
+	@author German Molina
+	@return success
+	@param[in] dir The subdirectory to export
+	*/
+	bool writeMaterials(char * dir);
 };

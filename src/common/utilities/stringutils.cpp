@@ -106,11 +106,12 @@ void fixString(char * s, size_t stringLength)
 		if (c == '\0') {
 			return;
 		}
-		else if (c == 32 || c == 35 || c == 179) {
-			// Space, #, |
-			s[i] = '_';
+		else if (c < 33 || c > 126 || c == 35 || c== 92 || c == 47) {
+			// special caracthers, Space, #, accented characters, back and front slashes
+			s[i] = DEFAULT_CHAR;
 			continue;
 		}
+		/*
 		else if (c >= 48 && c <= 58) {
 			// digits
 			continue;
@@ -119,13 +120,15 @@ void fixString(char * s, size_t stringLength)
 			//capital letters
 			continue;
 		}
+		else if (c == 95) {
+			// underscore
+			continue;
+		}
 		else if (c >= 97 && c <= 122) {
 			//small letters
 			continue;
 		}
-		else {
-			s[i] = DEFAULT_CHAR;			
-		}
+		*/
 	}
 
 }

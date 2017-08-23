@@ -42,10 +42,7 @@ GroundhogModel::~GroundhogModel()
 
 	for (size_t i = 0; i < views.size(); i++) {
 		delete views[i];
-	}
-
-	delete date;
-	delete location;
+	}	
 
 	DEBUG_MSG("Destroying GroundhogModel");
 }
@@ -53,7 +50,8 @@ GroundhogModel::~GroundhogModel()
 
 void GroundhogModel::addLayer(std::string * layerName)
 {	
-	layers.push_back( new Layer( layerName) );	
+	Layer * l = new Layer(layerName);
+	layers.push_back( l );	
 	DEBUG_MSG("Adding layer " + *layerName + " to model");
 }
 
@@ -172,97 +170,98 @@ double GroundhogModel::getNorthCorrection()
 
 void GroundhogModel::setLatitude(double l)
 {
-	location->setLatitude(l);
+	location.setLatitude(l);
 }
 
 void GroundhogModel::setLongitude(double l)
 {
-	location->setLongitude(l);
+	location.setLongitude(l);
 }
 
 void GroundhogModel::setTimeZone(double t)
 {
-	location->setTimezone(t);
+	location.setTimezone(t);
 }
 
 void GroundhogModel::setMonth(int m)
 {
-	date->setMonth(m);
+	date.setMonth(m);
 }
 
 void GroundhogModel::setDay(int d)
 {
-	date->setDay(d);
+	date.setDay(d);
 }
 
 void GroundhogModel::setHour(int h)
 {
-	date->setHour(h);
+	date.setHour(h);
 }
 
 void GroundhogModel::setMinute(int min)
 {
-	date->setMinute(min);
+	date.setMinute(min);
 }
 
 double GroundhogModel::getLatitude()
 {
-	return location->getLatitude();
+	return location.getLatitude();
 }
 
 double GroundhogModel::getLongitude()
 {
-	return location->getLongitude();
+	return location.getLongitude();
 }
 
 double GroundhogModel::getTimeZone()
 {
-	return location->getTimezone();
+	return location.getTimezone();
 }
 
 int GroundhogModel::getMonth()
 {
-	return date->getMonth();
+	return date.getMonth();
 }
 
 int GroundhogModel::getDay()
 {
-	return date->getDay();
+	return date.getDay();
 }
 
 int GroundhogModel::getHour()
 {
-	return date->getHour();
+	return date.getHour();
 }
 
 int GroundhogModel::getMinute()
 {
-	return date->getMinute();
+	return date.getMinute();
 }
 
 
 void GroundhogModel::setCity(std::string c)
 {
-	location->setCity(c);
+	location.setCity(c);
 }
 
 std::string GroundhogModel::getCity()
 {
-	return location->getCity();
+	return location.getCity();
 }
 
 void GroundhogModel::setCountry(std::string c)
 {
-	location->setCountry(c);
+	location.setCountry(c);
 }
 
 std::string GroundhogModel::getCountry()
 {
-	return location->getCountry();
+	return location.getCountry();
 }
 
 
-void GroundhogModel::addPolygonToWorkplane(std::string * workplaneName, Polygon3D * polygon) {
+void GroundhogModel::addPolygonToWorkplane(std::string * workplaneName, Polygon3D * polygon) 
+{
 	for (unsigned i = 0; i < workplanes.size(); i++) {
 		if (workplanes[i]->compareName(workplaneName)) {
 			DEBUG_MSG("Found workplane " + *workplaneName);
@@ -278,7 +277,8 @@ void GroundhogModel::addPolygonToWorkplane(std::string * workplaneName, Polygon3
 }
 
 
-void GroundhogModel::addWindowToGroup(std::string * windowGroupName, Face * face) {
+void GroundhogModel::addWindowToGroup(std::string * windowGroupName, Face * face) 
+{
 	for (size_t i = 0; i < windowGroups.size(); i++) {
 		if (windowGroups[i]->compareName(windowGroupName)) {
 			DEBUG_MSG("Found window group " + *windowGroupName);
@@ -293,19 +293,82 @@ void GroundhogModel::addWindowToGroup(std::string * windowGroupName, Face * face
 	windowGroups.push_back(wg);
 }
 
-size_t GroundhogModel::getNumWindowGroups() {
+size_t GroundhogModel::getNumWindowGroups() 
+{
 	return windowGroups.size();
 }
 
-size_t GroundhogModel::getNumWorkplanes() {
+size_t GroundhogModel::getNumWorkplanes() 
+{
 	return workplanes.size();
 }
 
 
-WindowGroup * GroundhogModel::getWindowGroupRef(size_t i) {
+WindowGroup * GroundhogModel::getWindowGroupRef(size_t i) 
+{
 	return windowGroups[i];
 }
 
-Workplane * GroundhogModel::getWorkplaneRef(size_t i) {
+Workplane * GroundhogModel::getWorkplaneRef(size_t i) 
+{
 	return workplanes[i];
+}
+
+Material * GroundhogModel::addMaterial(json j)
+{
+	std::string name = j["name"];
+	for (size_t i = 0; i < materials.size(); i++) {
+		if (materials[i]->compareName(&name))
+			return materials[i];
+	}
+
+	if (j["class"] == "plastic") {
+		Plastic * p = new Plastic(j);
+		materials.push_back(p);
+		return p;
+	}
+	else if (j["class"] == "glass") {
+		Glass * g = new Glass(j);
+		materials.push_back(g);
+		return g;
+	}
+	else {
+		fatal("Unsupported material class "+j["class"] , __LINE__, __FILE__);
+		return NULL;
+	}
+}
+
+
+Material * GroundhogModel::addDefaultMaterial()
+{
+	return addMaterial({
+		{ "name","Default Material" },
+		{ "color",{ 153,153,153 } },
+		{ "rad","void plastic %MAT_NAME% 0 0 5 0.6 0.6 0.6 0 0" },
+		{"alpha",1},
+		{ "class","plastic" }
+	});
+}
+
+
+Material * GroundhogModel::addDefaultGlass()
+{
+	return addMaterial({
+		{ "name","Default Glass" },
+		{ "color",{ 0,0,1} },
+		{ "rad","void glass %MAT_NAME% 0 0 3 0.86 0.86 0.86" },
+		{"alpha",0.4},
+		{ "class","glass" }
+	});
+}
+
+
+size_t GroundhogModel::getNumMaterials()
+{
+	return materials.size();
+}
+
+Material * GroundhogModel::getMaterialRef(size_t i)
+{
+	return materials[i];
 }

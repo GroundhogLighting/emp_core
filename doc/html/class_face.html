@@ -71,7 +71,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>The integration of a <a class="el" href="class_polygon3_d.html" title="A Polygon representation. ">Polygon3D</a> and a <a class="el" href="class_material.html">Material</a>.  
+<p>The integration of a <a class="el" href="class_polygon3_d.html" title="A Polygon representation. ">Polygon3D</a> and a <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a>.  
  <a href="class_face.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="face_8h_source.html">face.h</a>&gt;</code></p>
@@ -102,6 +102,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a22eaca1bf0564853991c193c77ba609f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_loop.html">Loop</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_face.html#a22eaca1bf0564853991c193c77ba609f">getClosedLoop</a> ()</td></tr>
 <tr class="memdesc:a22eaca1bf0564853991c193c77ba609f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the reference to a closed <a class="el" href="class_loop.html" title="Sequence of Point3D. ">Loop</a> of the <a class="el" href="class_face.html" title="The integration of a Polygon3D and a Material. ">Face</a> <a class="el" href="class_polygon3_d.html" title="A Polygon representation. ">Polygon3D</a>.  <a href="#a22eaca1bf0564853991c193c77ba609f">More...</a><br /></td></tr>
 <tr class="separator:a22eaca1bf0564853991c193c77ba609f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34cdc5a1aed3c3848ec976d2bc23568d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_face.html#a34cdc5a1aed3c3848ec976d2bc23568d">getMaterial</a> ()</td></tr>
+<tr class="memdesc:a34cdc5a1aed3c3848ec976d2bc23568d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> assigned to the face.  <a href="#a34cdc5a1aed3c3848ec976d2bc23568d">More...</a><br /></td></tr>
+<tr class="separator:a34cdc5a1aed3c3848ec976d2bc23568d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8d2a97b57eb43bb2c40f640911e5ddf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_face.html#aa8d2a97b57eb43bb2c40f640911e5ddf">setMaterial</a> (<a class="el" href="class_material.html">Material</a> *mat)</td></tr>
+<tr class="memdesc:aa8d2a97b57eb43bb2c40f640911e5ddf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assigns a <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> to the face.  <a href="#aa8d2a97b57eb43bb2c40f640911e5ddf">More...</a><br /></td></tr>
+<tr class="separator:aa8d2a97b57eb43bb2c40f640911e5ddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -109,13 +115,17 @@ Private Attributes</h2></td></tr>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_face.html#a82ab5020c75ed957daaf66199a765089">name</a></td></tr>
 <tr class="memdesc:a82ab5020c75ed957daaf66199a765089"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the face. <br /></td></tr>
 <tr class="separator:a82ab5020c75ed957daaf66199a765089"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a545ad144826cde8f119277a0447ad8c3"><td class="memItemLeft" align="right" valign="top"><a id="a545ad144826cde8f119277a0447ad8c3"></a>
+<a class="el" href="class_material.html">Material</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_face.html#a545ad144826cde8f119277a0447ad8c3">material</a> = NULL</td></tr>
+<tr class="memdesc:a545ad144826cde8f119277a0447ad8c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The material of the <a class="el" href="class_face.html" title="The integration of a Polygon3D and a Material. ">Face</a>. <br /></td></tr>
+<tr class="separator:a545ad144826cde8f119277a0447ad8c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0bae3c59bb8e2b4faf39b417cccb014"><td class="memItemLeft" align="right" valign="top"><a id="ae0bae3c59bb8e2b4faf39b417cccb014"></a>
 <a class="el" href="class_polygon3_d.html">Polygon3D</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a></td></tr>
 <tr class="memdesc:ae0bae3c59bb8e2b4faf39b417cccb014"><td class="mdescLeft">&#160;</td><td class="mdescRight">The polygon that represents the geometry of the face. <br /></td></tr>
 <tr class="separator:ae0bae3c59bb8e2b4faf39b417cccb014"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The integration of a <a class="el" href="class_polygon3_d.html" title="A Polygon representation. ">Polygon3D</a> and a <a class="el" href="class_material.html">Material</a>. </p>
+<div class="textblock"><p>The integration of a <a class="el" href="class_polygon3_d.html" title="A Polygon representation. ">Polygon3D</a> and a <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a>. </p>
 <p>A <a class="el" href="class_face.html" title="The integration of a Polygon3D and a Material. ">Face</a> represents physical objects of the model. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5b13422b25890fda345f5547591abd84"></a>
@@ -143,9 +153,9 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;{</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Creating face &quot;</span> + faceName);</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div><div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="class_face.html#a82ab5020c75ed957daaf66199a765089">name</a> = faceName;</div><div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a> = <span class="keyword">new</span> <a class="code" href="class_polygon3_d.html">Polygon3D</a>();</div><div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:38</div></div>
-<div class="ttc" id="class_face_html_a82ab5020c75ed957daaf66199a765089"><div class="ttname"><a href="class_face.html#a82ab5020c75ed957daaf66199a765089">Face::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the face. </div><div class="ttdef"><b>Definition:</b> face.h:36</div></div>
-<div class="ttc" id="class_polygon3_d_html"><div class="ttname"><a href="class_polygon3_d.html">Polygon3D</a></div><div class="ttdoc">A Polygon representation. </div><div class="ttdef"><b>Definition:</b> polygon.h:39</div></div>
+<div class="fragment"><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;{</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Creating face &quot;</span> + faceName);</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div><div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="class_face.html#a82ab5020c75ed957daaf66199a765089">name</a> = faceName;</div><div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a> = <span class="keyword">new</span> <a class="code" href="class_polygon3_d.html">Polygon3D</a>();</div><div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:39</div></div>
+<div class="ttc" id="class_face_html_a82ab5020c75ed957daaf66199a765089"><div class="ttname"><a href="class_face.html#a82ab5020c75ed957daaf66199a765089">Face::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the face. </div><div class="ttdef"><b>Definition:</b> face.h:37</div></div>
+<div class="ttc" id="class_polygon3_d_html"><div class="ttname"><a href="class_polygon3_d.html">Polygon3D</a></div><div class="ttdoc">A Polygon representation. </div><div class="ttdef"><b>Definition:</b> polygon.h:42</div></div>
 <div class="ttc" id="group__io_utils_html_gaf1206b4d3bda8c4c8c9257f369a9e9e1"><div class="ttname"><a href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a></div><div class="ttdeci">#define DEBUG_MSG(str)</div><div class="ttdoc">A debug message function. Only reports in DEBUG releases. </div><div class="ttdef"><b>Definition:</b> io.h:42</div></div>
 </div><!-- fragment -->
 </div>
@@ -168,8 +178,8 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Destroys the <a class="el" href="class_face.html" title="The integration of a Polygon3D and a Material. ">Face</a>. </p>
 <p>Also destroys the Polygon</p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
-<div class="fragment"><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;{</div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="comment">//destroy polygon</span></div><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">delete</span> <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a>;</div><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    </div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Destroying face &quot;</span>+<a class="code" href="class_face.html#a82ab5020c75ed957daaf66199a765089">name</a>);</div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:38</div></div>
-<div class="ttc" id="class_face_html_a82ab5020c75ed957daaf66199a765089"><div class="ttname"><a href="class_face.html#a82ab5020c75ed957daaf66199a765089">Face::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the face. </div><div class="ttdef"><b>Definition:</b> face.h:36</div></div>
+<div class="fragment"><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;{</div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="comment">//destroy polygon</span></div><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">delete</span> <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a>;</div><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    </div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Destroying face &quot;</span>+<a class="code" href="class_face.html#a82ab5020c75ed957daaf66199a765089">name</a>);</div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:39</div></div>
+<div class="ttc" id="class_face_html_a82ab5020c75ed957daaf66199a765089"><div class="ttname"><a href="class_face.html#a82ab5020c75ed957daaf66199a765089">Face::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the face. </div><div class="ttdef"><b>Definition:</b> face.h:37</div></div>
 <div class="ttc" id="group__io_utils_html_gaf1206b4d3bda8c4c8c9257f369a9e9e1"><div class="ttname"><a href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a></div><div class="ttdeci">#define DEBUG_MSG(str)</div><div class="ttdoc">A debug message function. Only reports in DEBUG releases. </div><div class="ttdef"><b>Definition:</b> io.h:42</div></div>
 </div><!-- fragment -->
 </div>
@@ -195,8 +205,30 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <dl class="section return"><dt>Returns</dt><dd>The reference to the new closed <a class="el" href="class_loop.html" title="Sequence of Point3D. ">Loop</a> </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_polygon3_d.html#a71900c7555782ce66f882f2210b8a235" title="Returns a pointer to a new loop that represents the same area and geometry, but connects all the inte...">Polygon3D::getClosedLoop()</a> </dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Should delete the closed <a class="el" href="class_loop.html" title="Sequence of Point3D. ">Loop</a> after its use </dd></dl>
-<div class="fragment"><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;{</div><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a>-&gt;<a class="code" href="class_polygon3_d.html#a71900c7555782ce66f882f2210b8a235">getClosedLoop</a>();</div><div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:38</div></div>
+<div class="fragment"><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;{</div><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a>-&gt;<a class="code" href="class_polygon3_d.html#a71900c7555782ce66f882f2210b8a235">getClosedLoop</a>();</div><div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:39</div></div>
 <div class="ttc" id="class_polygon3_d_html_a71900c7555782ce66f882f2210b8a235"><div class="ttname"><a href="class_polygon3_d.html#a71900c7555782ce66f882f2210b8a235">Polygon3D::getClosedLoop</a></div><div class="ttdeci">Loop * getClosedLoop()</div><div class="ttdoc">Returns a pointer to a new loop that represents the same area and geometry, but connects all the inte...</div><div class="ttdef"><b>Definition:</b> polygon.cpp:84</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a34cdc5a1aed3c3848ec976d2bc23568d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34cdc5a1aed3c3848ec976d2bc23568d">&#9670;&nbsp;</a></span>getMaterial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_material.html">Material</a> * Face::getMaterial </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> assigned to the face. </p>
+<dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The pointer to the <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> </dd></dl>
+<div class="fragment"><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;{</div><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_face.html#a545ad144826cde8f119277a0447ad8c3">material</a>;</div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;}</div><div class="ttc" id="class_face_html_a545ad144826cde8f119277a0447ad8c3"><div class="ttname"><a href="class_face.html#a545ad144826cde8f119277a0447ad8c3">Face::material</a></div><div class="ttdeci">Material * material</div><div class="ttdoc">The material of the Face. </div><div class="ttdef"><b>Definition:</b> face.h:38</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -218,7 +250,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Retrieves the name of the <a class="el" href="class_face.html" title="The integration of a Polygon3D and a Material. ">Face</a>. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The name of the face </dd></dl>
-<div class="fragment"><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;{</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_face.html#a82ab5020c75ed957daaf66199a765089">name</a>;</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div><div class="ttc" id="class_face_html_a82ab5020c75ed957daaf66199a765089"><div class="ttname"><a href="class_face.html#a82ab5020c75ed957daaf66199a765089">Face::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the face. </div><div class="ttdef"><b>Definition:</b> face.h:36</div></div>
+<div class="fragment"><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;{</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_face.html#a82ab5020c75ed957daaf66199a765089">name</a>;</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div><div class="ttc" id="class_face_html_a82ab5020c75ed957daaf66199a765089"><div class="ttname"><a href="class_face.html#a82ab5020c75ed957daaf66199a765089">Face::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the face. </div><div class="ttdef"><b>Definition:</b> face.h:37</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -241,7 +273,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the Outer <a class="el" href="class_loop.html" title="Sequence of Point3D. ">Loop</a> </dd></dl>
 <div class="fragment"><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;{</div><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a>-&gt;<a class="code" href="class_polygon3_d.html#a14b4430662d778aebab2b3600f1057ec">getOuterLoopRef</a>();</div><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div><div class="ttc" id="class_polygon3_d_html_a14b4430662d778aebab2b3600f1057ec"><div class="ttname"><a href="class_polygon3_d.html#a14b4430662d778aebab2b3600f1057ec">Polygon3D::getOuterLoopRef</a></div><div class="ttdeci">Loop * getOuterLoopRef()</div><div class="ttdoc">Retrieves the outer loop reference. </div><div class="ttdef"><b>Definition:</b> polygon.cpp:48</div></div>
-<div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:38</div></div>
+<div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:39</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -263,7 +295,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Checks if the <a class="el" href="class_face.html" title="The integration of a Polygon3D and a Material. ">Face</a> has inner <a class="el" href="class_loop.html" title="Sequence of Point3D. ">Loop</a> (or holes) </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>has inner <a class="el" href="class_loop.html" title="Sequence of Point3D. ">Loop</a> ? </dd></dl>
-<div class="fragment"><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;{</div><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a>-&gt;<a class="code" href="class_polygon3_d.html#a99d18517b89b432e04c18ec2187bc922">hasInnerLoops</a>();</div><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:38</div></div>
+<div class="fragment"><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;{</div><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a>-&gt;<a class="code" href="class_polygon3_d.html#a99d18517b89b432e04c18ec2187bc922">hasInnerLoops</a>();</div><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:39</div></div>
 <div class="ttc" id="class_polygon3_d_html_a99d18517b89b432e04c18ec2187bc922"><div class="ttname"><a href="class_polygon3_d.html#a99d18517b89b432e04c18ec2187bc922">Polygon3D::hasInnerLoops</a></div><div class="ttdeci">bool hasInnerLoops()</div><div class="ttdoc">Returns TRUE or FALSE, indicating if the polygon has interior loops. </div><div class="ttdef"><b>Definition:</b> polygon.cpp:71</div></div>
 </div><!-- fragment -->
 </div>
@@ -286,9 +318,37 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Checks if the <a class="el" href="class_face.html" title="The integration of a Polygon3D and a Material. ">Face</a> has too many inner <a class="el" href="class_loop.html" title="Sequence of Point3D. ">Loop</a> (or holes) </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>has too many inner <a class="el" href="class_loop.html" title="Sequence of Point3D. ">Loop</a> ? </dd></dl>
-<div class="fragment"><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;{</div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a>-&gt;<a class="code" href="class_polygon3_d.html#a133721f9bb22af94b6030cf6d9d768e5">countInnerLoops</a>() &gt; <a class="code" href="group__config_constants.html#gaa8f4237484f2a529ef23d744121b7461">TOO_MANY_LOOPS</a>;</div><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:38</div></div>
-<div class="ttc" id="group__config_constants_html_gaa8f4237484f2a529ef23d744121b7461"><div class="ttname"><a href="group__config_constants.html#gaa8f4237484f2a529ef23d744121b7461">TOO_MANY_LOOPS</a></div><div class="ttdeci">#define TOO_MANY_LOOPS</div><div class="ttdoc">Maximum interior loops. </div><div class="ttdef"><b>Definition:</b> config_constants.h:37</div></div>
+<div class="fragment"><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;{</div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a>-&gt;<a class="code" href="class_polygon3_d.html#a133721f9bb22af94b6030cf6d9d768e5">countInnerLoops</a>() &gt; <a class="code" href="group__config_constants.html#gaef1900e6d3457ad47c4b602593d05920">GLARE_TOO_MANY_LOOPS</a>;</div><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:39</div></div>
 <div class="ttc" id="class_polygon3_d_html_a133721f9bb22af94b6030cf6d9d768e5"><div class="ttname"><a href="class_polygon3_d.html#a133721f9bb22af94b6030cf6d9d768e5">Polygon3D::countInnerLoops</a></div><div class="ttdeci">size_t countInnerLoops()</div><div class="ttdoc">Retrieves the number of interior loops. </div><div class="ttdef"><b>Definition:</b> polygon.cpp:78</div></div>
+<div class="ttc" id="group__config_constants_html_gaef1900e6d3457ad47c4b602593d05920"><div class="ttname"><a href="group__config_constants.html#gaef1900e6d3457ad47c4b602593d05920">GLARE_TOO_MANY_LOOPS</a></div><div class="ttdeci">#define GLARE_TOO_MANY_LOOPS</div><div class="ttdoc">Maximum interior loops. </div><div class="ttdef"><b>Definition:</b> config_constants.h:41</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="aa8d2a97b57eb43bb2c40f640911e5ddf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8d2a97b57eb43bb2c40f640911e5ddf">&#9670;&nbsp;</a></span>setMaterial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Face::setMaterial </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_material.html">Material</a> *&#160;</td>
+          <td class="paramname"><em>mat</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Assigns a <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> to the face. </p>
+<dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">The</td><td>pointer to the <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="fragment"><div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;{</div><div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <a class="code" href="class_face.html#a545ad144826cde8f119277a0447ad8c3">material</a> = mat;</div><div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;}</div><div class="ttc" id="class_face_html_a545ad144826cde8f119277a0447ad8c3"><div class="ttname"><a href="class_face.html#a545ad144826cde8f119277a0447ad8c3">Face::material</a></div><div class="ttdeci">Material * material</div><div class="ttdoc">The material of the Face. </div><div class="ttdef"><b>Definition:</b> face.h:38</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -317,7 +377,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;{</div><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">delete</span> <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a>;</div><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a> = newPolygon;</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:38</div></div>
+<div class="fragment"><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;{</div><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">delete</span> <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a>;</div><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">polygon</a> = newPolygon;</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;}</div><div class="ttc" id="class_face_html_ae0bae3c59bb8e2b4faf39b417cccb014"><div class="ttname"><a href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face::polygon</a></div><div class="ttdeci">Polygon3D * polygon</div><div class="ttdoc">The polygon that represents the geometry of the face. </div><div class="ttdef"><b>Definition:</b> face.h:39</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -329,7 +389,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <!-- HTML footer for doxygen 1.8.13-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Aug 20 2017 12:17:43 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
+Generated on Tue Aug 22 2017 23:45:24 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
 </a> 1.8.13
 </small></address>
 </body>

@@ -35,14 +35,12 @@ Glare::Glare()
 {
 	DEBUG_MSG("Creating Glare object");
 	verbose = true;
-	//model = NULL;
-	model = new GroundhogModel();
+	model = GroundhogModel();
 }
 
 Glare::~Glare() 
 {
-	DEBUG_MSG("Destroying Glare object");
-	delete model;
+	DEBUG_MSG("Destroying Glare object");	
 }
 
 
@@ -93,7 +91,7 @@ bool Glare::solve()
 	if (!stringInclude(inputFile, ".lua")) {
 		/* STANDARD CALCULATION */
 		// load model
-		loadFile(model, inputFile, verbose);
+		loadFile(inputFile);
 
 		/* CHECK IF JUST EXPORT */
 		if (!outputFile.empty()) {
@@ -102,10 +100,8 @@ bool Glare::solve()
 				return false;
 			}
 			else { // no extension, thus: Radiance			
-				RadExporter * writer = new RadExporter(model,outputFile,verbose);
-				bool success = writer -> exportModel();
-				delete writer;
-				return success;
+				RadExporter writer = RadExporter(&model,outputFile,verbose);
+				return writer.exportModel();
 			}
 		}
 
@@ -123,12 +119,12 @@ bool Glare::solve()
 
 
 
-bool Glare::loadFile(GroundhogModel * model, std::string input, bool verbose) 
+bool Glare::loadFile(std::string input) 
 {
 	// inputFile is a Sketchup model
 	if (stringInclude(input, ".skp")) {
-		SKPReader reader;
-		if (!reader.parseSKPModel(input, model, verbose)) {
+		SKPReader reader(&model,verbose);
+		if (!reader.parseSKPModel(input)) {
 			fatal("Could not read file '" + std::string(input) + "'", __LINE__, __FILE__);
 			return false;
 		}

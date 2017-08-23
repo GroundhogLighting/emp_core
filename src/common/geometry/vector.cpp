@@ -96,26 +96,26 @@ bool  Vector3D::isParallel(Vector3D v)
 
 	// If they point in the same direction, K should be the same in all cases.
 	double k;
-	if(std::abs(v.x) > TINY)
+	if(std::abs(v.x) > GLARE_TINY)
 		k = x / v.x;
 
 	// compare Y
-	if (std::abs(v.y) < TINY) {
-		if (std::abs(y) > TINY)
+	if (std::abs(v.y) < GLARE_TINY) {
+		if (std::abs(y) > GLARE_TINY)
 			return false;
 	}
 	else {
-		if (std::abs(k - y/v.y) > TINY)
+		if (std::abs(k - y/v.y) > GLARE_TINY)
 			return true;
 	}
 	
 	// compare Z
-	if (std::abs(v.z) < TINY) {
-		if (std::abs(z) > TINY)
+	if (std::abs(v.z) < GLARE_TINY) {
+		if (std::abs(z) > GLARE_TINY)
 			return false;
 	}
 	else {
-		if (std::abs(k - z / v.z) > TINY)
+		if (std::abs(k - z / v.z) > GLARE_TINY)
 			return true;
 	}
 
@@ -127,13 +127,13 @@ bool Vector3D::sameDirection(Vector3D v)
 	if (!isParallel(v))
 		return false;
 
-	if (std::abs(v.x) > TINY) {
+	if (std::abs(v.x) > GLARE_TINY) {
 		return x / v.x > 0;
 	}
-	else if (std::abs(v.y) > TINY) {
+	else if (std::abs(v.y) > GLARE_TINY) {
 		return y / v.y > 0;
 	}
-	else if (std::abs(v.z) > TINY) {
+	else if (std::abs(v.z) > GLARE_TINY) {
 		return z / v.z > 0;
 	}
 	return false;
@@ -142,12 +142,12 @@ bool Vector3D::sameDirection(Vector3D v)
 
 bool Vector3D::isZero()
 {
-	return (std::abs(x) < TINY &&  std::abs(y) < TINY && std::abs(z) < TINY);
+	return (std::abs(x) < GLARE_TINY &&  std::abs(y) < GLARE_TINY && std::abs(z) < GLARE_TINY);
 }
 
 bool Vector3D::isEqual(Vector3D v)
 {
-	return (std::abs(x - v.x) < TINY &&  std::abs(y - v.y) < TINY && std::abs(z - v.z) < TINY);
+	return (std::abs(x - v.x) < GLARE_TINY &&  std::abs(y - v.y) < GLARE_TINY && std::abs(z - v.z) < GLARE_TINY);
 }
 
 

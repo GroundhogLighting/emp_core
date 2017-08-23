@@ -23,6 +23,7 @@
 
 #include <string>
 #include "./face.h"
+#include "./material.h"
 #include "../../common/geometry/polygon.h"
 
 //! The integration of a Polygon3D and a Material
@@ -34,7 +35,7 @@ A Face represents physical objects of the model.
 class Face {
 private:
 	std::string name; //!< The name of the face
-	//Material
+	Material * material = NULL; //!< The material of the Face
 	Polygon3D * polygon; //!< The polygon that represents the geometry of the face
 
 public:
@@ -101,4 +102,18 @@ public:
 	@note Should delete the closed Loop after its use
 	*/
 	Loop * getClosedLoop();
+
+	//! Retrieves the Material assigned to the face
+	/*!
+	@author German Molina
+	@return The pointer to the Material
+	*/
+	Material * getMaterial();
+
+	//! Assigns a Material to the face
+	/*!
+	@author German Molina
+	@param[in] The pointer to the Material
+	*/
+	void setMaterial(Material * mat);
 };

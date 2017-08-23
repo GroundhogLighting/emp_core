@@ -34,12 +34,12 @@
 
 class BBox {
 public:
-	double min_x = HUGE; //!< Minimum available X value
-	double max_x = MINUS_HUGE; //!< Maximum available X value
-	double min_y = HUGE; //!< Minimum available Y value
-	double max_y = MINUS_HUGE; //!< Maximum available Y value
-	double min_z = HUGE; //!< Minimum available Z value
-	double max_z = MINUS_HUGE; //!< Maximum available Z value
+	double min_x = GLARE_HUGE; //!< Minimum available X value
+	double max_x = GLARE_MINUS_HUGE; //!< Maximum available X value
+	double min_y = GLARE_HUGE; //!< Minimum available Y value
+	double max_y = GLARE_MINUS_HUGE; //!< Maximum available Y value
+	double min_z = GLARE_HUGE; //!< Minimum available Z value
+	double max_z = GLARE_MINUS_HUGE; //!< Maximum available Z value
 	double c_x = 0; //!< X component of the center of the box
 	double c_y = 0; //!< Y component of the center of the box
 	double c_z = 0; //!< Z component of the center of the box
