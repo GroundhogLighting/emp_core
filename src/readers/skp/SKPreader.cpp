@@ -26,6 +26,7 @@
 #include "../../groundhogmodel/groundhogmodel.h"
 #include "../../groundhogmodel/src/face.h"
 #include "../../common/geometry/polygon.h"
+#include "../../groundhogmodel/src/photosensor.h"
 
 #include <SketchUpAPI/initialize.h>
 #include <SketchUpAPI/model/model.h>
@@ -95,10 +96,6 @@ SKPReader::~SKPReader()
 
 bool SKPReader::checkSUResult(SUResult res, std::string functionName, int ln) 
 {
-#ifndef DEBUG
-	return true;
-#endif // !DEBUG
-
 	if (res == SU_ERROR_NONE) {
 		return true;
 	}
@@ -723,9 +720,20 @@ bool SKPReader::loadComponentDefinitions()
 
 	// Now, load One by One
 	for (size_t i = 0; i < countDefinitions; i++) {
-		if (!loadComponentDefinition(definitions[i])) {
-			warn("Impossible to load component definition to model");
-			continue;
+		// Check if it has label
+		std::string label;
+		if (!getSUEntityLabel(SUComponentDefinitionToEntity(definitions[i]), &label)) {
+			// has no label, load the definition
+			if (!loadComponentDefinition(definitions[i])) {
+				warn("Impossible to load component definition to model");
+				continue;
+			}
+		} 
+		else if (label == SKP_PHOTOSENSOR) { // if label is Photosensor
+			if (!addPhotosensorsToModel(definitions[i])) {
+				fatal("Error when trying to add Photosensos to the model", __LINE__, __FILE__);
+				return false;
+			}
 		}
 
 	}
@@ -829,6 +837,9 @@ bool SKPReader::loadLayersContent()
 	// fill layers with the instances
 	for (size_t i = 0; i < instanceCount; i++) {
 		
+		// ignore instances with labels
+
+
 		// get name of layer
 		SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instances[i]);
 		std::string layerName;
@@ -994,7 +1005,7 @@ bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name)
 	if (getValueFromEntityGHDictionary(entity, SKP_NAME, &suValue)) {
 		// There was, indeed, a Grounghog name
 
-		if (!getStringFromSUTypedValue(suValue, name))
+		if (!getFromSUTypedValue(suValue, name))
 			return false;
 
 		return true;
@@ -1051,7 +1062,7 @@ bool SKPReader::fillComponentInstanceLocation(ComponentInstance * instance, SUCo
 
 	if (!checkSUResult(
 		SUComponentInstanceGetTransform(suInstance, &transform),
-		"SUEntitiesGetInstances",
+		"SUComponentInstanceGetTransform",
 		__LINE__
 	)) return false;
 
@@ -1089,7 +1100,7 @@ bool SKPReader::getSUEntityLabel(SUEntityRef entity, std::string * name)
 	if (!getValueFromEntityGHDictionary(entity, SKP_LABEL, &suValue))
 		return false;
 
-	if (!getStringFromSUTypedValue(suValue, name))
+	if (!getFromSUTypedValue(suValue, name))
 		return false;
 
 	return true;
@@ -1130,7 +1141,7 @@ bool SKPReader::addWindowToModel(SUFaceRef suFace)
 	SUTypedValueRef suWinGroup = SU_INVALID;
 	if (getValueFromEntityGHDictionary(SUFaceToEntity(suFace), SKP_WINGROUP, &suWinGroup)) {
 		// If it has, set the windowgroup name to that...
-		if (!getStringFromSUTypedValue(suWinGroup,&winGroup))
+		if (!getFromSUTypedValue(suWinGroup,&winGroup))
 			fatal("Error when trying to retrieve Window Group name",__LINE__,__FILE__);
 	}
 	else {
@@ -1239,12 +1250,8 @@ bool SKPReader::getValueFromEntityGHDictionary(SUEntityRef entity, char * key, S
 					__LINE__
 				);
 				return false;
-			}
-			
-
-			return false;
+			}			
 		}
-		return false;
 	}
 	return false; //should not reach here.
 }
@@ -1289,7 +1296,7 @@ bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string)
 
 }
 
-bool SKPReader::getStringFromSUTypedValue(SUTypedValueRef suValue, std::string * value)
+bool SKPReader::getFromSUTypedValue(SUTypedValueRef suValue, std::string * value)
 {
 	// Create a SU String
 	SUStringRef suString = SU_INVALID;
@@ -1332,12 +1339,21 @@ Material * SKPReader::addMaterialToModel(SUMaterialRef material)
 			return NULL;
 		}
 
+		// get the name
+		std::string name;
+
+		if (!getSUMaterialName(material, &name))
+			return false;
+
+		// get the value
 		std::string value;
 		if (!getGHValueFromEntity(entityMat, &value)) {
 			return NULL;
 		}
 		
 		j = json::parse(value);
+		j["name"] = name;
+
 	}
 	else {
 		guessMaterial(material, &j);
@@ -1353,7 +1369,7 @@ bool SKPReader::getGHValueFromEntity(SUEntityRef entity, std::string * value)
 	if (!getValueFromEntityGHDictionary(entity, SKP_VALUE, &suValue))
 		return false;
 
-	if (!getStringFromSUTypedValue(suValue, value))
+	if (!getFromSUTypedValue(suValue, value))
 		return false;
 
 	return true;
@@ -1361,23 +1377,9 @@ bool SKPReader::getGHValueFromEntity(SUEntityRef entity, std::string * value)
 
 bool SKPReader::guessMaterial(SUMaterialRef material, json * j)
 {
-	SUStringRef suName = SU_INVALID;
-
-	if (!checkSUResult(
-		SUStringCreate(&suName),
-		"SUStringCreate",
-		__LINE__
-	)) return false;
-
-	if (!checkSUResult(
-		SUMaterialGetName(material, &suName),
-		"SUMaterialGetName", __LINE__
-	)) return false;
-
 	std::string name;
 
-	// this fixes the name as well
-	if (!SUStringtoString(suName, &name))
+	if (!getSUMaterialName(material,&name))
 		return false;
 
 	warn("Guessing material " + name);
@@ -1499,4 +1501,91 @@ Face * SKPReader::SUFaceToFace(SUFaceRef suFace)
 	face->setMaterial(mat);
 
 	return face;
+}
+
+bool SKPReader::getSUMaterialName(SUMaterialRef material, std::string * name)
+{
+	SUStringRef suName = SU_INVALID;
+
+	if (!checkSUResult(
+		SUStringCreate(&suName),
+		"SUStringCreate",
+		__LINE__
+	)) return false;
+
+	if (!checkSUResult(
+		SUMaterialGetName(material, &suName),
+		"SUMaterialGetName", __LINE__
+	)) return false;
+	
+	// this fixes the name as well, and releases the SUString
+	if (!SUStringtoString(suName, name))
+		return false;
+
+	return true;
+}
+
+bool SKPReader::addPhotosensorsToModel(SUComponentDefinitionRef definition)
+{
+	// count instances
+	size_t numInstances;
+	if (!checkSUResult(
+		SUComponentDefinitionGetNumInstances(definition, &numInstances),
+		"SUComponentDefinitionGetNumInstances",
+		__LINE__
+	)) return false;
+
+	if (numInstances == 0)
+		return true;
+
+	std::vector <SUComponentInstanceRef> instances(numInstances);
+
+	// Get the actual instances
+	if (!checkSUResult(
+		SUComponentDefinitionGetInstances(definition,numInstances,&instances[0],&numInstances),
+		"SUComponentDefinitionGetNumInstances",
+		__LINE__
+	)) return false;
+
+	for (size_t i = 0; i < numInstances; i++) {
+
+		//get the name
+		std::string name;
+		if (!getSUEntityName(SUComponentInstanceToEntity(instances[i]), &name))
+			return false;
+
+		// create the photosensor object
+		Photosensor * ph = new Photosensor(name);
+
+		// Get the transformation
+		SUTransformation transform;
+
+		if (!checkSUResult(
+			SUComponentInstanceGetTransform(instances[i], &transform),
+			"SUComponentInstanceGetTransform",
+			__LINE__
+		)) return false;
+
+		// Set the position
+		double x = TO_M(transform.values[12]);
+		double y = TO_M(transform.values[13]);
+		double z = TO_M(transform.values[14]);
+		ph->setPosition(Point3D(x, y, z));
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				int aux = 4 * i + j;
+				std::cerr << transform.values[aux] << ",";
+			}
+			std::cerr << std::endl;
+		}
+
+		// set the direction
+		ph->setDirection(Vector3D(transform.values[8], transform.values[9], transform.values[10]));
+
+		// add the photosensor
+		model->addPhotosensor(ph);
+	}
+
+	return true;
 }

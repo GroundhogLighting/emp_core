@@ -33,6 +33,8 @@ This module defines constants that are used in the rest of the program.
 
 /* @{ */
 
+/// The version of the program
+#define GLARE_VERSION "0.0.0" //!< The version of the program
 
 /// The separator used when writing files
 #define GLARE_TAB "\t" //!< This is the separator used when writing Radiance files
@@ -76,7 +78,17 @@ This module defines constants that are used in the rest of the program.
 /// Subfolder to export Material objects
 #define GLARE_MATERIALS_SUBFOLDER "Materials" //!< The default subfolder where the Workplane objects will be exported
 
+/// Subfolder to export Photosensor objects
+#define GLARE_PHOTOSENSORS_SUBFOLDER "Photosensors" //!< The default subfolder where the Photosensor objects will be exported
+
+/// Subfolder to export Skies
+#define GLARE_SKY_SUBFOLDER "Skies" //!< The default subfolder where the Sky will be exported
+
 /// Name of the file with the model info
-#define GLARE_MODEL_INFO_FILE "model_info.txt" //!< The default subfolder where the WindowGroup objects will be exported
+#define GLARE_MODEL_INFO_FILE "model_info.txt" //!< The default file where the model information will be exported
+
+/// Name of the file with the whole scene is stored
+#define GLARE_SCENE_FILE "scene.rad" //!< The default file where the "scene file" file objects will be exported
+
 
 /* @} */

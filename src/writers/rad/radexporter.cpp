@@ -26,6 +26,7 @@
 #include "./radexporter.h"
 #include <fstream>
 
+#define RADIANCE_SKY_COMPLEMENT "skyfunc glow skyglow 0 0 4 0.99 0.99 1.1 0 skyglow source skyball 0 0 4 0 0 1 360"
 
 RadExporter::RadExporter(GroundhogModel * the_model, std::string the_exportDir, bool the_verbose) 
 {
@@ -99,6 +100,25 @@ bool RadExporter::exportModel()
 		fatal("Error when exporing materials", __LINE__, __FILE__);
 		return false;
 	}
+
+	// Write sky
+	if (!writeSky(GLARE_SKY_SUBFOLDER)) {
+		fatal("Error when writing the Sky", __LINE__, __FILE__);
+		return false;
+	}
+
+	// Write Scene file
+	if (!writeSceneFile(GLARE_SCENE_FILE)) {
+		fatal("Error when writing the Scene file", __LINE__, __FILE__);
+		return false;
+	}
+
+	// write photosensors
+	if (!writePhotosensors(GLARE_PHOTOSENSORS_SUBFOLDER)) {
+		fatal("Error when exporting Photosensors", __LINE__, __FILE__);
+		return false;
+	}
+
 
 	return true;
 }
@@ -519,5 +539,111 @@ bool RadExporter::writeMaterials(char * dir)
 		mat->writeRadianceDefinition(&baseDir);
 		mainFile << "!xform ./" << dir << "/" << mat->getName() << ".mat" << std::endl;
 	}
+	return true;
+}
+
+bool RadExporter::writeSky(char * dir)
+{
+	// create directory
+	std::string baseDir = exportDir + "/" + dir;
+	createdir(baseDir);
+
+	std::ofstream file;
+	file.open(baseDir + "/sky.rad");
+
+	file << "!gensky +s" << " ";
+	file <<  model->getMonth() << " ";
+	file << model->getDay() << " ";
+	file << model->getHour() << " ";
+	file << "-g " << model->getAlbedo() << " "; 
+	file << "-a " << model->getLatitude() << " "; 
+	file << "-o " << model->getLongitude() << " ";
+	file << "-m " << model->getTimeZone()*15.0 << " ";
+
+	file << std::endl << std::endl;
+
+	file << RADIANCE_SKY_COMPLEMENT << std::endl;
+
+	file.close();
+
+	return true;
+}
+
+bool RadExporter::writeSceneFile(char * dir)
+{
+
+	std::ofstream file;
+	file.open(exportDir + "/" + dir);
+
+	// Write Header
+	file << "###############" << std::endl;
+	file << "## Scene exported using Glare v" << GLARE_VERSION << std::endl;
+	file << "###############" << std::endl;
+
+	file << std::endl << std::endl << std::endl;
+
+	// Write Geometry
+	file << "###### GEOMETRY" << std::endl << std::endl;
+	for (size_t i = 0; i < model->getNumLayers(); i++) {
+		std::string name = model->getLayerRef(i)->getName();
+		file << "!xform ./Geometry/" << name << ".rad" << std::endl;
+	}
+
+	file.close();
+
+	return true;
+}
+
+
+bool RadExporter::writePhotosensors(char * dir)
+{
+	size_t numPhotosensors = model->countPhotosensors();
+	
+	if (numPhotosensors == 0)
+		return true;
+
+	// create directory
+	std::string baseDir = exportDir + "/" + dir;
+	createdir(baseDir);
+
+	std::ofstream mainFile;
+	mainFile.open(baseDir + "/sensors.pts");
+
+	std::ofstream dictionary;
+	dictionary.open(baseDir + "/sensor_dictionary.txt");
+
+	for (size_t i = 0; i < numPhotosensors; i++) {
+		Photosensor * ph = model->getPhotosensorRef(i);
+		std::string name = ph->getName();
+		Point3D position = ph->getPosition();
+		Vector3D direction = ph->getDirection();
+
+		// Create its own file
+		std::ofstream file;
+		file.open(baseDir + "/" + name + ".pt");
+
+		file << position.getX() << GLARE_TAB;
+		file << position.getY() << GLARE_TAB;
+		file << position.getZ() << GLARE_TAB;
+		file << direction.getX() << GLARE_TAB;
+		file << direction.getY() << GLARE_TAB;
+		file << direction.getZ() << std::endl;
+		file.close();
+
+		// Add the sensor to the main file
+		mainFile << position.getX() << GLARE_TAB;
+		mainFile << position.getY() << GLARE_TAB;
+		mainFile << position.getZ() << GLARE_TAB;
+		mainFile << direction.getX() << GLARE_TAB;
+		mainFile << direction.getY() << GLARE_TAB;
+		mainFile << direction.getZ() << std::endl;
+
+		// add the Sensor to the dictionary
+		dictionary << i << "," << name << std::endl;
+	}
+
+	dictionary.close();
+	mainFile.close();
+
 	return true;
 }

@@ -18,3 +18,36 @@
 
 *****************************************************************************/
 
+#include "./photosensor.h"
+
+Photosensor::Photosensor(std::string n)
+{
+	name = n;
+}
+
+
+std::string Photosensor::getName()
+{
+	return name;
+}
+
+Vector3D Photosensor::getDirection()
+{
+	return direction;
+}
+
+void Photosensor::setDirection(Vector3D d)
+{
+	direction = d;
+}
+
+
+Point3D Photosensor::getPosition()
+{
+	return position;
+}
+
+void Photosensor::setPosition(Point3D p)
+{
+	position = p;
+}

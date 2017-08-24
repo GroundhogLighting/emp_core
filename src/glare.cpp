@@ -91,7 +91,10 @@ bool Glare::solve()
 	if (!stringInclude(inputFile, ".lua")) {
 		/* STANDARD CALCULATION */
 		// load model
-		loadFile(inputFile);
+		if (!loadFile(inputFile)) {
+			fatal("Impossible to load model", __LINE__, __FILE__);
+			return false;
+		}
 
 		/* CHECK IF JUST EXPORT */
 		if (!outputFile.empty()) {

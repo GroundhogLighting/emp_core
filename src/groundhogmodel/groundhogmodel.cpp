@@ -218,6 +218,16 @@ double GroundhogModel::getTimeZone()
 	return location.getTimezone();
 }
 
+void GroundhogModel::setAlbedo(double a)
+{
+	location.setAlbedo(a);
+}
+
+double GroundhogModel::getAlbedo()
+{
+	return location.getAlbedo();
+}
+
 int GroundhogModel::getMonth()
 {
 	return date.getMonth();
@@ -371,4 +381,21 @@ size_t GroundhogModel::getNumMaterials()
 Material * GroundhogModel::getMaterialRef(size_t i)
 {
 	return materials[i];
+}
+
+void GroundhogModel::addPhotosensor(Photosensor * p)
+{
+	photosensors.push_back(p);
+}
+
+
+size_t GroundhogModel::countPhotosensors()
+{
+	return photosensors.size();
+}
+
+
+Photosensor * GroundhogModel::getPhotosensorRef(size_t i)
+{
+	return photosensors[i];
 }

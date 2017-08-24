@@ -69,9 +69,9 @@ public:
 	*/
 	bool writeModelInfo(char * filename);
 	
-	//! Writes all the views in Radiance format in different files
+	//! Writes all the View objects in Radiance format in different files
 	/*!
-	A './Views' directory is created; and each View is stored in a '$viewName.vf' file
+	A directory is created; and each View is stored in a '$viewName.vf' file
 
 	@author German Molina
 	@return success
@@ -81,7 +81,7 @@ public:
 
 	//! Writes all the component definitions in different files
 	/*!
-	A './Components' directory is created; and a '$componentName.rad' file
+	A directory is created; and a '$componentName.rad' file
 	is created for each ComponentDefinition
 
 	The files will be autocontained; that is, they have all the materials
@@ -95,7 +95,7 @@ public:
 	
 	//! Writes all the layers in different files
 	/*!
-	A './Geometry' directory is created; and a 'layerName.rad' file
+	A directory is created; and a 'layerName.rad' file
 	is created for each Layer.
 
 	The files will contain the references to ComponentDefinitions (using xform)
@@ -178,4 +178,28 @@ public:
 	@param[in] dir The subdirectory to export
 	*/
 	bool writeMaterials(char * dir);
+
+	//! Writes the standard Clear Sky
+	/*!
+	@author German Molina
+	@return [Boolean] Success
+	*/
+	bool writeSky(char * dir);
+
+	//! Writes the scene file
+	/*!
+	@author German Molina
+	@return [Boolean] Success
+	@todo There is a bug that would cause an error if the exporting Directory of Layers changes.
+	*/
+	bool writeSceneFile(char * dir);
+
+	//! Writes the Photosensors
+	/*!
+	@author German Molina
+	@return [Boolean] Success
+	*/
+	bool writePhotosensors(char * dir);
+
+	
 };

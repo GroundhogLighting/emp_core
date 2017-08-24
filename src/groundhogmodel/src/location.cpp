@@ -53,15 +53,29 @@ double Location::getTimezone() {
 void Location::setTimezone(double t) {
 	timeZone = t;
 }
+
 std::string Location::getCity() {
 	return city;
 }
+
 void Location::setCity(std::string c) {
 	city = c;
 }
+
 std::string Location::getCountry() {
 	return country;
 }
+
 void Location::setCountry(std::string c) {
 	country = c;
+}
+
+void Location::setAlbedo(double a)
+{
+	albedo = a;
+}
+
+double Location::getAlbedo()
+{
+	return albedo;
 }

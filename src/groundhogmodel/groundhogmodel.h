@@ -30,6 +30,7 @@
 #include "./src/view.h"
 #include "../common/utilities/date.h"
 #include "./src/location.h"
+#include "./src/photosensor.h"
 
 #include "./src/material.h"
 #include "./src/materials/glass.h"
@@ -50,12 +51,12 @@ class GroundhogModel {
 private:	
 	//Objectives // **
 	std::vector <Layer *> layers = std::vector<Layer *>(); //!< Contains all the geometry that represents physical objects
-	std::vector <Workplane *> workplanes; //!< Contains the workplanes
-	//Photosensors // **
-	std::vector <Material *> materials; //!< Contains all the Materials in the model
+	std::vector <Workplane *> workplanes = std::vector<Workplane *>(); //!< Contains the Workplane objects in the model
+	std::vector <Photosensor *> photosensors = std::vector<Photosensor *>(); //!< Contains the Photosensor objects in the model
+	std::vector <Material *> materials = std::vector<Material *>(); //!< Contains all the Materials in the model
 	std::vector <View *> views = std::vector<View *>(); //!< Contains all the views that are saved in the model
 	std::vector <ComponentDefinition *> definitions = std::vector<ComponentDefinition *>(); //!< Contains all the Component Definitions in the model
-	std::vector <WindowGroup *> windowGroups; //!< Contains the window group
+	std::vector <WindowGroup *> windowGroups = std::vector<WindowGroup *>(); //!< Contains the window group
 	//Weather
 	//Luminaires
 	Location location = Location(); //!< The location (i.e. longitude, latitude, timezone, etc.)
@@ -323,6 +324,20 @@ public:
 	*/
 	double getTimeZone();
 
+	//! Sets the albedo
+	/*!
+	@author German Molina
+	@param[in] a The albedo
+	*/
+	void setAlbedo(double a);
+
+	//! Gets the albedo
+	/*!
+	@author German Molina
+	@param[in] a The albedo
+	*/
+	double getAlbedo();
+
 	//! Retrieves the Month of the model Date
 	/*!
 	@author German Molina
@@ -442,4 +457,26 @@ public:
 	@return the pointer to the Material
 	*/
 	Material * getMaterialRef(size_t i);
+
+	//! Adds a Photosensor to the GroundhogModel
+	/*!
+	@author German Molina
+	@param[in] p The Photosensor
+	*/
+	void addPhotosensor(Photosensor * p);
+
+	//! Returns the number of Photosensor objects in the model
+	/*!
+	@author German Molina
+	@return the number of Photosensor
+	*/
+	size_t countPhotosensors();
+
+	//! Retrieves a pointer to a certain Photosensor in the model
+	/*!
+	@author German Molina
+	@param[in] i The index of the Photosensor
+	@return The pointer to the Photosensor
+	*/
+	Photosensor * getPhotosensorRef(size_t i);
 };

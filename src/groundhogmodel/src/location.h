@@ -36,6 +36,7 @@ private:
 	double timeZone; //!< in GMT units
 	std::string city; //!< The name of the city
 	std::string country; //!< The name of the country
+	double albedo = 0.2; //!< The albedo in the location
 
 public:
 	
@@ -123,4 +124,18 @@ public:
 	@param[in] c The country name
 	*/
 	void setCountry(std::string c);
+
+	//! Sets the albedo
+	/*!
+	@author German Molina
+	@param[in] a The albedo
+	*/
+	void setAlbedo(double a);
+
+	//! Gets the albedo
+	/*!
+	@author German Molina
+	@param[in] a The albedo
+	*/
+	double getAlbedo();
 };

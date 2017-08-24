@@ -75,17 +75,17 @@ void utf8toASCII(char * input, size_t inputLength, char * output, size_t * outpu
 		}
 		else if( c < 2047){
 			// two byte
-			output[i] = '?';
+			output[i] = '_';
 			i++; i++;
 		}
 		else if ( c < 65535) {
 			// 3 byte
-			output[i] = '?';
+			output[i] = '_';
 			i++; i++;
 		}
 		else {
 			// 4 byte
-			output[i] = '?';
+			output[i] = '_';
 			i++; i++;
 		}
 	}

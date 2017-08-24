@@ -44,6 +44,7 @@ using nlohmann::json;
 #define SKP_WINGROUP "Win_Group"
 #define SKP_MATERIAL "rad_material"
 #define SKP_VALUE "Value"
+#define SKP_PHOTOSENSOR "illuminance_sensor"
 
 #define TO_M(x) x*0.0254
 #define TO_M2(x) x*0.00064516
@@ -421,7 +422,7 @@ public:
 	@param[out] value The returned string
 	@return success
 	*/
-	bool getStringFromSUTypedValue(SUTypedValueRef suValue, std::string * value);
+	bool getFromSUTypedValue(SUTypedValueRef suValue, std::string * value);
 
 	//! Adds a Material to the Groundhogmodel
 	/*!
@@ -477,4 +478,20 @@ public:
 	@return The pointer to the new Face
 	*/
 	Face * SUFaceToFace(SUFaceRef suFace);
+
+	//! Retrieves the name of a SUMaterialRef object
+	/*!
+	@author German Molina
+	@return success
+	@param[in] material SUMaterialRef to retrieve the name from
+	@param[out] name The name of the material
+	*/
+	bool getSUMaterialName(SUMaterialRef material, std::string * name);
+
+	//! Adds a photosensor to the Model
+	/*!
+	@author German Molina
+	@param[in] definition The SUComponentDefinitionRef representing the Photosensor
+	*/
+	bool addPhotosensorsToModel(SUComponentDefinitionRef definition);
 };
