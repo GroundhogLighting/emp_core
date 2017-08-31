@@ -7,7 +7,8 @@
 Glass::Glass(json j)
 {
 	DEBUG_MSG("Creating Glass");
-	getBasicData(j);
+	primitiveLength = 9;
+	fillFromJSON(j);
 }
 
 double Glass::red()
@@ -39,5 +40,16 @@ bool Glass::writeRadianceDefinition(std::string * dir)
 
 	file.close();
 
+	return true;
+}
+
+
+bool Glass::parsePrimitive(std::vector <std::string> * tokens)
+{	
+	size_t i = 6;
+	r = std::stod((*tokens)[i++]);
+	g = std::stod((*tokens)[i++]);
+	b = std::stod((*tokens)[i++]);
+	
 	return true;
 }

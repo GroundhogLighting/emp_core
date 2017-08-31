@@ -18,10 +18,11 @@
 
 *****************************************************************************/
 
+#include "../../3rdparty/json/json.hpp"
+
 #include "./material.h"
 #include "../../common/utilities/io.h"
-
-#include "../../3rdparty/json/json.hpp"
+#include "../../common/utilities/stringutils.h"
 
 Material::Material()
 {	
@@ -49,14 +50,45 @@ bool Material::compareName(std::string * otherName)
 	return (name == *otherName);
 }
 
-void Material::getBasicData(json j)
+bool Material::fillFromJSON(json j)
 {
-	name = j.at("name").get<std::string>();
-	type = j.at("class").get<std::string>();
+	try {
+		name = j.at("name").get<std::string>();
+		type = j.at("class").get<std::string>();
+
+		// Get the RAD tokens
+		std::vector<std::string> tokens = std::vector<std::string>();
+		std::string rad = j["rad"];
+		tokenize(&rad, &tokens);
+
+		// check if correct number of tokens
+		if (tokens.size() != primitiveLength) {
+			fatal("Incorrect primitive when parsing -- " + type, __LINE__, __FILE__);
+			return false;
+		}
+
+		// Parse primitive tokens
+		if (!parsePrimitive(&tokens)) {
+			fatal("Error while parsing primitive", __LINE__, __FILE__);
+			return false;
+		}
+	}
+	catch (const std::exception & e){
+		fatal("Error when converting JSON into Material", __LINE__, __FILE__);
+		fatal(e.what(),__LINE__,__FILE__);
+		return false;
+	}
+
+	return true;
 }
 
 
 bool Material::writeRadianceDefinition(std::string * dir)
+{
+	return true;
+}
+
+bool Material::parsePrimitive(std::vector <std::string> * tokens)
 {
 	return true;
 }

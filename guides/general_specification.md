@@ -58,7 +58,7 @@ just leave it empty.
 Some 3D modelling tools allow saving predefined views (sometimes known as cameras, 
 scenes or other). A Groundhog Model allows storing such views, requiring as input:
 
-*  Name
+* Name
 * Point of view
 * View direction
 * View up
@@ -107,6 +107,7 @@ If not available, default to 0.
 
 
 ### Observers
+
 
 ### Location
 

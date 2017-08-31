@@ -49,7 +49,7 @@ public:
 	@author German Molina
 	@param[in] layerName The name of the Layer
 	*/
-	Layer(std::string * layerName);
+	Layer(std::string layerName);
 
 	//! Destroys a Layer object
 	/*!

@@ -45,6 +45,8 @@ using nlohmann::json;
 #define SKP_MATERIAL "rad_material"
 #define SKP_VALUE "Value"
 #define SKP_PHOTOSENSOR "illuminance_sensor"
+#define SKP_SOLVED_WORKPLANE "solved_workplane"
+#define SKP_WEATHER "Weather"
 
 #define TO_M(x) x*0.0254
 #define TO_M2(x) x*0.00064516
@@ -411,18 +413,20 @@ public:
 	@author German Molina
 	@param[in] suString The original SUSTringRef
 	@param[out] string The resulting std::string
+	@param[in] fix Should we fixString()?
 	@return success
 	*/
-	bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string);
+	bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string, bool fix);
 
 	//! Retrieves a std::string from a SUTypedValue object
 	/*!
 	@author German Molina
 	@param[in] suValue The SUTypedValueRef object
 	@param[out] value The returned string
+	@param[in] fix Should we fix the string?
 	@return success
 	*/
-	bool getFromSUTypedValue(SUTypedValueRef suValue, std::string * value);
+	bool getFromSUTypedValue(SUTypedValueRef suValue, std::string * value, bool fix);
 
 	//! Adds a Material to the Groundhogmodel
 	/*!
@@ -438,9 +442,10 @@ public:
 	@author German Molina
 	@param[in] entity The entity to retrieve the value from
 	@param[out] value The value
+	@param[in] fix Fix the value?
 	@return success
 	*/
-	bool getGHValueFromEntity(SUEntityRef entity, std::string * value);
+	bool getGHValueFromEntity(SUEntityRef entity, std::string * value, bool fix);
 
 	//! Guesses a material from its SketchUp properties.
 	/*!
@@ -494,4 +499,18 @@ public:
 	@param[in] definition The SUComponentDefinitionRef representing the Photosensor
 	*/
 	bool addPhotosensorsToModel(SUComponentDefinitionRef definition);
+
+	//! Loads the weather in the model
+	/*!
+	@author German Molina
+	*/
+	bool loadWeather();
+
+	//! Retrieves a value from the SUModelRef dictionary
+	/*!
+	@author German Molina
+	@param[in] key The key to check
+	@param[out] value The value retrieved
+	*/
+	bool getValueFromModelGHDictionary(char * key, SUTypedValueRef * value);
 };

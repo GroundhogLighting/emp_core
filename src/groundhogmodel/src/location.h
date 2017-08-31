@@ -22,6 +22,7 @@
 #pragma once
 
 #include <string>
+#include "./weather.h"
 
 //! Represents a Location
 
@@ -37,6 +38,8 @@ private:
 	std::string city; //!< The name of the city
 	std::string country; //!< The name of the country
 	double albedo = 0.2; //!< The albedo in the location
+	Weather * weather = new Weather(); //! The weather of the location obtained from a weather file
+	double elevation = 0; //! The elevation
 
 public:
 	
@@ -88,14 +91,14 @@ public:
 	@author German Molina
 	@return the time zone
 	*/
-	double getTimezone();
+	double getTimeZone();
 
 	//! Sets the Time zone
 	/*!
 	@author German Molina
 	@param[in] t The time zone
 	*/
-	void setTimezone(double t);
+	void setTimeZone(double t);
 	
 	//! Retrieves the City name
 	/*!
@@ -135,7 +138,30 @@ public:
 	//! Gets the albedo
 	/*!
 	@author German Molina
-	@param[in] a The albedo
+	@return The albedo
 	*/
 	double getAlbedo();
+
+	//! Fill Weather member from JSON object
+	/*!
+	@author German Molina
+	@param[in] j The JSON object
+	@return success
+	*/
+	bool fillWeatherFromJSON(json * j);
+
+	//! Gets the elevation
+	/*!
+	@author German Molina
+	@param[in] The elevation
+	*/
+	double getElevation();
+
+	//! Gets the HourlyData for some hour
+	/*!
+	@author German Molina
+	@param[in] hour The hour of the year
+	@return The data
+	*/
+	HourlyData * getHourlyData(size_t hour);
 };

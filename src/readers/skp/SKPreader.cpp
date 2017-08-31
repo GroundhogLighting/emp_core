@@ -194,7 +194,9 @@ bool SKPReader::parseSKPModel(std::string inputFile)
 	if (!loadModelInfo())
 		return false;
 	
-	// Load ...
+	// Load weather
+	if (!loadWeather())
+		return false;
 
 
 	
@@ -232,7 +234,7 @@ bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, 
 	)) return false;
 
 	
-	if (!SUStringtoString(suString, value))
+	if (!SUStringtoString(suString, value,true))
 		return false;
 	
 	return true;
@@ -318,39 +320,43 @@ bool SKPReader::loadModelInfo()
 		__LINE__
 	)) return false;
 
+	// Get the location
+	Location * loc = model->getLocation();
+
 	// Set latitude
 	double latitude;
 	getDoubleFromShadowInfo(shadowInfo, "Latitude", &latitude);
-	model->setLatitude(latitude);
+	loc->setLatitude(latitude);
 
 	// Set longitude
 	double longitude;
 	getDoubleFromShadowInfo(shadowInfo, "Longitude", &longitude);
-	model->setLongitude(longitude);
+	loc->setLongitude(longitude);
 
 	// Set time zone
 	double timeZone;
 	getDoubleFromShadowInfo(shadowInfo, "TZOffset", &timeZone);
-	model->setTimeZone(timeZone);
+	loc->setTimeZone(timeZone);
 	
 	//set city
 	std::string city;
 	getStringFromShadowInfo(shadowInfo, "City", &city);
-	model->setCity(city);
+	loc->setCity(city);
 
 	//set country
 	std::string country;
 	getStringFromShadowInfo(shadowInfo, "Country", &country);
-	model->setCountry(country);
+	loc->setCountry(country);
 
 	// set time
 	int64_t epoch;
 	getTimeFromShadowInfo(shadowInfo, &epoch);
 	Date date = Date(epoch); //  + timeZone*60*60
-	model->setMonth(date.getMonth());
-	model->setHour(date.getDay());
-	model->setHour(date.getHour());
-	model->setMinute(date.getMinute());	
+	Date * d = model->getDate();
+	d->setMonth(date.getMonth());
+	d->setDay(date.getDay());
+	d->setHour(date.getHour());
+	d->setMinute(date.getMinute());
 
 	return true;
 }
@@ -456,7 +462,7 @@ bool SKPReader::SUViewToView(SUSceneRef suView, View * view)
 	
 	std::string viewName;
 
-	if (!SUStringtoString(suViewName,&viewName))
+	if (!SUStringtoString(suViewName,&viewName,true))
 		return false;
 
 
@@ -561,10 +567,10 @@ bool SKPReader::loadLayers()
 
 		std::string layerName;
 
-		if (!SUStringtoString(suLayerName,&layerName))
+		if (!SUStringtoString(suLayerName,&layerName,true))
 			return false;
 		
-		model->addLayer(&layerName);
+		model->addLayer(layerName);
 		inform("Layer " + layerName + " added",verbose);
 	};	
 
@@ -589,7 +595,7 @@ bool SKPReader::getSUComponentDefinitionName(SUComponentDefinitionRef definition
 	)) return false;
 
 	std::string componentName;
-	if (!SUStringtoString(suComponentName,&componentName))
+	if (!SUStringtoString(suComponentName,&componentName,true))
 		return false;
 
 	*name = componentName;
@@ -722,17 +728,23 @@ bool SKPReader::loadComponentDefinitions()
 	for (size_t i = 0; i < countDefinitions; i++) {
 		// Check if it has label
 		std::string label;
-		if (!getSUEntityLabel(SUComponentDefinitionToEntity(definitions[i]), &label)) {
+		if (getSUEntityLabel(SUComponentDefinitionToEntity(definitions[i]), &label)) {
+			
+			if (label == SKP_SOLVED_WORKPLANE)
+				continue;
+
+			if (label == SKP_PHOTOSENSOR) {
+				if (!addPhotosensorsToModel(definitions[i])) {
+					fatal("Error when trying to add Photosensos to the model", __LINE__, __FILE__);
+					return false;
+				}
+			}
+		} 
+		else { // if it has no label
 			// has no label, load the definition
 			if (!loadComponentDefinition(definitions[i])) {
 				warn("Impossible to load component definition to model");
 				continue;
-			}
-		} 
-		else if (label == SKP_PHOTOSENSOR) { // if label is Photosensor
-			if (!addPhotosensorsToModel(definitions[i])) {
-				fatal("Error when trying to add Photosensos to the model", __LINE__, __FILE__);
-				return false;
 			}
 		}
 
@@ -781,8 +793,8 @@ bool SKPReader::loadLayersContent()
 		
 		if ( hasLabel ) {
 
-			// if it is workplane
 			if (faceLabel == SKP_WORKPLANE) {
+			// if it is workplane
 				addWorkplaneToModel(faces[i]);
 			}
 			else if (faceLabel == SKP_ILLUM) {
@@ -837,7 +849,16 @@ bool SKPReader::loadLayersContent()
 	// fill layers with the instances
 	for (size_t i = 0; i < instanceCount; i++) {
 		
-		// ignore instances with labels
+		// ignore instances with certain labels
+		std::string label;
+		if (getSUEntityLabel(SUComponentInstanceToEntity(instances[i]), &label)) {
+			if(label == SKP_PHOTOSENSOR)
+				continue;
+
+			if (label == SKP_SOLVED_WORKPLANE)
+				continue;
+
+		}
 
 
 		// get name of layer
@@ -996,7 +1017,7 @@ bool SKPReader::getSUDrawingElementLayerName(SUDrawingElementRef element, std::s
 
 	// get final length
 	
-	return SUStringtoString(layerName,name);
+	return SUStringtoString(layerName,name,true);
 };
 
 bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name) 
@@ -1004,8 +1025,7 @@ bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name)
 	SUTypedValueRef suValue = SU_INVALID;
 	if (getValueFromEntityGHDictionary(entity, SKP_NAME, &suValue)) {
 		// There was, indeed, a Grounghog name
-
-		if (!getFromSUTypedValue(suValue, name))
+		if (!getFromSUTypedValue(suValue, name,true))
 			return false;
 
 		return true;
@@ -1100,7 +1120,7 @@ bool SKPReader::getSUEntityLabel(SUEntityRef entity, std::string * name)
 	if (!getValueFromEntityGHDictionary(entity, SKP_LABEL, &suValue))
 		return false;
 
-	if (!getFromSUTypedValue(suValue, name))
+	if (!getFromSUTypedValue(suValue, name,true))
 		return false;
 
 	return true;
@@ -1141,7 +1161,7 @@ bool SKPReader::addWindowToModel(SUFaceRef suFace)
 	SUTypedValueRef suWinGroup = SU_INVALID;
 	if (getValueFromEntityGHDictionary(SUFaceToEntity(suFace), SKP_WINGROUP, &suWinGroup)) {
 		// If it has, set the windowgroup name to that...
-		if (!getFromSUTypedValue(suWinGroup,&winGroup))
+		if (!getFromSUTypedValue(suWinGroup,&winGroup,true))
 			fatal("Error when trying to retrieve Window Group name",__LINE__,__FILE__);
 	}
 	else {
@@ -1256,7 +1276,7 @@ bool SKPReader::getValueFromEntityGHDictionary(SUEntityRef entity, char * key, S
 	return false; //should not reach here.
 }
 
-bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string)
+bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string, bool fix)
 {
 
 	size_t stringLength;
@@ -1266,14 +1286,11 @@ bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string)
 		__LINE__
 	)) return false;
 
-	if (stringLength > GLARE_MAX_STRING_LENGTH) {
-		fatal("String excedes the maximum accepted length", __LINE__, __FILE__);
-		return false;
-	}
+	std::string utf8String;
+	utf8String.reserve(stringLength);
 
-	char cString[GLARE_MAX_STRING_LENGTH];
 	if (!checkSUResult(
-		SUStringGetUTF8(suString, stringLength, cString, &stringLength),
+		SUStringGetUTF8(suString, stringLength, &utf8String[0], &stringLength),
 		"SUStringGetUTF8",
 		__LINE__
 	)) return false;
@@ -1284,19 +1301,19 @@ bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string)
 		__LINE__
 	)) return false;
 
-	char asciiString[GLARE_MAX_STRING_LENGTH];
+	string->reserve(stringLength);
+	string->resize(stringLength);
 
-	utf8toASCII(cString, stringLength, asciiString, &stringLength);
-
-	fixString(asciiString, stringLength);
-
-	*string = std::string(asciiString);
+	utf8toASCII(&utf8String[0], stringLength, &(*string)[0], &stringLength);
+	
+	if(fix)
+		fixString(&(*string)[0], stringLength);
 
 	return true;
 
 }
 
-bool SKPReader::getFromSUTypedValue(SUTypedValueRef suValue, std::string * value)
+bool SKPReader::getFromSUTypedValue(SUTypedValueRef suValue, std::string * value, bool fix)
 {
 	// Create a SU String
 	SUStringRef suString = SU_INVALID;
@@ -1315,7 +1332,7 @@ bool SKPReader::getFromSUTypedValue(SUTypedValueRef suValue, std::string * value
 		SUStringRelease(&suString);
 		return false;
 	}
-	SUStringtoString(suString, value);
+	SUStringtoString(suString, value,fix);
 	
 	return true;
 }
@@ -1347,7 +1364,7 @@ Material * SKPReader::addMaterialToModel(SUMaterialRef material)
 
 		// get the value
 		std::string value;
-		if (!getGHValueFromEntity(entityMat, &value)) {
+		if (!getGHValueFromEntity(entityMat, &value,false)) {
 			return NULL;
 		}
 		
@@ -1363,13 +1380,13 @@ Material * SKPReader::addMaterialToModel(SUMaterialRef material)
 	return model->addMaterial(j);
 }
 
-bool SKPReader::getGHValueFromEntity(SUEntityRef entity, std::string * value)
+bool SKPReader::getGHValueFromEntity(SUEntityRef entity, std::string * value, bool fix)
 {
 	SUTypedValueRef suValue = SU_INVALID;
 	if (!getValueFromEntityGHDictionary(entity, SKP_VALUE, &suValue))
 		return false;
 
-	if (!getFromSUTypedValue(suValue, value))
+	if (!getFromSUTypedValue(suValue, value,fix))
 		return false;
 
 	return true;
@@ -1409,11 +1426,10 @@ bool SKPReader::guessMaterial(SUMaterialRef material, json * j)
 	(*j)["color"] = {color.red, color.green, color.blue};
 
 	if (alpha < 1) {
-
-		(*j)["rad"] = "void glass %MATERIAL_NAME% 0 0 3 " + std::to_string(alpha*color.red / 255) + " " + std::to_string(alpha*color.green / 255) + " " + std::to_string(alpha*color.blue / 255) ;
+		(*j)["rad"] = "void glass %MATERIAL_NAME% 0 0 3 " + std::to_string(alpha*color.red / 255.0) + " " + std::to_string(alpha*color.green / 255.0) + " " + std::to_string(alpha*color.blue / 255.0) ;
 	}
 	else {
-		(*j)["rad"] = "void plastic %MATERIAL_NAME% 0 0 5 " + std::to_string(color.red / 255) + " " + std::to_string(color.green / 255) + " " + std::to_string(color.blue / 255) + " 0 0";
+		(*j)["rad"] = "void plastic %MATERIAL_NAME% 0 0 5 " + std::to_string(color.red / 255.0) + " " + std::to_string(color.green / 255.0) + " " + std::to_string(color.blue / 255.0) + " 0 0";
 	}
 	return true;
 }
@@ -1440,7 +1456,7 @@ bool SKPReader::getFaceMaterial(SUFaceRef face, SUMaterialRef * mat)
 
 	// Check the back material
 	SUMaterialRef backMat;
-	SUResult backRes = SUFaceGetFrontMaterial(face, &backMat);
+	SUResult backRes = SUFaceGetBackMaterial(face, &backMat);
 	if (backRes == SU_ERROR_NONE) { // it has back material
 		// Check if it has physical information 
 		std::string label;
@@ -1519,7 +1535,7 @@ bool SKPReader::getSUMaterialName(SUMaterialRef material, std::string * name)
 	)) return false;
 	
 	// this fixes the name as well, and releases the SUString
-	if (!SUStringtoString(suName, name))
+	if (!SUStringtoString(suName, name,true))
 		return false;
 
 	return true;
@@ -1572,14 +1588,6 @@ bool SKPReader::addPhotosensorsToModel(SUComponentDefinitionRef definition)
 		double z = TO_M(transform.values[14]);
 		ph->setPosition(Point3D(x, y, z));
 
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				int aux = 4 * i + j;
-				std::cerr << transform.values[aux] << ",";
-			}
-			std::cerr << std::endl;
-		}
-
 		// set the direction
 		ph->setDirection(Vector3D(transform.values[8], transform.values[9], transform.values[10]));
 
@@ -1588,4 +1596,103 @@ bool SKPReader::addPhotosensorsToModel(SUComponentDefinitionRef definition)
 	}
 
 	return true;
+}
+
+
+bool SKPReader::getValueFromModelGHDictionary(char * key, SUTypedValueRef * value)
+{
+	// check how many dictionaries
+	size_t dictionaryCount;
+	if (!checkSUResult(
+		SUModelGetNumAttributeDictionaries(suModel, &dictionaryCount),
+		"SUModelGetNumAttributeDictionaries",
+		__LINE__
+	)) return false;
+
+	// if there are no dictionaries, then return.
+	if (dictionaryCount == 0)
+		return false;
+
+	//retrieve dictionaries
+	std::vector <SUAttributeDictionaryRef> dictionaries(dictionaryCount);
+	if (!checkSUResult(
+		SUModelGetAttributeDictionaries(suModel, dictionaryCount, &dictionaries[0], &dictionaryCount),
+		"SUModelGetAttributeDictionaries",
+		__LINE__
+	)) return false;
+
+	// Check if it has a Groundhog dictionary
+	for (int i = 0; i < dictionaryCount; i++) {
+		SUStringRef dictionaryName = SU_INVALID;
+		if (!checkSUResult(
+			SUStringCreate(&dictionaryName),
+			"SUStringCreate",
+			__LINE__
+		)) return false;
+
+		if (!checkSUResult(
+			SUAttributeDictionaryGetName(dictionaries[i], &dictionaryName),
+			"SUAttributeDictionaryGetName",
+			__LINE__
+		)) return false;
+
+
+		int result;
+		if (!checkSUResult(
+			SUStringCompare(dictionaryName, groundhogDictionaryName, &result),
+			"SUStringCompare",
+			__LINE__
+		)) return false;
+
+		if (!checkSUResult(
+			SUStringRelease(&dictionaryName),
+			"SUStringRelease",
+			__LINE__
+		)) return false;
+
+		if (result == 0) { // then, it is a Groundhog dictionary
+
+			//retrieve the value			
+			if (!checkSUResult(
+				SUTypedValueCreate(value),
+				"SUTypedValueCreate",
+				__LINE__
+			)) return false;
+
+
+			SUResult res = SUAttributeDictionaryGetValue(dictionaries[i], key, value);
+			if (res == SU_ERROR_NONE || res == SU_ERROR_NO_DATA) {
+				return res == SU_ERROR_NONE;
+			}
+			else {
+				checkSUResult(
+					res,
+					"SUAttributeDictionaryGetValue",
+					__LINE__
+				);
+				return false;
+			}
+		}
+	}
+	return false; //should not reach here.
+}
+
+
+bool SKPReader::loadWeather()
+{
+
+	SUTypedValueRef suWeather = SU_INVALID;
+	if (!getValueFromModelGHDictionary(SKP_WEATHER, &suWeather))
+		return true; // return if no weather or error.
+
+	std::string value;
+
+	if (!getFromSUTypedValue(suWeather, &value,false))
+		return false;
+	
+	json j = json::parse(value);
+
+	Location * loc = model->getLocation();
+
+	return loc->fillWeatherFromJSON(&j);
 }

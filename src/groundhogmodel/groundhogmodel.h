@@ -57,10 +57,9 @@ private:
 	std::vector <View *> views = std::vector<View *>(); //!< Contains all the views that are saved in the model
 	std::vector <ComponentDefinition *> definitions = std::vector<ComponentDefinition *>(); //!< Contains all the Component Definitions in the model
 	std::vector <WindowGroup *> windowGroups = std::vector<WindowGroup *>(); //!< Contains the window group
-	//Weather
 	//Luminaires
 	Location location = Location(); //!< The location (i.e. longitude, latitude, timezone, etc.)
-	Date date = Date(1, 1, 12, 0); //!< The current date
+	Date date = Date(1, 1, 12, 12); //!< The current date
 	//Options
 	//Observers // **	
 	double northCorrection; //!< The north correction (i.e. the model should be rotated when calculating)
@@ -89,7 +88,7 @@ public:
 	@param[in] layerName The layer name
 	@todo Check if the layer already exists
 	*/
-	void addLayer(std::string * layerName);
+	void addLayer(std::string layerName);
 
 	//! Adds a face to a certain layer
 	/*!
@@ -226,145 +225,6 @@ public:
 	*/
 	double getNorthCorrection();
 
-	//! Sets the Latitude of the model Location
-	/*!
-	@author German Molina
-	@param[in] l the latitude
-	*/
-	void setLatitude(double l);
-
-	//! Sets the Longitude of the model Location
-	/*!
-	@author German Molina
-	@param[in] l the longitude
-	*/
-	void setLongitude(double l);
-
-	//! Sets the Time Zone of the model Location
-	/*!
-	@author German Molina
-	@param[in] t the time zone
-	*/
-	void setTimeZone(double t);
-
-	//! Sets the City Name of the model Location
-	/*!
-	@author German Molina
-	@param[in] c the name of the city
-	*/
-	void setCity(std::string c);
-
-	//! Retrieves the City Name of the model Location
-	/*!
-	@author German Molina
-	@return The name of the city
-	*/
-	std::string getCity();
-
-	//! Sets the Country Name of the model Location
-	/*!
-	@author German Molina
-	@param[in] c the name of the country
-	*/
-	void setCountry(std::string c);
-
-	//! Retrieves the Country Name of the model Location
-	/*!
-	@author German Molina
-	@return The name of the Country
-	*/
-	std::string getCountry();
-
-	//! Sets the Month of the model Date
-	/*!
-	@author German Molina
-	@param[in] m The month
-	*/
-	void setMonth(int m);
-
-	//! Sets the Day of the model Date
-	/*!
-	@author German Molina
-	@param[in] d The day
-	*/
-	void setDay(int d);
-
-	//! Sets the Hour of the model Date
-	/*!
-	@author German Molina
-	@param[in] h The hour
-	*/
-	void setHour(int h);
-
-	//! Sets the Minute of the model Date
-	/*!
-	@author German Molina
-	@param[in] min The minute
-	*/
-	void setMinute(int min);
-
-	//! Retrieves the Latitude of the model Location
-	/*!
-	@author German Molina
-	@return The latitude
-	*/
-	double getLatitude();
-
-	//! Retrieves the Longitude of the model Location
-	/*!
-	@author German Molina
-	@return The longitude
-	*/
-	double getLongitude();
-
-	//! Retrieves the Time Zone of the model Location
-	/*!
-	@author German Molina
-	@return The time zone
-	*/
-	double getTimeZone();
-
-	//! Sets the albedo
-	/*!
-	@author German Molina
-	@param[in] a The albedo
-	*/
-	void setAlbedo(double a);
-
-	//! Gets the albedo
-	/*!
-	@author German Molina
-	@param[in] a The albedo
-	*/
-	double getAlbedo();
-
-	//! Retrieves the Month of the model Date
-	/*!
-	@author German Molina
-	@return The month
-	*/
-	int getMonth();
-
-	//! Retrieves the Day of the model Date
-	/*!
-	@author German Molina
-	@return The day
-	*/
-	int getDay();
-
-	//! Retrieves the Hour of the model Date
-	/*!
-	@author German Molina
-	@return The hour
-	*/
-	int getHour();
-
-	//! Retrieves the Minute of the model Date
-	/*!
-	@author German Molina
-	@return The minute
-	*/
-	int getMinute();
 
 	//! Adds a new polygon to a certain workplane
 	/*!
@@ -479,4 +339,18 @@ public:
 	@return The pointer to the Photosensor
 	*/
 	Photosensor * getPhotosensorRef(size_t i);
+
+
+	//! Retrieves the Location object
+	/*!
+	@author German Molina
+	@return Pointer to the Location
+	*/
+	Location * getLocation();
+
+	//! Retrieves the Date object
+	/*!
+	@author German Molina
+	*/
+	Date * getDate();
 };

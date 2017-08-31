@@ -22,6 +22,7 @@
 #pragma once 
 
 #include <string>
+#include <vector>
 
 
 /*!
@@ -115,5 +116,6 @@ void fixString(char * s, size_t stringLength);
 std::string size_tToString(size_t sz);
 
 
+void tokenize(std::string * s, std::vector<std::string> * v);
 
 /* @} */

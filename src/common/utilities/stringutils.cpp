@@ -110,25 +110,7 @@ void fixString(char * s, size_t stringLength)
 			// special caracthers, Space, #, accented characters, back and front slashes
 			s[i] = DEFAULT_CHAR;
 			continue;
-		}
-		/*
-		else if (c >= 48 && c <= 58) {
-			// digits
-			continue;
-		}
-		else if (c >= 65 && c <= 90) {
-			//capital letters
-			continue;
-		}
-		else if (c == 95) {
-			// underscore
-			continue;
-		}
-		else if (c >= 97 && c <= 122) {
-			//small letters
-			continue;
-		}
-		*/
+		}		
 	}
 
 }
@@ -139,4 +121,17 @@ std::string size_tToString(size_t sz)
 	std::stringstream ss;
 	ss << sz;
 	return ss.str();
+}
+
+void tokenize(std::string * s,std::vector<std::string> * v)
+{
+	size_t start = 0;
+	size_t found = s->find(" ", start);
+	while (found != std::string::npos) {
+		v->push_back(s->substr(start, found-start));
+		start = found;
+		found = s->find(" ", start+1);
+	}
+	v->push_back(s->substr(start));
+
 }

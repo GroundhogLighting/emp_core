@@ -40,10 +40,7 @@ This module defines constants that are used in the rest of the program.
 #define GLARE_TAB "\t" //!< This is the separator used when writing Radiance files
 
 /// Maximum interior loops
-#define GLARE_TOO_MANY_LOOPS 40 //!< The number of interior loops that are considered too many in a face
- 
-/// Maximum string length
-#define GLARE_MAX_STRING_LENGTH 1000 //!< The number of characters that the char * are allowed to have by default
+#define GLARE_TOO_MANY_LOOPS 40 //!< The number of interior loops that are considered too many in a face 
 
 /// Huge number
 #define GLARE_HUGE 9e9 //!< This is a huge number that may be used by several sections of the program

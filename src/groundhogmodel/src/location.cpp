@@ -47,10 +47,10 @@ double Location::getLongitude() {
 void Location::setLongitude(double l) {
 	longitude = l;
 }
-double Location::getTimezone() {
+double Location::getTimeZone() {
 	return timeZone;
 }
-void Location::setTimezone(double t) {
+void Location::setTimeZone(double t) {
 	timeZone = t;
 }
 
@@ -78,4 +78,22 @@ void Location::setAlbedo(double a)
 double Location::getAlbedo()
 {
 	return albedo;
+}
+
+bool Location::fillWeatherFromJSON(json * j)
+{
+	elevation = j->at("elevation").get<double>();
+	return weather->fillFromJSON(j);
+}
+
+
+double Location::getElevation()
+{
+	return elevation;
+}
+
+
+HourlyData * Location::getHourlyData(size_t hour)
+{
+	return &(weather->data[hour]);
 }

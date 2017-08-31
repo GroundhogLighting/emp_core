@@ -7,7 +7,8 @@
 Plastic::Plastic(json j)
 {
 	DEBUG_MSG("Creating Plastic");
-	getBasicData(j);
+	primitiveLength = 11;
+	fillFromJSON(j);
 }
 
 
@@ -50,5 +51,16 @@ bool Plastic::writeRadianceDefinition(std::string * dir)
 
 	file.close();
 
+	return true;
+}
+
+bool Plastic::parsePrimitive(std::vector <std::string> * tokens)
+{
+	size_t i = 6;
+	r = std::stod((*tokens)[i++]);
+	g = std::stod((*tokens)[i++]);
+	b = std::stod((*tokens)[i++]);
+	specularity = std::stod((*tokens)[i++]);
+	roughness = std::stod((*tokens)[i++]);
 	return true;
 }

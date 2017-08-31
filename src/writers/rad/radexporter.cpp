@@ -107,6 +107,12 @@ bool RadExporter::exportModel()
 		return false;
 	}
 
+	// Write weather
+	if (!writeWeather(GLARE_SKY_SUBFOLDER)) {
+		fatal("Error when writing the Weather file", __LINE__, __FILE__);
+		return false;
+	}
+
 	// Write Scene file
 	if (!writeSceneFile(GLARE_SCENE_FILE)) {
 		fatal("Error when writing the Scene file", __LINE__, __FILE__);
@@ -129,15 +135,18 @@ bool RadExporter::writeModelInfo(char * filename)
 	std::ofstream file;
 	file.open(exportDir + "/" + filename);
 
-	file << "country," << model->getCountry() << std::endl;
-	file << "city," << model->getCity() << std::endl;
-	file << "latitude," << model->getLatitude() << std::endl;
-	file << "longitude," << model->getLongitude() << std::endl;
-	file << "time zone," << model->getTimeZone() << std::endl;
-	file << "month," << model->getMonth() << std::endl;
-	file << "day," << model->getDay() << std::endl;
-	file << "hour," << model->getHour() << std::endl;
-	file << "minute," << model->getMinute() << std::endl;
+	Date * d = model->getDate();
+	Location * loc = model->getLocation();
+
+	file << "country," << loc->getCountry() << std::endl;
+	file << "city," << loc->getCity() << std::endl;
+	file << "latitude," << loc->getLatitude() << std::endl;
+	file << "longitude," << loc->getLongitude() << std::endl;
+	file << "time zone," << loc->getTimeZone() << std::endl;
+	file << "month," << d->getMonth() << std::endl;
+	file << "day," << d->getDay() << std::endl;
+	file << "hour," << d->getHour() << std::endl;
+	file << "minute," << d->getMinute() << std::endl;
 	file << "north correction,"<< model->getNorthCorrection() << std::endl;
 	file.close();
 
@@ -551,14 +560,18 @@ bool RadExporter::writeSky(char * dir)
 	std::ofstream file;
 	file.open(baseDir + "/sky.rad");
 
-	file << "!gensky +s" << " ";
-	file <<  model->getMonth() << " ";
-	file << model->getDay() << " ";
-	file << model->getHour() << " ";
-	file << "-g " << model->getAlbedo() << " "; 
-	file << "-a " << model->getLatitude() << " "; 
-	file << "-o " << model->getLongitude() << " ";
-	file << "-m " << model->getTimeZone()*15.0 << " ";
+	Location * loc = model->getLocation();
+	Date * d = model->getDate();
+
+	file << "!gensky" << " ";
+	file <<  d->getMonth() << " ";
+	file << d->getDay() << " ";
+	file << d->getHour() << " ";
+	file << "-g " << loc->getAlbedo() << " "; 
+	file << "-a " << loc->getLatitude() << " ";
+	file << "-o " << loc->getLongitude() << " ";
+	file << "-m " << loc->getTimeZone()*15.0 << " ";
+	file << " +s " << " ";
 
 	file << std::endl << std::endl;
 
@@ -644,6 +657,37 @@ bool RadExporter::writePhotosensors(char * dir)
 
 	dictionary.close();
 	mainFile.close();
+
+	return true;
+}
+
+
+
+bool RadExporter::writeWeather(char * dir)
+{
+	std::ofstream file;
+	std::string baseDir = exportDir + "/" + dir;
+	file.open(baseDir + "/weather.wea");
+
+	Location * loc = model->getLocation();
+
+	file << "place " << loc->getCity() << std::endl;
+	file << "latitude " << loc->getLatitude() << std::endl;
+	file << "longitude " << -loc->getLongitude() << std::endl;
+	file << "time_zone " << loc->getTimeZone() << std::endl;
+	file << "site_elevation " << loc->getElevation() << std::endl;
+	file << "weather_data_file_units 1" << std::endl;
+
+	for (size_t i = 0; i < 8760; i++) {
+		HourlyData * h = loc->getHourlyData(i);
+		file << h->month << " ";
+		file << h->day << " ";
+		file << h->hour << " ";
+		file << h->direct_nomal << " ";
+		file << h->diffuse_horizontal << std::endl;
+	}
+
+	file.close();
 
 	return true;
 }

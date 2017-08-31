@@ -182,6 +182,7 @@ public:
 	//! Writes the standard Clear Sky
 	/*!
 	@author German Molina
+	@param[in] dir The directory to export
 	@return [Boolean] Success
 	*/
 	bool writeSky(char * dir);
@@ -190,6 +191,7 @@ public:
 	/*!
 	@author German Molina
 	@return [Boolean] Success
+	@param[in] dir The directory to export
 	@todo There is a bug that would cause an error if the exporting Directory of Layers changes.
 	*/
 	bool writeSceneFile(char * dir);
@@ -197,9 +199,16 @@ public:
 	//! Writes the Photosensors
 	/*!
 	@author German Molina
+	@param[in] dir The directory to export
 	@return [Boolean] Success
 	*/
 	bool writePhotosensors(char * dir);
 
-	
+	//! Writes the weather file
+	/*!
+	@author German Molina
+	@param[in] dir The directory
+	@return sucess
+	*/
+	bool writeWeather(char * dir);
 };

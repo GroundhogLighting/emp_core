@@ -8,6 +8,9 @@
 This material is extracted directly from the Radiance reference... 
 read that document to learn more
 
+The Primitive of the Plastic material es:
+
+void glass %MAT_NAME% 0 0 5 Red_r Green_r Blue_r Specularity Roughness
 
 */
 
@@ -73,5 +76,16 @@ public:
 	@return success
 	*/
 	bool writeRadianceDefinition(std::string * dir);
+
+	//! Parses a tokenized Groundhog primitive
+	/*!
+	A Groundhog primitive may be a Radiance primitive or an extension
+	of them
+
+	@author German Molina
+	@param[in] tokens The primitive tokenized
+	@return success
+	*/
+	bool parsePrimitive(std::vector <std::string> * tokens);
 
 };

@@ -48,11 +48,11 @@ GroundhogModel::~GroundhogModel()
 }
 
 
-void GroundhogModel::addLayer(std::string * layerName)
+void GroundhogModel::addLayer(std::string layerName)
 {	
 	Layer * l = new Layer(layerName);
 	layers.push_back( l );	
-	DEBUG_MSG("Adding layer " + *layerName + " to model");
+	DEBUG_MSG("Adding layer " + layerName + " to model");
 }
 
 bool GroundhogModel::addFaceToLayer(std::string * layerName, Face * face)
@@ -168,107 +168,6 @@ double GroundhogModel::getNorthCorrection()
 	return northCorrection;
 }
 
-void GroundhogModel::setLatitude(double l)
-{
-	location.setLatitude(l);
-}
-
-void GroundhogModel::setLongitude(double l)
-{
-	location.setLongitude(l);
-}
-
-void GroundhogModel::setTimeZone(double t)
-{
-	location.setTimezone(t);
-}
-
-void GroundhogModel::setMonth(int m)
-{
-	date.setMonth(m);
-}
-
-void GroundhogModel::setDay(int d)
-{
-	date.setDay(d);
-}
-
-void GroundhogModel::setHour(int h)
-{
-	date.setHour(h);
-}
-
-void GroundhogModel::setMinute(int min)
-{
-	date.setMinute(min);
-}
-
-double GroundhogModel::getLatitude()
-{
-	return location.getLatitude();
-}
-
-double GroundhogModel::getLongitude()
-{
-	return location.getLongitude();
-}
-
-double GroundhogModel::getTimeZone()
-{
-	return location.getTimezone();
-}
-
-void GroundhogModel::setAlbedo(double a)
-{
-	location.setAlbedo(a);
-}
-
-double GroundhogModel::getAlbedo()
-{
-	return location.getAlbedo();
-}
-
-int GroundhogModel::getMonth()
-{
-	return date.getMonth();
-}
-
-int GroundhogModel::getDay()
-{
-	return date.getDay();
-}
-
-int GroundhogModel::getHour()
-{
-	return date.getHour();
-}
-
-int GroundhogModel::getMinute()
-{
-	return date.getMinute();
-}
-
-
-void GroundhogModel::setCity(std::string c)
-{
-	location.setCity(c);
-}
-
-std::string GroundhogModel::getCity()
-{
-	return location.getCity();
-}
-
-void GroundhogModel::setCountry(std::string c)
-{
-	location.setCountry(c);
-}
-
-std::string GroundhogModel::getCountry()
-{
-	return location.getCountry();
-}
-
 
 void GroundhogModel::addPolygonToWorkplane(std::string * workplaneName, Polygon3D * polygon) 
 {
@@ -326,12 +225,13 @@ Workplane * GroundhogModel::getWorkplaneRef(size_t i)
 
 Material * GroundhogModel::addMaterial(json j)
 {
+	// Check if material already exists
 	std::string name = j["name"];
 	for (size_t i = 0; i < materials.size(); i++) {
 		if (materials[i]->compareName(&name))
 			return materials[i];
 	}
-
+		
 	if (j["class"] == "plastic") {
 		Plastic * p = new Plastic(j);
 		materials.push_back(p);
@@ -352,11 +252,11 @@ Material * GroundhogModel::addMaterial(json j)
 Material * GroundhogModel::addDefaultMaterial()
 {
 	return addMaterial({
-		{ "name","Default Material" },
-		{ "color",{ 153,153,153 } },
-		{ "rad","void plastic %MAT_NAME% 0 0 5 0.6 0.6 0.6 0 0" },
-		{"alpha",1},
-		{ "class","plastic" }
+		{ "name" , "Default-Material" },
+		{ "color" , { 153,153,153 } },
+		{ "rad" , "void plastic %MAT_NAME% 0 0 5 0.6 0.6 0.6 0 0" },
+		{ "alpha" , 1},
+		{ "class" , "plastic" }
 	});
 }
 
@@ -364,11 +264,11 @@ Material * GroundhogModel::addDefaultMaterial()
 Material * GroundhogModel::addDefaultGlass()
 {
 	return addMaterial({
-		{ "name","Default Glass" },
-		{ "color",{ 0,0,1} },
-		{ "rad","void glass %MAT_NAME% 0 0 3 0.86 0.86 0.86" },
-		{"alpha",0.4},
-		{ "class","glass" }
+		{ "name" , "Default-Glass" },
+		{ "color" , { 0,0,1} },
+		{ "rad" , "void glass %MAT_NAME% 0 0 3 0.86 0.86 0.86" },
+		{ "alpha" , 0.4},
+		{ "class" , "glass" }
 	});
 }
 
@@ -398,4 +298,14 @@ size_t GroundhogModel::countPhotosensors()
 Photosensor * GroundhogModel::getPhotosensorRef(size_t i)
 {
 	return photosensors[i];
+}
+
+Location * GroundhogModel::getLocation()
+{
+	return &location;
+}
+
+Date * GroundhogModel::getDate()
+{
+	return &date;
 }

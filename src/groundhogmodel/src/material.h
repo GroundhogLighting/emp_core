@@ -40,8 +40,9 @@ class Material {
 protected:
 	std::string name; //!< The unique name of the material
 	std::string type; //!< The type of material
-	int color[3] = {153, 153, 153};
-	double alpha = 1;
+	int color[3] = {153, 153, 153}; //!< Color of the material in the 3D modeling tool
+	double alpha = 1; //!< Transparency of the material in the 3D modeling tool
+	int primitiveLength = -1; //!< Number of expected tokens in primitive
 
 
 public:
@@ -80,12 +81,13 @@ public:
 	*/
 	bool compareName(std::string * otherName);
 
-	//! Retrieves basic data from a JSON and fills the Material info
+	//! Retrieves data from a JSON and fills the Material info
 	/*!
 	@author German Molina
 	@param[in] j The JSON that represents the Material
+	@return success
 	*/
-	void getBasicData(json j);
+	bool fillFromJSON(json j);
 
 	//! Writes a Material in Radiance format
 	/*!
@@ -95,4 +97,16 @@ public:
 	@note This function should be overriden by a function with the same name in each Material derived class
 	*/
 	virtual bool writeRadianceDefinition(std::string * dir);
+
+	//! Parses a tokenized Groundhog primitive
+	/*!
+	A Groundhog primitive may be a Radiance primitive or an extension
+	of them
+
+	@author German Molina
+	@param[in] tokens The primitive tokenized
+	@return success
+	@note This function should be overriden by a function with the same name in each Material derived class	
+	*/
+	virtual bool parsePrimitive(std::vector <std::string> * tokens);
 };
