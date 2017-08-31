@@ -313,7 +313,7 @@ public:
 	//! Retrieves the the pointer to a Material 
 	/*!
 	@author German Molina
-	@param[in] The index of the Material
+	@param[in] i The index of the Material
 	@return the pointer to the Material
 	*/
 	Material * getMaterialRef(size_t i);

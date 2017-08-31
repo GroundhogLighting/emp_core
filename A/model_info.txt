@@ -1,0 +1,10 @@
+country,USA
+city,Washington-Dc-Dulles-IntL-Ar
+latitude,38.98
+longitude,-77.47
+time zone,-5
+month,11
+day,8
+hour,13
+minute,30
+north correction,-0

@@ -78,9 +78,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a367fab2417768a7cd6d36dd27dca1335"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_layer.html#a367fab2417768a7cd6d36dd27dca1335">Layer</a> (std::string *layerName)</td></tr>
-<tr class="memdesc:a367fab2417768a7cd6d36dd27dca1335"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="class_layer.html" title="A Layer is the main group of geometry in a GroundhogModel. ">Layer</a> object.  <a href="#a367fab2417768a7cd6d36dd27dca1335">More...</a><br /></td></tr>
-<tr class="separator:a367fab2417768a7cd6d36dd27dca1335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4d43c923e8e295ad2eed1afc66c13f3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_layer.html#af4d43c923e8e295ad2eed1afc66c13f3">Layer</a> (std::string layerName)</td></tr>
+<tr class="memdesc:af4d43c923e8e295ad2eed1afc66c13f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="class_layer.html" title="A Layer is the main group of geometry in a GroundhogModel. ">Layer</a> object.  <a href="#af4d43c923e8e295ad2eed1afc66c13f3">More...</a><br /></td></tr>
+<tr class="separator:af4d43c923e8e295ad2eed1afc66c13f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b1ba4804451dfe6cc357194e42762ae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_layer.html#a1b1ba4804451dfe6cc357194e42762ae">~Layer</a> ()</td></tr>
 <tr class="memdesc:a1b1ba4804451dfe6cc357194e42762ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a <a class="el" href="class_layer.html" title="A Layer is the main group of geometry in a GroundhogModel. ">Layer</a> object.  <a href="#a1b1ba4804451dfe6cc357194e42762ae">More...</a><br /></td></tr>
 <tr class="separator:a1b1ba4804451dfe6cc357194e42762ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,8 +128,8 @@ std::vector&lt; <a class="el" href="class_component_instance.html">ComponentInst
 <div class="textblock"><p>A <a class="el" href="class_layer.html" title="A Layer is the main group of geometry in a GroundhogModel. ">Layer</a> is the main group of geometry in a <a class="el" href="class_groundhog_model.html" title="The main class, that contains all the Layer, Workplane and much more. ">GroundhogModel</a>. </p>
 <p>Every <a class="el" href="class_component_instance.html" title="A reference to a ComponentDefinition, including a location, position and scale. ">ComponentInstance</a> or <a class="el" href="class_face.html" title="The integration of a Polygon3D and a Material. ">Face</a> that is not in another <a class="el" href="class_component_definition.html" title="Groups of Face (or other geometry) meant to be placed several times in a GroudhogModel. ">ComponentDefinition</a> will be in a <a class="el" href="class_layer.html" title="A Layer is the main group of geometry in a GroundhogModel. ">Layer</a> </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a367fab2417768a7cd6d36dd27dca1335"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a367fab2417768a7cd6d36dd27dca1335">&#9670;&nbsp;</a></span>Layer()</h2>
+<a id="af4d43c923e8e295ad2eed1afc66c13f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4d43c923e8e295ad2eed1afc66c13f3">&#9670;&nbsp;</a></span>Layer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -137,7 +137,7 @@ std::vector&lt; <a class="el" href="class_component_instance.html">ComponentInst
         <tr>
           <td class="memname">Layer::Layer </td>
           <td>(</td>
-          <td class="paramtype">std::string *&#160;</td>
+          <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>layerName</em></td><td>)</td>
           <td></td>
         </tr>
@@ -153,7 +153,7 @@ std::vector&lt; <a class="el" href="class_component_instance.html">ComponentInst
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;{</div><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Creating layer &quot;</span> + *layerName);</div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="class_layer.html#a2071349b5667273725ae7f05a42db7a6">name</a> = *layerName;</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;};</div><div class="ttc" id="class_layer_html_a2071349b5667273725ae7f05a42db7a6"><div class="ttname"><a href="class_layer.html#a2071349b5667273725ae7f05a42db7a6">Layer::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">Name of the Layer. </div><div class="ttdef"><b>Definition:</b> layer.h:39</div></div>
+<div class="fragment"><div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;{</div><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Creating layer &quot;</span> + layerName);</div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="class_layer.html#a2071349b5667273725ae7f05a42db7a6">name</a> = layerName;</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;};</div><div class="ttc" id="class_layer_html_a2071349b5667273725ae7f05a42db7a6"><div class="ttname"><a href="class_layer.html#a2071349b5667273725ae7f05a42db7a6">Layer::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">Name of the Layer. </div><div class="ttdef"><b>Definition:</b> layer.h:39</div></div>
 <div class="ttc" id="group__io_utils_html_gaf1206b4d3bda8c4c8c9257f369a9e9e1"><div class="ttname"><a href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a></div><div class="ttdeci">#define DEBUG_MSG(str)</div><div class="ttdoc">A debug message function. Only reports in DEBUG releases. </div><div class="ttdef"><b>Definition:</b> io.h:42</div></div>
 </div><!-- fragment -->
 </div>
@@ -395,7 +395,7 @@ std::vector&lt; <a class="el" href="class_component_instance.html">ComponentInst
 <!-- HTML footer for doxygen 1.8.13-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Aug 22 2017 23:45:24 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
+Generated on Thu Aug 31 2017 14:25:20 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
 </a> 1.8.13
 </small></address>
 </body>

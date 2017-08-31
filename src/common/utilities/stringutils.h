@@ -115,7 +115,12 @@ void fixString(char * s, size_t stringLength);
 */
 std::string size_tToString(size_t sz);
 
-
+//! Splits a string into a vector of strings, divided by a blank space
+/*!
+@author German Molina
+@param[in] s The string to splot
+@param[out] v The vector to populate
+*/
 void tokenize(std::string * s, std::vector<std::string> * v);
 
 /* @} */

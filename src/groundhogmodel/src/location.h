@@ -38,8 +38,8 @@ private:
 	std::string city; //!< The name of the city
 	std::string country; //!< The name of the country
 	double albedo = 0.2; //!< The albedo in the location
-	Weather * weather = new Weather(); //! The weather of the location obtained from a weather file
-	double elevation = 0; //! The elevation
+	Weather * weather = new Weather(); //!< The weather of the location obtained from a weather file
+	double elevation = 0; //!< The elevation
 
 public:
 	
@@ -153,7 +153,7 @@ public:
 	//! Gets the elevation
 	/*!
 	@author German Molina
-	@param[in] The elevation
+	@return The elevation
 	*/
 	double getElevation();
 
@@ -164,4 +164,10 @@ public:
 	@return The data
 	*/
 	HourlyData * getHourlyData(size_t hour);
+
+	//! Checks if the weather has been filled with data
+	/*!
+	@author German Molina
+	*/
+	bool hasWeather();
 };

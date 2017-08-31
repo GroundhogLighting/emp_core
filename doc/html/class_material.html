@@ -82,7 +82,7 @@ Inheritance diagram for Material:</div>
   <img src="class_material.png" usemap="#Material_map" alt=""/>
   <map id="Material_map" name="Material_map">
 <area href="class_glass.html" title="Glass material. " alt="Glass" shape="rect" coords="0,56,58,80"/>
-<area href="class_plastic.html" alt="Plastic" shape="rect" coords="68,56,126,80"/>
+<area href="class_plastic.html" title="Plastic material. " alt="Plastic" shape="rect" coords="68,56,126,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -103,12 +103,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1489454672775345c40b5436c45898da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_material.html#a1489454672775345c40b5436c45898da">compareName</a> (std::string *otherName)</td></tr>
 <tr class="memdesc:a1489454672775345c40b5436c45898da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares a name with another string.  <a href="#a1489454672775345c40b5436c45898da">More...</a><br /></td></tr>
 <tr class="separator:a1489454672775345c40b5436c45898da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab32b57d305497f679be7edbcc54d9879"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_material.html#ab32b57d305497f679be7edbcc54d9879">getBasicData</a> (json j)</td></tr>
-<tr class="memdesc:ab32b57d305497f679be7edbcc54d9879"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves basic data from a JSON and fills the <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> info.  <a href="#ab32b57d305497f679be7edbcc54d9879">More...</a><br /></td></tr>
-<tr class="separator:ab32b57d305497f679be7edbcc54d9879"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42b3f0a1b965b6b30d0c944101d67f61"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_material.html#a42b3f0a1b965b6b30d0c944101d67f61">fillFromJSON</a> (json j)</td></tr>
+<tr class="memdesc:a42b3f0a1b965b6b30d0c944101d67f61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves data from a JSON and fills the <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> info.  <a href="#a42b3f0a1b965b6b30d0c944101d67f61">More...</a><br /></td></tr>
+<tr class="separator:a42b3f0a1b965b6b30d0c944101d67f61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22529ea16353b1ac72f5a99b0285b45e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_material.html#a22529ea16353b1ac72f5a99b0285b45e">writeRadianceDefinition</a> (std::string *dir)</td></tr>
 <tr class="memdesc:a22529ea16353b1ac72f5a99b0285b45e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> in Radiance format.  <a href="#a22529ea16353b1ac72f5a99b0285b45e">More...</a><br /></td></tr>
 <tr class="separator:a22529ea16353b1ac72f5a99b0285b45e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a824920fcf1557962409d071164f98806"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_material.html#a824920fcf1557962409d071164f98806">parsePrimitive</a> (std::vector&lt; std::string &gt; *tokens)</td></tr>
+<tr class="memdesc:a824920fcf1557962409d071164f98806"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses a tokenized Groundhog primitive.  <a href="#a824920fcf1557962409d071164f98806">More...</a><br /></td></tr>
+<tr class="separator:a824920fcf1557962409d071164f98806"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -121,11 +124,17 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <tr class="memdesc:a97efb5b3df1f11c422a82ab94535060a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of material. <br /></td></tr>
 <tr class="separator:a97efb5b3df1f11c422a82ab94535060a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4be1b925a9b12cd7ad8958bab8e3850b"><td class="memItemLeft" align="right" valign="top"><a id="a4be1b925a9b12cd7ad8958bab8e3850b"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>color</b> [3] = {153, 153, 153}</td></tr>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_material.html#a4be1b925a9b12cd7ad8958bab8e3850b">color</a> [3] = {153, 153, 153}</td></tr>
+<tr class="memdesc:a4be1b925a9b12cd7ad8958bab8e3850b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Color of the material in the 3D modeling tool. <br /></td></tr>
 <tr class="separator:a4be1b925a9b12cd7ad8958bab8e3850b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade8f226f5d101c3aec1646d3d6371c22"><td class="memItemLeft" align="right" valign="top"><a id="ade8f226f5d101c3aec1646d3d6371c22"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b> = 1</td></tr>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_material.html#ade8f226f5d101c3aec1646d3d6371c22">alpha</a> = 1</td></tr>
+<tr class="memdesc:ade8f226f5d101c3aec1646d3d6371c22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transparency of the material in the 3D modeling tool. <br /></td></tr>
 <tr class="separator:ade8f226f5d101c3aec1646d3d6371c22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60ec76e2316aa51bd089f865ff3be697"><td class="memItemLeft" align="right" valign="top"><a id="a60ec76e2316aa51bd089f865ff3be697"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_material.html#a60ec76e2316aa51bd089f865ff3be697">primitiveLength</a> = -1</td></tr>
+<tr class="memdesc:a60ec76e2316aa51bd089f865ff3be697"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of expected tokens in primitive. <br /></td></tr>
+<tr class="separator:a60ec76e2316aa51bd089f865ff3be697"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class that represent various materials. </p>
@@ -149,13 +158,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b> = 1</td><
 
 <p>Constructor of a new <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a>. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The name of the new <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> </td></tr>
-  </table>
-  </dd>
-</dl>
-<div class="fragment"><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;{   </div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Creating a new material&quot;</span>);</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}</div><div class="ttc" id="group__io_utils_html_gaf1206b4d3bda8c4c8c9257f369a9e9e1"><div class="ttname"><a href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a></div><div class="ttdeci">#define DEBUG_MSG(str)</div><div class="ttdoc">A debug message function. Only reports in DEBUG releases. </div><div class="ttdef"><b>Definition:</b> io.h:42</div></div>
+<div class="fragment"><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;{   </div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Creating a new material&quot;</span>);</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div><div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div><div class="ttc" id="group__io_utils_html_gaf1206b4d3bda8c4c8c9257f369a9e9e1"><div class="ttname"><a href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a></div><div class="ttdeci">#define DEBUG_MSG(str)</div><div class="ttdoc">A debug message function. Only reports in DEBUG releases. </div><div class="ttdef"><b>Definition:</b> io.h:42</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -176,7 +179,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b> = 1</td><
 
 <p>Destroys a material. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
-<div class="fragment"><div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Destroying material &quot;</span> + <a class="code" href="class_material.html#affe06990f884293d0fe2f39110f71730">name</a>);</div><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div><div class="ttc" id="class_material_html_affe06990f884293d0fe2f39110f71730"><div class="ttname"><a href="class_material.html#affe06990f884293d0fe2f39110f71730">Material::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The unique name of the material. </div><div class="ttdef"><b>Definition:</b> material.h:41</div></div>
+<div class="fragment"><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(<span class="stringliteral">&quot;Destroying material &quot;</span> + <a class="code" href="class_material.html#affe06990f884293d0fe2f39110f71730">name</a>);</div><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;}</div><div class="ttc" id="class_material_html_affe06990f884293d0fe2f39110f71730"><div class="ttname"><a href="class_material.html#affe06990f884293d0fe2f39110f71730">Material::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The unique name of the material. </div><div class="ttdef"><b>Definition:</b> material.h:41</div></div>
 <div class="ttc" id="group__io_utils_html_gaf1206b4d3bda8c4c8c9257f369a9e9e1"><div class="ttname"><a href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a></div><div class="ttdeci">#define DEBUG_MSG(str)</div><div class="ttdoc">A debug message function. Only reports in DEBUG releases. </div><div class="ttdef"><b>Definition:</b> io.h:42</div></div>
 </div><!-- fragment -->
 </div>
@@ -207,18 +210,18 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b> = 1</td><
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>is equal </dd></dl>
-<div class="fragment"><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;{</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordflow">return</span> (<a class="code" href="class_material.html#affe06990f884293d0fe2f39110f71730">name</a> == *otherName);</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div><div class="ttc" id="class_material_html_affe06990f884293d0fe2f39110f71730"><div class="ttname"><a href="class_material.html#affe06990f884293d0fe2f39110f71730">Material::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The unique name of the material. </div><div class="ttdef"><b>Definition:</b> material.h:41</div></div>
+<div class="fragment"><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;{</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordflow">return</span> (<a class="code" href="class_material.html#affe06990f884293d0fe2f39110f71730">name</a> == *otherName);</div><div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;}</div><div class="ttc" id="class_material_html_affe06990f884293d0fe2f39110f71730"><div class="ttname"><a href="class_material.html#affe06990f884293d0fe2f39110f71730">Material::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The unique name of the material. </div><div class="ttdef"><b>Definition:</b> material.h:41</div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="ab32b57d305497f679be7edbcc54d9879"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab32b57d305497f679be7edbcc54d9879">&#9670;&nbsp;</a></span>getBasicData()</h2>
+<a id="a42b3f0a1b965b6b30d0c944101d67f61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42b3f0a1b965b6b30d0c944101d67f61">&#9670;&nbsp;</a></span>fillFromJSON()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Material::getBasicData </td>
+          <td class="memname">bool Material::fillFromJSON </td>
           <td>(</td>
           <td class="paramtype">json&#160;</td>
           <td class="paramname"><em>j</em></td><td>)</td>
@@ -227,7 +230,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b> = 1</td><
       </table>
 </div><div class="memdoc">
 
-<p>Retrieves basic data from a JSON and fills the <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> info. </p>
+<p>Retrieves data from a JSON and fills the <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> info. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -235,7 +238,12 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b> = 1</td><
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;{</div><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="class_material.html#affe06990f884293d0fe2f39110f71730">name</a> = j.at(<span class="stringliteral">&quot;name&quot;</span>).get&lt;std::string&gt;();</div><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <a class="code" href="class_material.html#a97efb5b3df1f11c422a82ab94535060a">type</a> = j.at(<span class="stringliteral">&quot;class&quot;</span>).get&lt;std::string&gt;();</div><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;}</div><div class="ttc" id="class_material_html_a97efb5b3df1f11c422a82ab94535060a"><div class="ttname"><a href="class_material.html#a97efb5b3df1f11c422a82ab94535060a">Material::type</a></div><div class="ttdeci">std::string type</div><div class="ttdoc">The type of material. </div><div class="ttdef"><b>Definition:</b> material.h:42</div></div>
+<dl class="section return"><dt>Returns</dt><dd>success </dd></dl>
+<div class="fragment"><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;{</div><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">try</span> {</div><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="class_material.html#affe06990f884293d0fe2f39110f71730">name</a> = j.at(<span class="stringliteral">&quot;name&quot;</span>).get&lt;std::string&gt;();</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="code" href="class_material.html#a97efb5b3df1f11c422a82ab94535060a">type</a> = j.at(<span class="stringliteral">&quot;class&quot;</span>).get&lt;std::string&gt;();</div><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="comment">// Get the RAD tokens</span></div><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        std::vector&lt;std::string&gt; tokens = std::vector&lt;std::string&gt;();</div><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        std::string rad = j[<span class="stringliteral">&quot;rad&quot;</span>];</div><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="group__string_utils.html#gaf50d58e1c8680bc78f58cc524e1e492b">tokenize</a>(&amp;rad, &amp;tokens);</div><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="comment">// check if correct number of tokens</span></div><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">if</span> (tokens.size() != <a class="code" href="class_material.html#a60ec76e2316aa51bd089f865ff3be697">primitiveLength</a>) {</div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <a class="code" href="group__io_utils.html#ga8afab6dfaa6023e1c28faf8299acefac">fatal</a>(<span class="stringliteral">&quot;Incorrect primitive when parsing -- &quot;</span> + type, __LINE__, __FILE__);</div><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div><div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        }</div><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="comment">// Parse primitive tokens</span></div><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="class_material.html#a824920fcf1557962409d071164f98806">parsePrimitive</a>(&amp;tokens)) {</div><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <a class="code" href="group__io_utils.html#ga8afab6dfaa6023e1c28faf8299acefac">fatal</a>(<span class="stringliteral">&quot;Error while parsing primitive&quot;</span>, __LINE__, __FILE__);</div><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    }</div><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception &amp; e){</div><div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <a class="code" href="group__io_utils.html#ga8afab6dfaa6023e1c28faf8299acefac">fatal</a>(<span class="stringliteral">&quot;Error when converting JSON into Material&quot;</span>, __LINE__, __FILE__);</div><div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <a class="code" href="group__io_utils.html#ga8afab6dfaa6023e1c28faf8299acefac">fatal</a>(e.what(),__LINE__,__FILE__);</div><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    }</div><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div><div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div><div class="ttc" id="group__string_utils_html_gaf50d58e1c8680bc78f58cc524e1e492b"><div class="ttname"><a href="group__string_utils.html#gaf50d58e1c8680bc78f58cc524e1e492b">tokenize</a></div><div class="ttdeci">void tokenize(std::string *s, std::vector&lt; std::string &gt; *v)</div><div class="ttdoc">Splits a string into a vector of strings, divided by a blank space. </div><div class="ttdef"><b>Definition:</b> stringutils.cpp:126</div></div>
+<div class="ttc" id="class_material_html_a60ec76e2316aa51bd089f865ff3be697"><div class="ttname"><a href="class_material.html#a60ec76e2316aa51bd089f865ff3be697">Material::primitiveLength</a></div><div class="ttdeci">int primitiveLength</div><div class="ttdoc">Number of expected tokens in primitive. </div><div class="ttdef"><b>Definition:</b> material.h:45</div></div>
+<div class="ttc" id="class_material_html_a97efb5b3df1f11c422a82ab94535060a"><div class="ttname"><a href="class_material.html#a97efb5b3df1f11c422a82ab94535060a">Material::type</a></div><div class="ttdeci">std::string type</div><div class="ttdoc">The type of material. </div><div class="ttdef"><b>Definition:</b> material.h:42</div></div>
+<div class="ttc" id="group__io_utils_html_ga8afab6dfaa6023e1c28faf8299acefac"><div class="ttname"><a href="group__io_utils.html#ga8afab6dfaa6023e1c28faf8299acefac">fatal</a></div><div class="ttdeci">void fatal(std::string message, int ln, char *file)</div><div class="ttdoc">Report fatal error. </div><div class="ttdef"><b>Definition:</b> io.cpp:42</div></div>
+<div class="ttc" id="class_material_html_a824920fcf1557962409d071164f98806"><div class="ttname"><a href="class_material.html#a824920fcf1557962409d071164f98806">Material::parsePrimitive</a></div><div class="ttdeci">virtual bool parsePrimitive(std::vector&lt; std::string &gt; *tokens)</div><div class="ttdoc">Parses a tokenized Groundhog primitive. </div><div class="ttdef"><b>Definition:</b> material.cpp:91</div></div>
 <div class="ttc" id="class_material_html_affe06990f884293d0fe2f39110f71730"><div class="ttname"><a href="class_material.html#affe06990f884293d0fe2f39110f71730">Material::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The unique name of the material. </div><div class="ttdef"><b>Definition:</b> material.h:41</div></div>
 </div><!-- fragment -->
 </div>
@@ -258,7 +266,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b> = 1</td><
 <p>Retrieves the name of the <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a>. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The name of the material </dd></dl>
-<div class="fragment"><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;{</div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_material.html#affe06990f884293d0fe2f39110f71730">name</a>;</div><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;}</div><div class="ttc" id="class_material_html_affe06990f884293d0fe2f39110f71730"><div class="ttname"><a href="class_material.html#affe06990f884293d0fe2f39110f71730">Material::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The unique name of the material. </div><div class="ttdef"><b>Definition:</b> material.h:41</div></div>
+<div class="fragment"><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;{</div><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_material.html#affe06990f884293d0fe2f39110f71730">name</a>;</div><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div><div class="ttc" id="class_material_html_affe06990f884293d0fe2f39110f71730"><div class="ttname"><a href="class_material.html#affe06990f884293d0fe2f39110f71730">Material::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The unique name of the material. </div><div class="ttdef"><b>Definition:</b> material.h:41</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -280,8 +288,48 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b> = 1</td><
 <p>Retrieves the type of the <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a>. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The type of the material </dd></dl>
-<div class="fragment"><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{</div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_material.html#a97efb5b3df1f11c422a82ab94535060a">type</a>;</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div><div class="ttc" id="class_material_html_a97efb5b3df1f11c422a82ab94535060a"><div class="ttname"><a href="class_material.html#a97efb5b3df1f11c422a82ab94535060a">Material::type</a></div><div class="ttdeci">std::string type</div><div class="ttdoc">The type of material. </div><div class="ttdef"><b>Definition:</b> material.h:42</div></div>
+<div class="fragment"><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_material.html#a97efb5b3df1f11c422a82ab94535060a">type</a>;</div><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div><div class="ttc" id="class_material_html_a97efb5b3df1f11c422a82ab94535060a"><div class="ttname"><a href="class_material.html#a97efb5b3df1f11c422a82ab94535060a">Material::type</a></div><div class="ttdeci">std::string type</div><div class="ttdoc">The type of material. </div><div class="ttdef"><b>Definition:</b> material.h:42</div></div>
 </div><!-- fragment -->
+</div>
+</div>
+<a id="a824920fcf1557962409d071164f98806"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a824920fcf1557962409d071164f98806">&#9670;&nbsp;</a></span>parsePrimitive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Material::parsePrimitive </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::string &gt; *&#160;</td>
+          <td class="paramname"><em>tokens</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Parses a tokenized Groundhog primitive. </p>
+<p>A Groundhog primitive may be a Radiance primitive or an extension of them</p>
+<dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">tokens</td><td>The primitive tokenized </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>success </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This function should be overriden by a function with the same name in each <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> derived class </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_plastic.html#a7a94256532e6f7ebf85996c6a9f19575">Plastic</a>, and <a class="el" href="class_glass.html#a32c3223f4355e3c278c17aa9a2793063">Glass</a>.</p>
+<div class="fragment"><div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;{</div><div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div><div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
 <a id="a22529ea16353b1ac72f5a99b0285b45e"></a>
@@ -320,7 +368,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b> = 1</td><
 <dl class="section note"><dt>Note</dt><dd>This function should be overriden by a function with the same name in each <a class="el" href="class_material.html" title="Class that represent various materials. ">Material</a> derived class </dd></dl>
 
 <p>Reimplemented in <a class="el" href="class_plastic.html#a99d127ee0f2f265a4756087f12af5619">Plastic</a>, and <a class="el" href="class_glass.html#a1ac5d68e093bc480506ce9fbc3ca93bb">Glass</a>.</p>
-<div class="fragment"><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;{</div><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}</div></div><!-- fragment -->
+<div class="fragment"><div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;{</div><div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div><div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -331,7 +379,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b> = 1</td><
 <!-- HTML footer for doxygen 1.8.13-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Aug 22 2017 23:45:24 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
+Generated on Thu Aug 31 2017 14:25:20 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
 </a> 1.8.13
 </small></address>
 </body>

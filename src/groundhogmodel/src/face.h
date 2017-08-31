@@ -113,7 +113,7 @@ public:
 	//! Assigns a Material to the face
 	/*!
 	@author German Molina
-	@param[in] The pointer to the Material
+	@param[in] mat The pointer to the Material
 	*/
 	void setMaterial(Material * mat);
 };

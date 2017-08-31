@@ -1,0 +1,6 @@
+!xform -s 1 -rz -0 -ry 0 -rx -0 -t 0 0 0 ./Geometry/Story.rad
+!xform -s 1 -rz -0 -ry 0 -rx -0 -t 0 0 3 ./Geometry/Story.rad
+!xform -s 1 -rz -0 -ry 0 -rx -0 -t 0 0 6 ./Geometry/Story.rad
+!xform -s 1 -rz -0 -ry 0 -rx -0 -t 0 0 9 ./Geometry/Story.rad
+
+

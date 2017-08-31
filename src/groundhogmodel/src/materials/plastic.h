@@ -3,6 +3,8 @@
 #include "../material.h"
 #include "../../../3rdparty/json/json.hpp"
 
+using nlohmann::json;
+
 //! Plastic material
 /*!
 This material is extracted directly from the Radiance reference... 
@@ -14,7 +16,6 @@ void glass %MAT_NAME% 0 0 5 Red_r Green_r Blue_r Specularity Roughness
 
 */
 
-using nlohmann::json;
 
 class Plastic : public Material {
 

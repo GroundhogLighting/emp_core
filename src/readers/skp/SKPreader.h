@@ -432,7 +432,7 @@ public:
 	/*!
 	Will add the material unless another material with the same name exists
 	@author German Molina
-	@param[in] The material to parse and add
+	@param[in] material The material to parse and add
 	@return The pointer to the added material
 	*/
 	Material * addMaterialToModel(SUMaterialRef material);
@@ -468,7 +468,7 @@ public:
 	
 	@author German Molina
 	@param[in] face The SUFaceRef to retrieve the material from
-	@param[out] The retrieved SUMaterialRef
+	@param[out] mat The retrieved SUMaterialRef
 	@return true if a material was returned, false if not.
 	*/
 	bool getFaceMaterial(SUFaceRef face, SUMaterialRef * mat);

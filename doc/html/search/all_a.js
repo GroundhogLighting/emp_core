@@ -13,5 +13,5 @@ var searchData=
   ['min_5fz',['min_z',['../class_b_box.html#abcbf82791a72edbd5f6798ab2bb2a1ef',1,'BBox']]],
   ['minute',['minute',['../class_date.html#a0c4d2495e3da7ac1e7d3e19ecda210a2',1,'Date']]],
   ['model',['model',['../class_glare.html#acc7b759719f9fa02fc5f6a32fa8e4fa8',1,'Glare::model()'],['../class_s_k_p_reader.html#a3d2c507e431bd34c268857677e906d95',1,'SKPReader::model()'],['../class_rad_exporter.html#aedde4450ed7a6bd873d46edcc9e96b3c',1,'RadExporter::model()']]],
-  ['month',['month',['../class_date.html#a533843e07c6ac8d19fee9b16f5336ba2',1,'Date']]]
+  ['month',['month',['../class_date.html#a533843e07c6ac8d19fee9b16f5336ba2',1,'Date::month()'],['../class_hourly_data.html#a75dde64efd74daf997f221a40b05e793',1,'HourlyData::month()']]]
 ];

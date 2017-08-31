@@ -49,7 +49,6 @@ public:
 	//! Constructor of a new Material
 	/*!
 	@author German Molina
-	@param[in] name The name of the new Material
 	*/
 	Material();
 

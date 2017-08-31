@@ -25,6 +25,12 @@
 
 using nlohmann::json;
 
+//! Represents a line in a weather tape
+/*!
+	Contains the necessary information for performing lighting simulation
+	on such hour
+*/
+
 class HourlyData {
 public:
 	int month; //!< The month
@@ -33,6 +39,12 @@ public:
 	int diffuse_horizontal; //!< The diffuse horizontal radiation
 	int direct_nomal; //!< The direct normal radiation
 };
+
+//! Represents a whole weather
+/*!
+	Contains all the information related to the weather
+	of a Location. It is extracted from Weather data
+*/
 
 class Weather {
 

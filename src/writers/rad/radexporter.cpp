@@ -462,7 +462,7 @@ bool RadExporter::writeWorkplanes(char * dir) {
 		std::string name = wp->getName();
 
 		size_t numPolygons = wp->getNumPolygons();
-		if (numPolygons < 0) {
+		if (numPolygons <= 0) {
 			warn("Empty Workplane " + name);
 			continue;
 		}
@@ -670,6 +670,8 @@ bool RadExporter::writeWeather(char * dir)
 	file.open(baseDir + "/weather.wea");
 
 	Location * loc = model->getLocation();
+	if (!loc -> hasWeather())
+		return true;
 
 	file << "place " << loc->getCity() << std::endl;
 	file << "latitude " << loc->getLatitude() << std::endl;

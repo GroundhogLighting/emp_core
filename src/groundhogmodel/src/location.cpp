@@ -92,6 +92,10 @@ double Location::getElevation()
 	return elevation;
 }
 
+bool Location::hasWeather()
+{
+	return weather->hasData();
+}
 
 HourlyData * Location::getHourlyData(size_t hour)
 {
