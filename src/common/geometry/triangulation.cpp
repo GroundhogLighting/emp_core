@@ -50,6 +50,7 @@ Triangulation::~Triangulation()
 
 size_t Triangulation::addTriangle(Triangle * t) {
 	t->setIndex(nTriangles);
+	DEBUG_MSG("Adding triangle " + std::to_string(nTriangles));
 	triangles.push_back(t);
 	
 	nTriangles += 1;
@@ -290,13 +291,13 @@ void Triangulation::restoreDelaunay()
 		int bestNeighbor = -1;
 		double bestAspectRatio = HUGE;
 		// Found an ugly triangle
-		for (int j = 0; j < 3; j++) { // Check three edges for flipping or merging						
+		for (int j = 0; j < 3; j++) { // Check three edges for flipping 
 			// calculate possible aspect ratio		
 			double ar = getBestAspectRatio(triangles[i], j);
 			if (ar == -1) // Null neighbor or constraint
 				continue;
 			
-			if (ar < currentAspectRatio &&  ar < bestAspectRatio) {
+			if ( (currentAspectRatio - ar) > GLARE_TINY  &&  (bestAspectRatio-ar) > GLARE_TINY) {
 				bestNeighbor = j;
 				bestAspectRatio = ar;
 			}		
@@ -368,8 +369,10 @@ bool Triangulation::splitTriangle(size_t i, Point3D * p)
 
 bool Triangulation::splitEdge(size_t i, Point3D * p, int code)
 {	
-	if (triangles[i] == NULL)
+	if (triangles[i] == NULL) {
 		warn("Trying to split edge of NULL triangle "+std::to_string(i));
+		return false;
+	}
 
 	// get vertices
 	Point3D * a = triangles[i]->getVertex(code%3);
@@ -380,9 +383,10 @@ bool Triangulation::splitEdge(size_t i, Point3D * p, int code)
 	Point3D * oposite = getOpositeVertex(triangles[i], code % 3);
 	
 	// retrieve neighbor (will be deleted)
-	//Triangle * neighbor = triangles[i]->getNeighbor(code % 3);
-	Triangle * neighbor = NULL;
+	Triangle * neighbor = triangles[i]->getNeighbor(code % 3);
+	//Triangle * neighbor = NULL;
 
+	
 	// Create and add the new triangles.
 	Triangle * ac = new Triangle(a, p, c);
 	addTriangle(ac);
@@ -486,7 +490,7 @@ Point3D * Triangulation::getOpositeVertex(Triangle * t, int nei) {
 	for (int i = 0; i < 3; i++) { // count in neighbor		
 		bool found = false;
 		for (int j = 0; j < 3; j++) { // count in this
-			if (neighbor->getVertex(i) == t->getVertex(j)) {
+			if (neighbor->getVertex(i)->isEqual(t->getVertex(j))) {
 				found = true;
 				break;
 			}
@@ -536,9 +540,12 @@ void Triangulation::refine(double maxArea)
 
 		// find the longest edge
 		Segment * s = triangles[i]->getSegment(0);
+		int longestSegmentIndex= 0;
 		for (int j = 1; j < 3; j++) {
-			if (s->getLength() < triangles[i]->getSegment(j)->getLength())
+			if (s->getLength() < triangles[i]->getSegment(j)->getLength()) {
+				longestSegmentIndex = j;
 				s = triangles[i]->getSegment(j);
+			}
 		}
 
 		if (triangles[i]->getAspectRatio() > 1 || s->getLength() > 0.2) {			
@@ -546,12 +553,14 @@ void Triangulation::refine(double maxArea)
 			double dX = s->start->getX() + s->end->getX(); 
 			double dY = s->start->getY() + s->end->getY(); 
 			double dZ = s->start->getZ() + s->end->getZ();
-			addPoint(new Point3D(dX/2,dY/2,dZ/2));
+			addPointToTriangle(i,new Point3D(dX/2,dY/2,dZ/2), longestSegmentIndex + 3);
 			restoreDelaunay();
 		} 
 		else if (area > maxArea) { 
 			// if it is a skinny triangle, try to add the circumcenter
 			Point3D c = triangles[i]->getCircumCenter();
+			// Since the circumcenter may be in another triangle, we need 
+			// to search for it.
 			addPoint(new Point3D(c.getX(), c.getY(), c.getZ()));		
 			restoreDelaunay();			
 		}
