@@ -65,6 +65,17 @@ size_t Loop::size()
 }
 
 
+size_t Loop::realSize()
+{
+	size_t n = 0;
+	for (size_t i = 0; i < size(); i++) {
+		if (vertices[i] != NULL)
+			n++;
+	}
+	return n;
+}
+
+
 Point3D * Loop::getVertexRef(size_t i) 
 {
 	return vertices[i];

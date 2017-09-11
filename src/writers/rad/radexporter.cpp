@@ -47,12 +47,13 @@ RadExporter::~RadExporter()
 bool RadExporter::exportModel() 
 {
 	inform("Beggining Radiance export", verbose);
-
+	/*
 	// Check if directory exists
 	if ((dexist(exportDir) && isDir(exportDir))) {
 		fatal("Export directory '" + exportDir + "' alredy exists... please delete it.", __LINE__, __FILE__);
 		return false;
 	}
+	*/
 	// Create the directory
 	if (!createdir(exportDir)) {
 		fatal("Imposible to create Output directory", __LINE__, __FILE__);
@@ -302,13 +303,13 @@ bool RadExporter::writeLayers(char * dir)
 		file << std::endl << std::endl;
 
 		// check if there are faces... continue if not.
-		std::vector < Face * > * faces = layer->getFacesRef();
-		size_t numFaces = faces->size();
-		if (numFaces < 1) {
+		if (layer->isEmpty()) {
 			warn("Empty layer '" + layerName + "'");
 			continue;
 		}
 	
+		std::vector < Face * > * faces = layer->getFacesRef();
+		size_t numFaces = faces->size();
 		// write all faces
 		for (size_t j = 0; j < numFaces; j++) {
 			writeFace(&file, layer->getFaceRef(j));
@@ -334,7 +335,7 @@ void RadExporter::writeComponentInstance(std::ofstream * file, ComponentInstance
 	*file << " -ry " << instance->getRotationY(); 
 	*file << " -rx " << instance->getRotationX(); 
 	*file << " -t " << instance->getX() << " " << instance->getY() << " " << instance->getZ(); 	
-	*file << " ./Geometry/" << instance->getDefinitionRef()->getName() << ".rad"; 
+	*file << " ../Components/" << instance->getDefinitionRef()->getName() << ".rad"; 
 	*file << std::endl;
 }
 
@@ -382,7 +383,7 @@ void RadExporter::writeClosedFace(std::ofstream * file, Face * face)
 	*file << mat->getName() << GLARE_TAB << "polygon" << GLARE_TAB << faceName << std::endl;
 	*file << "0" << std::endl;
 	*file << "0" << std::endl;
-	*file << std::to_string(3 * finalLoop->size()) << std::endl;
+	*file << std::to_string(3 * finalLoop->realSize()) << std::endl;
 	writeLoop(file, finalLoop);
 
 	*file << std::endl;

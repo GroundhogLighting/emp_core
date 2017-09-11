@@ -34,8 +34,8 @@
 bool createdir(std::string dirname) 
 {
 	if (dexist(dirname) && isDir(dirname)) {
-		fatal("Impossible to create '"+dirname+"'. It already exists", __LINE__, __FILE__);
-		return false;
+		//fatal("Impossible to create '"+dirname+"'. It already exists", __LINE__, __FILE__);
+		return true;
 	}
 	else {
 		_mkdir(dirname.c_str());

@@ -37,7 +37,7 @@ This module defines functions that are handy for managing files and directories
 //! Crates a directory
 /*!
 Checks if the directory already exists. If not, it will create it
-and return TRUE. Else, returns FALSE.
+and return TRUE.
 
 @author German Molina (obtained from somewhere in the internet)
 @param[in] dirname the name of the directory to create

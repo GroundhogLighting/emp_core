@@ -771,62 +771,64 @@ bool SKPReader::loadLayersContent()
 		__LINE__
 	)) return false;
 
-	if (faceCount == 0) {
-		warn("No faces in model");
-		return true; //success, though.
+	if (faceCount > 0) {
+		inform("Counted Faces: " + size_tToString(faceCount), verbose);
+
+		std::vector<SUFaceRef> faces(faceCount);
+		if (!checkSUResult(
+			SUEntitiesGetFaces(entities, faceCount, &faces[0], &faceCount),
+			"SUEntitiesGetFaces",
+			__LINE__
+		)) return false;
+	
+		for (size_t i = 0; i < faceCount; i++) {
+
+			// CHECK LABEL OF FACE
+			std::string faceLabel;
+			bool hasLabel = getSUFaceLabel(faces[i], &faceLabel);
+		
+			if ( hasLabel ) {
+
+				if (faceLabel == SKP_WORKPLANE) {
+				// if it is workplane
+					addWorkplaneToModel(faces[i]);
+				}
+				else if (faceLabel == SKP_ILLUM) {
+				// if it is illum
+
+				}
+				else if (faceLabel == SKP_WINDOW) {
+				// if it is window
+					addWindowToModel(faces[i]);
+				}
+				continue;
+			}
+		
+			// if has no label (i.e. is geometry face)		
+			std::string layerName;		
+			if (!getSUFaceLayerName(faces[i],&layerName))
+				return false;
+
+			Layer * layerRef = model->getLayerByName(&layerName);
+			if (layerRef == NULL) {
+				return false;
+			}
+		
+			Face * face = SUFaceToFace(faces[i]);
+			if (face == NULL)
+				return false;		
+
+			// add the face
+			layerRef->getFacesRef()->push_back(face);
+
+		} // end of iterating faces
+	
+	}
+	else {
+		// Do not return... there may be instances
+		warn("No faces in model");		
 	}
 
-	inform("Counted Faces: " + size_tToString(faceCount), verbose);
-
-	std::vector<SUFaceRef> faces(faceCount);
-	if (!checkSUResult(
-		SUEntitiesGetFaces(entities, faceCount, &faces[0], &faceCount),
-		"SUEntitiesGetFaces",
-		__LINE__
-	)) return false;
-	
-	for (size_t i = 0; i < faceCount; i++) {
-
-		// CHECK LABEL OF FACE
-		std::string faceLabel;
-		bool hasLabel = getSUFaceLabel(faces[i], &faceLabel);
-		
-		if ( hasLabel ) {
-
-			if (faceLabel == SKP_WORKPLANE) {
-			// if it is workplane
-				addWorkplaneToModel(faces[i]);
-			}
-			else if (faceLabel == SKP_ILLUM) {
-			// if it is illum
-
-			}
-			else if (faceLabel == SKP_WINDOW) {
-			// if it is window
-				addWindowToModel(faces[i]);
-			}
-			continue;
-		}
-		
-		// if has no label (i.e. is geometry face)		
-		std::string layerName;		
-		if (!getSUFaceLayerName(faces[i],&layerName))
-			return false;
-
-		Layer * layerRef = model->getLayerByName(&layerName);
-		if (layerRef == NULL) {
-			return false;
-		}
-		
-		Face * face = SUFaceToFace(faces[i]);
-		if (face == NULL)
-			return false;		
-
-		// add the face
-		layerRef->getFacesRef()->push_back(face);
-
-	} // end of iterating faces
-	
 
 	// load component instances
 	size_t instanceCount;
