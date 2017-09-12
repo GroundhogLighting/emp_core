@@ -648,6 +648,9 @@ bool SKPReader::bulkFacesIntoVector(std::vector <Face * > * dest, SUEntitiesRef 
 		__LINE__
 	)) return false;
 
+	if (numFaces == 0)
+		return true;
+
 	// get the faces
 	std::vector<SUFaceRef> faces(numFaces);
 	if (!checkSUResult(
