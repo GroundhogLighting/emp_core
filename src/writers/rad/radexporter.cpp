@@ -18,11 +18,11 @@
 
 *****************************************************************************/
 
-#include "../../config_constants.h"
-#include "../../common/utilities/io.h"
-#include "../../common/utilities/file.h"
-#include "../../common/geometry/triangulation.h"
-#include "../../groundhogmodel/groundhogmodel.h"
+#include "config_constants.h"
+#include "common/utilities/io.h"
+#include "common/utilities/file.h"
+#include "common/geometry/triangulation.h"
+#include "groundhogmodel/groundhogmodel.h"
 #include "./radexporter.h"
 #include <fstream>
 

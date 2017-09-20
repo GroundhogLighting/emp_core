@@ -24,8 +24,8 @@
 #include <string>
 #include <vector>
 
-#include "../src/face.h"
-#include "../src/componentinstance.h"
+#include "./face.h"
+#include "./componentinstance.h"
 
 //! A Layer is the main group of geometry in a GroundhogModel. 
 

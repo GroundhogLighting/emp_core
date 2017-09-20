@@ -18,8 +18,8 @@
 
 *****************************************************************************/
 
-#include "../../common/utilities/io.h"
-#include "../../config_constants.h"
+#include "common/utilities/io.h"
+#include "config_constants.h"
 #include "./point3d.h"
 #include "./triangle.h"
 

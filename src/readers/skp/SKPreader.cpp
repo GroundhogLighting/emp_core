@@ -20,13 +20,13 @@
 
 
 #include "./SKPreader.h"
-#include "../../config_constants.h"
-#include "../../common/utilities/io.h"
-#include "../../common/utilities/stringutils.h"
-#include "../../groundhogmodel/groundhogmodel.h"
-#include "../../groundhogmodel/src/face.h"
-#include "../../common/geometry/polygon.h"
-#include "../../groundhogmodel/src/photosensor.h"
+#include "config_constants.h"
+#include "common/utilities/io.h"
+#include "common/utilities/stringutils.h"
+#include "groundhogmodel/groundhogmodel.h"
+#include "groundhogmodel/src/face.h"
+#include "common/geometry/polygon.h"
+#include "groundhogmodel/src/photosensor.h"
 
 #include <SketchUpAPI/initialize.h>
 #include <SketchUpAPI/model/model.h>

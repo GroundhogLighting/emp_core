@@ -19,9 +19,9 @@
 *****************************************************************************/
 
 #include <string>
-#include "../utilities/io.h"
+#include "common/utilities/io.h"
 
-#include "../../config_constants.h"
+#include "config_constants.h"
 #include "./segment.h"
 
 Segment::Segment(Point3D * a, Point3D * b) 

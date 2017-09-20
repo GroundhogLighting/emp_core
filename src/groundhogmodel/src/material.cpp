@@ -18,11 +18,10 @@
 
 *****************************************************************************/
 
-#include "../../3rdparty/json/json.hpp"
 
 #include "./material.h"
-#include "../../common/utilities/io.h"
-#include "../../common/utilities/stringutils.h"
+#include "common/utilities/io.h"
+#include "common/utilities/stringutils.h"
 
 Material::Material()
 {	

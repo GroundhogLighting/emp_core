@@ -1,7 +1,7 @@
-#include "../../../common/utilities/io.h"
+#include "common/utilities/io.h"
 #include "./glass.h"
 #include <fstream>
-#include "../../../config_constants.h"
+#include "config_constants.h"
 
 
 Glass::Glass(json j)

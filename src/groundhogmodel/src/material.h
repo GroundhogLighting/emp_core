@@ -21,7 +21,7 @@
 
 #pragma once
 #include <string>
-#include "../../3rdparty/json/json.hpp"
+#include "json/json.hpp"
 
 using nlohmann::json;
 

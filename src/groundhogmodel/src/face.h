@@ -24,7 +24,7 @@
 #include <string>
 #include "./face.h"
 #include "./material.h"
-#include "../../common/geometry/polygon.h"
+#include "common/geometry/polygon.h"
 
 //! The integration of a Polygon3D and a Material
 

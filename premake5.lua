@@ -2,8 +2,8 @@
 
 workspace "Glare"
     architecture "x86_64"
-
-    configurations { "DebugWIN", "WIN", "DebugMACOS", "MACOS", "LINUX", "DebugLINUX" }
+    platforms { "WIN64", "MACOS", "LINUX" }
+    configurations { "DEBUG", "RELEASE" }
 
 project "GoogleTest"
     kind "StaticLib"
@@ -11,6 +11,12 @@ project "GoogleTest"
     includedirs { "googletest/googletest/include", "googletest/googletest" }
     targetdir "googletest/build/%{cfg.buildcfg}"        
 
+
+project "raycalls"
+    kind "StaticLib"
+    files {"./src/3rdparty/Radiance/src/rt/raycalls.c"}
+    includedirs{"./3rdparty/Radiance/src/**"}
+    targetdir "./src/3rdparty/Radiance/build"
 
                    
 project "glare"
@@ -21,41 +27,39 @@ project "glare"
    files { 
        "main.cpp",
        "main.h",
-       "src/**"
+       "src/**"        
+    }
+
+    includedirs{
+        "./src/",
+        "./3rdparty"
     }
     
-    filter "configurations:Debug*"
+    filter "configurations:DEBUG"
         defines { "DEBUG" }
     
-    filter "configurations:*WIN*"
+    filter "platforms:WIN*"
         defines { "WIN" }    
         links {
-            "./src/3rdparty/SketchUp/WIN/binaries/sketchup/x64/*"
+            "./3rdparty/SketchUp/WIN/binaries/sketchup/x64/*",
+            "./3rdparty/Radiance/build/*"
         }
         includedirs {
-            "./src/3rdparty/SketchUp/WIN/headers"
-        }
+            "./3rdparty/SketchUp/WIN/headers", -- this changes in different machines
+        }     
 
-    filter "configurations:*MAC*"
-        defines { "MACOS" }  
-        includedirs {
-            "./src/3rdparty/SketchUp/MACOS/headers"
-        }
- 
-    filter "configurations:*LINUX*"
-        defines { "LINUX" }       
 
 project "glare_test"
     kind "ConsoleApp"
 
     links {
-            "./src/3rdparty/SketchUp/WIN/binaries/sketchup/x64/*",
+            "./3rdparty/SketchUp/WIN/binaries/sketchup/x64/*",
             "./googletest/build/%{cfg.buildcfg}/*"
     }
 
     includedirs { 
         "googletest/googletest/include", 
-        "./src/3rdparty/SketchUp/WIN/headers" 
+        "./3rdparty/SketchUp/WIN/headers" 
     }
 
     files { 

@@ -22,7 +22,7 @@
 #include <string>
 
 #include "./windowgroup.h"
-#include "../../common/utilities/io.h"
+#include "common/utilities/io.h"
 
 WindowGroup::WindowGroup(std::string groupName) {
 	name = groupName;

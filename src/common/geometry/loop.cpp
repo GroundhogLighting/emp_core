@@ -20,8 +20,8 @@
 
 
 #include "./loop.h"
-#include "../utilities/io.h"
-#include "../../config_constants.h"
+#include "common/utilities/io.h"
+#include "config_constants.h"
 #include "./segment.h"
 
 Loop::Loop() 

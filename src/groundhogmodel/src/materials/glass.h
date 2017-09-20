@@ -2,7 +2,8 @@
 
 #include "../material.h"
 
-#include "../../../3rdparty/json/json.hpp"
+#include "json/json.hpp"
+
 using nlohmann::json;
 
 //! Glass material

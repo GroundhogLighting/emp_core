@@ -20,7 +20,8 @@
 
 
 #include "componentdefinition.h"
-#include "../../common/utilities/io.h"
+
+#include "common/utilities/io.h"
 
 #include <string>
 
