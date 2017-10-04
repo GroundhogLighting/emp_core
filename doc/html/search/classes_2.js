@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['date',['Date',['../class_date.html',1,'']]]
+  ['face',['Face',['../class_face.html',1,'']]]
 ];

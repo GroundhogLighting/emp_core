@@ -23,7 +23,7 @@
 
 #include "./componentdefinition.h"
 #include "./componentinstance.h"
-#include "./face.h"
+#include "./otype.h"
 
 #include <vector>
 
@@ -38,7 +38,7 @@ class ComponentDefinition {
 
 private:
 	std::string name; //!< The name of the ComponentDefinition
-	std::vector <Face *> faces; //!< All the Face within the ComponentDefinition
+	std::vector <Otype *> objects; //!< All the Face within the ComponentDefinition
 	//Workplanes // **
 	//Sensors // **
 	//std::vector <Material *> materials;	
@@ -63,19 +63,19 @@ public:
 	*/
 	~ComponentDefinition();
 
-	//! Add a Face to the ComponentDefinition
+	//! Add an Otype to the ComponentDefinition
 	/*!
 	@author German Molina
 	@param[in] face The Face to add
 	*/
-	void addFace(Face * face);
+	void addObject(Otype * o);
 
-	//! Counts the number of Face in the ComponentDefinition
+	//! Counts the number of Otype in the ComponentDefinition
 	/*!
 	@author German Molina
 	@return The number of faces in the ComponentDefinition
 	*/
-	size_t getNumFaces();
+	size_t getNumObjects();
 
 	//! Retrieves the name of the ComponentDefinition
 	/*!
@@ -84,13 +84,13 @@ public:
 	*/
 	std::string getName();
 	
-	//! Retrieves a Face reference of the ComponentDefinition
+	//! Retrieves an Otype reference of the ComponentDefinition
 	/*!
 	@author German Molina
 	@param[in] i The index of the Face to retrieve
 	@return The reference to the Face
 	*/
-	Face * getFaceRef(size_t i);
+	Otype * getObjectRef(size_t i);
 
 	//! Retrieves a ComponentInstance reference of the ComponentDefinition
 	/*!
@@ -100,12 +100,12 @@ public:
 	*/
 	ComponentInstance * getComponentInstanceRef(size_t i);
 
-	//! Retrieves the reference to the Face vector
+	//! Retrieves the reference to the Otype vector
 	/*!
 	@author German Molina
 	@return The reference to the Face vector
 	*/
-	std::vector <Face * > * getFacesRef();
+	std::vector <Otype * > * getObjectsRef();
 
 	//! Retrieves the reference to the ComponentInstance vector
 	/*!

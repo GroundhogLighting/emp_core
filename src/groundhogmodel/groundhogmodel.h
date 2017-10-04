@@ -90,17 +90,17 @@ public:
 	*/
 	void addLayer(std::string layerName);
 
-	//! Adds a face to a certain layer
+	//! Adds an Otype to a certain layer
 	/*!
 	Will return false (and inform a fatal error) if the layer 
 	was not found.
 
 	@author German Molina
 	@param[in] layerName The name of the layer
-	@param[in] face The face to add
+	@param[in] o The Otype to add
 	@return success
 	*/
-	bool addFaceToLayer(std::string * layerName, Face * face);
+	bool addObjectToLayer(std::string * layerName, Otype * o);
 
 	//! Adds a ComponentInstance to a certain layer
 	/*!
@@ -114,22 +114,7 @@ public:
 	*/
 	bool addComponentInstanceToLayer(std::string * layerName, ComponentInstance * instance);
 
-	//! Adds a Face to a vector
-	/*!
-	@author German Molina
-	@param[in] faces The vector of Face
-	@param[in] face The Face to add
-	*/
-	void addFaceToVector(std::vector <Face *> * faces, Face * face);
-
-	//! Adds a ComponentInstance to a vector
-	/*!
-	@author German Molina
-	@param[in] instances The vector of CompoentInstance
-	@param[in] instance The instance to add
-	*/
-	void addComponentInstanceToVector(std::vector <ComponentInstance *> * instances, ComponentInstance * instance);
-
+	
 	//! Counts the Layer in the model
 	/*!	
 	@author German Molina

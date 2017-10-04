@@ -24,7 +24,7 @@
 #include "common/utilities/io.h"
 #include "common/utilities/stringutils.h"
 #include "groundhogmodel/groundhogmodel.h"
-#include "groundhogmodel/src/face.h"
+#include "groundhogmodel/src/otype.h"
 #include "common/geometry/polygon.h"
 #include "groundhogmodel/src/photosensor.h"
 
@@ -637,7 +637,7 @@ bool SKPReader::addComponentInstanceToVector(std::vector <ComponentInstance * > 
 }
 
 
-bool SKPReader::bulkFacesIntoVector(std::vector <Face * > * dest, SUEntitiesRef entities) 
+bool SKPReader::bulkFacesIntoVector(std::vector <Otype * > * dest, SUEntitiesRef entities) 
 {
 
 	// count faces in these entities
@@ -694,7 +694,7 @@ bool SKPReader::loadComponentDefinition(SUComponentDefinitionRef definition)
 	model->addComponentDefinition(componentDefinition);
 
 	// Load faces
-	bulkFacesIntoVector(componentDefinition->getFacesRef(), entities);
+	bulkFacesIntoVector(componentDefinition->getObjectsRef(), entities);
 
 	// load instances
 	bulkComponentInstancesIntoVector(componentDefinition->getComponentInstancesRef(), entities);
@@ -822,7 +822,7 @@ bool SKPReader::loadLayersContent()
 				return false;		
 
 			// add the face
-			layerRef->getFacesRef()->push_back(face);
+			layerRef->getObjectsRef()->push_back(face);
 
 		} // end of iterating faces
 	

@@ -2,6 +2,7 @@ var searchData=
 [
   ['r',['r',['../class_glass.html#a35defd6cb62b6f43bdd2add52940b3c0',1,'Glass::r()'],['../class_plastic.html#a7e24b22f9aeabbd61a36e870ff088ecc',1,'Plastic::r()']]],
   ['radexporter',['RadExporter',['../class_rad_exporter.html',1,'RadExporter'],['../class_rad_exporter.html#ab7fc07442474b6015a8e8aff2700db94',1,'RadExporter::RadExporter()']]],
+  ['realsize',['realSize',['../class_loop.html#a89306ca5925ef03014ddc0cdf681cb84',1,'Loop']]],
   ['red',['red',['../class_glass.html#a036f5665a61e03189f3e075d7ae86fe9',1,'Glass::red()'],['../class_plastic.html#a1d4612ba1331919eae9b374464d90e5a',1,'Plastic::red()']]],
   ['refine',['refine',['../class_triangulation.html#a2a5ea668003e82e89b73c5d753a9c706',1,'Triangulation']]],
   ['resetneighborhoods',['resetNeighborhoods',['../class_triangulation.html#a242cd3fb0b5e28e7ae5a8763ddab9147',1,'Triangulation']]],

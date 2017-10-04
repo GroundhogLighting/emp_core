@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['componentdefinition',['ComponentDefinition',['../class_component_definition.html',1,'']]],
-  ['componentinstance',['ComponentInstance',['../class_component_instance.html',1,'']]]
+  ['date',['Date',['../class_date.html',1,'']]]
 ];

@@ -52,6 +52,11 @@ extern OCTREE  *octblock[MAXOBLK];	/* octree blocks */
  *	boundaries.
  */
 
+#ifdef GLARE
+// Needed for compiling Glare
+#include "Radiance/src/common/fvect.h"
+#endif
+
 typedef struct {
 	FVECT  cuorg;			/* the cube origin */
 	double  cusize;			/* the cube size */

@@ -164,8 +164,8 @@ TEST(Point3DTest, transform)
 	k = Vector3D(-11, -2, -43);
 
 	p = Point3D(1, 1, 1);
-	ASSERT_EQ(p.transform(i, j, k).getX(), -8);
-	ASSERT_EQ(p.transform(i, j, k).getY(), 4);
-	ASSERT_EQ(p.transform(i, j, k).getZ(), -38);
+	ASSERT_EQ(p.transform(i, j, k).getX(), 2);
+	ASSERT_EQ(p.transform(i, j, k).getY(), 12);
+	ASSERT_EQ(p.transform(i, j, k).getZ(), -56);
 
 }

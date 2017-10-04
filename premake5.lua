@@ -4,12 +4,13 @@ workspace "Glare"
     architecture "x86_64"
     platforms { "WIN64", "MACOS", "LINUX" }
     configurations { "DEBUG", "RELEASE" }
-
+    defines{ "GLARE" }
+    
 project "GoogleTest"
     kind "StaticLib"
     files { "googletest/googletest/src/gtest-all.cc" }
     includedirs { "googletest/googletest/include", "googletest/googletest" }
-    targetdir "googletest/build/%{cfg.buildcfg}"        
+    targetdir "googletest/build/%{cfg.platform}"        
 
 
 project "raycalls"
@@ -22,7 +23,7 @@ project "raycalls"
 project "glare"
    kind "ConsoleApp"
    language "C++"
-   targetdir "bin/%{cfg.buildcfg}"
+   targetdir "bin/%{cfg.buildcfg}%{cfg.platform}"
 
    files { 
        "main.cpp",
@@ -41,8 +42,7 @@ project "glare"
     filter "platforms:WIN*"
         defines { "WIN" }    
         links {
-            "./3rdparty/SketchUp/WIN/binaries/sketchup/x64/*",
-            "./3rdparty/Radiance/build/*"
+            "./3rdparty/SketchUp/WIN/binaries/sketchup/x64/*"
         }
         includedirs {
             "./3rdparty/SketchUp/WIN/headers", -- this changes in different machines
@@ -52,12 +52,26 @@ project "glare"
 project "glare_test"
     kind "ConsoleApp"
 
+    filter "configurations:DEBUG"
+        defines { "DEBUG" }
+    
+    filter "platforms:WIN*"
+        defines { "WIN" }    
+        links {
+            "./3rdparty/SketchUp/WIN/binaries/sketchup/x64/*"
+        }
+        includedirs {
+            "./3rdparty/SketchUp/WIN/headers", -- this changes in different machines
+        }     
+
     links {
             "./3rdparty/SketchUp/WIN/binaries/sketchup/x64/*",
-            "./googletest/build/%{cfg.buildcfg}/*"
+            "./googletest/build/%{cfg.platform}/*"
     }
 
-    includedirs { 
+    includedirs {
+        "./src/",
+        "./3rdparty",
         "googletest/googletest/include", 
         "./3rdparty/SketchUp/WIN/headers" 
     }

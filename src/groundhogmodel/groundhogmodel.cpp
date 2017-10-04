@@ -55,12 +55,12 @@ void GroundhogModel::addLayer(std::string layerName)
 	DEBUG_MSG("Adding layer " + layerName + " to model");
 }
 
-bool GroundhogModel::addFaceToLayer(std::string * layerName, Face * face)
+bool GroundhogModel::addObjectToLayer(std::string * layerName, Otype * o)
 {
 	for (unsigned layerCount = 0; layerCount < layers.size(); layerCount++) {		
 		if (layers[layerCount]->compareName(layerName)) {
 			DEBUG_MSG("Found layer "+*layerName);
-			addFaceToVector(layers[layerCount]->getFacesRef(), face);
+			layers[layerCount]->getObjectsRef()->push_back(o);
 			return true;
 		}
 	}
@@ -74,7 +74,7 @@ bool GroundhogModel::addComponentInstanceToLayer(std::string * layerName, Compon
 	for (unsigned layerCount = 0; layerCount < layers.size(); layerCount++) {
 		if (layers[layerCount]->compareName(layerName)) {
 			DEBUG_MSG("Found layer " + *layerName);
-			addComponentInstanceToVector(layers[layerCount]->getComponentInstancesRef(), instance);
+			layers[layerCount]->getComponentInstancesRef()->push_back(instance);
 			return true;
 		}
 	}
@@ -82,15 +82,6 @@ bool GroundhogModel::addComponentInstanceToLayer(std::string * layerName, Compon
 	return false;
 }
 
-void GroundhogModel::addFaceToVector(std::vector <Face *> * faces, Face * face)
-{
-	faces->push_back(face);
-}
-
-void GroundhogModel::addComponentInstanceToVector(std::vector <ComponentInstance *> * instances, ComponentInstance * instance)
-{
-	instances->push_back(instance);
-}
 
 
 size_t GroundhogModel::getNumLayers()

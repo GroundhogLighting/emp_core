@@ -14,6 +14,10 @@ extern "C" {
 #define  OCTREE		int
 #endif
 
+#ifdef GLARE
+#include "Radiance/src/common/fvect.h"
+#endif
+
 /*
  *	Object definitions require general specifications
  *	which may include a number of different argument types.
@@ -44,7 +48,7 @@ typedef struct {
 #ifdef  SMLMEM
 #define  OBJECT		int16		/* index to object array */
 #else
-#define  OBJECT		int32		/* index to object array */
+#define  OBJECT		size_t		/* index to object array */
 #endif
 #endif
 

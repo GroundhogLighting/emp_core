@@ -148,14 +148,6 @@ $(function() {
 <li>getFaceMaterial()
 : <a class="el" href="class_s_k_p_reader.html#a2e2acf152e0d27f378db8dddead29a82">SKPReader</a>
 </li>
-<li>getFaceRef()
-: <a class="el" href="class_component_definition.html#a1bbae25fe94b1d4fed16ab7dd43371be">ComponentDefinition</a>
-, <a class="el" href="class_layer.html#ad494d9121d5fa82c899673c50d067f1a">Layer</a>
-</li>
-<li>getFacesRef()
-: <a class="el" href="class_component_definition.html#a98fe0a5d8d148448824491e3565c79bf">ComponentDefinition</a>
-, <a class="el" href="class_layer.html#a9a599d7f94e9b780a72a9009a342881e">Layer</a>
-</li>
 <li>getFromSUTypedValue()
 : <a class="el" href="class_s_k_p_reader.html#a074dc7ff80f1c47edcc99c4697ba6dc4">SKPReader</a>
 </li>
@@ -197,7 +189,7 @@ $(function() {
 : <a class="el" href="class_location.html#a3ad4a4c1bfb5d9619c6de94ff27bc1df">Location</a>
 </li>
 <li>getMaterial()
-: <a class="el" href="class_face.html#a34cdc5a1aed3c3848ec976d2bc23568d">Face</a>
+: <a class="el" href="class_otype.html#a6318a5b344c680e77a0bf04125059970">Otype</a>
 </li>
 <li>getMaterialRef()
 : <a class="el" href="class_groundhog_model.html#a054f3bdee8a793f1ac3fdb7ca2635e66">GroundhogModel</a>
@@ -210,9 +202,9 @@ $(function() {
 </li>
 <li>getName()
 : <a class="el" href="class_component_definition.html#a5d9cb57b3f2b2e5b5f9ed4e767b03eeb">ComponentDefinition</a>
-, <a class="el" href="class_face.html#aad5baa66b71126257a023d43f6180e41">Face</a>
 , <a class="el" href="class_layer.html#a1f981903fa03cd45b44aa68042ac809a">Layer</a>
 , <a class="el" href="class_material.html#a6dd6278a55af611612d999c7d3ab63f3">Material</a>
+, <a class="el" href="class_otype.html#a9008dfd05f66a3d10a41376acc369db3">Otype</a>
 , <a class="el" href="class_photosensor.html#adec806dc28cd36380e13a2c40e1ad9bd">Photosensor</a>
 , <a class="el" href="class_view.html#a74c6ddf71a1163fd4b8542c4c50794e2">View</a>
 , <a class="el" href="class_window_group.html#a4190d8eb93437b2bd014c4b49ed7c2cc">WindowGroup</a>
@@ -230,14 +222,14 @@ $(function() {
 <li>getNumComponentDefinitions()
 : <a class="el" href="class_groundhog_model.html#a2ea70fb9f568daf9566a0867809fed1f">GroundhogModel</a>
 </li>
-<li>getNumFaces()
-: <a class="el" href="class_component_definition.html#a310139df4f4479662c9d84176cf8877a">ComponentDefinition</a>
-</li>
 <li>getNumLayers()
 : <a class="el" href="class_groundhog_model.html#a7132b66eb3e182746506e46cc9c1f26a">GroundhogModel</a>
 </li>
 <li>getNumMaterials()
 : <a class="el" href="class_groundhog_model.html#ab76909b180cc0f78ea29387a816fb9d9">GroundhogModel</a>
+</li>
+<li>getNumObjects()
+: <a class="el" href="class_component_definition.html#a8cea35fae17969cd4c4a6d243acf791d">ComponentDefinition</a>
 </li>
 <li>getNumPolygons()
 : <a class="el" href="class_workplane.html#a909f0ef32a97848fa28be570ef44ad17">Workplane</a>
@@ -256,6 +248,14 @@ $(function() {
 </li>
 <li>getNumWorkplanes()
 : <a class="el" href="class_groundhog_model.html#ace330e3aa4650f160c18989038c958d2">GroundhogModel</a>
+</li>
+<li>getObjectRef()
+: <a class="el" href="class_component_definition.html#a4441ffa9aaa87dcac361a22897ec3af5">ComponentDefinition</a>
+, <a class="el" href="class_layer.html#ab34d850b99f4746be7d438d04d8e9295">Layer</a>
+</li>
+<li>getObjectsRef()
+: <a class="el" href="class_component_definition.html#a700af7462c30f9cae2af02b8fcfbab17">ComponentDefinition</a>
+, <a class="el" href="class_layer.html#a6ddb0cac1e79d606bc0df93ca6bc4b5e">Layer</a>
 </li>
 <li>getOpositeVertex()
 : <a class="el" href="class_triangulation.html#a4ef8f9b5bb9bdb461b8adfb19dc75414">Triangulation</a>
@@ -329,6 +329,7 @@ $(function() {
 </li>
 <li>getType()
 : <a class="el" href="class_material.html#aea468e0d9da26595e53f5c2201795a43">Material</a>
+, <a class="el" href="class_otype.html#a1c5d931de93f0832082c3ea293514ab9">Otype</a>
 </li>
 <li>getValueFromEntityGHDictionary()
 : <a class="el" href="class_s_k_p_reader.html#a363d8581fd8d799a8e0f081f1106d618">SKPReader</a>
@@ -411,7 +412,7 @@ $(function() {
 <!-- HTML footer for doxygen 1.8.13-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 31 2017 14:25:22 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
+Generated on Wed Oct 4 2017 09:34:13 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
 </a> 1.8.13
 </small></address>
 </body>

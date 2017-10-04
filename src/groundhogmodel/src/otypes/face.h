@@ -23,7 +23,9 @@
 
 #include <string>
 #include "./face.h"
-#include "./material.h"
+#include "../material.h"
+#include "../otype.h"
+
 #include "common/geometry/polygon.h"
 
 //! The integration of a Polygon3D and a Material
@@ -32,10 +34,8 @@
 A Face represents physical objects of the model.
 */
 
-class Face {
+class Face : public Otype {
 private:
-	std::string name; //!< The name of the face
-	Material * material = NULL; //!< The material of the Face
 	Polygon3D * polygon; //!< The polygon that represents the geometry of the face
 
 public:
@@ -57,12 +57,7 @@ public:
 	*/
 	~Face();
 
-	//! Retrieves the name of the Face
-	/*!
-	@author German Molina
-	@return The name of the face
-	*/
-	std::string getName();
+	
 
 	//! Sets the Polygon3D of the Face
 	/*!
@@ -103,17 +98,4 @@ public:
 	*/
 	Loop * getClosedLoop();
 
-	//! Retrieves the Material assigned to the face
-	/*!
-	@author German Molina
-	@return The pointer to the Material
-	*/
-	Material * getMaterial();
-
-	//! Assigns a Material to the face
-	/*!
-	@author German Molina
-	@param[in] mat The pointer to the Material
-	*/
-	void setMaterial(Material * mat);
 };

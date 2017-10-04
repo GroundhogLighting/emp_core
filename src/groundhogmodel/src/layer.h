@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include "./face.h"
+#include "./otype.h"
 #include "./componentinstance.h"
 
 //! A Layer is the main group of geometry in a GroundhogModel. 
@@ -37,7 +37,7 @@ class Layer{
 
 private:
 	std::string name; //!< Name of the Layer
-	std::vector <Face * > faces; //!< The faces in the Layer
+	std::vector <Otype * > objects; //!< The faces in the Layer
 	std::vector <ComponentInstance * > instances; //!< The ComponentInstance in the Layer
 
 public:
@@ -67,12 +67,12 @@ public:
 	*/
 	bool compareName(std::string * layerName);
 
-	//! Adds a Face to the Layer
+	//! Adds an Otype to the Layer
 	/*!
 	@author German Molina
 	@param[in] face The Face to add to the Layer
 	*/
-	void addFace(Face * face);
+	void addObject(Otype * face);
 
 	//! Retrieves the reference to the ComponentInstance vector
 	/*!
@@ -88,19 +88,19 @@ public:
 	*/
 	std::string getName();
 
-	//! Retrieves the reference to the Face vector
+	//! Retrieves the reference to the Otype vector
 	/*!
 	@author German Molina
 	@return The reference to the Face vector
 	*/
-	std::vector <Face * > * getFacesRef();
+	std::vector <Otype * > * getObjectsRef();
 
-	//! Retrieve the reference to a specific Face
+	//! Retrieve the reference to a specific Otype
 	/*!
 	@author German molina
 	@param[in] i The index of the Face to retrieve
 	*/
-	Face * getFaceRef(size_t i);
+	Otype * getObjectRef(size_t i);
 
 	//! Retrieve the reference to a specific ComponentInstance
 	/*!

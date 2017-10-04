@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['material',['Material',['../class_material.html',1,'']]]
+  ['otype',['Otype',['../class_otype.html',1,'']]]
 ];

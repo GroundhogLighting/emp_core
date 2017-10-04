@@ -36,8 +36,8 @@ ComponentDefinition::~ComponentDefinition()
 {
 	DEBUG_MSG("Destroying component " + name);
 
-	for (size_t i = 0; i < faces.size(); i++) {
-		delete faces[i];
+	for (size_t i = 0; i < objects.size(); i++) {
+		delete objects[i];
 	}
 	
 	for (size_t i = 0; i < instances.size(); i++) {
@@ -46,15 +46,15 @@ ComponentDefinition::~ComponentDefinition()
 }
 
 
-void ComponentDefinition::addFace(Face * face) 
+void ComponentDefinition::addObject(Otype * o)
 {
 	DEBUG_MSG("ADDING FACE TO" + name);
-	faces.push_back(face);
+	objects.push_back(o);
 }
 
-size_t ComponentDefinition::getNumFaces() 
+size_t ComponentDefinition::getNumObjects() 
 {
-	return faces.size();
+	return objects.size();
 }
 
 
@@ -64,9 +64,9 @@ std::string ComponentDefinition::getName()
 }
 
 
-Face * ComponentDefinition::getFaceRef(size_t i) 
+Otype * ComponentDefinition::getObjectRef(size_t i)
 {
-	return faces[i];
+	return objects[i];
 }
 
 
@@ -75,9 +75,9 @@ ComponentInstance * ComponentDefinition::getComponentInstanceRef(size_t i)
 	return instances[i];
 }
 
-std::vector <Face * > * ComponentDefinition::getFacesRef() 
+std::vector <Otype * > * ComponentDefinition::getObjectsRef()
 {
-	return &faces;
+	return &objects;
 }
 
 std::vector <ComponentInstance * > * ComponentDefinition::getComponentInstancesRef() 

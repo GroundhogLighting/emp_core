@@ -233,7 +233,7 @@ bool RadExporter::writeComponentDefinitions(char * dir)
 
 	for (size_t i = 0; i < numDefinitions; i++) {
 		ComponentDefinition * definition = model->getComponentDefinitionRef(i);
-		size_t numFaces = definition->getNumFaces();
+		size_t numObjects = definition->getNumObjects();
 		std::string componentName = definition->getName();
 
 		// create the file
@@ -245,7 +245,7 @@ bool RadExporter::writeComponentDefinitions(char * dir)
 		size_t numInstances = instances->size();
 		
 		// export faces
-		if (numFaces < 1 && numInstances < 1) {
+		if (numObjects < 1 && numInstances < 1) {
 			warn("Empty component '" + componentName + "'");
 			continue;
 		}
@@ -258,8 +258,8 @@ bool RadExporter::writeComponentDefinitions(char * dir)
 			file << std::endl << std::endl;
 		}
 
-		for (size_t j = 0; j < numFaces; j++) {
-			writeFace(&file, definition->getFaceRef(j));
+		for (size_t j = 0; j < numObjects; j++) {
+			writeObject(&file, definition->getObjectRef(j));
 		}// end of iterating faces
 
 		// Close the file
@@ -301,18 +301,13 @@ bool RadExporter::writeLayers(char * dir)
 			writeComponentInstance(&file, layer->getComponentInstanceRef(j));
 		}
 		file << std::endl << std::endl;
-
-		// check if there are faces... continue if not.
-		if (layer->isEmpty()) {
-			warn("Empty layer '" + layerName + "'");
-			continue;
-		}
+		
 	
-		std::vector < Face * > * faces = layer->getFacesRef();
-		size_t numFaces = faces->size();
+		std::vector < Otype * > * objects = layer->getObjectsRef();
+		size_t numFaces = objects->size();
 		// write all faces
 		for (size_t j = 0; j < numFaces; j++) {
-			writeFace(&file, layer->getFaceRef(j));
+			writeObject(&file, layer->getObjectRef(j));
 		}
 		
 		// Close the file
@@ -392,17 +387,17 @@ void RadExporter::writeClosedFace(std::ofstream * file, Face * face)
 	}
 }
 
-void RadExporter::writeFace(std::ofstream * file, Face * face) 
+void RadExporter::writeObject(std::ofstream * file, Otype * face) 
 {
-	if (face->hasTooManyInnerLoops()) {
+
+	if (dynamic_cast<Face *>(face)->hasTooManyInnerLoops()) {
 		warn("Ignoring face '" + face->getName() + "' because it has TOO MANY inner loops.");
 		// writeTriangulatedFace(file,face);
 		return;
 	}
 	else {
-		writeClosedFace(file,face);		
-	}
-	
+		writeClosedFace(file,dynamic_cast<Face *>(face));		
+	}	
 }
 
 bool RadExporter::writeWindows(char * dir) {
@@ -436,7 +431,7 @@ bool RadExporter::writeWindows(char * dir) {
 
 		for (size_t j = 0; j < numWindows; j++) {
 			Face * window = group->getWindowRef(j);
-			writeFace(&file, window);
+			writeObject(&file, window);
 		}
 
 		file.close();

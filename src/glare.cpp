@@ -26,9 +26,9 @@
 #include "./common/utilities/stringutils.h"
 #include "./common/utilities/file.h"
 
-#include "./readers/skp/SKPreader.h"
-
-#include "./writers/rad/radexporter.h"
+#include "readers/skp/SKPreader.h"
+#include "writers/rad/radexporter.h"
+#include "calculator/calculator.h"
 
 #define PRINT_USAGE std::cerr << usage << std::endl;
 

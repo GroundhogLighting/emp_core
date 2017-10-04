@@ -12,5 +12,6 @@ var searchData=
   ['polygons',['polygons',['../class_workplane.html#a8ced4fd92ce27966106fdfcdfa8064d9',1,'Workplane']]],
   ['position',['position',['../class_photosensor.html#a45012577fc81e6afec8f01716c60d234',1,'Photosensor::position()'],['../class_point3_d.html#a01a58612371985974627cc9925d9bfd4',1,'Point3D::position()']]],
   ['primitivelength',['primitiveLength',['../class_material.html#a60ec76e2316aa51bd089f865ff3be697',1,'Material']]],
-  ['print',['print',['../class_point3_d.html#ae9ba53746f5277891559dc8ba7e083e0',1,'Point3D::print()'],['../class_triangle.html#abc3785b96e03fde1b5f594f8ed6afabb',1,'Triangle::print()'],['../class_vector3_d.html#a37762d009e092a9a9eecb2de03b6f0ec',1,'Vector3D::print()']]]
+  ['print',['print',['../class_point3_d.html#ae9ba53746f5277891559dc8ba7e083e0',1,'Point3D::print()'],['../class_triangle.html#abc3785b96e03fde1b5f594f8ed6afabb',1,'Triangle::print()'],['../class_vector3_d.html#a37762d009e092a9a9eecb2de03b6f0ec',1,'Vector3D::print()']]],
+  ['purge',['purge',['../class_simulation_manager.html#a74d0afb87a91c052f87b94dc8e7b900b',1,'SimulationManager']]]
 ];

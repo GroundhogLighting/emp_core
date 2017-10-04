@@ -28,26 +28,18 @@ Face::Face(std::string faceName)
 {
 	DEBUG_MSG("Creating face " + faceName);
 
-	name = faceName;
+	setName(faceName);
 	polygon = new Polygon3D();
-
 
 }
 
 Face::~Face() 
 {
-
 	//destroy polygon
-	delete polygon;
-	
-	DEBUG_MSG("Destroying face "+name);
+	delete polygon;	
+	DEBUG_MSG("Destroying face "+getName());
 }
 
-
-std::string Face::getName() 
-{
-	return name;
-}
 
 
 void Face::setPolygon(Polygon3D * newPolygon) 
@@ -74,14 +66,4 @@ Loop * Face::getOuterLoopRef()
 Loop * Face::getClosedLoop() 
 {
 	return polygon->getClosedLoop();
-}
-
-Material * Face::getMaterial()
-{
-	return material;
-}
-
-void Face::setMaterial(Material * mat)
-{
-	material = mat;
 }

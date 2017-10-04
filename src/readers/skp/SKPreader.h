@@ -229,7 +229,7 @@ public:
 	@param[in] entities the SUEntitiesRef object containing the SUFacesRef
 	@return success
 	*/
-	bool bulkFacesIntoVector(std::vector <Face * > * dest, SUEntitiesRef  entities);
+	bool bulkFacesIntoVector(std::vector <Otype * > * dest, SUEntitiesRef  entities);
 
 	//! Transforms a SUComponentDefinitionRef into a ComponentDefinition and adds it to a GroundhogModel
 	/*!
