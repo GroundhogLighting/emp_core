@@ -38,7 +38,6 @@ RadExporter::RadExporter(GroundhogModel * the_model, std::string the_exportDir, 
 
 RadExporter::~RadExporter() 
 {
-
 	DEBUG_MSG("Destroying Rad Exporter");
 }
 

@@ -22,6 +22,7 @@
 #pragma once
 
 #include "./groundhogmodel/groundhogmodel.h"
+#include "./taskmanager/taskmanager.h"
 
 //! This is the main class within Glare. It manages the Read, Write, Calculate process.
 
@@ -36,11 +37,13 @@ private:
 	
 	std::string inputFile; //!< The file that is being read
 
-	std::string outputFile; //!< The file (or directory) that will be written
+	std::string secondArgument; //!< The second argument given to the program. It may be a Lua scrip, a name of a new model or a specific task
 	
-	bool verbose; //!< An option that controls what sort of things will be "informed" or not
+	bool verbose = true; //!< An option that controls what sort of things will be "informed" or not
 	
 	GroundhogModel model = GroundhogModel(); //!< The Groundhog Model being handled
+
+	TaskManager taskManager = TaskManager(); //!< The TaskManager that will handle and coordinate what needs to be done.
 
 public:
 	//! Creates a Glare object.

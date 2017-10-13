@@ -28,15 +28,21 @@
 
 #include "readers/skp/SKPreader.h"
 #include "writers/rad/radexporter.h"
-#include "calculator/calculator.h"
+#include "taskmanager/taskManager.h"
+
+
+// Include LUA headers
+extern "C" {
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h> 
+}
 
 #define PRINT_USAGE std::cerr << usage << std::endl;
 
 Glare::Glare() 
 {
-	DEBUG_MSG("Creating Glare object");
-	verbose = true;
-	model = GroundhogModel();
+	DEBUG_MSG("Creating Glare object");	
 }
 
 Glare::~Glare() 
@@ -54,10 +60,8 @@ bool Glare::parseInputs(int argc, char* argv[])
 		inputFile = std::string(argv[1]);
 	}
 	else if (argc == 3) {
-		// export... call in the shape of 
-		// 'Glare inputFile outFile
 		inputFile = std::string(argv[1]);
-		outputFile = std::string(argv[2]);
+		secondArgument = std::string(argv[2]);		
 	}
 	else { // input error
 		PRINT_USAGE
@@ -65,12 +69,12 @@ bool Glare::parseInputs(int argc, char* argv[])
 	}
 
 	// Check if input file makes sense.
-
-	char * supportedInputs[] = { ".skp",".lua" };
+	char * supportedInputs[] = { ".skp" };
 	if (!stringIncludeAny(inputFile, supportedInputs,2)) {
-		fatal("Only .SKP and .LUA input files are supported for now", __LINE__, __FILE__);
+		fatal("Only .SKP input files are supported for now", __LINE__, __FILE__);
 		return false;
 	}
+
 
 	
 	return true;
@@ -78,6 +82,34 @@ bool Glare::parseInputs(int argc, char* argv[])
 
 
 
+class ExportRadianceDir : public Task {
+
+public:
+
+	std::string target;
+	GroundhogModel * model;
+	bool verbose;
+
+	ExportRadianceDir(std::string dir, GroundhogModel * ghmodel, bool verb)
+	{
+		setName("Export model in Radiance format in directory '"+dir+"'");	
+
+		target = dir;
+		model = ghmodel;
+		verbose = verb;
+	}
+
+	bool isEqual(Task * t)
+	{
+		return target == static_cast<ExportRadianceDir *>(t)->target;		
+	}
+
+	bool solve()
+	{
+		RadExporter r = RadExporter(model, target, verbose);
+		return r.exportModel();
+	}
+};
 
 bool Glare::solve() 
 {
@@ -88,34 +120,58 @@ bool Glare::solve()
 		return false;
 	}
 
-	// Check what kind of process is wanted
-	if (!stringInclude(inputFile, ".lua")) {
-		/* STANDARD CALCULATION */
-		// load model
-		if (!loadFile(inputFile)) {
-			fatal("Impossible to load model", __LINE__, __FILE__);
+	// Load file
+	loadFile(inputFile);
+
+	// Analize second argument
+	if (secondArgument.empty()) {
+		// Process and return... get tasks from model
+
+	}
+	else if (stringInclude(secondArgument, ".lua")) {
+		// process lua file... get tasks from script
+
+		// check if script exists
+		if (!fexists(secondArgument)) {
+			fatal("Lua script '" + std::string(secondArgument) + "' not found", __LINE__, __FILE__);
 			return false;
 		}
 
-		/* CHECK IF JUST EXPORT */
-		if (!outputFile.empty()) {
-			if (stringInclude(outputFile, ".ghm")) {
-				fatal("Exporting .GHM file is not yet supported", __LINE__, __FILE__);
-				return false;
-			}
-			else { // no extension, thus: Radiance			
-				RadExporter writer = RadExporter(&model,outputFile,verbose);
-				return writer.exportModel();
-			}
+		// Process LUA script
+		int status, result;
+
+		// Create lua state
+		lua_State * L = luaL_newstate();
+
+		// Open libraries
+		luaL_openlibs(L);
+
+		// Load script
+		status = luaL_loadfile(L, secondArgument.c_str());
+		if (status) {
+			fatal("Error when reading script file '"+secondArgument+"'", __LINE__, __FILE__);
+			return 1;
+		};
+
+		result = lua_pcall(L, 0, LUA_MULTRET, 0);
+		if (result) {
+			fatal("Error when executing script file '" + secondArgument + "'", __LINE__, __FILE__);
+			return 1;
 		}
 
-		fatal("calculations are not yet supported", __LINE__, __FILE__);
-		return false;
+
 	}
 	else {
-		// In other case, process the lua script
-		fatal("The Lua API is not yet supported.", __LINE__, __FILE__);
-		return false;
+		// translate
+		if (!stringInclude(secondArgument, ".")) {
+			// Radiance format... no extension
+			taskManager.addTask(new ExportRadianceDir(secondArgument,&model,verbose));
+			taskManager.solve();
+		}
+		else {
+			fatal("Unrecognized file extension in " + secondArgument, __LINE__, __FILE__);
+			return false;
+		}
 	}
 
 	return true;

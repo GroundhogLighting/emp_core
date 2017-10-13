@@ -12,7 +12,7 @@
 #include "./tests/triangle_test.h"
 #include "./tests/os_test.h"
 */
-#include "./tests/simulationManager_test.h"
+#include "./tests/taskManager_test.h"
 
 int main(int argc, char* argv[]){	
 	

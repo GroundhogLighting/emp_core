@@ -189,7 +189,6 @@ bool SKPReader::parseSKPModel(std::string inputFile)
 	if (!loadViews())
 		return false;
 
-
 	// Load model info (location, date, etc).
 	if (!loadModelInfo())
 		return false;
