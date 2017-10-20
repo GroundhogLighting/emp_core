@@ -28,8 +28,8 @@
 
 #include "readers/skp/SKPreader.h"
 #include "writers/rad/radexporter.h"
-#include "taskmanager/taskManager.h"
-
+#include "common/tasks/task.h"
+#include "api/api.h"
 
 // Include LUA headers
 extern "C" {
@@ -37,6 +37,7 @@ extern "C" {
 #include <lualib.h>
 #include <lauxlib.h> 
 }
+
 
 #define PRINT_USAGE std::cerr << usage << std::endl;
 
@@ -127,7 +128,7 @@ bool Glare::solve()
 	if (secondArgument.empty()) {
 		// Process and return... get tasks from model
 
-	}
+	} 
 	else if (stringInclude(secondArgument, ".lua")) {
 		// process lua file... get tasks from script
 
@@ -146,17 +147,20 @@ bool Glare::solve()
 		// Open libraries
 		luaL_openlibs(L);
 
+		// Load API
+		loadAPI(L,&model);
+
 		// Load script
 		status = luaL_loadfile(L, secondArgument.c_str());
 		if (status) {
 			fatal("Error when reading script file '"+secondArgument+"'", __LINE__, __FILE__);
-			return 1;
-		};
+			return false;
+		}
 
 		result = lua_pcall(L, 0, LUA_MULTRET, 0);
 		if (result) {
 			fatal("Error when executing script file '" + secondArgument + "'", __LINE__, __FILE__);
-			return 1;
+			return false;
 		}
 
 

@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "./src/task.h"
+#include "./task.h"
 
 //! The TaskManager is an object that performs the calculation in an efficient way
 

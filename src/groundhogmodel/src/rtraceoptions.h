@@ -18,3 +18,19 @@
 
 *****************************************************************************/
 
+
+
+#pragma once
+#include "common/options/optionset.h"
+
+class RTraceOptions : public OptionSet {
+public:
+	//! Constructor
+	/*!
+	Creates an OptionSet and fills the corresponding 
+	options and default values
+
+	@author German Molina
+	*/
+	RTraceOptions();
+};

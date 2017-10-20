@@ -21,6 +21,14 @@
 
 #pragma once
 
+
+// Include LUA headers
+extern "C" {
+#include <lua.h>
+	//#include <lualib.h>
+#include <lauxlib.h> 
+}
+
 #include <vector>
 
 #include "./src/windowgroup.h"
@@ -31,6 +39,7 @@
 #include "../common/utilities/date.h"
 #include "./src/location.h"
 #include "./src/photosensor.h"
+#include "./src/rtraceoptions.h"
 
 #include "./src/material.h"
 #include "./src/materials/glass.h"
@@ -60,7 +69,7 @@ private:
 	//Luminaires
 	Location location = Location(); //!< The location (i.e. longitude, latitude, timezone, etc.)
 	Date date = Date(1, 1, 12, 12); //!< The current date
-	//Options
+	RTraceOptions rtraceOptions = RTraceOptions(); //< The options related to Ray Tracing (RTRACE program)
 	//Observers // **	
 	double northCorrection; //!< The north correction (i.e. the model should be rotated when calculating)
 
@@ -338,4 +347,11 @@ public:
 	@author German Molina
 	*/
 	Date * getDate();
+
+	//! Retrieves the RTraceOptions by pointer
+	/*!
+	@return The pointer to the RTraceOptions object
+	*/
+	RTraceOptions * getRTraceOptions();
+
 };

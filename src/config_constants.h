@@ -87,5 +87,7 @@ This module defines constants that are used in the rest of the program.
 /// Name of the file with the whole scene is stored
 #define GLARE_SCENE_FILE "scene.rad" //!< The default file where the "scene file" file objects will be exported
 
+/// Name of the global variable poitning to the GroundhogModel in the Lua API
+#define LUA_MODEL_VARIABLE "currentmodel"
 
 /* @} */

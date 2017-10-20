@@ -300,3 +300,8 @@ Date * GroundhogModel::getDate()
 {
 	return &date;
 }
+
+RTraceOptions * GroundhogModel::getRTraceOptions()
+{
+	return &rtraceOptions;
+}
