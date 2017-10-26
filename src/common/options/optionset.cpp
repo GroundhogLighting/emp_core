@@ -76,7 +76,6 @@ std::string OptionSet::getOptionName(size_t i)
 
 size_t OptionSet::countOptions()
 {
-	std::cerr << "Counting options:::: " << names.size() << std::endl;
 	return names.size();
 }
 

@@ -20,18 +20,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include "groundhogmodel/groundhogmodel.h"
+#include "writers/rad/radexporter.h"
 
-#include <iostream>
+class ExportRadianceDir : public Task {
+private:
+	std::string dir;
+	GroundhogModel * model;
+	bool verbose;
 
-int print_rtrace_options(lua_State * L);
+public:
 
-//! Sets options for RTRACE routines of the model.
-/*!
-This function will retrieve the current GroundhogModel and
-modify its RTRACE options
+	ExportRadianceDir(std::string theDir, GroundhogModel * ghmodel, bool verb)
+	{
+		setName("Export model in Radiance format in directory '" + theDir + "'");
 
-@author German Molina
-@param L The lua_State * object
-@return The number of variables in the lua stack
-*/
-int set_rtrace_options(lua_State *L);
+		dir = theDir;
+		model = ghmodel;
+		verbose = verb;
+	}
+
+	bool isEqual(Task * t)
+	{
+		return (
+					model == static_cast<ExportRadianceDir *>(t)->getModel() &&
+					dir == static_cast<ExportRadianceDir *>(t)->getDir()  
+				);
+	}
+
+	bool solve()
+	{
+		RadExporter r = RadExporter(model, dir, verbose);
+		return r.exportModel();
+	}
+
+	std::string getDir()
+	{
+		return dir;
+	}
+
+	GroundhogModel * getModel()
+	{
+		return model;
+	}
+};

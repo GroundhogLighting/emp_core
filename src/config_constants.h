@@ -87,7 +87,13 @@ This module defines constants that are used in the rest of the program.
 /// Name of the file with the whole scene is stored
 #define GLARE_SCENE_FILE "scene.rad" //!< The default file where the "scene file" file objects will be exported
 
-/// Name of the global variable poitning to the GroundhogModel in the Lua API
+/// Name of the global variable pointing to the GroundhogModel in the Lua API
 #define LUA_MODEL_VARIABLE "currentmodel"
+
+/// Name of the global variable pointing to the TaskManager in the Lua API
+#define LUA_TASKMANAGER_VARIABLE "currenttaskmanager"
+
+/// Name of the variable defining the TaskManager's autoSolve option
+#define LUA_AUTOSOLVE_VARIABLE "solve_automatically"
 
 /* @} */

@@ -17,21 +17,44 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
-
 #pragma once
 
+#include "./config_constants.h"
 
-#include <iostream>
+#include "./common/taskmanager/taskmanager.h"
+#include "./groundhogmodel/groundhogmodel.h"
 
-int print_rtrace_options(lua_State * L);
 
-//! Sets options for RTRACE routines of the model.
+// Include LUA headers
+extern "C" {
+	#include <lua.h>
+	//#include <lualib.h>
+	#include <lauxlib.h> 
+}
+
+
+//! Retrieves the current GroundhogModel exposed to the API
 /*!
-This function will retrieve the current GroundhogModel and
-modify its RTRACE options
-
 @author German Molina
 @param L The lua_State * object
-@return The number of variables in the lua stack
+@return The pointer to the current GroundhogModel
 */
-int set_rtrace_options(lua_State *L);
+GroundhogModel * getCurrentModel(lua_State * L);
+
+
+//! Retrieves the current TaskManager exposed to the API
+/*!
+@author German Molina
+@param L The lua_State * object
+@return The pointer to the current TaskManager
+*/
+TaskManager * getCurrentTaskManager(lua_State * L);
+
+//! Checks that the number of arguments matches a certain value
+/*!
+@author German Molina
+@param[in] L The lua_State * object
+@param[in] nargs The number of expected arguments
+@return The pointer to the current TaskManager
+*/
+bool checkNArguments(lua_State * L, int nargs);

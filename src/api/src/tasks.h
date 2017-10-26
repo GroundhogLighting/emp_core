@@ -21,17 +21,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 
-#include <iostream>
 
-int print_rtrace_options(lua_State * L);
+// Include LUA headers
+extern "C" {
+#include <lua.h>
+	//#include <lualib.h>
+#include <lauxlib.h> 
+}
 
-//! Sets options for RTRACE routines of the model.
+//! Solves the current TaskManager
+/*
+@author German Molina
+@param[in] L the lua_State object
+@return the number of arguments
+*/
+int solveTaskManager(lua_State * L);
+
+//! Adds the Export To Radiance task to the TaskManager
 /*!
-This function will retrieve the current GroundhogModel and
-modify its RTRACE options
+Exports the GroundhogModel into a Radiance format
 
 @author German Molina
-@param L The lua_State * object
-@return The number of variables in the lua stack
+@param[in] L the lua_State object
+@return the number of arguments
 */
-int set_rtrace_options(lua_State *L);
+int addExportToRadianceTask(lua_State * L);
+
+//! Adds the general Oconv task to the TaskManager
+/*
+@author German Molina
+@param[in] L the lua_State object
+@return the number of arguments
+*/
+int addWholeOconvTask(lua_State * L);
+
+
+int addRTRACETask(lua_State * L);

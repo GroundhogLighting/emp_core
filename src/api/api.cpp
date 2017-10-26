@@ -22,14 +22,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config_constants.h"
 
 #include "./src/options.h"
+#include "./src/tasks.h"
 
-void loadAPI(lua_State * L, GroundhogModel * ghmodel) {
+void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager) {
 
-	/* Register the GroundhogModel */
+	/* REGISTER THE GROUNDHOG MODEL */
 	lua_pushlightuserdata(L, ghmodel);
 	lua_setglobal(L, LUA_MODEL_VARIABLE);
 
-	/* SET OPTIONS FUNCTIONS */
+	/* REGISTER THE TASK MANAGER */
+	lua_pushlightuserdata(L, taskManager);
+	lua_setglobal(L, LUA_TASKMANAGER_VARIABLE);
+
+	/* REGISTER SOLVE FUNCTION */
+	lua_register(L, "solve", solveTaskManager);
+	
+	/* REGISTER EXPORT FUNCTIONS */
+	lua_register(L, "write_radiance_dir", addExportToRadianceTask);
+
+	/* REGISTER OCONV FUNCTIONS */
+	lua_register(L, "oconv",addWholeOconvTask);
+
+	/* REGISTER OPTIONS FUNCTIONS */
 	lua_register(L, "ray_trace_options", set_rtrace_options);
 	lua_register(L, "print_ray_trace_options", print_rtrace_options);
+
+	/* REGISTER RTRACE FUNCTIONS */
+	lua_register(L, "test_rtrace", addRTRACETask);
 }
+

@@ -41,7 +41,7 @@ calculating twice the Daylight Autonomy of a workplane)
 class TaskManager {
 private:
 	std::vector <Task * > tasks = std::vector<Task *>(); //!< The Task objects to solve.
-
+	
 public:
 
 	//! Constructor
@@ -98,4 +98,5 @@ public:
 	@param[in] b The pointer to Task number 2
 	*/
 	bool compareTasks(Task * a, Task * b);
+
 };

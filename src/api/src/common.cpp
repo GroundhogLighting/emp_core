@@ -18,20 +18,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
-#pragma once
-
-
+#include "./common.h"
 #include <iostream>
 
-int print_rtrace_options(lua_State * L);
+GroundhogModel * getCurrentModel(lua_State * L)
+{
 
-//! Sets options for RTRACE routines of the model.
-/*!
-This function will retrieve the current GroundhogModel and
-modify its RTRACE options
+	lua_getglobal(L, LUA_MODEL_VARIABLE);
+	GroundhogModel * model = (GroundhogModel *)lua_touserdata(L, lua_gettop(L));
+	lua_pop(L, 1);
+	return model;
+}
 
-@author German Molina
-@param L The lua_State * object
-@return The number of variables in the lua stack
-*/
-int set_rtrace_options(lua_State *L);
+TaskManager * getCurrentTaskManager(lua_State * L)
+{
+	lua_getglobal(L, LUA_TASKMANAGER_VARIABLE);
+	TaskManager * taskManager = (TaskManager *)lua_touserdata(L, lua_gettop(L));
+	lua_pop(L, 1);
+	return taskManager;
+}
+
+bool checkNArguments(lua_State * L, int nargs)
+{
+	int n = lua_gettop(L);
+	if (n < nargs) {
+		std::cerr << "too few arguments" << std::endl;
+		return false;
+	}
+	else if (n > nargs) {
+		std::cerr << "too many arguments" << std::endl;
+		return false;
+	}
+	return true;
+}

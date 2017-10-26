@@ -3,6 +3,8 @@
         "cmath": "cpp",
         "vector": "cpp",
         "bsdf.h": "c",
-        "object.h": "c"
+        "object.h": "c",
+        "xiosbase": "cpp",
+        "otypes.h": "c"
     }
 }

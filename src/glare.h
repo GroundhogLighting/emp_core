@@ -22,7 +22,7 @@
 #pragma once
 
 #include "groundhogmodel/groundhogmodel.h"
-#include "common/tasks/taskmanager.h"
+#include "common/taskmanager/taskmanager.h"
 
 //! This is the main class within Glare. It manages the Read, Write, Calculate process.
 

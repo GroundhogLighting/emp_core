@@ -21,15 +21,17 @@
 
 #include <string>
 
+#include "config_constants.h"
+
 #include "./glare.h"
 #include "./common/utilities/io.h"
 #include "./common/utilities/stringutils.h"
 #include "./common/utilities/file.h"
 
 #include "readers/skp/SKPreader.h"
-#include "writers/rad/radexporter.h"
-#include "common/tasks/task.h"
 #include "api/api.h"
+
+#include "common/taskmanager/tasks/export.h"
 
 // Include LUA headers
 extern "C" {
@@ -82,36 +84,6 @@ bool Glare::parseInputs(int argc, char* argv[])
 } // END OF PARSE INPUTS
 
 
-
-class ExportRadianceDir : public Task {
-
-public:
-
-	std::string target;
-	GroundhogModel * model;
-	bool verbose;
-
-	ExportRadianceDir(std::string dir, GroundhogModel * ghmodel, bool verb)
-	{
-		setName("Export model in Radiance format in directory '"+dir+"'");	
-
-		target = dir;
-		model = ghmodel;
-		verbose = verb;
-	}
-
-	bool isEqual(Task * t)
-	{
-		return target == static_cast<ExportRadianceDir *>(t)->target;		
-	}
-
-	bool solve()
-	{
-		RadExporter r = RadExporter(model, target, verbose);
-		return r.exportModel();
-	}
-};
-
 bool Glare::solve() 
 {
 	
@@ -148,7 +120,7 @@ bool Glare::solve()
 		luaL_openlibs(L);
 
 		// Load API
-		loadAPI(L,&model);
+		loadAPI(L,&model,&taskManager);
 
 		// Load script
 		status = luaL_loadfile(L, secondArgument.c_str());
@@ -161,6 +133,19 @@ bool Glare::solve()
 		if (result) {
 			fatal("Error when executing script file '" + secondArgument + "'", __LINE__, __FILE__);
 			return false;
+		}
+
+		// Autosolve?
+		bool autoSolve = true;
+
+		lua_getglobal(L, LUA_AUTOSOLVE_VARIABLE);
+		// Check type
+		if (lua_type(L, 1) == LUA_TBOOLEAN) {
+			autoSolve = lua_toboolean(L, 1);
+		}
+		taskManager.print();
+		if (autoSolve) {
+			taskManager.solve();
 		}
 
 

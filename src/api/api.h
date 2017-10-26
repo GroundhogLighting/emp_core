@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #pragma once
-
+#include "common/taskmanager/taskmanager.h"
 #include "groundhogmodel/groundhogmodel.h"
 
 
@@ -32,5 +32,12 @@ extern "C" {
 #include <lauxlib.h> 
 }
 
+//! Loads the Lua API and all the functions available in the scripts
+/*
+@author German Molina
+@param[in] L the lua_State
+@param[in] ghmodel The GroundhogModel to set as global variable
+@param[in] taskManager The TaskManager to set as global variable
+*/
+void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager);
 
-void loadAPI(lua_State * L, GroundhogModel * ghmodel);
