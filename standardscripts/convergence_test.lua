@@ -3,13 +3,17 @@
 @version 1.0.0
 @author German Molina
 @date November 2, 2017
-@API 0.0.0
-@title Tries to define a set of optimal ambient parameters for the model
-@brief Tries to find the 'best' parameters for solving your model
+@title Convergence test
+@brief Tries to find the 'best' ambient parameters for solving your model
 
 This scripts iterates trying to find the optimal parameters (i.e. those that 
 take as little time as possible in solving) by testing different combinations 
 of them
+
+@input[required] File with sensor points to perform test
+@input[optional] Number of randomly selected sensors to use for convergence test
+@input[optional] Increase in Ambient Divisions (i.e. next AD will be arg3*AD)
+@input[optional] Increase in Ambient Bounces (i.e. next AB will be AB + arg4)
 
 ]]
 

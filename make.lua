@@ -5,7 +5,7 @@ dofile(scripts_dir.."/config.lua")
 
 local versioning = require(scripts_dir.."/versions")
 local document = require(scripts_dir.."/document")
-local files = require(scripts_dir.."/files")
+local clean = require(scripts_dir.."/clean")
 
 
 -- Variable with the available commands
@@ -20,9 +20,10 @@ commands["increase_major"] = versioning.increase_major
 -- Document
 commands["doxygen"] = document.doxygen
 commands["document_api"] = document.document_api
+commands["document_scripts"] = document.document_scripts
 
 -- Files
-commands["clean"] = files.clean
+commands["clean"] = clean.clean
 
 -- MAIN
 

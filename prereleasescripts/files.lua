@@ -1,17 +1,13 @@
-#!/bin/env lua
-
 
 local f = {}
 
-function delete_file(flnm)
-    if is_windows then
-        os.execute("del "..flnm)
-    else -- assume is unix
-        os.execute("rm "..flnm)
-    end
+
+f.delete_file = function(flnm)
+    os.remove(flnm)    
 end
 
-function delete_dir(dirname)
+f.delete_dir = function(dirname)
+    
     if is_windows then
         os.execute("rd /s /q "..dirname)
     else
@@ -19,12 +15,26 @@ function delete_dir(dirname)
     end
 end
 
-f.clean = function()    
-    delete_file("*.vcxproj*")
-    delete_file("*.sln*")
-    delete_dir("obj")
-    delete_dir("libs")
-    delete_dir("bin")
+f.dir = function(d)
+    dirs = "dirs.tmp"    
+    lines = {}
+
+    if is_windows then
+        os.execute("dir  /B "..d.." > "..dirs)
+    else
+        os.execute("ls "..d.." > "..dirs)
+    end
+    file = io.open(dirs,"r")
+
+    ln = file:read()
+    while ln do
+        lines[#lines+1] = ln
+        ln = file:read()
+    end
+    file:close()
+    f.delete_file(dirs)
+    return lines
 end
+
 
 return f

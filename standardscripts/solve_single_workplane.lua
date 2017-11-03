@@ -3,13 +3,12 @@
 @version 1.0.0
 @author German Molina
 @date November 2, 2017
-@API 0.0.0
 
 @title Solves a single workplane
 @brief This script solves all the objectives in the model that correspond to a single workplane
 
-@param[required] The workplane name
-@param[optional] A file with options
+@input[required] The workplane name
+@input[optional] A file with options
 
 ]]
 
@@ -47,11 +46,3 @@ tasks = get_tasks_by_workplane(arg1)
 for i=1,#tasks do
     task_manager.add(tasks[i])
 end
-
---[[ @proposal
-
-if not get_tasks_by_workplane(arg1) then
-    raise("Workplane not found")
-end
-
-]]

@@ -8,9 +8,6 @@
 @title Solves the whole model
 @brief This script solves all the objectives in the model
 
-It is the same as calling the
-
-@code glare inputmodel
 
 ]]
 
