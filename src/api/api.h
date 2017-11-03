@@ -38,6 +38,7 @@ extern "C" {
 @param[in] L the lua_State
 @param[in] ghmodel The GroundhogModel to set as global variable
 @param[in] taskManager The TaskManager to set as global variable
+@param[in] argc Number of arguments
+@param[in] argv The arguments given to the command line
 */
-void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager);
-
+void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager, int argc, char* argv[]);

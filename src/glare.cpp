@@ -41,7 +41,6 @@ extern "C" {
 }
 
 
-#define PRINT_USAGE std::cerr << usage << std::endl;
 
 Glare::Glare() 
 {
@@ -57,24 +56,31 @@ Glare::~Glare()
 
 bool Glare::parseInputs(int argc, char* argv[]) 
 {
-	if (argc == 2) {
+	if (argc == 1) {
+		/* Only input is program name. i.e. no inputs... wrong */
+		std::cout << USAGE << std::endl;
+		return false;
+	}else if (argc == 2) {
 		// Input file... calculation will be performed.
 		// call in the shape of 'Glare inputFile'
-		inputFile = std::string(argv[1]);
+		inputFile = std::string(argv[1]);		
 	}
-	else if (argc == 3) {
+	else {
+		// Input file and at least one more.
 		inputFile = std::string(argv[1]);
 		secondArgument = std::string(argv[2]);		
 	}
-	else { // input error
-		PRINT_USAGE
-		return false;
-	}
 
-	// Check if input file makes sense.
+	// Check if inputFile makes sense.
 	char * supportedInputs[] = { ".skp" };
 	if (!stringIncludeAny(inputFile, supportedInputs,2)) {
 		fatal("Only .SKP input files are supported for now", __LINE__, __FILE__);
+		return false;
+	}
+
+	// verify that inputFile exists
+	if (!fexists(inputFile)) {
+		fatal("File '" + std::string(inputFile) + "' not found", __LINE__, __FILE__);
 		return false;
 	}
 
@@ -84,25 +90,21 @@ bool Glare::parseInputs(int argc, char* argv[])
 } // END OF PARSE INPUTS
 
 
-bool Glare::solve() 
+bool Glare::solve(int argc, char* argv[])
 {
 	
-	// verify that inputFile exists
-	if (!fexists(inputFile)) {
-		fatal("File '" + std::string(inputFile) + "' not found", __LINE__, __FILE__);
-		return false;
-	}
-
+	
 	// Load file
 	loadFile(inputFile);
 
 	// Analize second argument
-	if (secondArgument.empty()) {
-		// Process and return... get tasks from model
+	if (secondArgument.empty()) {		
+		
+		fatal("Solving a model is not yet supported!", __LINE__, __FILE__);
+		return false;		
 
-	} 
-	else if (stringInclude(secondArgument, ".lua")) {
-		// process lua file... get tasks from script
+	} else if (stringInclude(secondArgument, ".lua")) {
+		// Lua script was input... process
 
 		// check if script exists
 		if (!fexists(secondArgument)) {
@@ -120,18 +122,19 @@ bool Glare::solve()
 		luaL_openlibs(L);
 
 		// Load API
-		loadAPI(L,&model,&taskManager);
+		loadAPI(L,&model,&taskManager,argc,argv);
 
 		// Load script
 		status = luaL_loadfile(L, secondArgument.c_str());
 		if (status) {
-			fatal("Error when reading script file '"+secondArgument+"'", __LINE__, __FILE__);
+			fatal(lua_tostring(L, -1), __LINE__, __FILE__);
 			return false;
 		}
 
 		result = lua_pcall(L, 0, LUA_MULTRET, 0);
 		if (result) {
 			fatal("Error when executing script file '" + secondArgument + "'", __LINE__, __FILE__);
+			fatal(lua_tostring(L, -1), __LINE__, __FILE__);
 			return false;
 		}
 
@@ -154,7 +157,7 @@ bool Glare::solve()
 		// translate
 		if (!stringInclude(secondArgument, ".")) {
 			// Radiance format... no extension
-			taskManager.addTask(new ExportRadianceDir(secondArgument,&model,verbose));
+			taskManager.addTask(new ExportRadianceDirWithWorkplanes(secondArgument,&model,verbose));
 			taskManager.solve();
 		}
 		else {

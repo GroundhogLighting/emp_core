@@ -5,6 +5,8 @@
         "bsdf.h": "c",
         "object.h": "c",
         "xiosbase": "cpp",
-        "otypes.h": "c"
+        "otypes.h": "c",
+        "platform.h": "c",
+        "xlocale": "cpp"
     }
 }

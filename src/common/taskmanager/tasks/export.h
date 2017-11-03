@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "groundhogmodel/groundhogmodel.h"
 #include "writers/rad/radexporter.h"
+#include "common/geometry/triangulation.h"
 
 class ExportRadianceDir : public Task {
 private:
@@ -52,6 +53,97 @@ public:
 	{
 		RadExporter r = RadExporter(model, dir, verbose);
 		return r.exportModel();
+	}
+
+	std::string getDir()
+	{
+		return dir;
+	}
+
+	GroundhogModel * getModel()
+	{
+		return model;
+	}
+};
+
+
+
+
+
+class TriangulateWorkplane : public Task {
+private:
+	std::string workplane;
+	GroundhogModel * model;
+	Triangulation * result;
+
+public:
+	TriangulateWorkplane(GroundhogModel * theModel, std::string theWorkplane)
+	{
+		setName("Triangulating workplane " + theWorkplane);
+		workplane = theWorkplane;
+		model = theModel;
+	}
+
+	bool isEqual(Task * t)
+	{	
+		TriangulateWorkplane * otherT = static_cast<TriangulateWorkplane *>(t);
+		return workplane == otherT->getWorkplane();
+	}
+
+	bool solve()
+	{
+		Workplane * wp = model->getWorkplaneByName(workplane);
+		if (wp == NULL)
+			return false;
+
+		result = new Triangulation(wp->getPolygonRef(0));
+
+		result->mesh(0.5);
+		std::cerr << result << std::endl;
+		return true;
+	}
+
+	std::string getWorkplane()
+	{
+		return workplane;
+	}
+
+	Triangulation * getResult()
+	{
+		return result;
+	}
+
+};
+
+class ExportRadianceDirWithWorkplanes : public Task {
+private:
+	std::string dir;
+	GroundhogModel * model;
+	bool verbose;
+
+public:
+
+	ExportRadianceDirWithWorkplanes(std::string theDir, GroundhogModel * ghmodel, bool verb)
+	{
+		setName("Export model in Radiance format in directory '" + theDir + "' including workplanes");
+
+		dir = theDir;
+		model = ghmodel;
+		verbose = verb;
+	}
+
+	bool isEqual(Task * t)
+	{
+		return (
+			model == static_cast<ExportRadianceDir *>(t)->getModel() &&
+			dir == static_cast<ExportRadianceDir *>(t)->getDir()
+			);
+	}
+
+	bool solve()
+	{
+		RadExporter r = RadExporter(model, dir, verbose);
+		return r.exportModelWithWorkplanes();
 	}
 
 	std::string getDir()

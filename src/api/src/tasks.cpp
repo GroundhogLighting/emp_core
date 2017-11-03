@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "common/taskmanager/tasks/export.h"
 #include "common/taskmanager/tasks/oconv.h"
-#include "common/taskmanager/tasks/rtrace.h"
+#include "common/taskmanager/tasks/daylightfactor.h"
 
 int solveTaskManager(lua_State * L)
 {
@@ -59,48 +59,33 @@ int addExportToRadianceTask(lua_State * L)
 	return 0;
 }
 
-int addWholeOconvTask(lua_State * L)
+
+
+int addDFTask(lua_State * L)
 {
-	TaskManager * tm = getCurrentTaskManager(L);
 	GroundhogModel * model = getCurrentModel(L);
+	TaskManager * tm = getCurrentTaskManager(L);
+	RTraceOptions * options = model->getRTraceOptions();
 
-
-	// Check argument number
-	if (!checkNArguments(L, 2)) {
+	// Check nuber of arguments
+	if (!checkNArguments(L, 1)) {
 		return 0;
 	}
 
 	// Check type
-	if (lua_type(L, 1) != LUA_TSTRING) {
-		std::cerr << "Not a string " << std::endl;
-		return 0;
-	}
-	if (lua_type(L, 2) != LUA_TSTRING) {
-		std::cerr << "Not a string " << std::endl;
-		return 0;
-	}
-	// get target dir.
-
-	std::string dir = lua_tostring(L, 1);
-	std::string name = lua_tostring(L, 2);
-	
-	tm->addTask(new WholeSceneOconv(model,dir,name));
-
-	return 0;
-}
-
-
-int addRTRACETask(lua_State * L)
-{
-	TaskManager * tm = getCurrentTaskManager(L);
-	GroundhogModel * model = getCurrentModel(L);
-
-	// Check argument number
-	if (!checkNArguments(L, 0)) {
+	if (lua_type(L, 1) != LUA_TTABLE) {
+		std::cerr << "Not a table " << std::endl;
 		return 0;
 	}
 
-	tm->addTask(new Rtrace(model, "tmp", "octree.oct"));
+	if (lua_getfield(L, 1, "workplane") != LUA_TNIL) {
+		std::string value = luaL_checkstring(L, 2);
+		tm->addTask(new CalcDF(GLARE_TMP_DIR,model,value,options));
+	}
+	else {
+
+	}
+	lua_pop(L, 1);
 
 	return 0;
 }

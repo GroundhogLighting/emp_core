@@ -47,13 +47,11 @@ Exports the GroundhogModel into a Radiance format
 */
 int addExportToRadianceTask(lua_State * L);
 
-//! Adds the general Oconv task to the TaskManager
-/*
+//! Adds the task of calculating the Daylight Coefficient
+/*!
 @author German Molina
 @param[in] L the lua_State object
 @return the number of arguments
 */
-int addWholeOconvTask(lua_State * L);
+int addDFTask(lua_State * L);
 
-
-int addRTRACETask(lua_State * L);

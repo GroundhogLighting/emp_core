@@ -1,6 +1,6 @@
 # Glare
 
-Not really mature at all... still on design. If you are curious, contact germolinal@gmail.comg
+Not really mature at all... still on design. If you are curious, contact germolinal@gmail.com
 
 # License
 

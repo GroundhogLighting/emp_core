@@ -19,6 +19,7 @@
 *****************************************************************************/
 
 #include "config_constants.h"
+#include "versions.h"
 #include "common/utilities/io.h"
 #include "common/utilities/file.h"
 #include "common/geometry/triangulation.h"
@@ -42,6 +43,17 @@ RadExporter::~RadExporter()
 }
 
 
+bool RadExporter::exportModelWithWorkplanes()
+{
+	exportModel();
+
+	// write workplanes
+	if (!writeWorkplanes(GLARE_WORKPLANES_SUBFOLDER)) {
+		fatal("Error when exporing Layers", __LINE__, __FILE__);
+		return false;
+	}
+	return true;
+}
 
 bool RadExporter::exportModel() 
 {
@@ -89,12 +101,7 @@ bool RadExporter::exportModel()
 		return false;
 	}
 
-	// write workplanes
-	if(!writeWorkplanes(GLARE_WORKPLANES_SUBFOLDER)) {
-		fatal("Error when exporing Layers", __LINE__, __FILE__);
-		return false;
-	}
-
+	
 	// write materials
 	if (!writeMaterials(GLARE_MATERIALS_SUBFOLDER)) {
 		fatal("Error when exporing materials", __LINE__, __FILE__);
@@ -585,7 +592,7 @@ bool RadExporter::writeSceneFile(char * dir)
 
 	// Write Header
 	file << "###############" << std::endl;
-	file << "## Scene exported using Glare v" << GLARE_VERSION << std::endl;
+	file << "## Scene exported using " << GLARE_VERSION << std::endl;
 	file << "###############" << std::endl;
 
 	file << std::endl << std::endl << std::endl;

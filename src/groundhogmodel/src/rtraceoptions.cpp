@@ -34,27 +34,75 @@ RTraceOptions::RTraceOptions()
 	//i 							// irradiance calculation off
 	//u +							// uncorrelated Monte Carlo sampling
 	//bv +							// back face visibility on
+
+	/* DIRECT */
 	addOption("dt", 0.030000);		// direct threshold
 	addOption("dc", 0.750000);		// direct certainty
 	addOption("dj", 0.000000);		// direct jitter
-	addOption("ds", 0.200000);		// direct sampling
 	addOption("dr", 2);    			// direct relays
 	addOption("dp", 512);      		// direct pretest density
+	addOption("ds", 0.200000);		// direct sampling
 	//dv +							// direct visibility on TODO: Allow booleans
-	addOption("ss", 1.000000);		// specular sampling
+
+	/* SPECULAR */
 	addOption("st", 0.150000);		// specular threshold
-	addOption("v", 0.000000);		// ambient value TODO:: Allow three values
+	addOption("ss", 1.000000);		// specular sampling
+	
+	/* LIMIT */
+	addOption("lr", 10);      		// limit reflection (Russian roulette)
+	addOption("lw", 2.00e003);		// limit weight
+
+
+	/* AMBIENT */
+	//addOption("av", 0.000000);		// ambient value TODO:: Allow three values
 	addOption("aw", 0);        		// ambient value weight
 	addOption("ab", 0);        		// ambient bounces
 	addOption("aa", 0.100000);		// ambient accuracy
 	addOption("ar", 256);      		// ambient resolution
 	addOption("ad", 1024);     		// ambient divisions
 	addOption("as", 512);      		// ambient supersamples
-	addOption("me", 0.9);			// mist extinction coefficient TODO: Allow three values
-	addOption("ma", 0.000000);		// mist scattering albedo TODO: Allow three values
+	
+	/* MEDIUM */
+	//addOption("me", 0.9);			// mist extinction coefficient TODO: Allow three values
+	//addOption("ma", 0.000000);		// mist scattering albedo TODO: Allow three values
 	addOption("mg", 0.000000);		// mist scattering eccentricity
 	addOption("ms", 0.000000);		// mist sampling distance
-	addOption("lr", 10);      		// limit reflection (Russian roulette)
-	addOption("lw", 2.00e003);		// limit weight
+	
+	
 	addOption("am", 0.0);			// max photon search radius
 };
+
+void RTraceOptions::exposeOptions()
+{
+	/* DIRECT */
+	//shadthresh = getOption("dt");
+	//	shadcert = getOption("dc");
+	//dstrsrc = getOption("dj");
+	//directrelay = (int)getOption("dr");
+	//vspretest = (int)getOption("dp");
+	//--directvis = getOption("dv");
+	//srcsizerat = getOption("ds");
+
+	/* SPECULAR */
+	//specthresh = getOption("st");
+	//specjitter = getOption("ss");
+
+	/* LIMIT */
+	//maxdepth = (int)getOption("lr");
+	//minweight = getOption("lw");
+
+	/* AMBIENT */
+	// ambval
+	//ambvwt = (int)getOption("aw");
+	ambacc = getOption("aa");
+	//ambres = (int)getOption("ar");
+	//ambdiv = (int)getOption("ad");
+	//ambssamp = (int)getOption("as");
+	ambounce = (int)getOption("ab");
+
+	/* MEDIUM */
+	//cextinction
+	//salbedo
+	//seccg = getOption("mg");
+	//ssampdist = getOption("ms");
+}

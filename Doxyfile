@@ -6,9 +6,9 @@ PROJECT_NUMBER         = 0.1
 
 PROJECT_BRIEF          = ""
 
-PROJECT_LOGO           = ./doc/iso.png
+PROJECT_LOGO           = developer-doc/iso.png
 
-OUTPUT_DIRECTORY       = ./doc
+OUTPUT_DIRECTORY       = developer-doc
 
 CREATE_SUBDIRS         = NO
 
@@ -209,7 +209,7 @@ WARN_AS_ERROR          = NO
 
 WARN_FORMAT            = "$file:$line: $text"
 
-WARN_LOGFILE           = ./doc/doc.log
+WARN_LOGFILE           = developer-doc/doc.log
 
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
@@ -473,11 +473,11 @@ HTML_OUTPUT            = html
 
 HTML_FILE_EXTENSION    = .html
 
-HTML_HEADER            = ./doc/header.html
+HTML_HEADER            = developer-doc/header.html
 
-HTML_FOOTER            = ./doc/footer.html
+HTML_FOOTER            = developer-doc/footer.html
 
-HTML_STYLESHEET        = ./doc/style.css
+HTML_STYLESHEET        = developer-doc/style.css
 
 #HTML_EXTRA_FILES       =
 

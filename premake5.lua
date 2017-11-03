@@ -11,6 +11,12 @@ workspace "Glare"
     platforms { "WIN64", "MACOS", "LINUX" }
     configurations { "DEBUG", "RELEASE" }
     defines{ "GLARE" }
+
+filter "configurations:DEBUG"
+    defines { "DEBUG" }
+
+filter "configurations:RELEASE"
+    optimize "On"
     
 project "GoogleTest"
     kind "StaticLib"
@@ -242,7 +248,6 @@ project "raycalls"
     files {
         third_party_dir.."/Radiance/src/rt/raycalls.c",
         third_party_dir.."/Radiance/src/rt/rayfifo.c", 
-
     }
     includedirs{
         third_party_dir.."/Radiance/src/**",
@@ -268,11 +273,7 @@ project "glare"
         third_party_dir.."/Radiance/src/common",        
     }
     
-    filter "configurations:DEBUG"
-        defines { "DEBUG" }
-    
-    filter "configurations:RELEASE"
-        optimize "On"
+   
 
     filter "platforms:WIN*"
         defines { "WIN" }    
@@ -295,7 +296,8 @@ project "glare_test"
     filter "platforms:WIN*"
         defines { "WIN" }    
         links {
-            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/*"
+            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/*",
+            libs_dir.."/%{cfg.platform}".."/%{cfg.buildcfg}/*"
         }
         includedirs {
             third_party_dir.."/SketchUp/WIN/headers",      

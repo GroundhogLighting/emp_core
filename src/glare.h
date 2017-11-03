@@ -85,8 +85,10 @@ public:
 
 	@author German Molina
 	@return success
+	@param[in] argc Number of arguments
+	@param[in] argv The arguments given to the command line
 	*/
-	bool solve();
+	bool solve(int argc, char* argv[]);
 	
 
 	//! Loads the input file

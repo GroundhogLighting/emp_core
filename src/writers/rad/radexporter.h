@@ -49,6 +49,13 @@ public:
 	*/
 	~RadExporter();
 
+	//! Same as exportModel() but it will also export the Workplanes
+	/*!
+	@author German Molina
+	@return success
+	*/
+	bool RadExporter::exportModelWithWorkplanes();
+
 	//! Exports a GroundhogModel in Radiance format.
 	/*!
 	Will call other functions of the object with the purpose of creating

@@ -27,6 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 
 #include "common/utilities/os.h"
+#include "common/utilities/file.h"
+
+#include "common/taskmanager/tasks/sky.h"
 
 class WholeSceneOconv : public Task {
 private:
@@ -57,8 +60,7 @@ public:
 	}
 
 	bool solve()
-	{
-		
+	{		
 		CHDIR(&baseDir[0]);
 
 		FILE *in;
@@ -66,8 +68,10 @@ public:
 
 		std::string materials = "./Materials/materials.mat";
 		std::string scene = "scene.rad";
-		std::string sky = "./Skies/sky.rad";
-		std::string cmd = "oconv "+materials + " " + sky +" "+scene + " > " +octname;
+		std::string sky = "./"+ std::string(GLARE_SKY_SUBFOLDER) +"/sky.rad";
+		std::string window = fexists("./Windows/windows.rad") ? "./Windows/windows.rad" : "";
+
+		std::string cmd = "oconv " + materials + " " + sky + " " + scene + " " + window + " > " + octname;
 
 		if (!(in = POPEN(&cmd[0]))) {
 			return false;
@@ -97,4 +101,88 @@ public:
 		return model;
 	}
 
+};
+
+
+class DFOconv : public Task {
+private:
+	GroundhogModel * model;
+	std::string baseDir;
+	std::string octname;
+	double albedo;
+	std::string skyName;
+
+public:
+
+	DFOconv(GroundhogModel * ghm, std::string dir, std::string name)
+	{
+		setName("Whole scene oconv " + dir + "/" + name);
+		model = ghm;
+		baseDir = dir;
+		octname = name;
+		albedo = model->getLocation()->getAlbedo();
+
+		addDependency(new ExportRadianceDir(dir, model, false));
+		WriteDFSky * writeSky = new WriteDFSky(dir, albedo, model);
+		skyName = writeSky->getSkyName();
+		addDependency(writeSky);
+	}
+
+	bool isEqual(Task * t)
+	{
+		DFOconv * otherT = static_cast<DFOconv *>(t);
+		return (
+			model == otherT->getModel() &&
+			baseDir == otherT->getBaseDir() &&
+			octname == otherT->getOctName() &&
+			albedo == otherT->getAlbedo()
+		);
+	}
+
+	bool solve()
+	{
+		CHDIR(&baseDir[0]);
+
+		FILE *in;
+		char buff[512];
+
+		std::string materials = "./Materials/materials.mat";
+		std::string scene = "scene.rad";
+		std::string sky = "./" + std::string(GLARE_SKY_SUBFOLDER) + "/" + skyName;
+		std::string window = fexists("./Windows/windows.rad") ? "./Windows/windows.rad" : "";
+		
+		std::string cmd = "oconv " + materials + " " + sky + " " + scene + " " +window + " > " + octname;
+
+		if (!(in = POPEN(&cmd[0]))) {
+			return false;
+		}
+
+		while (fgets(buff, sizeof(buff), in) != NULL) {
+			std::cout << buff;
+		}
+		PCLOSE(in);
+		CHDIR("..");
+
+		return true;
+	}
+
+	std::string getBaseDir()
+	{
+		return baseDir;
+	}
+
+	std::string getOctName()
+	{
+		return octname;
+	}
+
+	GroundhogModel * getModel()
+	{
+		return model;
+	}
+
+	double getAlbedo()
+	{
+		return albedo;
+	}
 };

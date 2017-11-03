@@ -22,6 +22,7 @@
 
 #pragma once
 #include "common/options/optionset.h"
+#include "Radiance/src/rt/ray.h"
 
 class RTraceOptions : public OptionSet {
 public:
@@ -33,4 +34,7 @@ public:
 	@author German Molina
 	*/
 	RTraceOptions();
+
+	//! Expose all the RTRACE options to the global variables
+	void exposeOptions();
 };

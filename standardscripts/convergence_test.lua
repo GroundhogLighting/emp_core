@@ -1,0 +1,90 @@
+--[[
+
+@version 1.0.0
+@author German Molina
+@date November 2, 2017
+@API 0.0.0
+@title Tries to define a set of optimal ambient parameters for the model
+@brief Tries to find the 'best' parameters for solving your model
+
+This scripts iterates trying to find the optimal parameters (i.e. those that 
+take as little time as possible in solving) by testing different combinations 
+of them
+
+]]
+
+-- PARSE INPUTS
+-- ============
+converge_ad = arg1 or 0.2
+current_ad = arg2 or 28
+increase_ad = arg3 or 1.6
+converge_ab = arg4 or 0.2
+current_ab = arg5 or 1
+increase_ab = arg6 or 1 
+
+-- CHECK ARGUMENTS
+-- ===============
+
+
+-- PROCESS
+-- =======
+-- Set parameters to something low
+ray_trace_parameters{
+    ab = 1;
+    ad = current_ad;
+}
+
+-- Increase ambient divitions until converges
+-- ===============================================
+
+-- Define initial values
+current_illuminance = lux_meter(0,0,1)
+
+-- calculate initial error
+error = 1e9
+
+-- Calculate
+while error > converge_ad do
+    -- Increase ad
+    current_ad = current_ad*increase_ad
+
+    -- Modify params
+    ray_trace_parameters{
+        -- ab is already defined
+        ad = current_ad;
+    }
+
+    -- calculate error
+    error = math.abs(current_illuminance - lux_meter(0,0,1))
+end
+
+-- FIND AMBIENT BOUNCES
+-- ====================
+
+-- Define initial values
+ray_trace_parameters {
+    ab = current_ab;
+}
+current_illuminance = lux_meter(0,0,1)
+
+-- calculate initial error
+error = 1e9
+
+-- Calculate
+while error > converge_ad do
+    -- Increase ab
+    current_ab = current_ab + increase_ab
+
+    -- Modify params
+    ray_trace_parameters{
+        -- ab is already defined
+        ab = current_ab;
+    }
+
+    -- calculate error
+    error = math.abs(current_illuminance - lux_meter(0,0,1))
+end
+
+-- REPORT
+-- ======
+print_ray_trace_options()

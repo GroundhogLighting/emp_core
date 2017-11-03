@@ -29,7 +29,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int print_rtrace_options(lua_State * L)
 {
-
 	GroundhogModel * model = getCurrentModel(L);
 	RTraceOptions * options = model->getRTraceOptions();
 	options->print("aa");

@@ -23,8 +23,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "./src/options.h"
 #include "./src/tasks.h"
+#include "./src/getdata.h"
 
-void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager) {
+#include "common/utilities/stringutils.h"
+
+void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager, int argc, char* argv[]) {
 
 	/* REGISTER THE GROUNDHOG MODEL */
 	lua_pushlightuserdata(L, ghmodel);
@@ -34,6 +37,22 @@ void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager)
 	lua_pushlightuserdata(L, taskManager);
 	lua_setglobal(L, LUA_TASKMANAGER_VARIABLE);
 
+	/* LOAD ARGUMENTS */
+	for (int i = 3; i < argc; i++) {
+		std::string v = "arg" + std::to_string(i-2);
+		if (is_number(argv[i])) {
+			lua_pushnumber(L, std::stod(argv[i]));
+			lua_setglobal(L, &v[0]);
+		}
+		else {
+			lua_pushstring(L, argv[i]);
+			lua_setglobal(L, &v[0]);
+		}
+	}
+
+	/* REGISTER RETRIEVE DATA FUNCTIONS */
+	lua_register(L, "get_workplanes_list", get_workplane_list);
+
 	/* REGISTER SOLVE FUNCTION */
 	lua_register(L, "solve", solveTaskManager);
 	
@@ -41,13 +60,12 @@ void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager)
 	lua_register(L, "write_radiance_dir", addExportToRadianceTask);
 
 	/* REGISTER OCONV FUNCTIONS */
-	lua_register(L, "oconv",addWholeOconvTask);
 
 	/* REGISTER OPTIONS FUNCTIONS */
 	lua_register(L, "ray_trace_options", set_rtrace_options);
 	lua_register(L, "print_ray_trace_options", print_rtrace_options);
 
 	/* REGISTER RTRACE FUNCTIONS */
-	lua_register(L, "test_rtrace", addRTRACETask);
+	lua_register(L, "calc_DF", addDFTask);
 }
 

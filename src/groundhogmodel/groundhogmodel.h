@@ -22,13 +22,6 @@
 #pragma once
 
 
-// Include LUA headers
-extern "C" {
-#include <lua.h>
-	//#include <lualib.h>
-#include <lauxlib.h> 
-}
-
 #include <vector>
 
 #include "./src/windowgroup.h"
@@ -274,6 +267,15 @@ public:
 	@return The reference to the Workplane
 	*/
 	Workplane * getWorkplaneRef(size_t i);
+
+
+	//! Retrieves a workplane by name
+	/*!
+	@author German Molina
+	@param[in] wp The name of the workplane
+	@return The found workplane or NULL (if not found)
+	*/
+	Workplane * getWorkplaneByName(std::string wp);
 
 	//! Adds a Material to the Groundhogmodel
 	/*!
