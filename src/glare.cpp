@@ -21,21 +21,30 @@
 
 #include <string>
 
+#include "config_constants.h"
+
 #include "./glare.h"
 #include "./common/utilities/io.h"
 #include "./common/utilities/stringutils.h"
 #include "./common/utilities/file.h"
-#include "./readers/skp/SKPreader.h"
 
-#include "./writers/rad/radexporter.h"
+#include "readers/skp/SKPreader.h"
+#include "api/api.h"
 
-#define PRINT_USAGE std::cerr << usage << std::endl;
+#include "common/taskmanager/tasks/export.h"
+
+// Include LUA headers
+extern "C" {
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h> 
+}
+
+
 
 Glare::Glare() 
 {
-	DEBUG_MSG("Creating Glare object");
-	verbose = true;
-	model = GroundhogModel();
+	DEBUG_MSG("Creating Glare object");	
 }
 
 Glare::~Glare() 
@@ -47,74 +56,114 @@ Glare::~Glare()
 
 bool Glare::parseInputs(int argc, char* argv[]) 
 {
-	if (argc == 2) {
+	if (argc == 1) {
+		/* Only input is program name. i.e. no inputs... wrong */
+		std::cout << USAGE << std::endl;
+		return false;
+	}else if (argc == 2) {
 		// Input file... calculation will be performed.
 		// call in the shape of 'Glare inputFile'
-		inputFile = std::string(argv[1]);
+		inputFile = std::string(argv[1]);		
 	}
-	else if (argc == 3) {
-		// export... call in the shape of 
-		// 'Glare inputFile outFile
+	else {
+		// Input file and at least one more.
 		inputFile = std::string(argv[1]);
-		outputFile = std::string(argv[2]);
-	}
-	else { // input error
-		PRINT_USAGE
-		return false;
+		secondArgument = std::string(argv[2]);		
 	}
 
-	// Check if input file makes sense.
-
-	char * supportedInputs[] = { ".skp",".lua" };
+	// Check if inputFile makes sense.
+	char * supportedInputs[] = { ".skp" };
 	if (!stringIncludeAny(inputFile, supportedInputs,2)) {
-		fatal("Only .SKP and .LUA input files are supported for now", __LINE__, __FILE__);
+		fatal("Only .SKP input files are supported for now", __LINE__, __FILE__);
 		return false;
 	}
 
-	
-	return true;
-} // END OF PARSE INPUTS
-
-
-
-
-bool Glare::solve() 
-{
-	
 	// verify that inputFile exists
 	if (!fexists(inputFile)) {
 		fatal("File '" + std::string(inputFile) + "' not found", __LINE__, __FILE__);
 		return false;
 	}
 
-	// Check what kind of process is wanted
-	if (!stringInclude(inputFile, ".lua")) {
-		/* STANDARD CALCULATION */
-		// load model
-		if (!loadFile(inputFile)) {
-			fatal("Impossible to load model", __LINE__, __FILE__);
+
+	
+	return true;
+} // END OF PARSE INPUTS
+
+
+bool Glare::solve(int argc, char* argv[])
+{
+	
+	
+	// Load file
+	loadFile(inputFile);
+
+	// Analize second argument
+	if (secondArgument.empty()) {		
+		
+		fatal("Solving a model is not yet supported!", __LINE__, __FILE__);
+		return false;		
+
+	} else if (stringInclude(secondArgument, ".lua")) {
+		// Lua script was input... process
+
+		// check if script exists
+		if (!fexists(secondArgument)) {
+			fatal("Lua script '" + std::string(secondArgument) + "' not found", __LINE__, __FILE__);
 			return false;
 		}
 
-		/* CHECK IF JUST EXPORT */
-		if (!outputFile.empty()) {
-			if (stringInclude(outputFile, ".ghm")) {
-				fatal("Exporting .GHM file is not yet supported", __LINE__, __FILE__);
-				return false;
-			}
-			else { // no extension, thus: Radiance			
-				RadExporter writer = RadExporter(&model,outputFile,verbose);
-				return writer.exportModel();
-			}
+		// Process LUA script
+		int status, result;
+
+		// Create lua state
+		lua_State * L = luaL_newstate();
+
+		// Open libraries
+		luaL_openlibs(L);
+
+		// Load API
+		loadAPI(L,&model,&taskManager,argc,argv);
+
+		// Load script
+		status = luaL_loadfile(L, secondArgument.c_str());
+		if (status) {
+			fatal(lua_tostring(L, -1), __LINE__, __FILE__);
+			return false;
 		}
 
-		fatal("calculations are not yet supported", __LINE__, __FILE__);
-		return false;
+		result = lua_pcall(L, 0, LUA_MULTRET, 0);
+		if (result) {
+			//std::cerr << "Fatal: Error when executing script file '" << secondArgument << "'" << std::endl;
+			std::cerr << lua_tostring(L, -1) << std::endl;
+			return false;
+		}
+
+		// Autosolve?
+		bool autoSolve = true;
+
+		lua_getglobal(L, LUA_AUTOSOLVE_VARIABLE);
+		// Check type
+		if (lua_type(L, 1) == LUA_TBOOLEAN) {
+			autoSolve = lua_toboolean(L, 1);
+		}
+		taskManager.print();
+		if (autoSolve) {
+			taskManager.solve();
+		}
+
+
 	}
 	else {
-		// In other case, process the lua script
-		fatal("The Lua API is not yet supported.", __LINE__, __FILE__);
-		return false;
+		// translate
+		if (!stringInclude(secondArgument, ".")) {
+			// Radiance format... no extension
+			taskManager.addTask(new ExportRadianceDirWithWorkplanes(secondArgument,&model,verbose));
+			taskManager.solve();
+		}
+		else {
+			fatal("Unrecognized file extension in " + secondArgument, __LINE__, __FILE__);
+			return false;
+		}
 	}
 
 	return true;

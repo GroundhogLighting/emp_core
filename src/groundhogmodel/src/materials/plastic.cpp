@@ -1,7 +1,7 @@
 #include "./plastic.h"
 
-#include "../../../config_constants.h"
-#include "../../../common/utilities/io.h"
+#include "config_constants.h"
+#include "common/utilities/io.h"
 #include <fstream>
 
 Plastic::Plastic(json j)

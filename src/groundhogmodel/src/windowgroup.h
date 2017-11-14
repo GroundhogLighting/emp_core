@@ -23,7 +23,7 @@
 
 #include <vector>
 
-#include "./face.h"
+#include "./otypes/face.h"
 
 //! Represents groups of windows, that may contain one or more objects
 /*!

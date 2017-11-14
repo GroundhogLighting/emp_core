@@ -20,8 +20,8 @@
 #include<cmath>
 #include <iostream>
 
-#include "../../common/utilities/io.h"
-#include "../../config_constants.h"
+#include "common/utilities/io.h"
+#include "config_constants.h"
 #include "./point3d.h"
 
 Point3D::Point3D(double new_x, double new_y, double new_z) 

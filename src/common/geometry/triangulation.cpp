@@ -22,11 +22,11 @@
 
 
 #include "./triangulation.h"
-#include "./bbox.h"
-#include "../utilities/io.h"
+#include "common/utilities/io.h"
+#include "config_constants.h"
 
 #define MPE_POLY2TRI_IMPLEMENTATION
-#include "../../3rdparty/fast-poly2tri/MPE_fastpoly2tri.h"
+#include "fast-poly2tri/MPE_fastpoly2tri.h"
 
 
 Triangulation::Triangulation(Polygon3D * aPolygon)
@@ -640,7 +640,7 @@ void Triangulation::doCDT() {
 		for (size_t i = 0; i < polygon2D->countInnerLoops(); i++)
 		{
 			Loop * innerLoop = polygon2D->getInnerLoopRef(i);
-			MPEPolyPoint* Hole = MPE_PolyPushPointArray(&PolyContext, innerLoop->size());
+			MPEPolyPoint* Hole = MPE_PolyPushPointArray(&PolyContext, static_cast<u32>(innerLoop->size()));
 
 			for (size_t j = 0; j < innerLoop->size(); j++) {
 				Point3D * p = innerLoop->getVertexRef(j);
@@ -679,7 +679,7 @@ void Triangulation::doCDT() {
 				MPEPolyTriangle * polyneighbor = polytriangle->Neighbors[(i + 2) % 3];
 				// If there is no neighbor
 				if (polyneighbor != NULL && (polyneighbor->Flags) < 256)
-					t->setConstraint(i);
+					t->setConstraint(static_cast<u32>(i));
 			}
 			addTriangle(t);
 		}

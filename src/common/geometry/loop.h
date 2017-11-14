@@ -74,6 +74,13 @@ public:
 	*/
 	size_t size();
 
+	//! Returns the number of non-NULL vertices in the loop.
+	/*!
+	@author German Molina
+	@return the number of non-NULL vertices in the loop
+	*/
+	size_t realSize();
+
 	//! Returns the reference to a certain vertex in the loop.
 	/*!
 	@author German Molina

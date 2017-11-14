@@ -21,9 +21,9 @@
 
 #pragma once
 
-#include "../../groundhogmodel/groundhogmodel.h"
-#include "../../common/geometry/polygon.h"
-#include "../../common/geometry/loop.h"
+#include "groundhogmodel/groundhogmodel.h"
+#include "common/geometry/polygon.h"
+#include "common/geometry/loop.h"
 
 #include <SketchUpAPI/model/vertex.h>
 #include <SketchUpAPI/model/attribute_dictionary.h>
@@ -31,7 +31,7 @@
 #include <vector>
 
 
-#include "../../3rdparty/json/json.hpp"
+#include "json/json.hpp"
 using nlohmann::json;
 
 #define SKP_GROUNDHOG_DICTIONARY "Groundhog"
@@ -229,7 +229,7 @@ public:
 	@param[in] entities the SUEntitiesRef object containing the SUFacesRef
 	@return success
 	*/
-	bool bulkFacesIntoVector(std::vector <Face * > * dest, SUEntitiesRef  entities);
+	bool bulkFacesIntoVector(std::vector <Otype * > * dest, SUEntitiesRef  entities);
 
 	//! Transforms a SUComponentDefinitionRef into a ComponentDefinition and adds it to a GroundhogModel
 	/*!

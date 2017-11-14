@@ -20,8 +20,8 @@
 
 
 #include "./loop.h"
-#include "../utilities/io.h"
-#include "../../config_constants.h"
+#include "common/utilities/io.h"
+#include "config_constants.h"
 #include "./segment.h"
 
 Loop::Loop() 
@@ -62,6 +62,17 @@ void Loop::addVertex(Point3D * point)
 size_t Loop::size() 
 {
 	return vertices.size();
+}
+
+
+size_t Loop::realSize()
+{
+	size_t n = 0;
+	for (size_t i = 0; i < size(); i++) {
+		if (vertices[i] != NULL)
+			n++;
+	}
+	return n;
 }
 
 

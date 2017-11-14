@@ -21,6 +21,7 @@
 
 #pragma once
 
+
 #include <vector>
 
 #include "./src/windowgroup.h"
@@ -31,6 +32,7 @@
 #include "../common/utilities/date.h"
 #include "./src/location.h"
 #include "./src/photosensor.h"
+#include "./src/rtraceoptions.h"
 
 #include "./src/material.h"
 #include "./src/materials/glass.h"
@@ -60,7 +62,7 @@ private:
 	//Luminaires
 	Location location = Location(); //!< The location (i.e. longitude, latitude, timezone, etc.)
 	Date date = Date(1, 1, 12, 12); //!< The current date
-	//Options
+	RTraceOptions rtraceOptions = RTraceOptions(); //< The options related to Ray Tracing (RTRACE program)
 	//Observers // **	
 	double northCorrection; //!< The north correction (i.e. the model should be rotated when calculating)
 
@@ -90,17 +92,17 @@ public:
 	*/
 	void addLayer(std::string layerName);
 
-	//! Adds a face to a certain layer
+	//! Adds an Otype to a certain layer
 	/*!
 	Will return false (and inform a fatal error) if the layer 
 	was not found.
 
 	@author German Molina
 	@param[in] layerName The name of the layer
-	@param[in] face The face to add
+	@param[in] o The Otype to add
 	@return success
 	*/
-	bool addFaceToLayer(std::string * layerName, Face * face);
+	bool addObjectToLayer(std::string * layerName, Otype * o);
 
 	//! Adds a ComponentInstance to a certain layer
 	/*!
@@ -114,22 +116,7 @@ public:
 	*/
 	bool addComponentInstanceToLayer(std::string * layerName, ComponentInstance * instance);
 
-	//! Adds a Face to a vector
-	/*!
-	@author German Molina
-	@param[in] faces The vector of Face
-	@param[in] face The Face to add
-	*/
-	void addFaceToVector(std::vector <Face *> * faces, Face * face);
-
-	//! Adds a ComponentInstance to a vector
-	/*!
-	@author German Molina
-	@param[in] instances The vector of CompoentInstance
-	@param[in] instance The instance to add
-	*/
-	void addComponentInstanceToVector(std::vector <ComponentInstance *> * instances, ComponentInstance * instance);
-
+	
 	//! Counts the Layer in the model
 	/*!	
 	@author German Molina
@@ -281,6 +268,15 @@ public:
 	*/
 	Workplane * getWorkplaneRef(size_t i);
 
+
+	//! Retrieves a workplane by name
+	/*!
+	@author German Molina
+	@param[in] wp The name of the workplane
+	@return The found workplane or NULL (if not found)
+	*/
+	Workplane * getWorkplaneByName(std::string wp);
+
 	//! Adds a Material to the Groundhogmodel
 	/*!
 	@author German Molina
@@ -353,4 +349,11 @@ public:
 	@author German Molina
 	*/
 	Date * getDate();
+
+	//! Retrieves the RTraceOptions by pointer
+	/*!
+	@return The pointer to the RTraceOptions object
+	*/
+	RTraceOptions * getRTraceOptions();
+
 };

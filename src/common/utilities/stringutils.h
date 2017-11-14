@@ -123,4 +123,12 @@ std::string size_tToString(size_t sz);
 */
 void tokenize(std::string * s, std::vector<std::string> * v);
 
+//! Checks if s string is a number
+/*
+@author Internet... https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
+@param[in] s The string
+@return is number?
+*/
+bool is_number(const std::string& s);
+
 /* @} */

@@ -20,12 +20,11 @@
 
 
 #include "./stringutils.h"
-#include "../../common/utilities/io.h"
+#include "common/utilities/io.h"
 
 #include <sstream>
 #include <string>
 #include <algorithm> 
-
 
 bool stringInclude(std::string word, std::string substring) 
 {
@@ -134,4 +133,11 @@ void tokenize(std::string * s,std::vector<std::string> * v)
 	}
 	v->push_back(s->substr(start));
 
+}
+
+bool is_number(const std::string& s)
+{
+	std::string::const_iterator it = s.begin();
+	while (it != s.end() && (isdigit(*it) || *it == '.') ) ++it;
+	return !s.empty() && it == s.end();
 }

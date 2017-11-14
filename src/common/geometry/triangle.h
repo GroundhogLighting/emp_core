@@ -21,7 +21,7 @@
 #pragma once
 
 #include "./segment.h"
-#include "../../3rdparty/fast-poly2tri/MPE_fastpoly2tri.h"
+#include "fast-poly2tri/MPE_fastpoly2tri.h"
 
 // Represents a Triangle.
 /*!

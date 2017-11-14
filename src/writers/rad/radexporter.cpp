@@ -18,11 +18,12 @@
 
 *****************************************************************************/
 
-#include "../../config_constants.h"
-#include "../../common/utilities/io.h"
-#include "../../common/utilities/file.h"
-#include "../../common/geometry/triangulation.h"
-#include "../../groundhogmodel/groundhogmodel.h"
+#include "config_constants.h"
+#include "versions.h"
+#include "common/utilities/io.h"
+#include "common/utilities/file.h"
+#include "common/geometry/triangulation.h"
+#include "groundhogmodel/groundhogmodel.h"
 #include "./radexporter.h"
 #include <fstream>
 
@@ -38,21 +39,32 @@ RadExporter::RadExporter(GroundhogModel * the_model, std::string the_exportDir, 
 
 RadExporter::~RadExporter() 
 {
-
 	DEBUG_MSG("Destroying Rad Exporter");
 }
 
 
+bool RadExporter::exportModelWithWorkplanes()
+{
+	exportModel();
+
+	// write workplanes
+	if (!writeWorkplanes(GLARE_WORKPLANES_SUBFOLDER)) {
+		fatal("Error when exporing Layers", __LINE__, __FILE__);
+		return false;
+	}
+	return true;
+}
 
 bool RadExporter::exportModel() 
 {
 	inform("Beggining Radiance export", verbose);
-
+	/*
 	// Check if directory exists
 	if ((dexist(exportDir) && isDir(exportDir))) {
 		fatal("Export directory '" + exportDir + "' alredy exists... please delete it.", __LINE__, __FILE__);
 		return false;
 	}
+	*/
 	// Create the directory
 	if (!createdir(exportDir)) {
 		fatal("Imposible to create Output directory", __LINE__, __FILE__);
@@ -89,12 +101,7 @@ bool RadExporter::exportModel()
 		return false;
 	}
 
-	// write workplanes
-	if(!writeWorkplanes(GLARE_WORKPLANES_SUBFOLDER)) {
-		fatal("Error when exporing Layers", __LINE__, __FILE__);
-		return false;
-	}
-
+	
 	// write materials
 	if (!writeMaterials(GLARE_MATERIALS_SUBFOLDER)) {
 		fatal("Error when exporing materials", __LINE__, __FILE__);
@@ -232,7 +239,7 @@ bool RadExporter::writeComponentDefinitions(char * dir)
 
 	for (size_t i = 0; i < numDefinitions; i++) {
 		ComponentDefinition * definition = model->getComponentDefinitionRef(i);
-		size_t numFaces = definition->getNumFaces();
+		size_t numObjects = definition->getNumObjects();
 		std::string componentName = definition->getName();
 
 		// create the file
@@ -244,7 +251,7 @@ bool RadExporter::writeComponentDefinitions(char * dir)
 		size_t numInstances = instances->size();
 		
 		// export faces
-		if (numFaces < 1 && numInstances < 1) {
+		if (numObjects < 1 && numInstances < 1) {
 			warn("Empty component '" + componentName + "'");
 			continue;
 		}
@@ -257,8 +264,8 @@ bool RadExporter::writeComponentDefinitions(char * dir)
 			file << std::endl << std::endl;
 		}
 
-		for (size_t j = 0; j < numFaces; j++) {
-			writeFace(&file, definition->getFaceRef(j));
+		for (size_t j = 0; j < numObjects; j++) {
+			writeObject(&file, definition->getObjectRef(j));
 		}// end of iterating faces
 
 		// Close the file
@@ -300,18 +307,13 @@ bool RadExporter::writeLayers(char * dir)
 			writeComponentInstance(&file, layer->getComponentInstanceRef(j));
 		}
 		file << std::endl << std::endl;
-
-		// check if there are faces... continue if not.
-		std::vector < Face * > * faces = layer->getFacesRef();
-		size_t numFaces = faces->size();
-		if (numFaces < 1) {
-			warn("Empty layer '" + layerName + "'");
-			continue;
-		}
+		
 	
+		std::vector < Otype * > * objects = layer->getObjectsRef();
+		size_t numFaces = objects->size();
 		// write all faces
 		for (size_t j = 0; j < numFaces; j++) {
-			writeFace(&file, layer->getFaceRef(j));
+			writeObject(&file, layer->getObjectRef(j));
 		}
 		
 		// Close the file
@@ -334,7 +336,7 @@ void RadExporter::writeComponentInstance(std::ofstream * file, ComponentInstance
 	*file << " -ry " << instance->getRotationY(); 
 	*file << " -rx " << instance->getRotationX(); 
 	*file << " -t " << instance->getX() << " " << instance->getY() << " " << instance->getZ(); 	
-	*file << " ./Geometry/" << instance->getDefinitionRef()->getName() << ".rad"; 
+	*file << " ../Components/" << instance->getDefinitionRef()->getName() << ".rad"; 
 	*file << std::endl;
 }
 
@@ -382,7 +384,7 @@ void RadExporter::writeClosedFace(std::ofstream * file, Face * face)
 	*file << mat->getName() << GLARE_TAB << "polygon" << GLARE_TAB << faceName << std::endl;
 	*file << "0" << std::endl;
 	*file << "0" << std::endl;
-	*file << std::to_string(3 * finalLoop->size()) << std::endl;
+	*file << std::to_string(3 * finalLoop->realSize()) << std::endl;
 	writeLoop(file, finalLoop);
 
 	*file << std::endl;
@@ -391,17 +393,17 @@ void RadExporter::writeClosedFace(std::ofstream * file, Face * face)
 	}
 }
 
-void RadExporter::writeFace(std::ofstream * file, Face * face) 
+void RadExporter::writeObject(std::ofstream * file, Otype * face) 
 {
-	if (face->hasTooManyInnerLoops()) {
+
+	if (dynamic_cast<Face *>(face)->hasTooManyInnerLoops()) {
 		warn("Ignoring face '" + face->getName() + "' because it has TOO MANY inner loops.");
 		// writeTriangulatedFace(file,face);
 		return;
 	}
 	else {
-		writeClosedFace(file,face);		
-	}
-	
+		writeClosedFace(file,dynamic_cast<Face *>(face));		
+	}	
 }
 
 bool RadExporter::writeWindows(char * dir) {
@@ -435,7 +437,7 @@ bool RadExporter::writeWindows(char * dir) {
 
 		for (size_t j = 0; j < numWindows; j++) {
 			Face * window = group->getWindowRef(j);
-			writeFace(&file, window);
+			writeObject(&file, window);
 		}
 
 		file.close();
@@ -590,7 +592,7 @@ bool RadExporter::writeSceneFile(char * dir)
 
 	// Write Header
 	file << "###############" << std::endl;
-	file << "## Scene exported using Glare v" << GLARE_VERSION << std::endl;
+	file << "## Scene exported using " << GLARE_VERSION << std::endl;
 	file << "###############" << std::endl;
 
 	file << std::endl << std::endl << std::endl;

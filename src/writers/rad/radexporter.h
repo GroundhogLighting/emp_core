@@ -49,6 +49,13 @@ public:
 	*/
 	~RadExporter();
 
+	//! Same as exportModel() but it will also export the Workplanes
+	/*!
+	@author German Molina
+	@return success
+	*/
+	bool RadExporter::exportModelWithWorkplanes();
+
 	//! Exports a GroundhogModel in Radiance format.
 	/*!
 	Will call other functions of the object with the purpose of creating
@@ -133,14 +140,15 @@ public:
 	*/
 	void writeClosedFace(std::ofstream * file, Face * face);
 
-	//! Writes a Face in Radiance format
+	//! Writes an Otype in Radiance format
 	/*!
 	@author German Molina
 	@param[in] file The file to write this in
-	@param[in] face The Face to write
+	@param[in] o The Otype to write
 	@todo Support faces with many holes
+	@todo Enable other objects
 	*/
-	void writeFace(std::ofstream * file, Face * face);
+	void writeObject(std::ofstream * file, Otype * o);
 
 	//! Writes all the window groups in Radiance format
 	/*!

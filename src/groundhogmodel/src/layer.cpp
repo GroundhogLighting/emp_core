@@ -20,7 +20,7 @@
 
 
 #include "./layer.h"
-#include "../../common/utilities/io.h"
+#include "common/utilities/io.h"
 
 Layer::Layer(std::string layerName) 
 {
@@ -31,8 +31,8 @@ Layer::Layer(std::string layerName)
 Layer::~Layer() 
 {
 	// delete faces
-	for (unsigned int i = 0; i < faces.size(); i++) {
-		delete faces[i];
+	for (unsigned int i = 0; i < objects.size(); i++) {
+		delete objects[i];
 	}
 	for (unsigned int i = 0; i < instances.size(); i++) {
 		delete instances[i];
@@ -47,9 +47,9 @@ bool Layer::compareName(std::string * layerName)
 	return name == *layerName;
 }
 
-void Layer::addFace(Face * face) 
+void Layer::addObject(Otype * o) 
 {
-	faces.push_back(face);
+	objects.push_back(o);
 }
 
 std::vector <ComponentInstance * > * Layer::getComponentInstancesRef() 
@@ -62,15 +62,15 @@ std::string Layer::getName()
 	return name;
 }
 
-std::vector <Face * > * Layer::getFacesRef() 
+std::vector <Otype * > * Layer::getObjectsRef() 
 {
-	return &faces;
+	return &objects;
 }
 
 
-Face * Layer::getFaceRef(size_t i) 
+Otype * Layer::getObjectRef(size_t i) 
 {
-	return faces[i];
+	return objects[i];
 }
 
 
@@ -82,5 +82,5 @@ ComponentInstance * Layer::getComponentInstanceRef(size_t i)
 
 bool Layer::isEmpty() 
 {
-	return (faces.size() == 0 && instances.size() == 0);
+	return (objects.size() == 0 && instances.size() == 0);
 }

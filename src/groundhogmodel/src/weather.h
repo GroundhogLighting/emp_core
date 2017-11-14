@@ -21,7 +21,7 @@
 
 #pragma once
 #include  <vector>
-#include "../../3rdparty/json/json.hpp"
+#include "json/json.hpp"
 
 using nlohmann::json;
 

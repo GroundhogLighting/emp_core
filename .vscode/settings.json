@@ -1,6 +1,12 @@
 {
     "files.associations": {
         "cmath": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "bsdf.h": "c",
+        "object.h": "c",
+        "xiosbase": "cpp",
+        "otypes.h": "c",
+        "platform.h": "c",
+        "xlocale": "cpp"
     }
 }

@@ -30,3 +30,4 @@ debug/*
 .vs 
 *Makefile*
 *.skb
+*.log
