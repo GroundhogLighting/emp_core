@@ -18,19 +18,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
-#pragma once
+#include "./api_io.h"
 
+int warn(lua_State * L)
+{
+	lua_Debug ar;
+	lua_getstack(L, 1, &ar);
+	lua_getinfo(L, "nSl", &ar);
 
-// Include LUA headers
-extern "C" {
-#include <lua.h>
-	//#include <lualib.h>
-#include <lauxlib.h> 
+	const char * msg = lua_tostring(L, 1);
+	std::cerr << "Warning from Line " << ar.currentline << ": " << msg << std::endl;
+	
+	return 0;
 }
 
-//! Retrieves a list of the Workplane objects in the GroundhogModel
-/*!
-@author German Molina
-@param[in] L The lua_State of the api
-*/
-int get_workplane_list(lua_State * L);
+int raise(lua_State * L)
+{	
+	const char * msg = lua_tostring(L, 1);		
+	sendError(L, "Usage", msg);	
+	return 0;
+}

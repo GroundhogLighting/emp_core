@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../task.h"
 #include "common/taskmanager/tasks/sky.h"
 #include "calculations/radiance.h"
+#include "common/utilities/io.h"
 
 class CalcDF : public Task {
 private:
@@ -66,8 +67,10 @@ public:
 	{
 		Workplane * wp = model->getWorkplaneByName(workplane);
 
-		if (wp == NULL)
+		if (wp == NULL) {
+			warn("Workplane " + workplane + " was not found in model");
 			return false;
+		}
 
 		Triangulation * triangulation = static_cast<TriangulateWorkplane *>(getDependencyRef(1))->getResult();
 

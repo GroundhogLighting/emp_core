@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "groundhogmodel/groundhogmodel.h"
 #include "writers/rad/radexporter.h"
 #include "common/geometry/triangulation.h"
+#include "common/utilities/io.h"
 
 class ExportRadianceDir : public Task {
 private:
@@ -93,8 +94,10 @@ public:
 	bool solve()
 	{
 		Workplane * wp = model->getWorkplaneByName(workplane);
-		if (wp == NULL)
+		if (wp == NULL) {
+			warn("Workplane " + workplane + " was not found in model");
 			return false;
+		}
 
 		result = new Triangulation(wp->getPolygonRef(0));
 

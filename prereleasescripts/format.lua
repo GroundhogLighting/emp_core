@@ -3,19 +3,22 @@
 format = {}
 
 format.header1 = function(text)
-    return "# "..text.."\n\n"
+    return "\n# "..text.."\n\n"
 end
 
 format.header2 = function(text)
-    return "## "..text.."\n\n"
+    return "\n## "..text.."\n\n"
 end
 
 format.header3 = function(text)
-    return "### "..text.."\n\n"
+    return "\n### "..text.."\n\n"
 end
 
 format.headerN = function(text,n)
-    return string.rep("#",n)..text.."\n\n"
+    if n > 6 then
+        return "\n<h7>"..text.."</h7>\n\n"
+    end
+    return "\n"..string.rep("#",n).." "..text.."\n\n"
 end
 
 format.text = function(text)
@@ -35,7 +38,7 @@ format.date = function(author,date,version)
     date = date or ""
     version = version or ""
     
-    return author.." | "..date .. " | version "..version.."\n\n"
+    return format.headerN(author.." | "..date .. " | version "..version,6)
 end
 
 format.input = function(i,value,required)
@@ -44,6 +47,10 @@ format.input = function(i,value,required)
         r = "-- required"
     end
     return i..". "..value.." "..r.."\n"
+end
+
+format.bold = function(text)
+    return "**"..text.."**\n"
 end
 
 return format

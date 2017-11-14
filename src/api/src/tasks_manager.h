@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -37,15 +37,6 @@ extern "C" {
 */
 int solveTaskManager(lua_State * L);
 
-//! Adds the Export To Radiance task to the TaskManager
-/*!
-Exports the GroundhogModel into a Radiance format
-
-@author German Molina
-@param[in] L the lua_State object
-@return the number of arguments
-*/
-int addExportToRadianceTask(lua_State * L);
 
 //! Adds the task of calculating the Daylight Coefficient
 /*!

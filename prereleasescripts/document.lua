@@ -11,7 +11,7 @@ d.doxygen = function()
     log = io.open(doxygen_log,"r")
     first_line = log:read()     
     log:close()    
-    if not (first_line == nil or string.gsub(first_line,"[ \n]","") == "") then        
+    if not (first_line == nil or first_line:gsub("[ \n]","") == "") then        
         warn2("Doxygen documentation seem to be incomplete")
     end
 end
@@ -24,11 +24,149 @@ local user_doc_dir = "glare-doc"
 
 local user_api_doc_file = "api-reference.md"
 d.document_api = function()
-    file = io.open(user_doc_dir.."/"..user_api_doc_file,'w')
+    -- Create container
+    local funcs = {}
     
-    file:write("Testing 2!")
+    -- Open the source file
+    source = io.open("./src/api/api.cpp",'r')
+    ln = source:read()
+    local current_group = false
+    local current_function = false   
+    local in_function = false
+    while ln do        
+        if ln:find("@APIgroup") then
+            current_group = ln:gsub("[*/]","")
+            _,e = current_group:find("APIgroup")
+            current_group = current_group:sub(e+2):lower()
+            current_group = current_group:sub(1,1):upper()..current_group:sub(2)            
+            funcs[current_group] = {}
+            current_function = {
+                params = {};
+                returns = {};
+                text = {};
+            }
+        elseif ln:find("@APIfunction") then
+            in_function = true
+        elseif ln:find("lua_register") then
+            local first_comma = ln:find(",",1)
+            local second_comma = ln:find(",",first_comma+1)
+            local name = ln:sub(first_comma+1,second_comma-1):gsub("[\" ]","") 
+            funcs[current_group][name] = current_function
+            current_function = {
+                params = {};
+                returns = {};
+                text = {};
+            }
+            in_function  = false
+        elseif in_function and ln:find("@") then
+            local at = ln:find("@")
+            local blank = ln:find(" ",at+1)
+            local tag = ln:sub(at+1,blank)
+            local v = ln:sub(blank+1)
+            if tag:find("param") then
+                local r = false
+                if tag:find("required") then
+                    r = true
+                end
+                local second_blank = v:find(" ")
+                local param_name = v:sub(0,second_blank-1)
+                local param_description = v:sub(second_blank)
+                current_function.params[param_name] = {required = r; value = param_description}
+            elseif tag:find("return") then
+                local second_blank = v:find(" ")
+                local ret_name = v:sub(0,second_blank-1)
+                local ret_description = v:sub(second_blank)                
+                current_function.returns[ret_name] = ret_description            
+            else
+                current_function[tag] = v
+            end
+        elseif in_function and not ln:find("[*/]") then             
+            current_function.text[#current_function.text+1] = ln
+        end
+        ln = source:read()
+    end
 
-    file:close()
+    source:close()
+
+    -- Write the resulting file
+    result_file = io.open(user_doc_dir.."/"..user_api_doc_file,'w')
+
+    -- Write title
+    result_file:write(format.header1("Glare's API reference manual"))
+    result_file:write("All the functions in Glare's API")
+
+    result_file:write(format.header2("Index"))
+    -- Write index
+    for group_name,group in pairs(funcs) do
+        result_file:write(format.header3(group_name))
+        for f,_ in pairs(group) do
+            result_file:write("- "..f.."\n")
+        end
+        result_file:write("\n")
+    end
+    
+    result_file:write("\n---\n")
+
+    -- Write functions    
+    result_file:write(format.header2("Functions"))
+
+    for group_name,group in pairs(funcs) do
+        result_file:write(format.header3(group_name))
+        for f,data in pairs(group) do
+            -- Write name of function
+            p = {}
+            for param,v in pairs(data.params) do
+                p[#p+1] = param
+            end            
+            result_file:write(format.headerN(f.."("..table.concat(p,",")..")",4))
+            
+            -- Write text
+            tag = "text"
+            value = data[tag]
+            for i=1,#value do
+                s = value[i]:find("%w")
+                if s then
+                    result_file:write(value[i]:sub(s).."\n")                
+                else
+                    result_file:write(value[i])
+                end
+            end
+
+            -- Write params
+            tag = "params"
+            value = data[tag]
+            result_file:write("\n"..format.headerN("Arguments",7).."\n")
+            local n = 0
+            for ret,v in pairs(value) do
+                local req = ""
+                if v.required then
+                    req = " | required"
+                end
+                result_file:write("- **"..ret.."**:"..v.value..req.."\n")
+                n = n+1
+            end              
+            if n == 0 then
+                result_file:write("- none\n")
+            end
+        
+
+            -- Write returns
+            tag = "returns"
+            value = data[tag]
+            result_file:write("\n"..format.headerN("Return",7).."\n")
+            local n = 0
+            for ret,v in pairs(value) do
+                result_file:write("- **"..ret.."**: "..v.."\n")
+                n = n+1
+            end
+            if n == 0 then
+                result_file:write("- none\n")
+            end
+        
+        end
+    end
+
+    result_file:close()
 end
 
 -- SCRIPTS DOCUMENTATION
@@ -50,30 +188,28 @@ function parse_script(script_name)
     local in_header = false
     local ln = file:read()    
     while ln do
-        if string.find(ln,"--%[%[") then
+        if ln:find("--%[%[") then
             in_header = true
-        elseif in_header and string.find(ln,"%]%]") then
+        elseif in_header and ln:find("%]%]") then
             in_header = false
-        elseif in_header and string.find(ln,"@") then            
+        elseif in_header and ln:find("@") then            
             -- Delete preceding blank spaces and the at
-            ln = string.gsub(ln," ","",string.find(ln,"@")-1)
-            ln = string.gsub(ln,"@","")
+            ln = ln:gsub(" ","",ln:find("@")-1)
+            ln = ln:gsub("@","")
             
-            local end_tag = string.find(ln," ",1)
-            local tag = string.sub(ln,0,end_tag-1)            
-            local value = string.sub(ln,end_tag,#ln)
-            if string.find(tag,"input") then
-                tag = string.sub(tag,6)
-                tag = string.gsub(tag,"[%]%[]","")
+            local end_tag = ln:find(" ",1)
+            local tag = ln:sub(0,end_tag-1)            
+            local value = ln:sub(end_tag,#ln)
+            if tag:find("input") then
+                tag = tag:sub(6)
+                tag = tag:gsub("[%]%[]","")
                 ret.inputs[#(ret.inputs)+1] = { required = (tag == "required"); v = value }
             else
                 ret[tag] = value
             end            
         elseif in_header then
             -- Other text in headers
-            if ln ~= "" then
-                ret.text = ret.text..ln.."\n"                
-            end
+            ret.text = ret.text..ln.."\n"                            
         else
             -- code
             ret.code = ret.code..ln.."\n"
@@ -88,13 +224,11 @@ end
 function document_script(script,main_file)
     warn2("Documenting script "..script.name)
     
-    local this_doc_file_name = string.gsub(script.name,".lua",".md")
+    local this_doc_file_name = script.name:gsub(".lua",".md")
 
     -- open file    
-    local file = io.open(user_doc_dir.."//standardscripts/"..this_doc_file_name,'w')
-
-    main_file:write(format.header1("Standard scripts"))
-
+    local file = io.open(user_doc_dir.."/"..scripts_dir.."/"..this_doc_file_name,'w')
+    
     -- Write title
     main_file:write(format.header2(script.title or script.name))
     file:write(format.header1(script.title or script.name))
@@ -112,8 +246,12 @@ function document_script(script,main_file)
     end
 
     -- Write link to more info
-    main_file:write("[See details](/standardscripts/"..this_doc_file_name..")\n\n")
+    main_file:write("[See details](/"..scripts_dir.."/"..this_doc_file_name..")\n\n")
     
+    -- write text
+    if script.text then
+        file:write(format.text(script.text))
+    end
 
     -- Inputs    
     main_file:write(format.header3("Inputs:"))    
@@ -130,10 +268,6 @@ function document_script(script,main_file)
     main_file:write("\n")
     file:write("\n")
     
-    -- write text
-    if script.text then
-        file:write(format.text(script.text))
-    end
 
 
     -- Write example
@@ -161,6 +295,8 @@ d.document_scripts = function()
 
     -- document each script script
     local file = io.open(user_doc_dir.."/"..scripts_doc_file,'w')
+    file:write(format.header1("Standard scripts"))
+    
     for i=1,#scripts do
         s = parse_script(scripts[i])
         titles[#titles+1] = {name = s.name; title = s.title}-- register title and name
@@ -176,14 +312,14 @@ d.document_scripts = function()
     local in_scripts = false
     
     while ln do        
-        if string.find(ln,string.gsub(scripts_doc_file,"-","%%-")) then
+        if ln:find(scripts_doc_file:gsub("-","%%-")) then
             in_scripts = true            
             lines[#lines+1]=ln
             for i=1,#titles do
-                lines[#lines+1] = "  * ["..titles[i].title.."](/standardscripts".."/"..titles[i].name..")"
+                lines[#lines+1] = "  * ["..titles[i].title.."](/"..scripts_dir.."/"..titles[i].name:gsub(".lua",".md")..")"
             end
         else
-            if 1 ~= string.find(ln," ",1) then
+            if 1 ~= ln:find(" ",1) then
                 lines[#lines+1]=ln
             end
         end        

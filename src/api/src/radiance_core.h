@@ -18,24 +18,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
-#include "./getdata.h"
-#include "./common.h"
-
-#include <iostream>
-
-int get_workplane_list(lua_State * L)
-{
-	GroundhogModel * model = getCurrentModel(L);
-	size_t nwps = model->getNumWorkplanes();
-
-	// Create the table
-	lua_newtable(L); // index = 1
-	
-	// push workplane names
-	for (size_t i = 0; i < nwps; i++) {
-		lua_pushstring(L, &(model->getWorkplaneRef(i)->getName())[0]);
-		lua_seti(L, 1, i+1); 
-	}
-
-	return 1;
-}
+#pragma once

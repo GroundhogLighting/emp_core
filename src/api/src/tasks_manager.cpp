@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 
-#include "./tasks.h"
+#include "./tasks_manager.h"
 #include "./common.h"
 
 #include "common/taskmanager/tasks/export.h"
@@ -33,32 +33,6 @@ int solveTaskManager(lua_State * L)
 	return 0;
 }
 
-int addExportToRadianceTask(lua_State * L)
-{
-	GroundhogModel * model = getCurrentModel(L);
-	TaskManager * tm = getCurrentTaskManager(L);
-
-	// Check argument number
-	if (!checkNArguments(L, 1)) {
-		return 0;
-	}
-
-	// Check type
-	if (lua_type(L, 1) != LUA_TSTRING) {
-		std::cerr << "Not a string " << std::endl;
-		return 0;
-	}
-
-	// get target dir.
-
-	std::string dir = lua_tostring(L, 1);
-	
-	tm->addTask(new ExportRadianceDir(dir, model, false));
-
-
-	return 0;
-}
-
 
 
 int addDFTask(lua_State * L)
@@ -68,15 +42,10 @@ int addDFTask(lua_State * L)
 	RTraceOptions * options = model->getRTraceOptions();
 
 	// Check nuber of arguments
-	if (!checkNArguments(L, 1)) {
-		return 0;
-	}
+    checkNArguments(L, 1);
 
 	// Check type
-	if (lua_type(L, 1) != LUA_TTABLE) {
-		std::cerr << "Not a table " << std::endl;
-		return 0;
-	}
+    checkArgType(L, LUA_TTABLE, 1);
 
 	if (lua_getfield(L, 1, "workplane") != LUA_TNIL) {
 		std::string value = luaL_checkstring(L, 2);

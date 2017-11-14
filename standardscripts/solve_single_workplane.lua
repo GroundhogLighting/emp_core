@@ -32,7 +32,7 @@ if not workplane_exist(wp_name) then
     return
 end
 
-if not arg2 == nil then
+if arg2 ~= nil then
    load_ray_trace_options(arg2) 
 end
 

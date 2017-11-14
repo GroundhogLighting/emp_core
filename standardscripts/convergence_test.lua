@@ -19,16 +19,16 @@ of them
 
 -- PARSE INPUTS
 -- ============
-converge_ad = arg1 or 0.2
-current_ad = arg2 or 28
+sensor_file = arg1 or 0.2
+n_sensors = arg2 or 28
 increase_ad = arg3 or 1.6
-converge_ab = arg4 or 0.2
-current_ab = arg5 or 1
-increase_ab = arg6 or 1 
+increase_ab = arg4 or 1 
 
 -- CHECK ARGUMENTS
 -- ===============
-
+if not file_exists(sensor_file) then
+    raise("Sensor file '"..sensor_file.."' does not exist")
+end
 
 -- PROCESS
 -- =======

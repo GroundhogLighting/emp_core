@@ -3,7 +3,12 @@ local f = {}
 
 
 f.delete_file = function(flnm)
-    os.remove(flnm)    
+    if is_windows then
+        os.execute("del "..flnm)
+    else
+        os.execute("rm "..flnm)
+    end
+    -- os.remove(flnm)    
 end
 
 f.delete_dir = function(dirname)

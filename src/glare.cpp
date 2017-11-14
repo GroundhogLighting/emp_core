@@ -133,8 +133,8 @@ bool Glare::solve(int argc, char* argv[])
 
 		result = lua_pcall(L, 0, LUA_MULTRET, 0);
 		if (result) {
-			fatal("Error when executing script file '" + secondArgument + "'", __LINE__, __FILE__);
-			fatal(lua_tostring(L, -1), __LINE__, __FILE__);
+			//std::cerr << "Fatal: Error when executing script file '" << secondArgument << "'" << std::endl;
+			std::cerr << lua_tostring(L, -1) << std::endl;
 			return false;
 		}
 

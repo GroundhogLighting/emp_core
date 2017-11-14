@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -41,19 +41,14 @@ int set_rtrace_options(lua_State *L)
 	RTraceOptions * options = model->getRTraceOptions();
 	
 	// Check nuber of arguments
-	if (!checkNArguments(L, 1)) {
-		return 0;
-	}
+    checkNArguments(L, 1);
 
 	// Check type
-	if (lua_type(L, 1) != LUA_TTABLE){
-		std::cerr << "Not a table " << std::endl;
-		return 0;
-	}
-	
+    checkArgType(L, LUA_TTABLE, 1);
+    
+    // Iterate options
 	size_t j = options->countOptions();
 	
-
 	for (size_t i = 0; i < j; i++) {
 		std::string optionName = options->getOptionName(i);
 		if (lua_getfield(L, 1,&optionName[0]) != LUA_TNIL) {			

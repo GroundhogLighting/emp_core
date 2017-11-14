@@ -219,8 +219,7 @@ Workplane * GroundhogModel::getWorkplaneByName(std::string wp)
 	for (size_t i = 0; i < workplanes.size(); i++) {
 		if (workplanes[i]->getName() == wp)
 			return workplanes[i];
-	}
-	warn("Workplane " + wp + " was not found in model");
+	}	
 	return NULL;
 }
 

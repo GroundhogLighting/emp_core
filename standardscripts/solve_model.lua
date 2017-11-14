@@ -3,7 +3,6 @@
 @version 1.0.0
 @author German Molina
 @date November 2, 2017
-@API 0.0.0
 
 @title Solves the whole model
 @brief This script solves all the objectives in the model
