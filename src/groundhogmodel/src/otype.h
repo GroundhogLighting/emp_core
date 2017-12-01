@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -106,15 +106,18 @@ public:
 	@author German Molina
 	@param[in] mat The pointer to the Material
 	*/
-	void setMaterial(Material * mat);
+    void setMaterial(Material * mat);
 
-	//! Translates an Otype into a Radiance object
+    
+	//! Writes an Otype in Radiance format
 	/*!
 
 	@author German Molina
-	@param[in] tokens The primitive tokenized
+	@param[in] file The file to write the object to
 	@return success
 	@note This function should be overriden by a function with the same name in each Material derived class
 	*/
-	virtual bool translateIntoRadiance(FUNARGS * args);
+    virtual bool writeInRadianceFormat(FILE * file);
+	
+    
 };

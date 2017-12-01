@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -21,8 +21,21 @@
 
 #pragma once
 
+
+// Include LUA headers
+extern "C" {
+#include <lua.h>
+//#include <lualib.h>
+#include <lauxlib.h> 
+}
+
+#include "common/utilities/io.h"
+
 #include <vector>
 #include <string>
+#include "json/json.hpp"
+
+using json = nlohmann::json;
 
 //! A base class for sets of Options
 
@@ -30,16 +43,17 @@
 This class allows creating derived classes that represent a set of predefined
 options and their default values.
 
-For now it is assumed that every option is a double value.
+The actual options are contained within a JSON object called data
 
 @todo Allow String options
 */
 
 class OptionSet {
 private:
-	std::vector<std::string> names = std::vector<std::string>(); //!< The names of the options registered
-	std::vector<double> values = std::vector<double>(); //!< The values of the options in the same order as the names
-	
+	//std::vector<std::string> names = std::vector<std::string>(); //!< The names of the options registered
+	//std::vector<double> values = std::vector<double>(); //!< The values of the options in the same order as the names
+    json data = json({});
+
 public:
 
 	//! Registers a new option in the OptionSet
@@ -51,7 +65,26 @@ public:
 	@param opt The name of the option
 	@param defaultValue The default value for such option
 	*/
-	void addOption(std::string opt, double defaultValue);
+	template<typename T>
+    void addOption(std::string opt, T defaultValue)
+    {
+      data[opt] = defaultValue;
+    }
+
+    //! Returns the number of options
+    /*!
+    @author German Molina
+    @return the number of options
+    */
+    size_t size();
+
+    //! Checks wether an option exists in an OptionSet
+    /*!
+    @author German Molina
+    @param[in] opt The option name
+    @return true or false
+    */
+    bool hasOption(std::string opt);
 
 	//! Sets an option value
 	/*!
@@ -62,58 +95,57 @@ public:
 	@param opt The name of the option
 	@param value The new value for the option
 	*/
-	bool setOption(std::string opt, double value);
+    template<typename T>
+    bool setOption(std::string opt, T value)
+    {
+      if (!hasOption(opt)) {
+        fatal("OptionSet has no " + opt + " option... impossible to set such value", __LINE__, __FILE__);
+        return false;
+      }
+      
 
-	//! Retrieves an option value
-	/*!
-	Retrieves value of an option. Returns the value if found, 
-	or -1 (plus a Fatal error message) if option is not found.
+      // set the new data, with the type of the original
+      data[opt] = value;
+      return true;
+    }
 
-	@author German Molina
-	@param opt The name of the option
-	@return The value of the option
-	*/
-	double getOption(std::string opt);
+   
+	//! Retrieves an option from the OptionSet
+    /*!
+    @author German Molina
+    @param[in] opt The option to retrieve
+    */
+    template<typename T>
+    T getOption(std::string opt)
+    {
+      return data.at(opt).get<T>();
+    }
 
-	//! Retrieves an option value by index
-	/*!
-	Retrieves value of an option in a certain index. 
-	Returns the value if the index is correct, or NULL 
-	(plus a Fatal error message) if the index excedes 
-	the length of the vector.
-
-	@author German Molina
-	@param opt The name of the option
-	@return The value of the option
-	*/
-	double getOption(size_t i);
-
-
-	//! Retrieves the name of an option
-	/*!
-	Retrieves name of an option in a certain index. 
-	Returns the name if the index is correct, or NULL 
-	(plus a Fatal error message) if the index excedes 
-	the length of the vector.
-
-	@author German Molina
-	@param size_t The index of the option
-	@return The name of the option
-	*/
-	std::string getOptionName(size_t i);
-
-	//! Returns the number of options registered
-	/*!
-	@author German Molina
-	@return The number of options
-	*/
-	size_t countOptions();
 
 	//! Prints the options
 	/*!
+    Prints a set of options in a file. If NULL is passed as a name, 
+    they will be printed to the STDOUT
+
 	@author German Molina
-	@param flnm The name of the file to print the options to
-	@todo The function is currently printing to the STDOUT
+	@param file The file name to print the data to 
 	*/
-	void print(std::string flnm);
+	void print(char * file);
+
+    //! Checks if all the options in two OptionSet objects are the same
+    /*
+    @author German Molina
+    @param other A pointer to another OptionSet object
+    @return is equal?
+    */
+    bool isEqual(OptionSet * other);
+
+    //! Fills an OptionSet from a given Lua table
+    /*!
+    @author German Molina
+    @param[in] L the Lua state
+    @param[in] tablePosition The position of the table in the lua stack
+    @return success
+    */
+    bool fillFromLuaTable(lua_State * L, int tablePosition);
 };

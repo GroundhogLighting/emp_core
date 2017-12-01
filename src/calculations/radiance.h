@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -23,17 +23,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /// Do not change this, please... it is required to compile Radiance in C++
 #define FUN_ARGLIST ...
 
-#define GETLUX(r,g,b) (r*47.45 + g*119.95+b*11.60)
+#define GETLUX(r,g,b) (r*47.45 + g*119.95 + b*11.60)
 
+#include "./oconv_options.h"
 #include "groundhogmodel/src/rtraceoptions.h"
 #include "common/utilities/os.h"
 #include "./Radiance/src/rt/ray.h"
-
+#include "config_constants.h"
 
 #include "Radiance/src/common/otypes.h"
 
 #include "common/geometry/triangulation.h"
 
+#include "writers/rad/radexporter.h"
 
 //! This function emulates the use of Radiance's RTRACE program
 /*!
@@ -74,3 +76,14 @@ bool rtrace_I(Triangulation * t, RTraceOptions * options, std::string baseDir, s
 @param[out] rays The place where the resulting rays will be stored
 */
 bool rtrace_i(Triangulation * t, RTraceOptions * options, std::string baseDir, std::string octname, std::string amb, std::vector<RAY> * rays);
+
+
+//! Creates an octree according to certain option
+/*
+@author German Molina
+@param[in] octreeName The name of the octree to create
+@param[in] options The OconvOptions set
+@param[in] exporter The RadianceExporter that will write all the necessary geometry
+@todo Lights on
+*/
+bool oconv(std::string octreeName, OconvOptions * options, RadExporter exporter);

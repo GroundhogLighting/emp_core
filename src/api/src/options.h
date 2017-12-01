@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -23,6 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 
+//! Prints the rtrace options in a file or stdout
+/*
+@author German Molina
+@param[in] L The lua state
+@return the number of return values within the script
+*/
 int print_rtrace_options(lua_State * L);
 
 //! Sets options for RTRACE routines of the model.

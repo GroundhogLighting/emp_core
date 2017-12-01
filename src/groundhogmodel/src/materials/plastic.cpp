@@ -1,4 +1,4 @@
-#include "./plastic.h"
+﻿#include "./plastic.h"
 
 #include "config_constants.h"
 #include "common/utilities/io.h"
@@ -38,18 +38,11 @@ double Plastic::rough()
 }
 
 
-bool Plastic::writeRadianceDefinition(std::string * dir)
+bool Plastic::writeInRadianceFormat(FILE * file)
 {
 
-	std::ofstream file;
-	file.open(*dir + "/" + name + ".mat");
-
-	file << "void" << GLARE_TAB << type << GLARE_TAB << name << std::endl;
-	file << 0 << std::endl;
-	file << 0 << std::endl;
-	file << 5 << GLARE_TAB << r << GLARE_TAB << g << GLARE_TAB << b << GLARE_TAB << specularity << GLARE_TAB << roughness << std::endl;
-
-	file.close();
+    fprintf(file, "void %s %s\n0\n0\n", &type[0], &name[0]);
+    fprintf(file, "5 %f %f %f %f %f\n", r, g, b, specularity, roughness);
 
 	return true;
 }

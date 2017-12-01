@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -32,6 +32,17 @@ extern "C" {
 #include <iostream>
 #include "./common.h"
 
+//! Raises an error in Lua
+/*
+@param[in] L The Lua state
+@return the number of return values within the script
+*/
 int raise(lua_State * L); 
 
+
+//! Warns something to the user
+/*
+@param[in] L The Lua state
+@return the number of return values within the script
+*/
 int warn(lua_State * L);

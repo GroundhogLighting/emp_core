@@ -1,4 +1,4 @@
-#include "common/utilities/io.h"
+﻿#include "common/utilities/io.h"
 #include "./glass.h"
 #include <fstream>
 #include "config_constants.h"
@@ -27,19 +27,12 @@ double Glass::blue()
 }
 
 
-bool Glass::writeRadianceDefinition(std::string * dir)
+bool Glass::writeInRadianceFormat(FILE * file)
 {
 
-	std::ofstream file;
-	file.open(*dir + "/" + name + ".mat");
-
-	file << "void" << GLARE_TAB << type << GLARE_TAB << name << std::endl;
-	file << 0 << std::endl;
-	file << 0 << std::endl;
-	file << 3 << GLARE_TAB << r << GLARE_TAB << g << GLARE_TAB << b  << std::endl;
-
-	file.close();
-
+    fprintf(file, "void %s %s\n0\n0\n", &type[0], &name[0]);
+	fprintf(file, "3 %f %f %f", r, g, b);
+	
 	return true;
 }
 

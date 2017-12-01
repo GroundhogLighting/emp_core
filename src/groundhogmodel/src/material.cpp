@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -82,7 +82,7 @@ bool Material::fillFromJSON(json j)
 }
 
 
-bool Material::writeRadianceDefinition(std::string * dir)
+bool Material::writeInRadianceFormat(FILE * file)
 {
 	return true;
 }

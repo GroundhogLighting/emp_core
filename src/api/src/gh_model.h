@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -32,8 +32,14 @@ extern "C" {
 /*!
 @author German Molina
 @param[in] L The lua_State of the api
+@return the number of return values within the script
 */
 int get_workplane_list(lua_State * L);
 
-
+//! Checks if a workplane exists in a GroundhogModel
+/*
+@author German Molina
+@param[in] L The lua state
+@return the number of return values within the script
+*/
 int workplane_exists(lua_State * L);

@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -25,9 +25,9 @@
 #include "common/geometry/triangulation.h"
 #include "groundhogmodel/groundhogmodel.h"
 #include "./radexporter.h"
+
 #include <fstream>
 
-#define RADIANCE_SKY_COMPLEMENT "skyfunc glow skyglow 0 0 4 0.99 0.99 1.1 0 skyglow source skyball 0 0 4 0 0 1 360"
 
 RadExporter::RadExporter(GroundhogModel * the_model, std::string the_exportDir, bool the_verbose) 
 {
@@ -145,16 +145,16 @@ bool RadExporter::writeModelInfo(char * filename)
 	Date * d = model->getDate();
 	Location * loc = model->getLocation();
 
-	file << "country," << loc->getCountry() << std::endl;
-	file << "city," << loc->getCity() << std::endl;
-	file << "latitude," << loc->getLatitude() << std::endl;
-	file << "longitude," << loc->getLongitude() << std::endl;
-	file << "time zone," << loc->getTimeZone() << std::endl;
-	file << "month," << d->getMonth() << std::endl;
-	file << "day," << d->getDay() << std::endl;
-	file << "hour," << d->getHour() << std::endl;
-	file << "minute," << d->getMinute() << std::endl;
-	file << "north correction,"<< model->getNorthCorrection() << std::endl;
+	file << "country," << loc->getCountry() << "\n";
+	file << "city," << loc->getCity() << "\n";
+	file << "latitude," << loc->getLatitude() << "\n";
+	file << "longitude," << loc->getLongitude() << "\n";
+	file << "time zone," << loc->getTimeZone() << "\n";
+	file << "month," << d->getMonth() << "\n";
+	file << "day," << d->getDay() << "\n";
+	file << "hour," << d->getHour() << "\n";
+	file << "minute," << d->getMinute() << "\n";
+	file << "north correction,"<< model->getNorthCorrection() << "\n";
 	file.close();
 
 	return true;
@@ -218,7 +218,7 @@ bool RadExporter::writeViews(char * dir)
 		file << " -vv " << view->getViewVertical();
 
 		// close
-		file << std::endl;
+		file << "\n";
 
 		// close file
 		file.close();
@@ -243,8 +243,8 @@ bool RadExporter::writeComponentDefinitions(char * dir)
 		std::string componentName = definition->getName();
 
 		// create the file
-		std::ofstream file;
-		file.open(baseDir + "/" + componentName + ".rad");
+        std::string fileName = baseDir + "/" + componentName + ".rad";
+        FILE * file = fopen(&fileName[0], "w");
 
 		// get instances within the model
 		std::vector < ComponentInstance * > * instances = definition->getComponentInstancesRef();
@@ -259,17 +259,17 @@ bool RadExporter::writeComponentDefinitions(char * dir)
 		// write instances within the model
 		if (numInstances > 0) {
 			for (size_t j = 0; j < numInstances; j++) {
-				writeComponentInstance(&file, definition->getComponentInstanceRef(j));
+				writeComponentInstance(file, definition->getComponentInstanceRef(j));
 			}
-			file << std::endl << std::endl;
+            fprintf(file, "\n\n");
 		}
 
 		for (size_t j = 0; j < numObjects; j++) {
-			writeObject(&file, definition->getObjectRef(j));
+          definition->getObjectRef(j)->writeInRadianceFormat(file);
 		}// end of iterating faces
 
 		// Close the file
-		file.close();
+        fclose(file);
 	} // end of iterating definitions
 	return true;
 }
@@ -296,50 +296,120 @@ bool RadExporter::writeLayers(char * dir)
 		}
 		std::string layerName = layer->getName();
 
-		// create the file
-		std::ofstream file;
-		file.open(baseDir + "/" + layerName + ".rad");
-		
+		// create the file  
+		//std::ofstream file;
+		//file.open(baseDir + "/" + layerName + ".rad");
+        std::string flnm = baseDir + "/" + layerName + ".rad";
+        FILE * file = fopen(&flnm[0], "w");
+
 		// write instances
 		std::vector < ComponentInstance * > * instances = layer->getComponentInstancesRef();
 		size_t numInstances = instances->size();
 		for (size_t j = 0; j < numInstances; j++) {
-			writeComponentInstance(&file, layer->getComponentInstanceRef(j));
+			writeComponentInstance(file, layer->getComponentInstanceRef(j));
 		}
-		file << std::endl << std::endl;
-		
+
+        fprintf(file, "\n\n");		
 	
 		std::vector < Otype * > * objects = layer->getObjectsRef();
-		size_t numFaces = objects->size();
+		size_t numObjs= objects->size();
 		// write all faces
-		for (size_t j = 0; j < numFaces; j++) {
-			writeObject(&file, layer->getObjectRef(j));
+		for (size_t j = 0; j < numObjs; j++) {
+          layer->getObjectRef(j)->writeInRadianceFormat(file);
+          //writeObject(&file, layer->getObjectRef(j));
 		}
 		
 		// Close the file
-		file.close();
+        fclose(file);
+		//file.close();
 	}
 	return true;
 }
 
 
-void RadExporter::writeComponentInstance(std::ofstream * file, ComponentInstance * instance) 
+bool RadExporter::writeLayers(FILE * file, std::string * newMaterial)
+{
+
+  size_t numLayers = model->getNumLayers();
+  
+  for (size_t i = 0; i < numLayers; i++) {
+    // get the layer
+    Layer * layer = model->getLayerRef(i);
+    if (layer->isEmpty()) {      
+      continue;
+    }
+        
+    // write instances
+
+    // Create a transformation
+    Transform * transform = new Transform();
+
+    std::vector < ComponentInstance * > * instances = layer->getComponentInstancesRef();
+    size_t numInstances = instances->size();
+    for (size_t j = 0; j < numInstances; j++) {
+      writeComponentInstance(file, layer->getComponentInstanceRef(j),transform,newMaterial);
+    }
+
+    // delete this transform
+    delete transform;
+
+    fprintf(file, "\n\n");
+
+    std::vector < Otype * > * objects = layer->getObjectsRef();
+    size_t numObjs = objects->size();
+    // write all faces
+    for (size_t j = 0; j < numObjs; j++) {
+      layer->getObjectRef(j)->writeInRadianceFormat(file);
+    }
+
+  }
+  return true;
+}
+
+
+
+void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instance) 
 {	
 	ComponentDefinition * definition = instance->getDefinitionRef();
 	if (definition == NULL) {
 		warn("Trying to export an instance with NULL definition... instance ignored.");
 		return;
 	}
-	*file << "!xform";  
-	*file << " -s " << instance->getScale(); 
-	*file << " -rz " << instance->getRotationZ(); 
-	*file << " -ry " << instance->getRotationY(); 
-	*file << " -rx " << instance->getRotationX(); 
-	*file << " -t " << instance->getX() << " " << instance->getY() << " " << instance->getZ(); 	
-	*file << " ../Components/" << instance->getDefinitionRef()->getName() << ".rad"; 
-	*file << std::endl;
+
+    fprintf(file, "!xform -s %f -rz %f -ry %f -rx %f -t %f %f %f ../Components/%s.rad\n",
+      instance->getScale(),
+      instance->getRotationZ(),
+      instance->getRotationY(),
+      instance->getRotationX(),
+      instance->getX(),
+      instance->getY(),
+      instance->getZ(),
+      instance->getDefinitionRef()->getName().c_str()
+    );   
 }
 
+
+void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * transform, std::string * newMaterial)
+{
+  ComponentDefinition * definition = instance->getDefinitionRef();
+  if (definition == NULL) {
+    warn("Trying to export an instance with NULL definition... instance ignored.");
+    return;
+  }
+
+  fprintf(file, "!xform -s %f -rz %f -ry %f -rx %f -t %f %f %f ../Components/%s.rad\n",
+    instance->getScale(),
+    instance->getRotationZ(),
+    instance->getRotationY(),
+    instance->getRotationX(),
+    instance->getX(),
+    instance->getY(),
+    instance->getZ(),
+    instance->getDefinitionRef()->getName().c_str()
+  );
+}
+
+/*
 void RadExporter::writeLoop(std::ofstream * file, Loop * loop) 
 {
 	// Print the loop
@@ -354,57 +424,12 @@ void RadExporter::writeLoop(std::ofstream * file, Loop * loop)
 		*file << GLARE_TAB;
 		*file << point->getX() << GLARE_TAB;
 		*file << point->getY() << GLARE_TAB;
-		*file << point->getZ() << std::endl;
+		*file << point->getZ() << "\n";
 	}
 }
+*/
 
-void RadExporter::writeClosedFace(std::ofstream * file, Face * face) 
-{
-	// get the name of the face
-	std::string faceName = face->getName();
 
-	// get the material
-	Material * mat = face->getMaterial();
-	if (mat == NULL) {
-		fatal("Face " + faceName + " has no Material... it has been ignored", __LINE__, __FILE__);
-		return;
-	}
-
-	// define the loop that will be written
-	Loop * finalLoop = NULL;
-	bool needToDelete = false;
-	if (face->hasInnerLoops()) {
-		finalLoop = face -> getClosedLoop();		
-		needToDelete = true;
-	}
-	else {
-		finalLoop = face->getOuterLoopRef();
-	}
-	
-	*file << mat->getName() << GLARE_TAB << "polygon" << GLARE_TAB << faceName << std::endl;
-	*file << "0" << std::endl;
-	*file << "0" << std::endl;
-	*file << std::to_string(3 * finalLoop->realSize()) << std::endl;
-	writeLoop(file, finalLoop);
-
-	*file << std::endl;
-	if (needToDelete) {
-		delete finalLoop;
-	}
-}
-
-void RadExporter::writeObject(std::ofstream * file, Otype * face) 
-{
-
-	if (dynamic_cast<Face *>(face)->hasTooManyInnerLoops()) {
-		warn("Ignoring face '" + face->getName() + "' because it has TOO MANY inner loops.");
-		// writeTriangulatedFace(file,face);
-		return;
-	}
-	else {
-		writeClosedFace(file,dynamic_cast<Face *>(face));		
-	}	
-}
 
 bool RadExporter::writeWindows(char * dir) {
 	size_t numGroups = model->getNumWindowGroups();
@@ -430,18 +455,20 @@ bool RadExporter::writeWindows(char * dir) {
 		std::string fileName = baseDir + "/" + name + ".wingroup";
 
 		// create and open file
-		std::ofstream file;
-		file.open(fileName);
+		//std::ofstream file;
+		//file.open(fileName);
+        FILE * file = fopen(&fileName[0], "w");
 
-		mainFile << "!xform ./"<< dir <<"/" << name << ".wingroup" << std::endl;
+		mainFile << "!xform ./"<< dir <<"/" << name << ".wingroup" << "\n";
 
 		for (size_t j = 0; j < numWindows; j++) {
 			Face * window = group->getWindowRef(j);
-			writeObject(&file, window);
+            window->writeInRadianceFormat(file);
+			//writeObject(&file, window);
 		}
 
-		file.close();
-
+		//file.close();
+        fclose(file);
 	}
 
 	mainFile.close();
@@ -523,8 +550,8 @@ bool RadExporter::writeWorkplane(std::ofstream * ptsFile, std::ofstream * pxlFil
 			z += pz;
 			*pxlFile << px << GLARE_TAB << py << GLARE_TAB << pz << GLARE_TAB;
 		}
-		*pxlFile << std::endl;
-		*ptsFile << x / 3 << GLARE_TAB << y / 3 << GLARE_TAB << z / 3 << GLARE_TAB << nx << GLARE_TAB << ny << GLARE_TAB << nz << std::endl;
+		*pxlFile << "\n";
+		*ptsFile << x / 3 << GLARE_TAB << y / 3 << GLARE_TAB << z / 3 << GLARE_TAB << nx << GLARE_TAB << ny << GLARE_TAB << nz << "\n";
 	}
 
 	delete t;
@@ -546,11 +573,31 @@ bool RadExporter::writeMaterials(char * dir)
 	mainFile.open(baseDir + "/materials.mat");
 
 	for (size_t i = 0; i < numMaterials; i++) {
+
 		Material * mat = model->getMaterialRef(i);
-		mat->writeRadianceDefinition(&baseDir);
-		mainFile << "!xform ./" << dir << "/" << mat->getName() << ".mat" << std::endl;
+
+        std::string name  = mat->getName();
+        std::string filename = "./"+std::string(baseDir) + "/" + name + ".mat";
+        
+        
+        FILE * file = fopen(&filename[0],"w");
+        mat->writeInRadianceFormat(file);
+        fclose(file);
+
+		mainFile << "!xform ./" << dir << "/" << mat->getName() << ".mat" << "\n";
 	}
 	return true;
+}
+
+bool RadExporter::writeMaterials(FILE * file)
+{
+  size_t numMaterials = model->getNumMaterials(); 
+ 
+  for (size_t i = 0; i < numMaterials; i++) {
+    Material * mat = model->getMaterialRef(i);    
+    mat->writeInRadianceFormat(file);
+  }
+  return true;
 }
 
 bool RadExporter::writeSky(char * dir)
@@ -575,9 +622,9 @@ bool RadExporter::writeSky(char * dir)
 	file << "-m " << loc->getTimeZone()*15.0 << " ";
 	file << " +s " << " ";
 
-	file << std::endl << std::endl;
+	file << "\n" << "\n";
 
-	file << RADIANCE_SKY_COMPLEMENT << std::endl;
+	file << RADIANCE_SKY_COMPLEMENT << "\n";
 
 	file.close();
 
@@ -591,17 +638,17 @@ bool RadExporter::writeSceneFile(char * dir)
 	file.open(exportDir + "/" + dir);
 
 	// Write Header
-	file << "###############" << std::endl;
-	file << "## Scene exported using " << GLARE_VERSION << std::endl;
-	file << "###############" << std::endl;
+	file << "###############" << "\n";
+	file << "## Scene exported using " << GLARE_VERSION << "\n";
+	file << "###############" << "\n";
 
-	file << std::endl << std::endl << std::endl;
+	file << "\n" << "\n" << "\n";
 
 	// Write Geometry
-	file << "###### GEOMETRY" << std::endl << std::endl;
+	file << "###### GEOMETRY" << "\n" << "\n";
 	for (size_t i = 0; i < model->getNumLayers(); i++) {
 		std::string name = model->getLayerRef(i)->getName();
-		file << "!xform ./Geometry/" << name << ".rad" << std::endl;
+		file << "!xform ./Geometry/" << name << ".rad" << "\n";
 	}
 
 	file.close();
@@ -642,7 +689,7 @@ bool RadExporter::writePhotosensors(char * dir)
 		file << position.getZ() << GLARE_TAB;
 		file << direction.getX() << GLARE_TAB;
 		file << direction.getY() << GLARE_TAB;
-		file << direction.getZ() << std::endl;
+		file << direction.getZ() << "\n";
 		file.close();
 
 		// Add the sensor to the main file
@@ -651,10 +698,10 @@ bool RadExporter::writePhotosensors(char * dir)
 		mainFile << position.getZ() << GLARE_TAB;
 		mainFile << direction.getX() << GLARE_TAB;
 		mainFile << direction.getY() << GLARE_TAB;
-		mainFile << direction.getZ() << std::endl;
+		mainFile << direction.getZ() << "\n";
 
 		// add the Sensor to the dictionary
-		dictionary << i << "," << name << std::endl;
+		dictionary << i << "," << name << "\n";
 	}
 
 	dictionary.close();
@@ -675,12 +722,12 @@ bool RadExporter::writeWeather(char * dir)
 	if (!loc -> hasWeather())
 		return true;
 
-	file << "place " << loc->getCity() << std::endl;
-	file << "latitude " << loc->getLatitude() << std::endl;
-	file << "longitude " << -loc->getLongitude() << std::endl;
-	file << "time_zone " << loc->getTimeZone() << std::endl;
-	file << "site_elevation " << loc->getElevation() << std::endl;
-	file << "weather_data_file_units 1" << std::endl;
+	file << "place " << loc->getCity() << "\n";
+	file << "latitude " << loc->getLatitude() << "\n";
+	file << "longitude " << -loc->getLongitude() << "\n";
+	file << "time_zone " << loc->getTimeZone() << "\n";
+	file << "site_elevation " << loc->getElevation() << "\n";
+	file << "weather_data_file_units 1" << "\n";
 
 	for (size_t i = 0; i < 8760; i++) {
 		HourlyData * h = loc->getHourlyData(i);
@@ -688,7 +735,7 @@ bool RadExporter::writeWeather(char * dir)
 		file << h->day << " ";
 		file << h->hour << " ";
 		file << h->direct_nomal << " ";
-		file << h->diffuse_horizontal << std::endl;
+		file << h->diffuse_horizontal << "\n";
 	}
 
 	file.close();

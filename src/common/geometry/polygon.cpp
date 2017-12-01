@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -24,7 +24,6 @@
 
 Polygon3D::Polygon3D() 
 {
-	DEBUG_MSG("Creating polygon");
 	outerLoop = new Loop();
 	innerLoops = std::vector< Loop * >();
 };
@@ -39,8 +38,7 @@ Polygon3D::~Polygon3D()
 	for (unsigned int i = 0; i < innerLoops.size(); i++) {
 		delete innerLoops[i];
 	}
-
-	DEBUG_MSG("Destroying polygon");
+	
 }
 
 

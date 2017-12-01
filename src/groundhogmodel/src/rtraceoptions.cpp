@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -49,8 +49,8 @@ RTraceOptions::RTraceOptions()
 	addOption("ss", 1.000000);		// specular sampling
 	
 	/* LIMIT */
-	addOption("lr", 10);      		// limit reflection (Russian roulette)
-	addOption("lw", 2.00e003);		// limit weight
+	addOption("lr", -10);      		// limit reflection (Russian roulette)
+	addOption("lw", 2.00e-003);		// limit weight
 
 
 	/* AMBIENT */
@@ -75,34 +75,34 @@ RTraceOptions::RTraceOptions()
 void RTraceOptions::exposeOptions()
 {
 	/* DIRECT */
-	//shadthresh = getOption("dt");
-	//	shadcert = getOption("dc");
-	//dstrsrc = getOption("dj");
-	//directrelay = (int)getOption("dr");
-	//vspretest = (int)getOption("dp");
-	//--directvis = getOption("dv");
-	//srcsizerat = getOption("ds");
+	shadthresh = getOption<double>("dt");
+	shadcert = getOption<double>("dc");
+	dstrsrc = getOption<double>("dj");
+	directrelay = getOption<int>("dr");
+	vspretest = getOption<int>("dp");
+	//directvis = getOption("dv");
+	srcsizerat = getOption<double>("ds");
 
 	/* SPECULAR */
-	//specthresh = getOption("st");
-	//specjitter = getOption("ss");
+	specthresh = getOption<double>("st");
+	specjitter = getOption<double>("ss");
 
 	/* LIMIT */
-	//maxdepth = (int)getOption("lr");
-	//minweight = getOption("lw");
+	maxdepth = getOption<int>("lr");
+	minweight = getOption<double>("lw");
 
 	/* AMBIENT */
 	// ambval
-	//ambvwt = (int)getOption("aw");
-	ambacc = getOption("aa");
-	//ambres = (int)getOption("ar");
-	//ambdiv = (int)getOption("ad");
-	//ambssamp = (int)getOption("as");
-	ambounce = (int)getOption("ab");
+	ambvwt = getOption<int>("aw");
+	ambacc = getOption<double>("aa");
+	ambres = getOption<int>("ar");
+	ambdiv = getOption<int>("ad");
+	ambssamp = getOption<int>("as");
+	ambounce = getOption<int>("ab");
 
 	/* MEDIUM */
 	//cextinction
 	//salbedo
-	//seccg = getOption("mg");
-	//ssampdist = getOption("ms");
+	seccg = getOption<double>("mg");
+	ssampdist = getOption<double>("ms");
 }

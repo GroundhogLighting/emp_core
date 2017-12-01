@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "./src/gh_model.h"
 #include "./src/api_io.h"
 #include "./src/export_import.h"
+#include "./src/radiance_core.h"
 
 #include "common/utilities/stringutils.h"
 
@@ -174,14 +175,14 @@ void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager,
     several options can be set. They are:
 
     - include_windows: If true, the windows will be included in the octree. Defaults to true.
-    - include_sky: If true, the sky will be included in the octree. Defaults to true.
+    - sky: If a string is given, a sky will be included in the octree. Else, no sky will be given.
     - black_geometry: If true, all the non-window geometry becomes black. Defaults to false.
 
     @param[required] base_dir The directory where the Radiance Model is stored
     @param[required] octree_name The name of the octree to create
     @param[optional] options The table of options if the octree
     */
-    //lua_register(L, "oconv", oconv);
+    lua_register(L, "oconv", oconv_command);
 
 	
     

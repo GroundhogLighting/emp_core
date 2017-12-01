@@ -1,4 +1,4 @@
-/* triangle_test.h */
+﻿/* triangle_test.h */
 
 #include <cmath>
 
@@ -69,7 +69,7 @@ TEST(TriangleTest, circumCenter) {
 	Triangle t = Triangle(&a, &b, &c);
 
 	Point3D center1 = t.getCircumCenter();	
-	EXPECT_TRUE(center1.isEqual(Point3D(0, 0, 0)));
+	ASSERT_TRUE(center1.isEqual(Point3D(0, 0, 0)));
 
 	l = 3;
 	double cx = 23;
@@ -82,7 +82,9 @@ TEST(TriangleTest, circumCenter) {
 	t = Triangle(&a, &b, &c);
 
 	Point3D center2 = t.getCircumCenter();	
+    
 	ASSERT_TRUE(center2.isEqual(Point3D(cx, cy, cz)));
+
 }
 
 

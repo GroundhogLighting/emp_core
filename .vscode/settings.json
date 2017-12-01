@@ -7,6 +7,16 @@
         "xiosbase": "cpp",
         "otypes.h": "c",
         "platform.h": "c",
-        "xlocale": "cpp"
+        "xlocale": "cpp",
+        "array": "cpp",
+        "future": "cpp",
+        "istream": "cpp",
+        "memory": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "xlocmon": "cpp",
+        "xlocnum": "cpp",
+        "xloctime": "cpp"
     }
 }

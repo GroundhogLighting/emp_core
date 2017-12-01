@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -18,71 +18,108 @@
 
 *****************************************************************************/
 
+#include <typeinfo>
+
+#include "api/src/common.h" //  for filling optionsets with LUA tables
 #include "./optionset.h"
-#include "common/utilities/io.h"
+#include <fstream>
 
-void OptionSet::addOption(std::string opt, double defValue)
+size_t OptionSet::size()
 {
-	names.push_back(opt);
-	values.push_back(defValue);
+  return data.size();
 }
 
-bool OptionSet::setOption(std::string opt, double v)
+bool OptionSet::hasOption(std::string opt)
 {
-	size_t n = names.size();
-	for (size_t i = 0; i < n; i++) {
-		if (names[i] == opt) {
-			values[i] = v;
-			return true;
-		}
-	}
-	fatal("Option '"+opt+"' not found", __LINE__, __FILE__);
-	return false;
+  return (data.find(opt) != data.end());
 }
 
-
-double OptionSet::getOption(std::string opt)
+bool OptionSet::isEqual(OptionSet * other)
 {
-	size_t n = names.size();
-	for (size_t i = 0; i < n; i++) {
-		if (names[i] == opt) {
-			return values[i];			
-		}
-	}
-	fatal("Option '" + opt + "' not found", __LINE__, __FILE__);
-	return NULL;
+  
+  // return false if both do not have the same size
+  if (data.size() != other->size())
+    return false;
+
+  for (json::iterator it = data.begin(); it != data.end(); ++it) {   
+
+    std::string k = it.key();
+    auto v = it.value();
+    // If the option does not exists || it is different, return false
+    if (!(other->hasOption(k)) || v != other->getOption<decltype(v)>(k)) {
+      return false;      
+    }
+  }
+  return true;
 }
 
 
-double OptionSet::getOption(size_t i)
+bool OptionSet::fillFromLuaTable(lua_State * L, int tablePosition)
 {
-	size_t n = names.size();
-	if (i < 0 || i >= n) {
-		fatal("Option set has less than " + std::to_string(i) + " options... impossible to retrieve such value", __LINE__, __FILE__);
-		return NULL;
-	}
-	return values[i];
+  for (json::iterator it = data.begin(); it != data.end(); ++it) {
+
+    std::string optionName = it.key();
+    auto value = it.value();
+    
+    // Now the value we are looking for is in the position 2 of the stack
+    int field = lua_getfield(L, 1, &optionName[0]);
+    
+    // If the value is there (i.e. it is not nil)
+    if (field != LUA_TNIL) {
+      // Retrieve it and use it      
+      if (field == LUA_TNUMBER) {
+        // Verify that the original value was a number as well
+        if (value.is_number_integer()) {          
+          setOption(optionName, (int)lua_tonumber(L,2));
+        }
+        else if (value.is_number() ){
+          setOption(optionName, lua_tonumber(L, 2));
+        }
+        else {                   
+          badOptionError(L, optionName, lua_typename(L, field));
+        }
+      }
+      else if (field == LUA_TSTRING) {
+        if (!value.is_string()) {
+          badOptionError(L, optionName, lua_typename(L, field));
+        }        
+        setOption(optionName, lua_tostring(L, 2));
+      }
+      else if (field == LUA_TBOOLEAN ) {
+        if (!value.is_boolean()) {
+          badOptionError(L, optionName, lua_typename(L, field));
+        }
+        setOption(optionName, lua_toboolean(L, 2));
+      }
+      else {
+        fatal("Unrecognized value type "+ std::string(lua_typename(L, field)) +" of value for option " + optionName,__LINE__,__FILE__);
+        return false;
+      }
+    }
+    // remove the value (or nil, if it was not there)
+    lua_pop(L, 1);
+  }
+  return true;
 }
 
-std::string OptionSet::getOptionName(size_t i)
-{
-	size_t n = names.size();
-	if (i < 0 || i >= n) {
-		fatal("Option set has less than " + std::to_string(i) + " options... impossible to retrieve such name", __LINE__, __FILE__);
-		return NULL;
-	}
-	return names[i];
-}
 
-size_t OptionSet::countOptions()
+void OptionSet::print(char * filename)
 {
-	return names.size();
-}
+  std::ofstream file;
+  if (filename != NULL) {
+    file.open(filename);
+  }
 
-void OptionSet::print(std::string flnm)
-{
-	size_t n = names.size();
-	for (size_t i = 0; i < n; i++) {
-		std::cout << "-" << names[i] << " " << values[i] << std::endl;
-	}
+  for (json::iterator it = data.begin(); it != data.end(); ++it) {
+    if (filename == NULL) {
+     std::cout << "-" << it.key() << " " << it.value() << std::endl;
+    }
+    else {
+      file << "-" << it.key() << " " << it.value() << std::endl;
+    }
+  }
+
+  if (filename != NULL) {
+    file.close();
+  }
 }

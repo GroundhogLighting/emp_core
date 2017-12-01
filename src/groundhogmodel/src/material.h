@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -92,11 +92,11 @@ public:
 	//! Writes a Material in Radiance format
 	/*!
 	@author German Molina
-	@param[in] dir The directory where the material should be written
+	@param[in] file The file where the material should be written
 	@return success
 	@note This function should be overriden by a function with the same name in each Material derived class
 	*/
-	virtual bool writeRadianceDefinition(std::string * dir);
+	virtual bool writeInRadianceFormat(FILE * file);
 
 	//! Parses a tokenized Groundhog primitive
 	/*!

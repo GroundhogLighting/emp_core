@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -69,7 +69,9 @@ void Otype::setMaterial(Material * mat)
 	material = mat;
 }
 
-bool Otype::translateIntoRadiance(FUNARGS * args)
+
+bool Otype::writeInRadianceFormat(FILE * file)
 {
+
 	return true;
 }

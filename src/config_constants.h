@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -38,7 +38,7 @@ This module defines constants that are used in the rest of the program.
 #define USAGE "\n " << GLARE_VERSION << " usage options: \n\n glare {--help|-h}\t\t: prints this message \n glare {--version|-v}\t\t: prints version \n glare {--about|-a}\t\t: prints about \n glare inputFile\t\t: solves the model itself \n glare inputFile script.lua\t: applies a lua script over an input file \n glare inputFile outputFile\t: translates the model"
 
 /// The 'about' message
-#define ABOUT "\n\n Copyright (C) 2017 Germ�n Molina (germolinal@gmail.com) \n\n This program is free software : you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. \n\n This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the GNU General Public License for more details. \n\n You should have received a copy of the GNU General Public License along with this program.If not, see http ://www.gnu.org/licenses/."
+#define ABOUT "\n\n Copyright (C) 2017 Germán Molina (germolinal@gmail.com) \n\n This program is free software : you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. \n\n This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the GNU General Public License for more details. \n\n You should have received a copy of the GNU General Public License along with this program.If not, see http ://www.gnu.org/licenses/."
 
 /// The separator used when writing files
 #define GLARE_TAB "\t" //!< This is the separator used when writing Radiance files
@@ -102,5 +102,8 @@ This module defines constants that are used in the rest of the program.
 
 /// Name of the directory where we export the model before solving
 #define GLARE_TMP_DIR "tmp"
+
+/// The sky and ground hemispheres needed for completing a sky definition
+#define RADIANCE_SKY_COMPLEMENT "skyfunc glow skyglow 0 0 4 1 1 1 0 skyglow source skyball 0 0 4 0 0 1 360"
 
 /* @} */

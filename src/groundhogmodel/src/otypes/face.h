@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -97,5 +97,13 @@ public:
 	@note Should delete the closed Loop after its use
 	*/
 	Loop * getClosedLoop();
+
+    //! Writes a face in Radiance format
+    /*!
+    @author German Molina
+    @param[in] file The file to write the face to
+    @return success
+    */
+    bool writeInRadianceFormat(FILE * file);
 
 };

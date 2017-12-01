@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -21,7 +21,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include <fstream>
+
 #include "./radiance.h"
+
+#include "config_constants.h"
+#include "common/utilities/os.h"
+#include "common/utilities/file.h"
+#include "common/utilities/stringutils.h"
+
 
 extern "C" {
 
@@ -121,7 +129,6 @@ bool rtrace(Triangulation * t, RTraceOptions * options, std::string baseDir, std
 }
 
 
-
 bool rtrace_i(Triangulation * t, RTraceOptions * options, std::string baseDir, std::string octname, std::string amb, std::vector<RAY> * rays)
 {
 	return rtrace(t, options, baseDir, octname, true, false,amb,rays);
@@ -131,4 +138,27 @@ bool rtrace_i(Triangulation * t, RTraceOptions * options, std::string baseDir, s
 bool rtrace_I(Triangulation * t, RTraceOptions * options, std::string baseDir, std::string octname, std::string amb, std::vector<RAY> * rays)
 {
 	return rtrace(t, options, baseDir, octname, false, true, amb, rays);
+}
+
+
+bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
+{
+    std::string command = "oconv - > " + octname + " 2> "+octname+".err";
+  	//FILE *octree = POPEN(&command[0], "w");
+  
+    FILE * file = fopen(&octname[0], "w");
+
+    // Add all the materials
+    exporter.writeMaterials(file);
+
+
+    // Add the geometry
+    exporter.writeLayers(file, NULL);
+
+
+    fclose(file);
+    
+	//PCLOSE(octree);
+
+    return true;
 }

@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -19,3 +19,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
 
 #pragma once
+
+
+// Include LUA headers
+extern "C" {
+#include <lua.h>
+//#include <lualib.h>
+#include <lauxlib.h> 
+}
+
+
+//! Creates an octree from a Radiance Directory
+/*
+@param[in] L The Lua state
+@return the number of return values within the script
+*/
+int oconv_command(lua_State * L);

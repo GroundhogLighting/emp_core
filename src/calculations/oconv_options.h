@@ -18,42 +18,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
-#include <iostream>
 
-#include "./tasks_manager.h"
-#include "./common.h"
+#pragma once
 
-#include "common/taskmanager/tasks/export.h"
+#include "common/options/optionset.h"
 
-int solveTaskManager(lua_State * L)
-{
-	getCurrentTaskManager(L)->solve();
-	return 0;
-}
+#define OCONV_INCLUDE_WINDOWS "inclue_windows"
+#define OCONV_USE_BLACK_GEOMETRY "black_geometry"
+#define OCONV_INCLUDE_SKY "include_sky"
+#define OCONV_SKY "sky"
+#define OCONV_LIGHTS_ON "lights_on"
+
+#define OCONV_USE_CURRENT_SKY "current"
 
 
-/*
-int addDFTask(lua_State * L)
-{
-	GroundhogModel * model = getCurrentModel(L);
-	TaskManager * tm = getCurrentTaskManager(L);
-	RTraceOptions * options = model->getRTraceOptions();
+class OconvOptions : public OptionSet {
+public:
+  //! Constructor
+  /*!
+  Creates an OptionSet and fills the corresponding
+  options and default values
 
-	// Check nuber of arguments
-    checkNArguments(L, 1);
-
-	// Check type
-    checkArgType(L, LUA_TTABLE, 1);
-
-	if (lua_getfield(L, 1, "workplane") != LUA_TNIL) {
-		std::string value = luaL_checkstring(L, 2);
-		tm->addTask(new CalcDF(GLARE_TMP_DIR,model,value,options));
-	}
-	else {
-
-	}
-	lua_pop(L, 1);
-
-	return 0;
-}
-*/
+  @author German Molina
+  */
+  OconvOptions()
+  {
+    addOption(OCONV_INCLUDE_WINDOWS, true);
+    addOption(OCONV_USE_BLACK_GEOMETRY, false);
+    addOption(OCONV_SKY, "current");
+    addOption(OCONV_INCLUDE_SKY, true);
+    addOption(OCONV_LIGHTS_ON, true);
+  };
+};

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../material.h"
 
@@ -54,22 +54,6 @@ public:
 	*/
 	double blue();
 
-	//! Prints the Material in Radiance format
-	/*!
-	@author German Molina
-	@param[in] dir The directory to write it at
-	@return success
-	*/
-	bool writeRadianceDefinition(std::string * dir);
-
-	//! Parses the correspondent Groundhog primitive
-	/*!
-	@author German Molina
-	@param[in] p The primitive
-	@return success
-	*/
-	bool parsePrimitive(std::string * p);
-
 	//! Parses a tokenized Groundhog primitive
 	/*!
 	A Groundhog primitive may be a Radiance primitive or an extension
@@ -80,4 +64,12 @@ public:
 	@return success
 	*/
 	bool parsePrimitive(std::vector <std::string> * tokens);
+
+    //! Writes the Glass material in Radiance format
+    /*!
+    @author German Molina
+    @param[in] file The file to write to
+    @return success
+    */
+    bool writeInRadianceFormat(FILE * file);
 };

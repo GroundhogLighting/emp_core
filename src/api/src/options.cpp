@@ -26,12 +26,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "./options.h"
 
 #include <iostream>
+#include <fstream>
 
 int print_rtrace_options(lua_State * L)
 {
 	GroundhogModel * model = getCurrentModel(L);
 	RTraceOptions * options = model->getRTraceOptions();
-	options->print("aa");
+
+    // Check if any input was given
+    int nargs[2] = { 0, 1 };
+    int n = checkNArguments(L, nargs,2);
+    
+    // check type
+    if (n == 1) {
+      checkArgType(L, LUA_TSTRING, 1);
+      std::string filename = std::string(lua_tostring(L, 1));
+      options->print(&filename[0]);
+    }
+    else {
+	  options->print(NULL); // to STDOUT
+    }
+
 	return 0;	
 }
 
@@ -46,17 +61,8 @@ int set_rtrace_options(lua_State *L)
 	// Check type
     checkArgType(L, LUA_TTABLE, 1);
     
-    // Iterate options
-	size_t j = options->countOptions();
-	
-	for (size_t i = 0; i < j; i++) {
-		std::string optionName = options->getOptionName(i);
-		if (lua_getfield(L, 1,&optionName[0]) != LUA_TNIL) {			
-			double value = luaL_checknumber(L, 2);
-			options->setOption(optionName, value);
-		}
-		lua_pop(L, 1);
-	}
+    // Fill the table
+    options->fillFromLuaTable(L, 1);
 
 	return 0;
 	

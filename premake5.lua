@@ -292,23 +292,6 @@ project "glare_test"
 
     filter "configurations:DEBUG"
         defines { "DEBUG" }
-    
-    filter "platforms:WIN*"
-        defines { "WIN" }    
-        links {
-            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/*",
-            libs_dir.."/%{cfg.platform}".."/%{cfg.buildcfg}/*"
-        }
-        includedirs {
-            third_party_dir.."/SketchUp/WIN/headers",      
-            third_party_dir.."/intelTBB/include" -- this changes in different machines
-        }     
-
-    links {
-            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/*",
-            libs_dir.."/%{cfg.platform}/*",           
-            third_party_dir.."/intelTBB/lib/intel64/vc14/*"
-    }
 
     includedirs {
         "./src/",
@@ -316,6 +299,28 @@ project "glare_test"
         google_test_dir.."/include", 
         third_party_dir.."/SketchUp/WIN/headers" 
     }
+    
+    filter "platforms:WIN*"
+        defines { "WIN" }    
+        links {
+            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/*",
+            libs_dir.."/%{cfg.platform}".."/%{cfg.buildcfg}/*"
+        }
+        includedirs{
+            "./src/",
+            third_party_dir,
+            third_party_dir.."/intelTBB/include",
+            lua_dir,
+            third_party_dir.."/Radiance/src/common",        
+        }  
+
+    links {
+            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/*",
+            libs_dir.."/%{cfg.platform}/*",           
+            third_party_dir.."/intelTBB/lib/intel64/vc14/*"
+    }
+
+    
 
     files { 
         "main_test.cpp",

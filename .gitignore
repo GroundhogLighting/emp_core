@@ -31,3 +31,4 @@ debug/*
 *Makefile*
 *.skb
 *.log
+.vscode

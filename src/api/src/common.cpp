@@ -45,6 +45,32 @@ void checkNArguments(lua_State * L, int nRArgs)
 }
 
 
+int checkNArguments(lua_State * L, int nArgs[],int length)
+{
+  int givenArgs = lua_gettop(L);
+  for (int i = 0; i < length; i++) {
+    if (givenArgs == nArgs[i])
+      return givenArgs;
+  }
+  nArgumentError(L, nArgs, length);
+  return -1;
+}
+
+void nArgumentError(lua_State * L, int nArgs[], int length)
+{
+  std::string allowable = "";
+  for (int i = 0; i < length; i++) {
+    std::string comma = i==(length-2) ? " or " : ", ";    
+    if (i == length - 1)
+      comma = "";
+
+    allowable = allowable + std::to_string(nArgs[i]) + comma;
+  }
+  std::string errmsg = "Function allows receiving " + allowable + " arguments, but received " + std::to_string(lua_gettop(L));
+  sendError(L, "Number of arguments", &errmsg[0]);
+}
+
+
 void nArgumentError(lua_State * L, int nRequiredArgs)
 {
 	std::string errmsg = "Function requires " + std::to_string(nRequiredArgs) + " but received " + std::to_string(lua_gettop(L));
@@ -54,7 +80,7 @@ void nArgumentError(lua_State * L, int nRequiredArgs)
 void checkArgType(lua_State * L, int expectedType, int argPoisition)
 {
   if (lua_type(L, argPoisition) != expectedType)
-    argTypeError(L, expectedType, 1);    
+    argTypeError(L, expectedType, argPoisition);
 }
 
 
@@ -65,6 +91,11 @@ void argTypeError(lua_State * L, int expectedType, int argPoisition)
 }
 
 
+void executionError(lua_State * L, const char * err)
+{
+  sendError(L, "Execition error", err);
+}
+
 void sendError(lua_State * L, const char * kind, const char * err)
 {
 	lua_Debug ar;
@@ -74,4 +105,11 @@ void sendError(lua_State * L, const char * kind, const char * err)
 	std::string errMsg = "'"+std::string(kind) + "' error in line " + std::to_string(ar.currentline) + ": " + std::string(err);
 	lua_pushstring(L, &errMsg[0]);
 	lua_error(L);
+}
+
+
+void badOptionError(lua_State * L, std::string optionName, const char * receivedType)
+{
+  std::string err = "Option '" + optionName + "' is not supposed to be a "+ receivedType;
+  sendError(L, "Bad option type", &err[0]);
 }

@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -20,6 +20,9 @@
 
 
 #pragma once
+#include "groundhogmodel/groundhogmodel.h"
+
+#include "common/geometry/transform.h"
 
 //! The main object for exporting a GroundhogModel in Radiance format.
 /*!
@@ -114,21 +117,51 @@ public:
 	*/
 	bool writeLayers(char * dir);
 
-	//! Writes a ComponentInstance in Radiance format
+    //! Writes all the layers in a single file
+    /*!
+
+    All the geometry in the Layers will be written in a single 
+    file, optionally converting all the material names into the 
+    "newMaterial" (this is turn off when newMaterial is a NULL
+    pointer).
+
+    @author German Molina
+    @return success
+    @param[in] file The file
+    @param[in] newMaterial The name of the material
+    */
+    bool writeLayers(FILE * file, std::string * newMaterial);
+
+	//! Writes an XFORM call to a ComponentInstance in Radiance format
 	/*!
 	@author German Molina
 	@param[in] file The file to write this in
 	@param[in] instance The ComponentInstance to write
 	*/
-	void writeComponentInstance(std::ofstream * file, ComponentInstance * instance);
+	void writeComponentInstance(FILE * file, ComponentInstance * instance);
 	
+    //! Writes a ComponentInstance in Radiance format
+    /*!
+    Instead of writing an XFORM command, it will expand the
+    geometry according to a transform. If a "newMaterial" is provided,
+    all the material names will be replaced by this
+
+    @author German Molina
+    @param[in] file The file to write this in
+    @param[in] instance The ComponentInstance to write
+    @param[in] transform A transformation to apply to the instance geometry
+    @param[in] A material name that overrides the actual materials of the geometry (i.e. xform -m 'newMaterial' option)
+    */
+    void writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * transform, std::string * newMaterial);
+
+
 	//! Writes a Loop in Radiance format
 	/*!
 	@author German Molina
 	@param[in] file The file to write this in
 	@param[in] loop The Loop to write
 	*/
-	void writeLoop(std::ofstream * file, Loop * loop);
+	//void writeLoop(std::ofstream * file, Loop * loop);
 	
 	//! Writes a Face in Radiance format
 	/*!
@@ -138,7 +171,7 @@ public:
 	@param[in] file The file to write this in
 	@param[in] face The Face to write
 	*/
-	void writeClosedFace(std::ofstream * file, Face * face);
+	//void writeClosedFace(std::ofstream * file, Face * face);
 
 	//! Writes an Otype in Radiance format
 	/*!
@@ -148,7 +181,7 @@ public:
 	@todo Support faces with many holes
 	@todo Enable other objects
 	*/
-	void writeObject(std::ofstream * file, Otype * o);
+	//void writeObject(std::ofstream * file, Otype * o);
 
 	//! Writes all the window groups in Radiance format
 	/*!
@@ -186,6 +219,14 @@ public:
 	@param[in] dir The subdirectory to export
 	*/
 	bool writeMaterials(char * dir);
+
+    //! Writes all the Material objects in a single FILE * object
+    /*!
+    @author German Molina
+    @return success
+    @param[in] file The FILE object to write to
+    */
+    bool writeMaterials(FILE * file);
 
 	//! Writes the standard Clear Sky
 	/*!

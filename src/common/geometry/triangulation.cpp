@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -50,7 +50,7 @@ Triangulation::~Triangulation()
 
 size_t Triangulation::addTriangle(Triangle * t) {
 	t->setIndex(nTriangles);
-	DEBUG_MSG("Adding triangle " + std::to_string(nTriangles));
+	
 	triangles.push_back(t);
 	
 	nTriangles += 1;
@@ -71,10 +71,6 @@ Triangle * Triangulation::getTriangleRef(size_t i)
 
 bool Triangulation::addPointToTriangle(size_t index, Point3D * point, int code)
 {
-#ifdef DEBUG
-	warn("........... Adding point");
-	point->print();
-#endif
 	if (triangles[index] == NULL) {
 		fatal("Trying to add point into an obsolete triangle", __LINE__, __FILE__);
 		return false;

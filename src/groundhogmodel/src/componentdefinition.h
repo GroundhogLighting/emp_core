@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -47,6 +47,7 @@ private:
 	//Observers // **	
 
 public:
+
 	//! Creates a ComponentDefinition object
 	/*!
 
@@ -54,6 +55,7 @@ public:
 
 	@author German Molina
 	@param[in] componentName The name of the ComponentDefinition
+    @todo allow windows, sensors and workplanes to be within ComponentDefinitions
 	*/
 	ComponentDefinition(std::string * componentName);
 

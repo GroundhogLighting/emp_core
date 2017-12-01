@@ -61,6 +61,18 @@ The number of arguments is obtained from the size of the Lua stack
 */
 void checkNArguments(lua_State * L, int nargs);
 
+//! Checks that the number of arguments matches a certain set of posibilities
+/*
+This is supposed to be used with functions with optional values
+
+@author German Molina
+@param[in] L The Lua state
+@param[in] nArgs A pointer to an array with the allowable number of arguments
+@param[in] length The number of options
+@return the number of arguments given
+*/
+int checkNArguments(lua_State * L, int nArgs[], int length);
+
 //! Throws a Lua error informing that the number of arguments is incorrect
 /*!
 
@@ -71,6 +83,27 @@ The number of given arguments is obtained from the size of the Lua stack
 @param[in] nRequiredArgs The number of arguments expected in the Lua state
 */
 void nArgumentError(lua_State * L, int nRequiredArgs);
+
+//! Throws a Lua error informing that the number of arguments is incorrect
+/*!
+
+The number of given arguments is obtained from the size of the Lua stack
+
+@author German Molina
+@param[in] L The Lua state
+@param[in] nArgs A pointer to an array with the allowable number of arguments
+@param[in] length The number of options
+*/
+void nArgumentError(lua_State * L, int nArgs[], int length);
+
+//! Throws a Lua error informing that a certain option was incorrectly input
+/*!
+@author German Molina
+@param[in] L The lua_State * object
+@param[in] optionName The name of the option
+@param[in] receivedType The type of the received option
+*/
+void badOptionError(lua_State * L, std::string optionName, const char * receivedType);
 
 //! Checks if a certain argument (in the stack) is of a certain type
 /*!
@@ -89,6 +122,14 @@ void checkArgType(lua_State * L, int expectedType, int argPoisition);
 @param[in] argPosition The position in the stack of the argument to check
 */
 void argTypeError(lua_State * L, int expectedType, int argPoisition);
+
+//! Sends an error that sais that some internal glare process failed
+/*!
+@author German Molina
+@param[in] L The lua state
+@param[in] msg The error message
+*/
+void executionError(lua_State * L, const char * err);
 
 //! Throws a Lua error
 /*!

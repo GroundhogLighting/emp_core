@@ -37,6 +37,6 @@ Exports the GroundhogModel into a Radiance format
 
 @author German Molina
 @param[in] L the lua_State object
-@return the number of arguments
+@return the number of return values within the script
 */
 int exportToRadiance(lua_State * L);

@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -66,4 +66,59 @@ Loop * Face::getOuterLoopRef()
 Loop * Face::getClosedLoop() 
 {
 	return polygon->getClosedLoop();
+}
+
+bool Face::writeInRadianceFormat(FILE * file)
+{
+  // get the name of the face
+  std::string faceName = getName();
+  
+  if (hasTooManyInnerLoops()) {
+    warn("Ignoring face '" + faceName + "' because it has TOO MANY inner loops.");
+    // writeTriangulatedFace(file,face);
+    return true;
+  }
+
+
+  // get the material
+  Material * mat = getMaterial();
+  if (mat == NULL) {
+    fatal("Face " + faceName + " has no Material... it has been ignored", __LINE__, __FILE__);
+    return false;
+  }
+
+  // define the loop that will be written
+  Loop * finalLoop = NULL;
+  bool needToDelete = false;
+  if (hasInnerLoops()) {
+    finalLoop = getClosedLoop();
+    needToDelete = true;
+  }
+  else {
+    finalLoop = getOuterLoopRef();
+  }
+
+  fprintf(file, "%s polygon %s\n0\n0\n", mat->getName().c_str(), &faceName[0]);
+  
+  fprintf(file,"%zd\n",3 * finalLoop->realSize());
+
+  // Print the loop
+  size_t numVertices = finalLoop->size();
+
+  for (int i = 0; i < numVertices; i++) {
+    Point3D * point = finalLoop->getVertexRef(i);
+
+    if (point == NULL)
+      continue;
+
+      fprintf(file, "\t");
+      fprintf(file, "%f %f %f\n", point->getX(), point->getY(), point->getZ());      
+    }
+
+
+    if (needToDelete) {
+      delete finalLoop;
+    }
+
+    return true;
 }

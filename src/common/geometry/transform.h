@@ -18,27 +18,14 @@
 
 *****************************************************************************/
 
-
-
 #pragma once
-#include "common/options/optionset.h"
-#include "Radiance/src/rt/ray.h"
+#include "./matrix4x4.h"
 
-class RTraceOptions : public OptionSet {
+class Transform {
+private:
+  Matrix4x4 m = Matrix4x4();  
+
 public:
-	//! Constructor
-	/*!
-	Creates an OptionSet and fills the corresponding 
-	options and default values
 
-	@author German Molina
-	*/
-	RTraceOptions();
 
-	//! Expose all the RTRACE options to the global variables
-    /*
-    @author German Molina
-    @todo Expose all options
-    */
-	void exposeOptions();
 };

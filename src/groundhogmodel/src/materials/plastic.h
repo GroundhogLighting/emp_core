@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../material.h"
 
@@ -74,10 +74,10 @@ public:
 	//! Prints the Material in Radiance format
 	/*!
 	@author German Molina
-	@param[in] dir The directory to write it at
+	@param[in] file The file to write to
 	@return success
 	*/
-	bool writeRadianceDefinition(std::string * dir);
+	bool writeInRadianceFormat(FILE * file);
 
 	//! Parses a tokenized Groundhog primitive
 	/*!

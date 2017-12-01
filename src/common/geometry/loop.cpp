@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -26,8 +26,6 @@
 
 Loop::Loop() 
 {
-	DEBUG_MSG("Creating loop");
-	//vertices.reserve(3);
 	vertices = std::vector < Point3D * >();
 }
 
@@ -50,7 +48,6 @@ Loop::~Loop()
 		delete vertices[i];
 	}
 
-	DEBUG_MSG("Destroying loop");
 }
 
 void Loop::addVertex(Point3D * point) 
