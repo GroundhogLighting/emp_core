@@ -1,4 +1,4 @@
-// simulationManager_test.h
+﻿// simulationManager_test.h
 
 #include "common/taskmanager/taskmanager.h"
 
@@ -102,7 +102,7 @@ TEST(TaskManagerTest, addTask)
 	
 	m.addTask(new TaskC(a1,a2,mult));
 	ASSERT_EQ(m.countTasks(), 4); // C, B, A1, A2
-	//sm.print();
+    m.print("graph.dot");
 
 }
 

@@ -24,11 +24,10 @@
 #include "common/utilities/io.h"
 #include "config_constants.h"
 
-Face::Face(std::string faceName) 
+Face::Face(std::string * faceName) 
 {
-	DEBUG_MSG("Creating face " + faceName);
-
-	setName(faceName);
+	setName( faceName );
+ 
 	polygon = new Polygon3D();
 
 }
@@ -37,7 +36,6 @@ Face::~Face()
 {
 	//destroy polygon
 	delete polygon;	
-	DEBUG_MSG("Destroying face "+getName());
 }
 
 
@@ -68,24 +66,17 @@ Loop * Face::getClosedLoop()
 	return polygon->getClosedLoop();
 }
 
-bool Face::writeInRadianceFormat(FILE * file)
+bool Face::writeInRadianceFormat(FILE * file, char * material, Transform * transform)
 {
   // get the name of the face
-  std::string faceName = getName();
+  std::string * faceName = getName();
   
   if (hasTooManyInnerLoops()) {
-    warn("Ignoring face '" + faceName + "' because it has TOO MANY inner loops.");
+    WARN(warnMessage,"Ignoring face '" + *faceName + "' because it has TOO MANY inner loops.");
     // writeTriangulatedFace(file,face);
     return true;
   }
 
-
-  // get the material
-  Material * mat = getMaterial();
-  if (mat == NULL) {
-    fatal("Face " + faceName + " has no Material... it has been ignored", __LINE__, __FILE__);
-    return false;
-  }
 
   // define the loop that will be written
   Loop * finalLoop = NULL;
@@ -98,7 +89,7 @@ bool Face::writeInRadianceFormat(FILE * file)
     finalLoop = getOuterLoopRef();
   }
 
-  fprintf(file, "%s polygon %s\n0\n0\n", mat->getName().c_str(), &faceName[0]);
+  fprintf(file, "%s polygon %s\n0\n0\n", material, &(faceName->at(0)));
   
   fprintf(file,"%zd\n",3 * finalLoop->realSize());
 
@@ -111,14 +102,20 @@ bool Face::writeInRadianceFormat(FILE * file)
     if (point == NULL)
       continue;
 
-      fprintf(file, "\t");
+    fprintf(file, "\t");
+    if (transform == NULL) {
       fprintf(file, "%f %f %f\n", point->getX(), point->getY(), point->getZ());      
     }
-
-
-    if (needToDelete) {
-      delete finalLoop;
+    else {
+      Point3D p = point->transform(transform);
+      fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
     }
+  }
 
-    return true;
+
+  if (needToDelete) {
+    delete finalLoop;
+  }
+
+  return true;
 }

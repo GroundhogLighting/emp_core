@@ -1,4 +1,4 @@
-/* point3d_test.h */
+﻿/* point3d_test.h */
 
 #include <cmath>
 
@@ -168,4 +168,29 @@ TEST(Point3DTest, transform)
 	ASSERT_EQ(p.transform(i, j, k).getY(), 12);
 	ASSERT_EQ(p.transform(i, j, k).getZ(), -56);
 
+}
+
+
+TEST(Point3DTest, transformation)
+{
+  Transform t = Transform();
+  Point3D p = Point3D(1, 1, 1);
+
+  Point3D p2 = p.transform(&t);
+
+  ASSERT_TRUE(p.isEqual(p2));
+
+  // Modify transform
+  Matrix4x4 * m = t.getMatrix();
+
+  for (int row = 0; row < 4; row++) {
+    for (int col = 0; col < 4; col++) {
+      m->setElement(row, col, 1);
+    }
+  }
+
+  Point3D p3 = p.transform(&t);
+  ASSERT_EQ(p3.getX(), 4);
+  ASSERT_EQ(p3.getY(), 4);
+  ASSERT_EQ(p3.getZ(), 4);
 }

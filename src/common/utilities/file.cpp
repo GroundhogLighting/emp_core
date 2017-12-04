@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -34,7 +34,7 @@
 bool createdir(std::string dirname) 
 {
 	if (dexist(dirname) && isDir(dirname)) {
-		//fatal("Impossible to create '"+dirname+"'. It already exists", __LINE__, __FILE__);
+		//FATAL(errorMessage,"Impossible to create '"+dirname+"'. It already exists");
 		return true;
 	}
 	else {
@@ -67,7 +67,7 @@ bool isDir(std::string dirname)
 		}
 	}
 	else {
-		fatal("Directory does not exist", __LINE__, __FILE__);
+		FATAL(errorMessage,"Directory does not exist");
 		return false;
 	}
 }

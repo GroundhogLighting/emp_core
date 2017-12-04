@@ -130,7 +130,7 @@ public:
     @param[in] file The file
     @param[in] newMaterial The name of the material
     */
-    bool writeLayers(FILE * file, std::string * newMaterial);
+    bool writeLayers(FILE * file, char * newMaterial);
 
 	//! Writes an XFORM call to a ComponentInstance in Radiance format
 	/*!
@@ -152,36 +152,8 @@ public:
     @param[in] transform A transformation to apply to the instance geometry
     @param[in] A material name that overrides the actual materials of the geometry (i.e. xform -m 'newMaterial' option)
     */
-    void writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * transform, std::string * newMaterial);
+    void writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * transform, char * newMaterial);
 
-
-	//! Writes a Loop in Radiance format
-	/*!
-	@author German Molina
-	@param[in] file The file to write this in
-	@param[in] loop The Loop to write
-	*/
-	//void writeLoop(std::ofstream * file, Loop * loop);
-	
-	//! Writes a Face in Radiance format
-	/*!
-	This is used when the Face does not Face::hasTooManyLoops
-
-	@author German Molina
-	@param[in] file The file to write this in
-	@param[in] face The Face to write
-	*/
-	//void writeClosedFace(std::ofstream * file, Face * face);
-
-	//! Writes an Otype in Radiance format
-	/*!
-	@author German Molina
-	@param[in] file The file to write this in
-	@param[in] o The Otype to write
-	@todo Support faces with many holes
-	@todo Enable other objects
-	*/
-	//void writeObject(std::ofstream * file, Otype * o);
 
 	//! Writes all the window groups in Radiance format
 	/*!
@@ -190,6 +162,14 @@ public:
 	@param[in] dir The subdirectory to export
 	*/
 	bool writeWindows(char * dir);
+
+    //! Writes all the windows in a single file
+    /*!
+    @author German Molina
+    @return success
+    @param[in] file the file
+    */
+    bool writeWindows(FILE * file);
 
 	//! Writes all the Workplanes in Radiance format
 	/*!
@@ -231,10 +211,18 @@ public:
 	//! Writes the standard Clear Sky
 	/*!
 	@author German Molina
-	@param[in] dir The directory to export
+	@param[in] file The File to write the sky to
 	@return [Boolean] Success
 	*/
-	bool writeSky(char * dir);
+	bool writeSky(FILE * file);
+
+    //! Writes the standard Clear Sky
+    /*!
+    @author German Molina
+    @param[in] dir The directory to write to
+    @return [Boolean] Success
+    */
+    bool writeSky(char * dir);
 
 	//! Writes the scene file
 	/*!

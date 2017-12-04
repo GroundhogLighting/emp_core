@@ -31,29 +31,22 @@ int solveTaskManager(lua_State * L)
 	return 0;
 }
 
-
-/*
-int addDFTask(lua_State * L)
+int printTaskManager(lua_State * L)
 {
-	GroundhogModel * model = getCurrentModel(L);
-	TaskManager * tm = getCurrentTaskManager(L);
-	RTraceOptions * options = model->getRTraceOptions();
+  // Check if any input was given
+  int nargs[2] = { 0, 1 };
+  int n = checkNArguments(L, nargs, 2);
 
-	// Check nuber of arguments
-    checkNArguments(L, 1);
+  // check type
+  if (n == 1) {
+    checkArgType(L, LUA_TSTRING, 1);
+    std::string filename = std::string(lua_tostring(L, 1));
+    getCurrentTaskManager(L)->print(&filename[0]);
+  }
+  else {
+    getCurrentTaskManager(L)->print(NULL); // to STDOUT
+  }
 
-	// Check type
-    checkArgType(L, LUA_TTABLE, 1);
-
-	if (lua_getfield(L, 1, "workplane") != LUA_TNIL) {
-		std::string value = luaL_checkstring(L, 2);
-		tm->addTask(new CalcDF(GLARE_TMP_DIR,model,value,options));
-	}
-	else {
-
-	}
-	lua_pop(L, 1);
-
-	return 0;
+  return 0;
+  return 0;
 }
-*/

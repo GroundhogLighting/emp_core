@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -90,7 +90,7 @@ public:
 	@param[in] layerName The layer name
 	@todo Check if the layer already exists
 	*/
-	void addLayer(std::string layerName);
+	void addLayer(std::string * layerName);
 
 	//! Adds an Otype to a certain layer
 	/*!
@@ -283,7 +283,7 @@ public:
 	@param[in] j The json that represents a material
 	@return The pointer to the new Material
 	*/
-	Material * addMaterial(json j);
+	Material * addMaterial(json * j);
 
 	//! Add the default material
 	/*!

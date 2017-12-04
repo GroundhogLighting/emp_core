@@ -64,14 +64,14 @@ public:
 	@author German Molina
 	@return The name of the material
 	*/
-	std::string getName();
+	std::string * getName();
 
 	//! Retrieves the type of the Material
 	/*!
 	@author German Molina
 	@return The type of the material
 	*/
-	std::string getType();
+	std::string * getType();
 
 	//! Compares a name with another string
 	/*!
@@ -87,7 +87,7 @@ public:
 	@param[in] j The JSON that represents the Material
 	@return success
 	*/
-	bool fillFromJSON(json j);
+	bool fillFromJSON(json * j);
 
 	//! Writes a Material in Radiance format
 	/*!

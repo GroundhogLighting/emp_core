@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -87,9 +87,12 @@ public:
 
 	//! A Debug function...
 	/*!
+    if file is NULL, it will be printed to STDOUT
+
 	@author German Molina
+    @param[in] filename The file to print
 	*/
-	void print();
+	void print(char * filename);
 
 	//! Compares two Task object
 	/*!

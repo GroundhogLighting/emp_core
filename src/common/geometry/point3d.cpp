@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -129,4 +129,16 @@ Point3D Point3D::transform(Vector3D i, Vector3D j, Vector3D k)
 	double rz = k.getX()*x + k.getY()*y + k.getZ()*z;
 
 	return Point3D(rx, ry, rz);
+}
+
+
+Point3D Point3D::transform(Transform * t)
+{
+  
+  Matrix4x4 * m = t->getMatrix();
+  double xv = x*m->getElement(0, 0) + y*m->getElement(0,1) + z*m->getElement(0,2) + m->getElement(0,3);
+  double yv = x*m->getElement(1, 0) + y*m->getElement(1, 1) + z*m->getElement(1, 2) + m->getElement(1, 3);
+  double zv = x*m->getElement(2, 0) + y*m->getElement(2, 1) + z*m->getElement(2, 2) + m->getElement(2, 3);
+
+  return Point3D(xv, yv, zv);
 }

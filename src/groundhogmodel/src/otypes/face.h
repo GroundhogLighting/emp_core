@@ -47,7 +47,7 @@ public:
 	@author German Molina
 	@param[in] faceName The name of the face
 	*/
-	Face(std::string faceName);
+	Face(std::string * faceName);
 
 	//! Destroys the Face
 	/*!
@@ -102,8 +102,10 @@ public:
     /*!
     @author German Molina
     @param[in] file The file to write the face to
+    @param[in] material The name of the Material to assign the face
+    @param[in] transform The optional Transform object
     @return success
     */
-    bool writeInRadianceFormat(FILE * file);
+    bool writeInRadianceFormat(FILE * file, char * material, Transform * transform);
 
 };

@@ -99,7 +99,7 @@ public:
     bool setOption(std::string opt, T value)
     {
       if (!hasOption(opt)) {
-        fatal("OptionSet has no " + opt + " option... impossible to set such value", __LINE__, __FILE__);
+        FATAL(errorMessage,"OptionSet has no " + opt + " option... impossible to set such value");
         return false;
       }
       
@@ -120,6 +120,8 @@ public:
     {
       return data.at(opt).get<T>();
     }
+
+    
 
 
 	//! Prints the options

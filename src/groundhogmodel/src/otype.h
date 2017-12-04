@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 #include "Radiance/src/common/object.h"
+#include "common/geometry/transform.h"
+
 #include "./material.h"
 
 //! Class for representing various types of geometrical objects
@@ -60,14 +62,14 @@ public:
 	@author German Molina
 	@return The name of the Otype
 	*/
-	std::string getName();
+	std::string * getName();
 
 	//! Sets the name of the Otype
 	/*!
 	@author German Molina
 	@param[in] newName The name of the Otype
 	*/
-	void setName(std::string newName);
+	void setName(std::string * newName);
 
 
 	//! Retrieves the type of the Otype
@@ -75,7 +77,7 @@ public:
 	@author German Molina
 	@return The type of the Otype
 	*/
-	std::string getType();
+	std::string * getType();
 
 	//! Compares a name with another string
 	/*!
@@ -112,12 +114,16 @@ public:
 	//! Writes an Otype in Radiance format
 	/*!
 
+    Receives an optional transform object (may be NULL) that will modify the OType
+
 	@author German Molina
 	@param[in] file The file to write the object to
+    @param[in] material The name of the material to assign
+    @param[in] transform The transformation to apply to the object
 	@return success
 	@note This function should be overriden by a function with the same name in each Material derived class
 	*/
-    virtual bool writeInRadianceFormat(FILE * file);
+    virtual bool writeInRadianceFormat(FILE * file, char * material, Transform * transform);
 	
     
 };

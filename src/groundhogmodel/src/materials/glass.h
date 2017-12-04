@@ -31,7 +31,7 @@ public:
 	@author German Molina
 	@param j The JSON object describing the Glass
 	*/
-	Glass(json j);
+	Glass(json * j);
 
 	//! Retrieves the 'r' member
 	/*!

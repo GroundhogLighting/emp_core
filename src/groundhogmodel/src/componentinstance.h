@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -23,6 +23,7 @@
 
 #include "./componentinstance.h"
 #include "./componentdefinition.h"
+#include "common/geometry/transform.h"
 
 
 class ComponentDefinition;
@@ -170,5 +171,12 @@ public:
 	@return The ComponentDefinition reference
 	*/
 	ComponentDefinition * getDefinitionRef();
+
+    //! Retrieves a Transform object corresponding to this instance
+    /*!
+    @author German Molina
+    @return The Transform
+    */
+    Transform * getTransform();
 
 };

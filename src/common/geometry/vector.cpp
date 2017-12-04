@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
 	Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -166,7 +166,7 @@ void Vector3D::normalize()
 {
 	double l = getLength();
 	if (l == 0) {
-		fatal("Normalizing vector with Zero length",__LINE__,__FILE__);
+		FATAL(errorMessage,"Normalizing vector with Zero length");
 		return;
 	}
 

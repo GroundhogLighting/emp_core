@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -26,7 +26,6 @@
 
 GroundhogModel::GroundhogModel()
 {
-	DEBUG_MSG("Creating GroundhogModel");	
 };
 
 GroundhogModel::~GroundhogModel()
@@ -44,27 +43,24 @@ GroundhogModel::~GroundhogModel()
 		delete views[i];
 	}	
 
-	DEBUG_MSG("Destroying GroundhogModel");
 }
 
 
-void GroundhogModel::addLayer(std::string layerName)
+void GroundhogModel::addLayer(std::string * layerName)
 {	
 	Layer * l = new Layer(layerName);
 	layers.push_back( l );	
-	DEBUG_MSG("Adding layer " + layerName + " to model");
 }
 
 bool GroundhogModel::addObjectToLayer(std::string * layerName, Otype * o)
 {
 	for (unsigned layerCount = 0; layerCount < layers.size(); layerCount++) {		
 		if (layers[layerCount]->compareName(layerName)) {
-			DEBUG_MSG("Found layer "+*layerName);
 			layers[layerCount]->getObjectsRef()->push_back(o);
 			return true;
 		}
 	}
-	fatal("Layer " + *layerName + " could not be found", __LINE__, __FILE__);
+	FATAL(errorMessage,"Layer " + *layerName + " could not be found");
 	return false;
 }
 
@@ -73,12 +69,11 @@ bool GroundhogModel::addComponentInstanceToLayer(std::string * layerName, Compon
 {
 	for (unsigned layerCount = 0; layerCount < layers.size(); layerCount++) {
 		if (layers[layerCount]->compareName(layerName)) {
-			DEBUG_MSG("Found layer " + *layerName);
 			layers[layerCount]->getComponentInstancesRef()->push_back(instance);
 			return true;
 		}
 	}
-	fatal("Layer " + *layerName + " could not be found", __LINE__, __FILE__);
+	FATAL(errorMessage,"Layer " + *layerName + " could not be found");
 	return false;
 }
 
@@ -107,31 +102,30 @@ ComponentDefinition * GroundhogModel::getComponentDefinitionRef(size_t i)
 void GroundhogModel::addComponentDefinition(ComponentDefinition * componentDefinition)
 {
 	definitions.push_back(componentDefinition);
-	DEBUG_MSG("Adding component definition to model");
 }
 
 
 ComponentDefinition *  GroundhogModel::getComponentDefinitionByName(std::string * definitionName)
 {
 	for (size_t i = 0; i < definitions.size(); i++) {
-		if (*definitionName == definitions[i]->getName()) {
-			DEBUG_MSG("Found definition" + *definitionName);
-			return definitions[i];
-		}
+      std::string * name = definitions[i]->getName();
+	  if (*definitionName == *name) {
+		  return definitions[i];
+	  }
 	}
-	fatal("Component Definition " + *definitionName + " could not be found", __LINE__, __FILE__);
+	FATAL(errorMessage,"Component Definition " + *definitionName + " could not be found");
 	return NULL;
 }
 
 Layer *  GroundhogModel::getLayerByName(std::string * layerName)
 {
 	for (size_t i = 0; i < layers.size(); i++) {
-		if (*layerName == layers[i]->getName()) {
-			DEBUG_MSG("Found layer" + *layerName);
-			return layers[i];
-		}
+      std::string * name = layers[i]->getName();
+	  if (*layerName == *name) {
+		  return layers[i];
+	  }
 	}
-	fatal("Layer " + *layerName + " could not be found", __LINE__, __FILE__);
+	FATAL(errorMessage,"Layer " + *layerName + " could not be found");
 	return NULL;
 }
 
@@ -164,7 +158,6 @@ void GroundhogModel::addPolygonToWorkplane(std::string * workplaneName, Polygon3
 {
 	for (unsigned i = 0; i < workplanes.size(); i++) {
 		if (workplanes[i]->compareName(workplaneName)) {
-			DEBUG_MSG("Found workplane " + *workplaneName);
 			workplanes[i]->addPolygon(polygon);
 			return;
 		}
@@ -181,7 +174,6 @@ void GroundhogModel::addWindowToGroup(std::string * windowGroupName, Face * face
 {
 	for (size_t i = 0; i < windowGroups.size(); i++) {
 		if (windowGroups[i]->compareName(windowGroupName)) {
-			DEBUG_MSG("Found window group " + *windowGroupName);
 			windowGroups[i]->addFace(face);
 			return;
 		}
@@ -223,27 +215,27 @@ Workplane * GroundhogModel::getWorkplaneByName(std::string wp)
 	return NULL;
 }
 
-Material * GroundhogModel::addMaterial(json j)
+Material * GroundhogModel::addMaterial(json * j)
 {
 	// Check if material already exists
-	std::string name = j["name"];
+	std::string name = (*j)["name"];
 	for (size_t i = 0; i < materials.size(); i++) {
 		if (materials[i]->compareName(&name))
 			return materials[i];
 	}
 		
-	if (j["class"] == "plastic") {
+	if ((*j)["class"] == "plastic") {
 		Plastic * p = new Plastic(j);
 		materials.push_back(p);
 		return p;
 	}
-	else if (j["class"] == "glass") {
+	else if ((*j)["class"] == "glass") {
 		Glass * g = new Glass(j);
 		materials.push_back(g);
 		return g;
 	}
 	else {
-		fatal("Unsupported material class "+j["class"] , __LINE__, __FILE__);
+		FATAL(errorMessage,"Unsupported material class "+ (*j)["class"] );
 		return NULL;
 	}
 }
@@ -251,25 +243,27 @@ Material * GroundhogModel::addMaterial(json j)
 
 Material * GroundhogModel::addDefaultMaterial()
 {
-	return addMaterial({
-		{ "name" , "Default-Material" },
-		{ "color" , { 153,153,153 } },
-		{ "rad" , "void plastic %MAT_NAME% 0 0 5 0.6 0.6 0.6 0 0" },
-		{ "alpha" , 1},
-		{ "class" , "plastic" }
-	});
+  json j = {
+    { "name" , "Default-Material" },
+    { "color" ,{ 153,153,153 } },
+    { "rad" , "void plastic %MAT_NAME% 0 0 5 0.6 0.6 0.6 0 0" },
+    { "alpha" , 1 },
+    { "class" , "plastic" }
+  };
+  return addMaterial(&j);
 }
 
 
 Material * GroundhogModel::addDefaultGlass()
-{
-	return addMaterial({
-		{ "name" , "Default-Glass" },
-		{ "color" , { 0,0,1} },
-		{ "rad" , "void glass %MAT_NAME% 0 0 3 0.86 0.86 0.86" },
-		{ "alpha" , 0.4},
-		{ "class" , "glass" }
-	});
+{ 
+  json j = {
+    { "name" , "Default-Glass" },
+    { "color" ,{ 0,0,1 } },
+    { "rad" , "void glass %MAT_NAME% 0 0 3 0.86 0.86 0.86" },
+    { "alpha" , 0.4 },
+    { "class" , "glass" }
+  };
+  return addMaterial(&j);
 }
 
 

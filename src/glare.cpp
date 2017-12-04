@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -44,12 +44,10 @@ extern "C" {
 
 Glare::Glare() 
 {
-	DEBUG_MSG("Creating Glare object");	
 }
 
 Glare::~Glare() 
-{
-	DEBUG_MSG("Destroying Glare object");	
+{	
 }
 
 
@@ -74,13 +72,13 @@ bool Glare::parseInputs(int argc, char* argv[])
 	// Check if inputFile makes sense.
 	char * supportedInputs[] = { ".skp" };
 	if (!stringIncludeAny(inputFile, supportedInputs,2)) {
-		fatal("Only .SKP input files are supported for now", __LINE__, __FILE__);
+		FATAL(errorMessage,"Only .SKP input files are supported for now");
 		return false;
 	}
 
 	// verify that inputFile exists
 	if (!fexists(inputFile)) {
-		fatal("File '" + std::string(inputFile) + "' not found", __LINE__, __FILE__);
+		FATAL(errorMessage,"File '" + std::string(inputFile) + "' not found");
 		return false;
 	}
 
@@ -98,17 +96,16 @@ bool Glare::solve(int argc, char* argv[])
 	loadFile(inputFile);
 
 	// Analize second argument
-	if (secondArgument.empty()) {		
-		
-		fatal("Solving a model is not yet supported!", __LINE__, __FILE__);
-		return false;		
+	if (secondArgument.empty()) {				
+      FATAL(errorMessage,"Solving a model is not yet supported!");
+	  return false;		
 
 	} else if (stringInclude(secondArgument, ".lua")) {
 		// Lua script was input... process
 
 		// check if script exists
 		if (!fexists(secondArgument)) {
-			fatal("Lua script '" + std::string(secondArgument) + "' not found", __LINE__, __FILE__);
+			FATAL(errorMessage,"Lua script '" + std::string(secondArgument) + "' not found");
 			return false;
 		}
 
@@ -127,7 +124,7 @@ bool Glare::solve(int argc, char* argv[])
 		// Load script
 		status = luaL_loadfile(L, secondArgument.c_str());
 		if (status) {
-			fatal(lua_tostring(L, -1), __LINE__, __FILE__);
+			std::cerr <<  lua_tostring(L, -1) << std::endl;
 			return false;
 		}
 
@@ -146,7 +143,7 @@ bool Glare::solve(int argc, char* argv[])
 		if (lua_type(L, 1) == LUA_TBOOLEAN) {
 			autoSolve = lua_toboolean(L, 1);
 		}
-		taskManager.print();
+
 		if (autoSolve) {
 			taskManager.solve();
 		}
@@ -161,7 +158,7 @@ bool Glare::solve(int argc, char* argv[])
 			taskManager.solve();
 		}
 		else {
-			fatal("Unrecognized file extension in " + secondArgument, __LINE__, __FILE__);
+			FATAL(errorMessage,"Unrecognized file extension in " + secondArgument);
 			return false;
 		}
 	}
@@ -177,7 +174,7 @@ bool Glare::loadFile(std::string input)
 	if (stringInclude(input, ".skp")) {
 		SKPReader reader(&model,verbose);
 		if (!reader.parseSKPModel(input)) {
-			fatal("Could not read file '" + std::string(input) + "'", __LINE__, __FILE__);
+			FATAL(errorMessage,"Could not read file '" + std::string(input) + "'");
 			return false;
 		}
 	}

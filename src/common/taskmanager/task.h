@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -43,14 +43,11 @@ a CalculateAnnualDaylight Task is generic, but targeted to different workplanes)
 class Task {
 private:
 	
-	std::string name; //!< The name of the task
+	std::string name = "ThisTaskHasNoName"; //!< The name of the task
 	std::vector<Task *> dependencies = std::vector<Task * >(); //!< The vector of Task objects that this Task depend upon
 	std::vector<size_t> dependenciesIndexes = std::vector<size_t>(); //! Vector with the position of the dependencies in the tasks array of the SimulationManager
 	std::vector<size_t> dependantsIndexes = std::vector<size_t>(); //! Vector with the position of the dependant tasks in the tasks array of the SimulationManager
-
-	// results ... depend on each kind of Task
-	// target ... depend on each kind of Task
-
+	
 public:
 
 	//! Generic constructor

@@ -1,4 +1,4 @@
-
+﻿
 /*****************************************************************************
 	Glare
 
@@ -160,7 +160,7 @@ public:
 	@param[out] view The View object to fill
 	@return success
 	*/
-	bool SUCameraToView(std::string viewName, SUCameraRef suCamera, View * view);
+	bool SUCameraToView(std::string * viewName, SUCameraRef suCamera, View * view);
 
 	//! Transforms a SUSceneRef object into a View object
 	/*!

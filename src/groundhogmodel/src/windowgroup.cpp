@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -26,11 +26,9 @@
 
 WindowGroup::WindowGroup(std::string groupName) {
 	name = groupName;
-	DEBUG_MSG("Creating Window Group " + groupName);
 }
 
 WindowGroup::~WindowGroup() {
-	DEBUG_MSG("Destroying Window Group " + name);
 	for (size_t i = 0; i < windows.size(); i++) {
 		delete windows[i];
 	}

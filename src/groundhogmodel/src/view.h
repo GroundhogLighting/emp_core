@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -63,14 +63,14 @@ public:
 	@author German Molina
 	@param[in] name The name of the view
 	*/
-	void setName(std::string name);
+	void setName(std::string * name);
 
 	//! Retrieves the name of the view
 	/*!
 	@author German Molina
 	@return The name of the view
 	*/
-	std::string getName();
+	std::string * getName();
 
 	//! Assigns a View Point to the view
 	/*!

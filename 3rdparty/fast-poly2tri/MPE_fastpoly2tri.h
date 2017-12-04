@@ -1,4 +1,4 @@
-/* fast-poly2tri - v1.0
+﻿/* fast-poly2tri - v1.0
 
   Rewrite of the poly2tri library (https://github.com/jhasse/poly2tri)
   by Unspongeful (@unspongeful).

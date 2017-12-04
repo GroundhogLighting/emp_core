@@ -209,7 +209,7 @@ Vector3D Polygon3D::getNormal()
 bool Polygon3D::testPoint(Point3D p)
 {		
 	if (normal.isZero()) {
-		fatal("Trying to test a point in a polygon without normal", __LINE__, __FILE__);		
+		FATAL(errorMessage,"Trying to test a point in a polygon without normal");		
 		return false;
 	}
 	Loop * outerLoop = getOuterLoopRef();
@@ -301,7 +301,7 @@ bool Polygon3D::getInverseAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3
 		+ i.getZ()*(j.getX()*k.getY() - j.getY()*k.getX());
 
 	if (det == 0) {
-		fatal("Determinant is zero when trying to ", __LINE__, __FILE__);
+		FATAL(errorMessage,"Determinant is zero when trying to ");
 		normal.print();
 		return NULL;
 	}
@@ -330,8 +330,8 @@ bool Polygon3D::getInverseAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3
 bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * auxj, Vector3D * auxk)
 {
 	if (normal.isZero()) {
-		fatal("Trying to get auxiliar axes with a Zero normal", __LINE__, __FILE__);
-		return false;
+      FATAL(errorMessage,"Trying to get auxiliar axes with a Zero normal");
+	  return false;
 	}
 		
 	Vector3D k = normal;
@@ -364,7 +364,7 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 			j = Vector3D(0, 1, 0);
 		}
 		else {
-			fatal("Not considered situation when calculating auxiliar axes of polygon", __LINE__, __FILE__);
+			FATAL(errorMessage,"Not considered situation when calculating auxiliar axes of polygon");
 			normal.print();
 			return false;
 		}

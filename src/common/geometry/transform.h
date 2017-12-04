@@ -26,6 +26,67 @@ private:
   Matrix4x4 m = Matrix4x4();  
 
 public:
+  //! Basic constructor.
+  /*!
+  Builds an identity transform.
 
+  @author German Molina  
+  */
+  Transform();
+
+  
+  //! Creates a translation matrix
+  /*!
+  @author German Molina
+  @param[in] x The translation on the X axis
+  @param[in] y The translation on the Y axis
+  @param[in] x The translation on the Z axis
+  */
+  Matrix4x4 * getTranslationMatrix(double x, double y, double z);
+
+  //! Creates a Rotation matrix on axis X
+  /*!
+  @author German Molina
+  @param[in] rotation The rotation
+  */
+  Matrix4x4 * getRotationXMatrix(double rotation);
+
+  //! Creates a Rotation matrix on axis Y
+  /*!
+  @author German Molina
+  @param[in] rotation The rotation
+  */
+  Matrix4x4 * getRotationYMatrix(double rotation);
+
+  //! Creates a Rotation matrix on axis Z
+  /*!
+  @author German Molina
+  @param[in] rotation The rotation
+  */
+  Matrix4x4 * getRotationZMatrix(double rotation);
+
+
+  //! Creates a Scale matrix 
+  /*!
+  @author German Molina
+  @param[in] scale The scale
+  */
+  Matrix4x4 * getScaleMatrix(double scale);
+
+  //! Retrieves a pointer to the matrix
+  /*!
+  @author German Molina
+  @return The Matrix4x4
+  */
+  Matrix4x4 * getMatrix();
+
+  //! Adds the transformation from a base transformation
+  /*!
+  Basically does (this) = t*(this)
+
+  @author German Molina
+  @param[in] t The base transform
+  */
+  void preMultiply(Transform * t);
 
 };

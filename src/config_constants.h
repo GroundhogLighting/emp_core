@@ -104,6 +104,6 @@ This module defines constants that are used in the rest of the program.
 #define GLARE_TMP_DIR "tmp"
 
 /// The sky and ground hemispheres needed for completing a sky definition
-#define RADIANCE_SKY_COMPLEMENT "skyfunc glow skyglow 0 0 4 1 1 1 0 skyglow source skyball 0 0 4 0 0 1 360"
+#define RADIANCE_SKY_COMPLEMENT "skyfunc glow skyglow 0 0 4 1 1 1 0 skyglow source skyball 0 0 4 0 0 1 360\n\n"
 
 /* @} */

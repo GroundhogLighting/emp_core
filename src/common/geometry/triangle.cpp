@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -47,8 +47,8 @@ Triangle::~Triangle()
 Point3D * Triangle::getVertex(int i)
 {	
 	if (i < 0 || i > 3) {
-		fatal("Impossible index when getting Vertex... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
-		return NULL;
+      FATAL(errorMessage,"Impossible index when getting Vertex... index was '" + std::to_string(i) + "'");
+	  return NULL;
 	}
 	return vertices[i];
 }
@@ -84,8 +84,8 @@ double Triangle::getAspectRatio()
 bool Triangle::setNeighbor(Triangle * t, int i,bool reciprocity) 
 {
 	if (i < 0 || i > 2) {
-		fatal("Impossible index when Setting neighbor... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
-		return false;
+      FATAL(errorMessage,"Impossible index when Setting neighbor... index was '" + std::to_string(i) + "'");
+	  return false;
 	}
 	neighbors[i] = t;
 	
@@ -101,8 +101,8 @@ bool Triangle::setNeighbor(Triangle * t, int i,bool reciprocity)
 Segment * Triangle::getSegment(int i)
 {
 	if (i < 0 || i > 2) {
-		fatal("Impossible index when getting segment... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
-		return NULL;
+      FATAL(errorMessage,"Impossible index when getting segment... index was '" + std::to_string(i) + "'");
+	  return NULL;
 	}
 	return segments[i];
 }
@@ -111,8 +111,8 @@ Segment * Triangle::getSegment(int i)
 Triangle * Triangle::getNeighbor(int i)
 {
 	if (i < 0 || i > 2) {
-		fatal("Impossible index when getting neighbor... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
-		return NULL;
+      FATAL(errorMessage,"Impossible index when getting neighbor... index was '" + std::to_string(i) + "'");
+	  return NULL;
 	}
 	return neighbors[i];
 }
@@ -147,8 +147,8 @@ size_t Triangle::getIndex()
 bool Triangle::setConstraint(int i)
 {
 	if (i < 0 || i > 2) {
-		fatal("Impossible index when setting constraint... index was '" + std::to_string(i) + "'", __LINE__,__FILE__);
-		return false;
+      FATAL(errorMessage,"Impossible index when setting constraint... index was '" + std::to_string(i) + "'");
+	  return false;
 	}
 
 	constraints[i] = true;
@@ -168,8 +168,8 @@ bool Triangle::setConstraint(int i)
 bool Triangle::isContraint(int i)
 {
 	if (i < 0 || i > 2) {
-		fatal("Impossible index when getting constraint... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
-		return false;
+      FATAL(errorMessage,"Impossible index when getting constraint... index was '" + std::to_string(i) + "'");
+	  return false;
 	}	
 	return constraints[i];
 }

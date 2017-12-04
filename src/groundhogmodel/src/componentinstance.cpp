@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -24,7 +24,6 @@
 
 
 ComponentInstance::ComponentInstance(ComponentDefinition * definitionRef) {
-	DEBUG_MSG("Creating component instance");
 	definition = definitionRef;	
 	rotationX = 0; 
 	rotationY = 0; 
@@ -39,7 +38,6 @@ ComponentInstance::ComponentInstance(ComponentDefinition * definitionRef) {
 
 
 ComponentInstance::~ComponentInstance() {
-	DEBUG_MSG("Destroying component instance");	
 }
 
 void ComponentInstance::setX(double newX) {
@@ -101,4 +99,50 @@ double ComponentInstance::getScale() {
 
 ComponentDefinition * ComponentInstance::getDefinitionRef() {
 	return definition;
+}
+
+Transform * ComponentInstance::getTransform()
+{
+
+  Transform * res = new Transform();
+  Matrix4x4 * m = res->getMatrix();
+
+  // Scale
+  /*
+  double s = getScale();
+  Matrix4x4 * scale = res->getScaleMatrix(s);
+  m->multiplyThis(scale);
+  delete scale;
+  */
+  // Translation
+  double x = getX();
+  double y = getY();
+  double z = getZ();
+  Matrix4x4 * translation = res->getTranslationMatrix(x, y, z);
+  m->multiplyThis(translation);
+  delete translation;
+
+  
+  // Rotation X
+  double rx = getRotationX();
+  Matrix4x4 * rotationX = res->getRotationXMatrix(rx);
+  m->multiplyThis(rotationX);
+  delete rotationX;
+
+
+  // Rotation Y
+  double ry = getRotationY();
+  Matrix4x4 * rotationY = res->getRotationYMatrix(ry);
+  m->multiplyThis(rotationY);
+  delete rotationY;
+
+  // Rotation Z
+  double rz = getRotationZ();
+  Matrix4x4 * rotationZ = res->getRotationZMatrix(rz);
+  m->multiplyThis(rotationZ);
+  delete rotationZ;
+
+  
+
+  return res;
 }

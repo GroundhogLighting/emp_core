@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -20,6 +20,7 @@
 
 #pragma once
 #include "./vector.h"
+#include "./transform.h"
 
 //! A 3D point representation
 
@@ -158,6 +159,14 @@ public:
 	@param[in] k Vector3D k
 	*/
 	Point3D transform(Vector3D i, Vector3D j, Vector3D k);
+
+    //! Transforms a point based on a Transform object
+    /*!
+    @author German Molina
+    @param[in] t The transformation to apply
+    @return the transformed Point3D object
+    */
+    Point3D transform(Transform * t);
 
 
 };

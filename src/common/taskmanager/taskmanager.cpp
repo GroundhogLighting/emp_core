@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -18,9 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
+
+#include <fstream>
 #include "taskManager.h"
 #include "common/utilities/io.h"
-
 #include "tbb/tbb.h"
 
 TaskManager::TaskManager()
@@ -122,35 +123,47 @@ bool TaskManager::solve()
 }
 
 
-void TaskManager::print()
+void TaskManager::print(char * filename)
 {
-	std::cout << "==================== " << std::endl;
-	std::cout << "[ ";
-	for (size_t i = 0; i < tasks.size(); i++) {
-		Task * task = tasks[i];
-		std::cout << task->getName() << "  ";
-	}
-	std::cout << " ]" << std::endl;
 
-	for (size_t i = 0; i < tasks.size(); i++) {
-		Task * task = tasks[i];
+  std::ofstream file;
+  if (filename != NULL) {
+    file.open(filename);
+  }
 
-		std::cout << task->getName() << "  " << i << std::endl;
+  
+  if (filename == NULL) {
+    std::cout << "digraph {\n";
+  }
+  else {
+    file << "digraph {\n";
+  }
+	
+  for (size_t i = 0; i < tasks.size(); i++) {
+	  Task * task = tasks[i];
+      size_t nDep = task->countDependencies();
+      for (size_t j = 0; j < nDep; j++) {                   
+        std::string ln = "\"" + task->getDependencyRef(j)->getName() + "\" -> \"" + task->getName()+ "\"";
+        if (filename == NULL) {
+          std::cout << ln << ";\n";
+        }
+        else {
+          file << ln << ";\n";
+        }    
+      }		
+  }
+  if (filename == NULL) {
+    std::cout << "}\n";
+  }
+  else {
+    file << "}\n";
+  }
+	
+  
+  if (filename != NULL) {
+    file.close();
+  }
 
-		std::cout << " ... dependencies: ";
-		for (size_t j = 0; j < task->countDependencies(); j++) {
-			std::cout << task->getDependencyIndex(j) << " , ";
-		}
-		std::cout << std::endl;
-
-		std::cout << " ... dependants: ";
-		for (size_t j = 0; j < task->countDependants(); j++) {
-			std::cout << task->getDependantIndex(j) << " , ";
-		}
-		std::cout << std::endl << std::endl;
-	}
-
-	std::cout << "==================== " << std::endl;
 }
 
 bool TaskManager::compareTasks(Task * a, Task * b)

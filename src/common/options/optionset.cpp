@@ -62,18 +62,17 @@ bool OptionSet::fillFromLuaTable(lua_State * L, int tablePosition)
     auto value = it.value();
     
     // Now the value we are looking for is in the position 2 of the stack
-    int field = lua_getfield(L, 1, &optionName[0]);
-    
+    int field = lua_getfield(L, tablePosition, &optionName[0]);
     // If the value is there (i.e. it is not nil)
     if (field != LUA_TNIL) {
       // Retrieve it and use it      
       if (field == LUA_TNUMBER) {
         // Verify that the original value was a number as well
         if (value.is_number_integer()) {          
-          setOption(optionName, (int)lua_tonumber(L,2));
+          setOption(optionName, (int)lua_tonumber(L, tablePosition+1));
         }
         else if (value.is_number() ){
-          setOption(optionName, lua_tonumber(L, 2));
+          setOption(optionName, lua_tonumber(L, tablePosition + 1));
         }
         else {                   
           badOptionError(L, optionName, lua_typename(L, field));
@@ -83,20 +82,20 @@ bool OptionSet::fillFromLuaTable(lua_State * L, int tablePosition)
         if (!value.is_string()) {
           badOptionError(L, optionName, lua_typename(L, field));
         }        
-        setOption(optionName, lua_tostring(L, 2));
+        setOption(optionName, lua_tostring(L, tablePosition + 1));
       }
       else if (field == LUA_TBOOLEAN ) {
         if (!value.is_boolean()) {
           badOptionError(L, optionName, lua_typename(L, field));
         }
-        setOption(optionName, lua_toboolean(L, 2));
+        setOption(optionName, lua_toboolean(L, tablePosition + 1) ? true : false);
       }
       else {
-        fatal("Unrecognized value type "+ std::string(lua_typename(L, field)) +" of value for option " + optionName,__LINE__,__FILE__);
+        FATAL(errorMessage,"Unrecognized value type " + std::string(lua_typename(L, field)) + " of value for option " + optionName);        
         return false;
       }
     }
-    // remove the value (or nil, if it was not there)
+    // remove one value from the stack (or nil, if it was not there)
     lua_pop(L, 1);
   }
   return true;
@@ -112,10 +111,10 @@ void OptionSet::print(char * filename)
 
   for (json::iterator it = data.begin(); it != data.end(); ++it) {
     if (filename == NULL) {
-     std::cout << "-" << it.key() << " " << it.value() << std::endl;
+     std::cout << "-" << it.key() << " " << it.value() << "\n";
     }
     else {
-      file << "-" << it.key() << " " << it.value() << std::endl;
+      file << "-" << it.key() << " " << it.value() << "\n";
     }
   }
 

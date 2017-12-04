@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -56,8 +56,7 @@
 
 SKPReader::SKPReader(GroundhogModel * ghmodel, bool newVerbose) 
 {
-	DEBUG_MSG("Creating SKPReader");
-
+	
 	//initialize API
 	SUInitialize();
 
@@ -76,7 +75,6 @@ SKPReader::SKPReader(GroundhogModel * ghmodel, bool newVerbose)
 
 SKPReader::~SKPReader() 
 {
-	DEBUG_MSG("Destroying SKPReader");
 	
 	
 	//release dictionary
@@ -158,7 +156,7 @@ bool SKPReader::checkSUResult(SUResult res, std::string functionName, int ln)
 		error = "Unrecognized error....";
 	}
 
-	fatal("function '" + functionName + "' returned '" + error , ln, __FILE__);
+    FATAL(errorMessage,"function '" + functionName + "' returned '" + error);
 	return false;
 }
 
@@ -360,7 +358,7 @@ bool SKPReader::loadModelInfo()
 	return true;
 }
 
-bool SKPReader::SUCameraToView(std::string viewName, SUCameraRef camera, View * view) 
+bool SKPReader::SUCameraToView(std::string * viewName, SUCameraRef camera, View * view) 
 {
 
 	// set the name
@@ -424,14 +422,14 @@ bool SKPReader::SUCameraToView(std::string viewName, SUCameraRef camera, View * 
 	case SU_ERROR_NONE:
 		break; // all OK.
 	case SU_ERROR_INVALID_INPUT:
-		fatal("SU_ERROR_INVALID_INPUT when trying to get aspect ratio of view", __LINE__, __FILE__);
+		fatal("SU_ERROR_INVALID_INPUT when trying to get aspect ratio of view",__LINE__,__FILE__);
 		break;
 	case SU_ERROR_NO_DATA:
 		// the camera uses the screen aspect ratio... will assume the following
 		aspectRatio = 16.0 / 9.0;
 		break;
 	case SU_ERROR_NULL_POINTER_OUTPUT:
-		fatal("SU_ERROR_NULL_POINTER_OUTPUT when trying to get aspect ratio of view", __LINE__, __FILE__);
+		fatal("SU_ERROR_NULL_POINTER_OUTPUT when trying to get aspect ratio of view",__LINE__,__FILE__);
 		break;
 	}
 	
@@ -473,7 +471,7 @@ bool SKPReader::SUViewToView(SUSceneRef suView, View * view)
 		__LINE__
 	)) return false;
 
-	if (!SUCameraToView(viewName, camera, view)) {
+	if (!SUCameraToView(&viewName, camera, view)) {
 		SUCameraRelease(&camera);
 		return false;
 	}
@@ -494,7 +492,8 @@ bool SKPReader::loadViews()
 	)) return false;
 
 	View * activeView = new View();
-	SUCameraToView("view", activeCamera, activeView);
+    std::string viewName = "view";
+	SUCameraToView(&viewName, activeCamera, activeView);
 	model->addView(activeView);
 
 	// load stored views
@@ -546,7 +545,7 @@ bool SKPReader::loadLayers()
 	)) return false;
 
 	// inform layer status
-	inform("Counted layers: " + size_tToString(countLayers), verbose);
+	INFORM(i,"Counted layers: " + size_tToString(countLayers), verbose);
 
 	// create and load the layers
 	for (unsigned int i = 0; i < layers.size(); i++) {		
@@ -569,8 +568,8 @@ bool SKPReader::loadLayers()
 		if (!SUStringtoString(suLayerName,&layerName,true))
 			return false;
 		
-		model->addLayer(layerName);
-		inform("Layer " + layerName + " added",verbose);
+		model->addLayer(&layerName);
+		INFORM(informMessage,"Layer " + layerName + " added",verbose);
 	};	
 
 	return true;
@@ -619,7 +618,7 @@ bool SKPReader::addComponentInstanceToVector(std::vector <ComponentInstance * > 
 	// get the definition
 	ComponentDefinition * definitionRef = model->getComponentDefinitionByName(&definitionName);
 	if (definitionRef == NULL) {
-		fatal("Impossible to find " + definitionName + " when adding an instance... ignoring instance", __LINE__, __FILE__);
+		FATAL(errorMessage,"Impossible to find " + definitionName + " when adding an instance... ignoring instance");
 		return false;
 	}
 
@@ -716,7 +715,7 @@ bool SKPReader::loadComponentDefinitions()
 		inform("No component definitions in model",verbose);
 		return true; // success
 	}
-	inform(std::to_string(countDefinitions) + " definitions in model",verbose);
+	INFORM(i,std::to_string(countDefinitions) + " definitions in model",verbose);
 
 	// get the component definitions
 	std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
@@ -737,7 +736,7 @@ bool SKPReader::loadComponentDefinitions()
 
 			if (label == SKP_PHOTOSENSOR) {
 				if (!addPhotosensorsToModel(definitions[i])) {
-					fatal("Error when trying to add Photosensos to the model", __LINE__, __FILE__);
+					FATAL(errorMessage,"Error when trying to add Photosensos to the model");
 					return false;
 				}
 			}
@@ -774,7 +773,7 @@ bool SKPReader::loadLayersContent()
 	)) return false;
 
 	if (faceCount > 0) {
-		inform("Counted Faces: " + size_tToString(faceCount), verbose);
+		INFORM(i,"Counted Faces: " + size_tToString(faceCount), verbose);
 
 		std::vector<SUFaceRef> faces(faceCount);
 		if (!checkSUResult(
@@ -1136,7 +1135,7 @@ bool SKPReader::addWorkplaneToModel(SUFaceRef suFace) {
 	std::string name;
 	bool hasName = getSUFaceName(suFace, &name);
 	if (!hasName) {
-		fatal("Invalid workplane: has no name", __LINE__, __FILE__);
+		FATAL(errorMessage,"Invalid workplane: has no name");
 		return false;
 	}
 
@@ -1154,7 +1153,7 @@ bool SKPReader::addWindowToModel(SUFaceRef suFace)
 	// get the name of the face
 	std::string name;
 	if (!getSUFaceName(suFace, &name)) { // this will allways put something
-		fatal("Impossible to get name from Window",__LINE__,__FILE__);
+		FATAL(errorMessage,"Impossible to get name from Window");
 		return false;
 	}
 	
@@ -1165,8 +1164,10 @@ bool SKPReader::addWindowToModel(SUFaceRef suFace)
 	SUTypedValueRef suWinGroup = SU_INVALID;
 	if (getValueFromEntityGHDictionary(SUFaceToEntity(suFace), SKP_WINGROUP, &suWinGroup)) {
 		// If it has, set the windowgroup name to that...
-		if (!getFromSUTypedValue(suWinGroup,&winGroup,true))
-			fatal("Error when trying to retrieve Window Group name",__LINE__,__FILE__);
+      if (!getFromSUTypedValue(suWinGroup, &winGroup, true)) {
+		  FATAL(errorMessage,"Error when trying to retrieve Window Group name");
+        }
+        
 	}
 	else {
 		// if not, set the name of the window.
@@ -1194,7 +1195,7 @@ int32_t SKPReader::getEntityID(SUEntityRef entity)
 		"SUEntityGetID",
 		__LINE__
 	)) {
-		fatal("Error when retrieving entity ID",__LINE__,__FILE__);
+		FATAL(errorMessage,"Error when retrieving entity ID");
 		return -1;
 	}
 
@@ -1356,7 +1357,7 @@ Material * SKPReader::addMaterialToModel(SUMaterialRef material)
 
 		// it is a Radiance material
 		if(label != SKP_MATERIAL){
-			fatal("Material with weird label " + label,__LINE__,__FILE__);
+			FATAL(errorMessage,"Material with weird label " + label);
 			return NULL;
 		}
 
@@ -1381,7 +1382,7 @@ Material * SKPReader::addMaterialToModel(SUMaterialRef material)
 	}
 
 	// Add the material and return
-	return model->addMaterial(j);
+	return model->addMaterial(&j);
 }
 
 bool SKPReader::getGHValueFromEntity(SUEntityRef entity, std::string * value, bool fix)
@@ -1403,7 +1404,7 @@ bool SKPReader::guessMaterial(SUMaterialRef material, json * j)
 	if (!getSUMaterialName(material,&name))
 		return false;
 
-	warn("Guessing material " + name);
+	WARN(message,"Guessing material " + name);
 	
 	// set the name
 	(*j)["name"] = name;
@@ -1449,7 +1450,7 @@ bool SKPReader::getFaceMaterial(SUFaceRef face, SUMaterialRef * mat)
 		if (getSUEntityLabel(SUMaterialToEntity(frontMat), &label)) {
 			// if it has, do not bother and return.
 			if (label != SKP_MATERIAL) {
-				fatal("Weird material label "+label,__LINE__,__FILE__);
+				FATAL(errorMessage,"Weird material label "+label);
 				return false;
 			}
 
@@ -1466,7 +1467,7 @@ bool SKPReader::getFaceMaterial(SUFaceRef face, SUMaterialRef * mat)
 		std::string label;
 		if (getSUEntityLabel(SUMaterialToEntity(backMat), &label)) {
 			if (label != SKP_MATERIAL) {
-				fatal("Weird material label " + label, __LINE__, __FILE__);
+				FATAL(errorMessage,"Weird material label " + label);
 				return false;
 			}
 			*mat = backMat;
@@ -1503,7 +1504,7 @@ Face * SKPReader::SUFaceToFace(SUFaceRef suFace)
 		return NULL;
 
 	//build the face
-	Face * face = new Face(name);
+	Face * face = new Face(&name);
 	face->setPolygon(polygon);	
 
 	// retrieve and set the material

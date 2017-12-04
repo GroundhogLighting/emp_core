@@ -4,9 +4,8 @@
 #include "common/utilities/io.h"
 #include <fstream>
 
-Plastic::Plastic(json j)
+Plastic::Plastic(json * j)
 {
-	DEBUG_MSG("Creating Plastic");
 	primitiveLength = 11;
 	fillFromJSON(j);
 }

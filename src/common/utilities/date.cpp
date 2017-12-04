@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -46,7 +46,6 @@ Date::Date(int64_t t)
 
 Date::~Date() 
 {
-	DEBUG_MSG("Destroying date");
 }
 
 void Date::setMonth(int m) 

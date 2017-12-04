@@ -34,7 +34,7 @@ public:
 	@author German Molina
 	@param j The JSON object describing the Plastic
 	*/
-	Plastic::Plastic(json j);
+	Plastic::Plastic(json * j);
 
 	//! Retrieves the 'r' member
 	/*!

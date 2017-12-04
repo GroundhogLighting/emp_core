@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -28,13 +28,11 @@
 ComponentDefinition::ComponentDefinition(std::string * componentName) 
 {
 	name = *componentName;
-	DEBUG_MSG("Creating component " + *componentName);
 }
 
 
 ComponentDefinition::~ComponentDefinition() 
 {
-	DEBUG_MSG("Destroying component " + name);
 
 	for (size_t i = 0; i < objects.size(); i++) {
 		delete objects[i];
@@ -58,9 +56,9 @@ size_t ComponentDefinition::getNumObjects()
 }
 
 
-std::string ComponentDefinition::getName() 
+std::string * ComponentDefinition::getName() 
 {
-	return name;
+	return &name;
 }
 
 

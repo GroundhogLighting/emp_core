@@ -88,8 +88,7 @@ void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager,
 	@return workplane_array An array with the workplanes names
 	*/
 	lua_register(L, "get_workplanes_list", get_workplane_list);
-
-
+    
 	/* @APIfunction
 
 	Checks if a workplane does exist in the model
@@ -114,7 +113,7 @@ void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager,
     
     Prints the current task flow to the standard output
     */
-    //lua_register(L,"print_task_flow",printTaskManager);
+    lua_register(L,"print_task_flow", printTaskManager);
 
     /* @APIfunction 
 

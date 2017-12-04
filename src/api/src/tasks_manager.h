@@ -38,11 +38,13 @@ extern "C" {
 int solveTaskManager(lua_State * L);
 
 
-//! Adds the task of calculating the Daylight Coefficient
+//! Prints the task manager
 /*!
 @author German Molina
 @param[in] L the lua_State object
-@return the number of return values within the script
+@return 0
 */
-int addDFTask(lua_State * L);
+int printTaskManager(lua_State * L);
+
+
 

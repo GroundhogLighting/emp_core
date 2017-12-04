@@ -31,20 +31,20 @@ Otype::~Otype()
 
 }
 
-std::string Otype::getName()
+std::string * Otype::getName()
 {
-	return name;
+	return &name;
 }
 
-void Otype::setName(std::string newName)
+void Otype::setName(std::string * newName)
 {
-	name = newName;
+	name = *newName;
 }
 
 
-std::string Otype::getType()
+std::string * Otype::getType()
 {
-	return type;
+	return &type;
 }
 
 bool Otype::compareName(std::string * otherName)
@@ -70,8 +70,7 @@ void Otype::setMaterial(Material * mat)
 }
 
 
-bool Otype::writeInRadianceFormat(FILE * file)
+bool Otype::writeInRadianceFormat(FILE * file, char * material, Transform * transform)
 {
-
 	return true;
 }

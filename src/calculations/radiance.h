@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "./oconv_options.h"
 #include "groundhogmodel/src/rtraceoptions.h"
-#include "common/utilities/os.h"
 #include "./Radiance/src/rt/ray.h"
 #include "config_constants.h"
 

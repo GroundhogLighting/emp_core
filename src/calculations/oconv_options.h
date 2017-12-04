@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "common/options/optionset.h"
 
-#define OCONV_INCLUDE_WINDOWS "inclue_windows"
+#define OCONV_INCLUDE_WINDOWS "include_windows"
 #define OCONV_USE_BLACK_GEOMETRY "black_geometry"
 #define OCONV_INCLUDE_SKY "include_sky"
 #define OCONV_SKY "sky"
@@ -47,6 +47,6 @@ public:
     addOption(OCONV_USE_BLACK_GEOMETRY, false);
     addOption(OCONV_SKY, "current");
     addOption(OCONV_INCLUDE_SKY, true);
-    addOption(OCONV_LIGHTS_ON, true);
+    addOption(OCONV_LIGHTS_ON, false);
   };
 };

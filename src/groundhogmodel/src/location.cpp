@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -23,7 +23,6 @@
 #include "common/utilities/io.h"
 
 Location::Location() {
-	DEBUG_MSG("Creating Location");
 	city = "not specified";
 	country = "not specified";
 	latitude = 0;
@@ -32,7 +31,6 @@ Location::Location() {
 }
 
 Location::~Location() {
-	DEBUG_MSG("Destroying location");
 }
 
 double Location::getLatitude() {

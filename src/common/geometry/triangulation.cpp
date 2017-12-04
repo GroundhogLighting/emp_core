@@ -72,7 +72,7 @@ Triangle * Triangulation::getTriangleRef(size_t i)
 bool Triangulation::addPointToTriangle(size_t index, Point3D * point, int code)
 {
 	if (triangles[index] == NULL) {
-		fatal("Trying to add point into an obsolete triangle", __LINE__, __FILE__);
+		FATAL(errorMessage,"Trying to add point into an obsolete triangle");
 		return false;
 	}
 
@@ -102,7 +102,7 @@ bool Triangulation::addPoint(Point3D * point)
 			return addPointToTriangle(i, point, code);
 					
 	}
-	fatal("Point is not in any triangle",__LINE__,__FILE__);
+	FATAL(errorMessage,"Point is not in any triangle");
 	return false; // triangle not found
 }
 
@@ -110,15 +110,15 @@ bool Triangulation::addPoint(Point3D * point)
 void Triangulation::flipDiagonal(size_t index, int edge)
 {
 	if (edge < 0 || edge > 2) {
-		fatal("Impossible index when flipping digonal... index was '" + std::to_string(edge) + "'", __LINE__, __FILE__);
+      FATAL(errorMessage,"Impossible index when flipping digonal... index was '" + std::to_string(edge) + "'");	  
 	}
 	
 	// get neighbor
 	Triangle * neighbor = triangles[index]->getNeighbor(edge);
 
 	if (neighbor == NULL) {
-		fatal("Trying to flip a diagonal with a NULL neighbor", __LINE__, __FILE__);
-		return;
+      FATAL(errorMessage,"Trying to flip a diagonal with a NULL neighbor");
+	  return;
 	}
 
 	// get vertices
@@ -142,8 +142,8 @@ void Triangulation::flipDiagonal(size_t index, int edge)
 	// Set neighbors
 	int aux1 = neighbor->getEdgeIndexByPoints(oposite, a);
 	if (aux1 < 0) {
-		fatal("Inconsistent neighborhood when flipping edge", __LINE__, __FILE__);
-		return;
+      FATAL(errorMessage,"Inconsistent neighborhood when flipping edge");
+	  return;
 	}
 	Triangle * aux2 = neighbor->getNeighbor(aux1);
 	if (aux2 != NULL) {
@@ -158,8 +158,8 @@ void Triangulation::flipDiagonal(size_t index, int edge)
 	
 	int aux12 = neighbor->getEdgeIndexByPoints(oposite, b);
 	if (aux12 < 0) {
-		fatal("Inconsistent neighborhood when flipping edge -- Line", __LINE__, __FILE__);
-		return;
+      FATAL(errorMessage,"Inconsistent neighborhood when flipping edge -- Line");
+	  return;
 	}
 	
 	Triangle * aux22 = neighbor->getNeighbor(aux12);
@@ -223,8 +223,8 @@ bool Triangulation::isConvex(Point3D * a, Point3D * b, Point3D * c, Point3D * d)
 double Triangulation::getBestAspectRatio(Triangle * t, int i)
 {
 	if (i < 0 || i > 2) {
-		fatal("Impossible index when getting best aspect ratio... index was '" + std::to_string(i) + "'", __LINE__, __FILE__);
-		return -1;
+      FATAL(errorMessage,"Impossible index when getting best aspect ratio... index was '" + std::to_string(i) + "'");
+	  return -1;
 	}
 
 	// do not modify constraints
@@ -271,7 +271,6 @@ double Triangulation::getBestAspectRatio(Triangle * t, int i)
 
 void Triangulation::restoreDelaunay()
 {	
-	DEBUG_MSG("Restoring Delaunay triangulation");
 	
 	for (size_t i = 0; i < nTriangles; i++) {		
 	
@@ -366,8 +365,9 @@ bool Triangulation::splitTriangle(size_t i, Point3D * p)
 bool Triangulation::splitEdge(size_t i, Point3D * p, int code)
 {	
 	if (triangles[i] == NULL) {
-		warn("Trying to split edge of NULL triangle "+std::to_string(i));
-		return false;
+      std::string e = "Trying to split edge of NULL triangle " + std::to_string(i);
+      warn(&e[0]);
+	  return false;
 	}
 
 	// get vertices
@@ -422,7 +422,7 @@ bool Triangulation::splitEdge(size_t i, Point3D * p, int code)
 
 		int aux1 = neighbor->getEdgeIndexByPoints(oposite, a); 
 		if (aux1 < 0) {
-			fatal("Inconsistent neighborhood when splitting edge!", __LINE__, __FILE__);
+			FATAL(errorMessage,"Inconsistent neighborhood when splitting edge!");
 		}
 
 		Triangle * aux2 = neighbor->getNeighbor(aux1);	
@@ -442,7 +442,7 @@ bool Triangulation::splitEdge(size_t i, Point3D * p, int code)
 
 		aux1= neighbor->getEdgeIndexByPoints(oposite, b);
 		if (aux1 < 0) {
-			fatal("Inconsistent neighborhood when splitting edge!", __LINE__, __FILE__);
+			FATAL(errorMessage,"Inconsistent neighborhood when splitting edge!");
 		}
 		aux2 = neighbor->getNeighbor(aux1);
 		if (aux2 != NULL) {
@@ -501,11 +501,8 @@ Point3D * Triangulation::getOpositeVertex(Triangle * t, int nei) {
 
 void Triangulation::deleteTriangle(size_t i) {
 
-#ifdef DEBUG
-	DEBUG_MSG("Deleting triangle "+std::to_string(i));
-#endif	
 	if (triangles[i] == NULL) {
-		fatal("Trying to delete an already deleted triangle", __LINE__, __FILE__);
+		FATAL(errorMessage,"Trying to delete an already deleted triangle");
 	}
 	delete triangles[i];
 	triangles[i] = NULL;
@@ -585,7 +582,7 @@ void Triangulation::doCDT() {
 	Vector3D k = Vector3D(0, 0, 0);
 
 	if (!polygon2D->getInverseAuxiliarAxes(polygon->getNormal(), &i, &j, &k)) {
-		fatal("Impossible to triangulate because of an error in calculating inverse of auxiliar axes", __LINE__, __FILE__);
+		FATAL(errorMessage,"Impossible to triangulate because of an error in calculating inverse of auxiliar axes");
 		return;
 	}
 

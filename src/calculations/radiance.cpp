@@ -26,10 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "./radiance.h"
 
 #include "config_constants.h"
-#include "common/utilities/os.h"
-#include "common/utilities/file.h"
 #include "common/utilities/stringutils.h"
-
+#include "os_definitions.h"
 
 extern "C" {
 
@@ -58,10 +56,7 @@ extern "C" {
 bool rtrace(Triangulation * t, RTraceOptions * options, std::string baseDir, std::string octname, bool do_irradiance, bool imm_irrad, std::string amb, std::vector<RAY> * rays)
 {
 
-	// Move to the base directory
-	CHDIR(&baseDir[0]);
-
-
+	
 		
 
 	if (do_irradiance) {
@@ -123,8 +118,6 @@ bool rtrace(Triangulation * t, RTraceOptions * options, std::string baseDir, std
 
 
 	
-	// Return to the original
-	CHDIR("..");
 	return true;
 }
 
@@ -144,21 +137,51 @@ bool rtrace_I(Triangulation * t, RTraceOptions * options, std::string baseDir, s
 bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
 {
     std::string command = "oconv - > " + octname + " 2> "+octname+".err";
-  	//FILE *octree = POPEN(&command[0], "w");
-  
-    FILE * file = fopen(&octname[0], "w");
+  	
+    //FILE *octree = POPEN(&command[0], "w");
+    FOPEN(octree, octname.c_str(), "w");
+
+    // check sky
+    if (options->getOption<bool>(OCONV_INCLUDE_SKY)) {
+      std::string sky = options->getOption<std::string>(OCONV_SKY);
+      if (sky == OCONV_USE_CURRENT_SKY) {
+        exporter.writeSky(octree);
+      }
+      else {
+        fprintf(octree, "!%s\n", &sky[0]);
+      }
+    }
 
     // Add all the materials
-    exporter.writeMaterials(file);
+    bool blackGeometry = options->getOption<bool>(OCONV_USE_BLACK_GEOMETRY);
+    if (blackGeometry) {      
+      fprintf(octree, "void plastic black 0 0 5 0.9 0 0 0 0 \n\n");      
+    }
+    exporter.writeMaterials(octree);
+    
+    // Check windows
+    if (options->getOption<bool>(OCONV_INCLUDE_WINDOWS)) {
+      exporter.writeWindows(octree);
+    }
+
+    // check lights
+    if (options->getOption<bool>(OCONV_LIGHTS_ON)) {
+      std::cerr << "OCONVing lights is still not supported\n";
+    }
 
 
     // Add the geometry
-    exporter.writeLayers(file, NULL);
+    if (blackGeometry) {
+      exporter.writeLayers(octree, "black");
+    }
+    else {
+      exporter.writeLayers(octree, NULL);
+    }
 
 
-    fclose(file);
+
     
-	//PCLOSE(octree);
+	PCLOSE(octree);
 
     return true;
 }

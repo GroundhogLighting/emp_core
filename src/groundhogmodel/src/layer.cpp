@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -22,10 +22,9 @@
 #include "./layer.h"
 #include "common/utilities/io.h"
 
-Layer::Layer(std::string layerName) 
+Layer::Layer(std::string * layerName) 
 {
-	DEBUG_MSG("Creating layer " + layerName);
-	name = layerName;
+	name = *layerName;
 };
 
 Layer::~Layer() 
@@ -36,10 +35,7 @@ Layer::~Layer()
 	}
 	for (unsigned int i = 0; i < instances.size(); i++) {
 		delete instances[i];
-	}
-
-	DEBUG_MSG("Destroying layer " + name);
-
+	}	
 };
 
 bool Layer::compareName(std::string * layerName) 
@@ -57,9 +53,9 @@ std::vector <ComponentInstance * > * Layer::getComponentInstancesRef()
 	return &instances;
 }
 
-std::string Layer::getName() 
+std::string * Layer::getName() 
 {
-	return name;
+	return &name;
 }
 
 std::vector <Otype * > * Layer::getObjectsRef() 

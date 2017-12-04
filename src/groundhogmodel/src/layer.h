@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -49,7 +49,7 @@ public:
 	@author German Molina
 	@param[in] layerName The name of the Layer
 	*/
-	Layer(std::string layerName);
+	Layer(std::string * layerName);
 
 	//! Destroys a Layer object
 	/*!
@@ -86,7 +86,7 @@ public:
 	@author German Molina
 	@return The name of the Layer
 	*/
-	std::string getName();
+	std::string * getName();
 
 	//! Retrieves the reference to the Otype vector
 	/*!

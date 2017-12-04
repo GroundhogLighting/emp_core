@@ -4,9 +4,8 @@
 #include "config_constants.h"
 
 
-Glass::Glass(json j)
+Glass::Glass(json * j)
 {
-	DEBUG_MSG("Creating Glass");
 	primitiveLength = 9;
 	fillFromJSON(j);
 }
@@ -31,7 +30,7 @@ bool Glass::writeInRadianceFormat(FILE * file)
 {
 
     fprintf(file, "void %s %s\n0\n0\n", &type[0], &name[0]);
-	fprintf(file, "3 %f %f %f", r, g, b);
+	fprintf(file, "3 %f %f %f\n", r, g, b);
 	
 	return true;
 }

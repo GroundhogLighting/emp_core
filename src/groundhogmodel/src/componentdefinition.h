@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include "./componentdefinition.h"
 #include "./componentinstance.h"
 #include "./otype.h"
 
@@ -84,7 +83,7 @@ public:
 	@author German Molina
 	@return The name of the ComponentDefinition
 	*/
-	std::string getName();
+	std::string * getName();
 	
 	//! Retrieves an Otype reference of the ComponentDefinition
 	/*!

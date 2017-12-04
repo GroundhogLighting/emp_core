@@ -25,23 +25,21 @@
 
 Material::Material()
 {	
-	DEBUG_MSG("Creating a new material");
 
 }
 
 Material::~Material()
 {
-	DEBUG_MSG("Destroying material " + name);
 }
 
-std::string Material::getName()
+std::string * Material::getName()
 {
-	return name;
+	return &name;
 }
 
-std::string Material::getType()
+std::string * Material::getType()
 {
-	return type;
+	return &type;
 }
 
 bool Material::compareName(std::string * otherName)
@@ -49,33 +47,33 @@ bool Material::compareName(std::string * otherName)
 	return (name == *otherName);
 }
 
-bool Material::fillFromJSON(json j)
+bool Material::fillFromJSON(json * j)
 {
 	try {
-		name = j.at("name").get<std::string>();
-		type = j.at("class").get<std::string>();
+		name = j->at("name").get<std::string>();
+		type = j->at("class").get<std::string>();
 
 		// Get the RAD tokens
 		std::vector<std::string> tokens = std::vector<std::string>();
-		std::string rad = j["rad"];
+		std::string rad = (*j)["rad"];
 		tokenize(&rad, &tokens);
 
 		// check if correct number of tokens
 		if (tokens.size() != primitiveLength) {
-			fatal("Incorrect primitive when parsing -- " + type, __LINE__, __FILE__);
-			return false;
+          FATAL(errorMessage,"Incorrect primitive when parsing -- " + type);
+		  return false;
 		}
 
 		// Parse primitive tokens
 		if (!parsePrimitive(&tokens)) {
-			fatal("Error while parsing primitive", __LINE__, __FILE__);
+			FATAL(errorMessage,"Error while parsing primitive");
 			return false;
 		}
 	}
-	catch (const std::exception & e){
-		fatal("Error when converting JSON into Material", __LINE__, __FILE__);
-		fatal(e.what(),__LINE__,__FILE__);
-		return false;
+	catch (const std::exception & ex){
+		FATAL(errorMessage,"Error when converting JSON into Material");
+        FATAL(errorMessage2,ex.what());
+        return false;
 	}
 
 	return true;

@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -95,8 +95,9 @@ public:
 	{
 		Workplane * wp = model->getWorkplaneByName(workplane);
 		if (wp == NULL) {
-			warn("Workplane " + workplane + " was not found in model");
-			return false;
+          std::string m = "Workplane " + workplane + " was not found in model";
+		  warn(&m[0]);
+		  return false;
 		}
 
 		result = new Triangulation(wp->getPolygonRef(0));
