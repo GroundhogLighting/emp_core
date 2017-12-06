@@ -28,12 +28,16 @@
 #define MPE_POLY2TRI_IMPLEMENTATION
 #include "fast-poly2tri/MPE_fastpoly2tri.h"
 
+Triangulation::Triangulation()
+{
+
+}
 
 Triangulation::Triangulation(Polygon3D * aPolygon)
 {
 	// initialize without points
 	polygon = aPolygon;
-	triangles = std::vector < Triangle * >();	
+	triangles = std::vector < Triangle * >();	    
 }
 
 Triangulation::~Triangulation()
@@ -45,7 +49,6 @@ Triangulation::~Triangulation()
 		delete triangles[i];
 	}
 }
-
 
 
 size_t Triangulation::addTriangle(Triangle * t) {
@@ -89,7 +92,7 @@ bool Triangulation::addPointToTriangle(size_t index, Point3D * point, int code)
 	}
 }
 
-bool Triangulation::addPoint(Point3D * point)
+bool Triangulation::addPoint(Point3D * point, bool warn)
 {
 	// Iterate through triangles to check
 	int code;
@@ -102,8 +105,12 @@ bool Triangulation::addPoint(Point3D * point)
 			return addPointToTriangle(i, point, code);
 					
 	}
-	FATAL(errorMessage,"Point is not in any triangle");
-	return false; // triangle not found
+
+    if (warn) {
+	  FATAL(errorMessage,"Point is not in any triangle");
+    }
+	
+    return false; // triangle not found
 }
 
 
@@ -520,7 +527,7 @@ void Triangulation::clean()
 	}
 }
 
-void Triangulation::refine(double maxArea)
+void Triangulation::refine(double maxArea, double maxAspectRatio)
 {	
 	for (size_t i = 0; i < nTriangles; i++) {
 		if (triangles[i] == NULL)
@@ -541,7 +548,7 @@ void Triangulation::refine(double maxArea)
 			}
 		}
 
-		if (triangles[i]->getAspectRatio() > 1 || s->getLength() > 0.2) {			
+		if (triangles[i]->getAspectRatio() > maxAspectRatio) {
 			// add midpoint
 			double dX = s->start->getX() + s->end->getX(); 
 			double dY = s->start->getY() + s->end->getY(); 
@@ -554,24 +561,26 @@ void Triangulation::refine(double maxArea)
 			Point3D c = triangles[i]->getCircumCenter();
 			// Since the circumcenter may be in another triangle, we need 
 			// to search for it.
-			addPoint(new Point3D(c.getX(), c.getY(), c.getZ()));		
+			addPoint(new Point3D(c.getX(), c.getY(), c.getZ()),false);		
 			restoreDelaunay();			
 		}
 	}
 }
 
 
-bool Triangulation::mesh(double maxArea)
+bool Triangulation::mesh(double maxArea, double maxAspectRatio)
 {	
 
 	// Create a constrained delaunay triangulation
-	doCDT();
-	refine(maxArea);
-	return true;
+  if (!doCDT())
+    return false;
+
+  refine(maxArea, maxAspectRatio);
+  return true;
 }
 
 
-void Triangulation::doCDT() {
+bool Triangulation::doCDT() {
 
 	// Create a 2D version of this polygon
 	Polygon3D * polygon2D = polygon->get2DPolygon();
@@ -583,8 +592,9 @@ void Triangulation::doCDT() {
 
 	if (!polygon2D->getInverseAuxiliarAxes(polygon->getNormal(), &i, &j, &k)) {
 		FATAL(errorMessage,"Impossible to triangulate because of an error in calculating inverse of auxiliar axes");
-		return;
+		return false;
 	}
+    
 
 	// The maximum number of points you expect to need
 	// This value is used by the library to calculate
@@ -682,6 +692,7 @@ void Triangulation::doCDT() {
 	delete polygon2D;
 
 	resetNeighborhoods();
+    return true;
 }
 
 
@@ -731,3 +742,7 @@ void Triangulation::resetNeighborhoods()
 	}
 }
 
+Polygon3D * Triangulation::getPolygon()
+{
+  return polygon;
+}

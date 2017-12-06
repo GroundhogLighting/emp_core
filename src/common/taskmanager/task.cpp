@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 Glare
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -31,15 +31,15 @@ Task::~Task()
 	
 }
 
-void Task::setName(std::string n)
+void Task::setName(std::string * n)
 {
-	name = n;
+	name = *n;
 }
 
 
-std::string Task::getName()
+std::string * Task::getName()
 {
-	return name;
+	return &name;
 }
 
 void Task::addDependency(Task * t)

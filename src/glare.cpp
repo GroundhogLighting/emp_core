@@ -130,7 +130,6 @@ bool Glare::solve(int argc, char* argv[])
 
 		result = lua_pcall(L, 0, LUA_MULTRET, 0);
 		if (result) {
-			//std::cerr << "Fatal: Error when executing script file '" << secondArgument << "'" << std::endl;
 			std::cerr << lua_tostring(L, -1) << std::endl;
 			return false;
 		}
@@ -155,7 +154,7 @@ bool Glare::solve(int argc, char* argv[])
 		if (!stringInclude(secondArgument, ".")) {
 			// Radiance format... no extension
 			taskManager.addTask(new ExportRadianceDirWithWorkplanes(secondArgument,&model,verbose));
-			taskManager.solve();
+            taskManager.solve();
 		}
 		else {
 			FATAL(errorMessage,"Unrecognized file extension in " + secondArgument);

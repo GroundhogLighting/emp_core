@@ -44,7 +44,7 @@ size_t TaskManager::addTask(Task * t)
 	size_t currentIndex = tasks.size();
 
 	// Check if the Task exists
-	size_t n = tasks.size();
+	size_t n = currentIndex;
 	for (size_t i = 0; i < n; i++) {
 		if (compareTasks(tasks[i], t)) {
 			// Task is redundant... delete, add dependand and return
@@ -143,7 +143,7 @@ void TaskManager::print(char * filename)
 	  Task * task = tasks[i];
       size_t nDep = task->countDependencies();
       for (size_t j = 0; j < nDep; j++) {                   
-        std::string ln = "\"" + task->getDependencyRef(j)->getName() + "\" -> \"" + task->getName()+ "\"";
+        std::string ln = "\"" + *(task->getDependencyRef(j)->getName()) + "\" -> \"" + *(task->getName())+ "\"";
         if (filename == NULL) {
           std::cout << ln << ";\n";
         }
@@ -173,4 +173,13 @@ bool TaskManager::compareTasks(Task * a, Task * b)
 		return false;
 
 	return a->isEqual(b);
+}
+
+void TaskManager::clean()
+{
+  size_t nTasks = countTasks();
+  for (size_t i = 0; i < nTasks; i++) {
+    delete tasks[i];    
+  }
+  tasks.erase(tasks.begin(), tasks.end());
 }

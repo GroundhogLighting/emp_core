@@ -1,0 +1,8 @@
+!xform ./Materials/Default-Material.mat
+!xform ./Materials/[Chris_Shirt].mat
+!xform ./Materials/[Chris_Shoe].mat
+!xform ./Materials/[Chris_Skin].mat
+!xform ./Materials/[Chris_Shoe_Sole].mat
+!xform ./Materials/[Chris_Hair].mat
+!xform ./Materials/[Chris_Pants].mat
+!xform ./Materials/Default-3mm-Clear-Glass.mat

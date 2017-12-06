@@ -33,7 +33,8 @@ int get_workplane_list(lua_State * L)
 	
 	// push workplane names
 	for (size_t i = 0; i < nwps; i++) {
-		lua_pushstring(L, &(model->getWorkplaneRef(i)->getName())[0]);
+      std::string * name = model->getWorkplaneRef(i)->getName();
+		lua_pushstring(L, &name->at(0));
 		lua_seti(L, 1, i+1); 
 	}
 

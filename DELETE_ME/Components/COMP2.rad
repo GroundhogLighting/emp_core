@@ -1,0 +1,4 @@
+!xform -s 1.000000 -rz 45.000000 -ry 0.000000 -rx 45.000000 -t 3.535534 3.535534 4.571068 ../Components/Component-1.rad
+!xform -s 1.000000 -rz 0.000000 -ry 0.000000 -rx 45.000000 -t 7.071068 6.035534 0.000000 ../Components/Component-1.rad
+
+

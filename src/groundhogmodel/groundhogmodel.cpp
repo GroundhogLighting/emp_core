@@ -209,7 +209,7 @@ Workplane * GroundhogModel::getWorkplaneRef(size_t i)
 Workplane * GroundhogModel::getWorkplaneByName(std::string wp)
 {
 	for (size_t i = 0; i < workplanes.size(); i++) {
-		if (workplanes[i]->getName() == wp)
+		if (*(workplanes[i]->getName()) == wp)
 			return workplanes[i];
 	}	
 	return NULL;
@@ -307,4 +307,18 @@ Date * GroundhogModel::getDate()
 RTraceOptions * GroundhogModel::getRTraceOptions()
 {
 	return &rtraceOptions;
+}
+
+
+Material * GroundhogModel::hasMaterial(std::string * matName)
+{
+  size_t nMaterials = materials.size();
+
+  for (size_t i = 0; i < nMaterials; i++)
+  {
+    if (materials[i]->compareName(matName)) {
+      return materials[i];
+    }
+  }
+  return NULL;
 }

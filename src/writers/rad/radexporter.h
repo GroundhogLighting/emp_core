@@ -52,13 +52,6 @@ public:
 	*/
 	~RadExporter();
 
-	//! Same as exportModel() but it will also export the Workplanes
-	/*!
-	@author German Molina
-	@return success
-	*/
-	bool RadExporter::exportModelWithWorkplanes();
-
 	//! Exports a GroundhogModel in Radiance format.
 	/*!
 	Will call other functions of the object with the purpose of creating
@@ -170,27 +163,6 @@ public:
     @param[in] file the file
     */
     bool writeWindows(FILE * file);
-
-	//! Writes all the Workplanes in Radiance format
-	/*!
-	@author German Molina
-	@return success
-	@param[in] dir The subdirectory to export
-	*/
-	bool writeWorkplanes(char * dir);
-
-	//! Writes a Polygon3D that represents a Workplane
-	/*!
-	This method takes a Polygon3D with holes, triangulates it and writes
-	the files required.
-
-	@author German Molina
-	@param[in] ptsFile The file where the points (sensors) get written
-	@param[in] pxlFile The file where the pixels (i.e. triangles) get written
-	@param[in] wp The Polygon3D to triangulate and write
-	@return success
-	*/
-	bool writeWorkplane(std::ofstream * ptsFile, std::ofstream * pxlFile, Polygon3D * wp);
 
 	//! Writes all the Material objects in Radiance format
 	/*!

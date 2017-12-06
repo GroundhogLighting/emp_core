@@ -42,8 +42,8 @@ void Workplane::addPolygon(Polygon3D * polygon) {
 	polygons.push_back(polygon);
 }
 
-std::string Workplane::getName() {
-	return name;
+std::string * Workplane::getName() {
+	return &name;
 }
 
 bool Workplane::compareName(std::string * otherName) {

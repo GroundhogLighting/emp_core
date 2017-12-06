@@ -46,13 +46,14 @@
 #include <SketchUpAPI/model/camera.h>
 #include <SketchUpAPI/model/shadow_info.h>
 #include <SketchUpAPI/model/material.h>
+#include <SketchUpAPI/model/group.h>
 
 #include <vector>
 #include <string>
 #include <iostream>
 #include <fstream>
 
-
+#define CHECK_SU(x) checkSUResult(x,"x",__LINE__)
 
 SKPReader::SKPReader(GroundhogModel * ghmodel, bool newVerbose) 
 {
@@ -63,11 +64,15 @@ SKPReader::SKPReader(GroundhogModel * ghmodel, bool newVerbose)
 	suModel = SU_INVALID;
 
 	groundhogDictionaryName = SU_INVALID;
+
+    CHECK_SU(SUStringCreateFromUTF8(&groundhogDictionaryName, SKP_GROUNDHOG_DICTIONARY));
+    /*
 	checkSUResult(
 		SUStringCreateFromUTF8(&groundhogDictionaryName, SKP_GROUNDHOG_DICTIONARY),
 		"SUStringCreateFromUTF8",
 		__LINE__
 	);
+    */
 
 	model = ghmodel;
 	verbose = newVerbose;
@@ -78,11 +83,14 @@ SKPReader::~SKPReader()
 	
 	
 	//release dictionary
+  CHECK_SU(SUStringRelease(&groundhogDictionaryName));
+  /*
 	checkSUResult(
 		SUStringRelease(&groundhogDictionaryName),
 		"SUStringRelease",
 		__LINE__
 	);
+  */
 	
 	// Must release the model or there will be memory leaks
 	SUModelRelease(&suModel);
@@ -174,9 +182,18 @@ bool SKPReader::parseSKPModel(std::string inputFile)
 	if(!loadLayers())
 		return false;
 
-	// load components
+	// load components and groups
 	if (!loadComponentDefinitions())
 		return false;
+
+    if (!loadGroupDefinitions())
+      return false;
+
+    if (!fillComponentDefinitions())
+      return false;
+
+    if (!fillGroupDefinitions())
+      return false;
 
 	// Fill layers and load related surfaces, discrimitating between
 	// workplanes, windows, etc.
@@ -194,8 +211,6 @@ bool SKPReader::parseSKPModel(std::string inputFile)
 	// Load weather
 	if (!loadWeather())
 		return false;
-
-
 	
 	return true;
 };
@@ -669,38 +684,75 @@ bool SKPReader::bulkFacesIntoVector(std::vector <Otype * > * dest, SUEntitiesRef
 	return true;
 }
 
+
 bool SKPReader::loadComponentDefinition(SUComponentDefinitionRef definition) 
 {
-	//get the name
-	std::string definitionName;
-	if (!getSUComponentDefinitionName(definition, &definitionName)) {
-		warn("Impossible to get name of component");
-		return false;
-	};
+  // Check if it has label
+  std::string label;
+  if (getSUEntityLabel(SUComponentDefinitionToEntity(definition), &label)) {
 
-	// get entities
-	SUEntitiesRef entities;
-	if (!checkSUResult(
-		SUComponentDefinitionGetEntities(definition, &entities),
-		"SUComponentDefinitionGetEntities",
-		__LINE__
-	)) return false;
+    if (label == SKP_SOLVED_WORKPLANE)
+      return true;
 
-	// Create the definition
-	ComponentDefinition * componentDefinition = new ComponentDefinition(&definitionName);
+    if (label == SKP_PHOTOSENSOR) {
+      if (!addPhotosensorsToModel(definition)) {
+        FATAL(errorMessage, "Error when trying to add Photosensos to the model");
+        return false;
+      }
+    }
+  }
 
-	model->addComponentDefinition(componentDefinition);
+  //get the name
+  std::string definitionName;
+  if (!getSUComponentDefinitionName(definition, &definitionName)) {
+	  warn("Impossible to get name of component");
+	  return false;
+  };
 
-	// Load faces
-	bulkFacesIntoVector(componentDefinition->getObjectsRef(), entities);
+  // Create the definition
+  ComponentDefinition * componentDefinition = new ComponentDefinition(&definitionName);
 
-	// load instances
-	bulkComponentInstancesIntoVector(componentDefinition->getComponentInstancesRef(), entities);
+  // add it to the model
+  model->addComponentDefinition(componentDefinition);  
 
-	return true;
+  return true;
 }
 
-bool SKPReader::loadComponentDefinitions() 
+bool SKPReader::loadComponentDefinitions()
+{
+  // count the component definitions
+  size_t countDefinitions = 0;
+  if (!checkSUResult(
+    SUModelGetNumComponentDefinitions(suModel, &countDefinitions),
+    "SUModelGetNumComponentDefinitions",
+    __LINE__
+  )) return false;
+
+  // return if none
+  if (countDefinitions == 0) {
+    inform("No component definitions in model", verbose);
+    return true; // success
+  }
+  INFORM(i, std::to_string(countDefinitions) + " component definitions in model", verbose);
+
+  // get the component definitions
+  std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
+  if (!checkSUResult(
+    SUModelGetComponentDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions),
+    "SUModelGetComponentDefinitions",
+    __LINE__
+  )) return false;
+
+  // Now, load One by One
+  for (size_t i = 0; i < countDefinitions; i++) {
+    loadComponentDefinition(definitions[i]);
+  }
+  return true;
+}
+
+
+
+bool SKPReader::fillComponentDefinitions() 
 {
 	// count the component definitions
 	size_t countDefinitions = 0;
@@ -715,7 +767,6 @@ bool SKPReader::loadComponentDefinitions()
 		inform("No component definitions in model",verbose);
 		return true; // success
 	}
-	INFORM(i,std::to_string(countDefinitions) + " definitions in model",verbose);
 
 	// get the component definitions
 	std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
@@ -727,30 +778,158 @@ bool SKPReader::loadComponentDefinitions()
 
 	// Now, load One by One
 	for (size_t i = 0; i < countDefinitions; i++) {
-		// Check if it has label
-		std::string label;
-		if (getSUEntityLabel(SUComponentDefinitionToEntity(definitions[i]), &label)) {
-			
-			if (label == SKP_SOLVED_WORKPLANE)
-				continue;
+      
+      //get the name
+      std::string definitionName;
+      if (!getSUComponentDefinitionName(definitions[i], &definitionName)) {
+        warn("Impossible to get name of component");
+        return false;
+      };
 
-			if (label == SKP_PHOTOSENSOR) {
-				if (!addPhotosensorsToModel(definitions[i])) {
-					FATAL(errorMessage,"Error when trying to add Photosensos to the model");
-					return false;
-				}
-			}
-		} 
-		else { // if it has no label
-			// has no label, load the definition
-			if (!loadComponentDefinition(definitions[i])) {
-				warn("Impossible to load component definition to model");
-				continue;
-			}
-		}
+      ComponentDefinition * ghDefinition = model->getComponentDefinitionByName(&definitionName);
 
+      // get entities
+      SUEntitiesRef entities;
+      if (!checkSUResult(
+      SUComponentDefinitionGetEntities(definitions[i], &entities),
+      "SUComponentDefinitionGetEntities",
+      __LINE__
+      )) return false;
+
+
+      // Load faces
+      bulkFacesIntoVector(ghDefinition->getObjectsRef(), entities);
+
+      // load instances
+      bulkComponentInstancesIntoVector(ghDefinition->getComponentInstancesRef(), entities);
+      
 	}
 	return true;
+  
+}
+
+
+
+bool SKPReader::fillGroupDefinitions()
+{
+  // count the component definitions
+  size_t countDefinitions = 0;
+  if (!checkSUResult(
+    SUModelGetNumGroupDefinitions(suModel, &countDefinitions),
+    "SUModelGetNumComponentDefinitions",
+    __LINE__
+  )) return false;
+
+  // return if none
+  if (countDefinitions == 0) {
+    inform("No component definitions in model", verbose);
+    return true; // success
+  }
+
+  // get the component definitions
+  std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
+  if (!checkSUResult(
+    SUModelGetGroupDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions),
+    "SUModelGetComponentDefinitions",
+    __LINE__
+  )) return false;
+
+  // Now, load One by One
+  for (size_t i = 0; i < countDefinitions; i++) {
+
+    std::string definitionName;
+    if (!getSUComponentDefinitionName(definitions[i], &definitionName)) {
+      warn("Impossible to get name of component");
+      return false;
+    };
+
+    ComponentDefinition * ghDefinition = model->getComponentDefinitionByName(&definitionName);
+
+    // get entities
+    SUEntitiesRef entities;
+    if (!checkSUResult(
+      SUComponentDefinitionGetEntities(definitions[i], &entities),
+      "SUComponentDefinitionGetEntities",
+      __LINE__
+    )) return false;
+
+
+    // Load faces
+    bulkFacesIntoVector(ghDefinition->getObjectsRef(), entities);
+
+    // load instances
+    bulkComponentInstancesIntoVector(ghDefinition->getComponentInstancesRef(), entities);
+
+  }
+  return true;
+
+}
+
+bool SKPReader::loadInstance(SUComponentInstanceRef instance)
+{
+  
+  std::cout << "about to load............" << std::endl;
+  // ignore instances with certain labels
+  std::string label;
+  if (getSUEntityLabel(SUComponentInstanceToEntity(instance), &label)) {
+    if (label == SKP_PHOTOSENSOR)
+      return true;
+
+    if (label == SKP_SOLVED_WORKPLANE)
+      return true;
+  }
+
+  // get name of layer
+  SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instance);
+  std::string layerName;
+  if (!getSUDrawingElementLayerName(drawingElement, &layerName))
+    return false;
+
+  Layer * layerRef = model->getLayerByName(&layerName);
+  if (layerRef == NULL) {
+    return false;
+  }
+
+  std::cout << " Addding  instance to " << *(layerRef->getName()) << std::endl;
+
+  addComponentInstanceToVector(layerRef->getComponentInstancesRef(), instance);
+  
+  return true;
+}
+
+
+bool SKPReader::loadGroupDefinitions()
+{
+  
+  // count the component definitions
+  size_t countDefinitions = 0;
+  if (!checkSUResult(
+    SUModelGetNumGroupDefinitions(suModel, &countDefinitions),
+    "SUModelGetNumComponentDefinitions",
+    __LINE__
+  )) return false;
+
+  // return if none
+  if (countDefinitions == 0) {
+    inform("No Group definitions in model", verbose);
+    return true; // success
+  }
+  INFORM(i, std::to_string(countDefinitions) + " group definitions in model", verbose);
+
+  // get the component definitions
+  std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
+  if (!checkSUResult(
+    SUModelGetGroupDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions),
+    "SUModelGetComponentDefinitions",
+    __LINE__
+  )) return false;
+
+  // Now, load One by One
+  for (size_t i = 0; i < countDefinitions; i++) {
+    loadComponentDefinition(definitions[i]);
+  }
+  
+  return true;
 }
 
 bool SKPReader::loadLayersContent() 
@@ -764,7 +943,7 @@ bool SKPReader::loadLayersContent()
 	)) return false;
 
 
-	// count faces
+	// count and load faces
 	size_t faceCount = 0;
 	if (!checkSUResult(
 		SUEntitiesGetNumFaces(entities, &faceCount),
@@ -823,61 +1002,65 @@ bool SKPReader::loadLayersContent()
 			layerRef->getObjectsRef()->push_back(face);
 
 		} // end of iterating faces
-	
+	            
 	}
 	else {
-		// Do not return... there may be instances
+		// Do not return... there may be groups or component instances
 		warn("No faces in model");		
 	}
 
 
 	// load component instances
-	size_t instanceCount;
+	size_t instanceCount = 0;
 	if (!checkSUResult(
 		SUEntitiesGetNumInstances(entities, &instanceCount),
 		"SUEntitiesGetNumInstances",
 		__LINE__
 	)) return false;
 
-	if (instanceCount == 0)
-		return true;
+    if (instanceCount > 0) {
+      std::cout << " ----- writing " << instanceCount << " component instances" << std::endl;
+	  std::vector<SUComponentInstanceRef> instances(instanceCount);
+	  if (!checkSUResult(
+		  SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount),
+		  "SUEntitiesGetInstances",
+		  __LINE__
+	  )) return false;
 
-	std::vector<SUComponentInstanceRef> instances(instanceCount);
-	if (!checkSUResult(
-		SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount),
-		"SUEntitiesGetInstances",
-		__LINE__
-	)) return false;
+	  // fill layers with the instances
+	  for (size_t i = 0; i < instanceCount; i++) {		
+        loadInstance(instances[i]);
+	  }      
 
-	// fill layers with the instances
-	for (size_t i = 0; i < instanceCount; i++) {
-		
-		// ignore instances with certain labels
-		std::string label;
-		if (getSUEntityLabel(SUComponentInstanceToEntity(instances[i]), &label)) {
-			if(label == SKP_PHOTOSENSOR)
-				continue;
+    } // end loading component instances.
 
-			if (label == SKP_SOLVED_WORKPLANE)
-				continue;
+    // Load group instances   
+    size_t groupCount = 0;
+    if (!checkSUResult(
+      SUEntitiesGetNumGroups(entities, &groupCount),
+      "SUModelGetEntities",
+      __LINE__
+    )) return false;
 
-		}
+    if (groupCount > 0) {
+      std::cout << " ----- writing " << groupCount << " Groups" << std::endl;
+      // Declare the vector
+      std::vector<SUGroupRef> groups(groupCount);
+      
+      // Fill vector
+      if (!checkSUResult(
+        SUEntitiesGetGroups(entities, groupCount, &groups[0], &groupCount),
+        "SUEntitiesGetInstances",
+        __LINE__
+      )) return false;
 
+      // fill layers with the instances
+      for (size_t i = 0; i < groupCount; i++) {
+        SUComponentInstanceRef instance = SUGroupToComponentInstance(groups[i]);
+        loadInstance(instance);        
+      }
 
-		// get name of layer
-		SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instances[i]);
-		std::string layerName;
-		if (!getSUDrawingElementLayerName(drawingElement, &layerName)) 
-			return false;
-
-		Layer * layerRef = model->getLayerByName(&layerName);
-		if (layerRef == NULL) {
-			return false;
-		}
-
-		addComponentInstanceToVector(layerRef->getComponentInstancesRef(), instances[i]);
-
-	}
+    } // end loading groups
 
 	return true;
 } // end of Load Faces
@@ -1045,36 +1228,71 @@ bool SKPReader::getSUEntityName(SUEntityRef entity, std::string * name)
 
 
 bool SKPReader::bulkComponentInstancesIntoVector(std::vector <ComponentInstance * > * dest, SUEntitiesRef  entities) {
-	// load component instances
-	size_t instanceCount;
+
+  /* LOAD THE COMPONENT INSTANCES FIRST */	
+	size_t instanceCount = 0;
 	if (!checkSUResult(
 		SUEntitiesGetNumInstances(entities, &instanceCount),
 		"SUEntitiesGetNumInstances",
 		__LINE__
 	)) return false;
 
-	if (instanceCount == 0) {
-		return true;
-	}
+	if (instanceCount != 0) {		
+	  std::vector<SUComponentInstanceRef> instances(instanceCount);
+	  if (!checkSUResult(
+		  SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount),
+		  "SUEntitiesGetInstances",
+		  __LINE__
+	  )) return false;
 
-	std::vector<SUComponentInstanceRef> instances(instanceCount);
-	if (!checkSUResult(
-		SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount),
-		"SUEntitiesGetInstances",
-		__LINE__
-	)) return false;
-
-	// fill layers with the instances
-	for (size_t i = 0; i < instanceCount; i++) {
-		// get name of layer
-		SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instances[i]);
-		std::string layerName;
-		if (!getSUDrawingElementLayerName(drawingElement, &layerName))
-			return false;
+	  // fill layers with the instances
+	  for (size_t i = 0; i < instanceCount; i++) {
+		  // get name of layer
+		  SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instances[i]);
+		  std::string layerName;
+		  if (!getSUDrawingElementLayerName(drawingElement, &layerName))
+			  return false;
 		
-		addComponentInstanceToVector(dest, instances[i]);
+		  addComponentInstanceToVector(dest, instances[i]);
 
+	  }
 	}
+
+    /* THEN LOAD THE GROUPS */
+    size_t groupInstanceCount = 0;
+    if (!checkSUResult(
+      SUEntitiesGetNumGroups(entities, &groupInstanceCount),
+      "SUEntitiesGetNumInstances",
+      __LINE__
+    )) return false;
+
+    std::cout << "----------- group instances " << groupInstanceCount << std::endl;
+
+    if (groupInstanceCount != 0) {
+      
+      std::vector<SUGroupRef> groups(groupInstanceCount);
+      if (!checkSUResult(
+        SUEntitiesGetGroups(entities, groupInstanceCount, &groups[0], &groupInstanceCount),
+        "SUEntitiesGetInstances",
+        __LINE__
+      )) return false;
+
+      // fill layers with the instances
+      for (size_t i = 0; i < groupInstanceCount; i++) {
+        // Get drawing element
+        SUGroupRef group = groups[i];
+        SUComponentInstanceRef instance = SUGroupToComponentInstance(group);
+        SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instance);
+      
+        // get name of layer
+        std::string layerName;
+        if (!getSUDrawingElementLayerName(drawingElement, &layerName))
+          return false;
+
+        addComponentInstanceToVector(dest, instance);
+
+      }
+    }
 
 	return true;
 }
@@ -1351,22 +1569,26 @@ Material * SKPReader::addMaterialToModel(SUMaterialRef material)
 
 	SUEntityRef entityMat = SUMaterialToEntity(material);
 
+    // Check if the material exists
+    std::string name;
+    if (!getSUMaterialName(material, &name))
+      return false;
+
+    Material * m = model->hasMaterial(&name);
+    if (m != NULL)
+      return m;
+
 	// Check if it is a Radiance Material
 	std::string label;
+    
 	if (getSUEntityLabel(entityMat, &label)) {
 
 		// it is a Radiance material
 		if(label != SKP_MATERIAL){
 			FATAL(errorMessage,"Material with weird label " + label);
 			return NULL;
-		}
-
-		// get the name
-		std::string name;
-
-		if (!getSUMaterialName(material, &name))
-			return false;
-
+		}		
+		
 		// get the value
 		std::string value;
 		if (!getGHValueFromEntity(entityMat, &value,false)) {
@@ -1701,3 +1923,4 @@ bool SKPReader::loadWeather()
 
 	return loc->fillWeatherFromJSON(&j);
 }
+

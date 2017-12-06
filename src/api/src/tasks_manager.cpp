@@ -48,5 +48,4 @@ int printTaskManager(lua_State * L)
   }
 
   return 0;
-  return 0;
 }

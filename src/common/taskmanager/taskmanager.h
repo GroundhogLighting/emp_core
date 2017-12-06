@@ -102,4 +102,10 @@ public:
 	*/
 	bool compareTasks(Task * a, Task * b);
 
+    //! Removes all tasks
+    /*!
+    @author German Molina
+    */
+    void clean();
+
 };

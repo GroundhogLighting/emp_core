@@ -1,4 +1,4 @@
-#include <string>
+﻿#include <string>
 
 #include "config_constants.h"
 #include "versions.h"
@@ -21,7 +21,7 @@ extern "C" {
 int main(int argc, char* argv[]){	
 	
 	// Check if only some help is needed
-	if (strcmp(argv[1], "--help") == 0 || strcmp(argv[1] , "-h")== 0) {
+	if (argc == 1 || strcmp(argv[1], "--help") == 0 || strcmp(argv[1] , "-h")== 0) {
 		std::cout << USAGE << std::endl;
 		return 0;
 	}

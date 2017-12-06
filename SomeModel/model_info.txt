@@ -1,0 +1,10 @@
+country,USA
+city,Boulder-(CO)
+latitude,40.0183
+longitude,-105.242
+time zone,-7
+month,11
+day,8
+hour,13
+minute,30
+north correction,-0

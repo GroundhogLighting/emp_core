@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -69,7 +69,7 @@ public:
 	@author German Molina
 	@return the name;
 	*/
-	std::string getName();
+	std::string * getName();
 
 	//! Checks if the workplane has a certain name
 	/*!

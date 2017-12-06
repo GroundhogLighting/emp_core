@@ -246,6 +246,27 @@ public:
 	*/
 	bool loadComponentDefinitions();
 
+    //! Loads all the SUGroupDefinitions in the model
+    /*!
+    @author German Molina
+    @return success
+    */
+    bool loadGroupDefinitions();
+
+    //! Loads the contents of the SUComponentDefinitions in the model
+    /*!
+    @author German Molina
+    @return success
+    */
+    bool fillComponentDefinitions();
+
+    //! Loads the contents of the SUGroupDefinitions in the model
+    /*!
+    @author German Molina
+    @return success
+    */
+    bool fillGroupDefinitions();
+
 	//! Loads the contents of the SULayerRef in the suModel
 	/*!
 	Starts by importing all the SUFaceRef objects (as Face) and continues
@@ -513,4 +534,14 @@ public:
 	@param[out] value The value retrieved
 	*/
 	bool getValueFromModelGHDictionary(char * key, SUTypedValueRef * value);
+
+    //! Loads a SUComponentInstanceRef in the corresponding layer
+    /*!
+    @author German Molina
+    @param[in] instance
+    @return success
+    */
+    bool loadInstance(SUComponentInstanceRef instance);
+
+    
 };

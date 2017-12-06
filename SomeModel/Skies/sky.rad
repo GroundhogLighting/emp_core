@@ -1,0 +1,3 @@
+!gensky 11 8 13 -g 0.200000 -a 40.018309 -o -105.242139 -m -105.000000 +s 
+skyfunc glow skyglow 0 0 4 1 1 1 0 skyglow source skyball 0 0 4 0 0 1 360
+

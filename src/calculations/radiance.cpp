@@ -52,29 +52,24 @@ extern "C" {
 
 }
 
-#include <iostream>
 bool rtrace(Triangulation * t, RTraceOptions * options, std::string baseDir, std::string octname, bool do_irradiance, bool imm_irrad, std::string amb, std::vector<RAY> * rays)
 {
-
+    do_irrad = do_irradiance ? 1 : 0;
 	
-		
-
-	if (do_irradiance) {
-		do_irrad = 1; // +i
-	}
-	else {
-		do_irrad = 0;
-	}
-
-	
+    // Expose the provided options
 	options->exposeOptions();
+
+    // set the ambient file
 	ambfile = &amb[0];
 
+    // save the parameters
 	RAYPARAMS rp;
 	ray_save(&rp);
 	
+    // set up Radiance
 	ray_init(&octname[0]);
 
+    // trace a ray for each triangle
 	Triangle * tr;
 	for (size_t i = 0; i < t->getNumTriangles(); i++) {
 
@@ -86,6 +81,7 @@ bool rtrace(Triangulation * t, RTraceOptions * options, std::string baseDir, std
 		// then process
 		Point3D o = tr->getCenter();
 		
+        // set origin and direction
 		FVECT org = { o.getX(), o.getY(), o.getZ() };
 		FVECT dir = { 0, 0, 1 };
 		VCOPY((*rays)[i].rorg, org);
@@ -94,6 +90,7 @@ bool rtrace(Triangulation * t, RTraceOptions * options, std::string baseDir, std
 
 		double dmax = 0;
 
+        // calculate
 		rayorigin(&(*rays)[i], PRIMARY, NULL, NULL);
 		if (imm_irrad) {
 			VSUM((*rays)[i].rorg, org, dir, 1.1e-4);
@@ -109,14 +106,15 @@ bool rtrace(Triangulation * t, RTraceOptions * options, std::string baseDir, std
 			(*rays)[i].rmax = dmax;
 		}
 
+        // increase one
 		samplendx++;
+
+        // copy value
 		rayvalue(&((*rays)[i]));
 		
 	}
 
 	ray_done(1);
-
-
 	
 	return true;
 }
@@ -138,8 +136,8 @@ bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
 {
     std::string command = "oconv - > " + octname + " 2> "+octname+".err";
   	
-    //FILE *octree = POPEN(&command[0], "w");
-    FOPEN(octree, octname.c_str(), "w");
+    FILE *octree = POPEN(&command[0], "w");
+    //FOPEN(octree, octname.c_str(), "w");
 
     // check sky
     if (options->getOption<bool>(OCONV_INCLUDE_SKY)) {
@@ -155,7 +153,7 @@ bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
     // Add all the materials
     bool blackGeometry = options->getOption<bool>(OCONV_USE_BLACK_GEOMETRY);
     if (blackGeometry) {      
-      fprintf(octree, "void plastic black 0 0 5 0.9 0 0 0 0 \n\n");      
+      fprintf(octree, "void plastic black 0 0 5 0 0 0 0 0 \n\n");      
     }
     exporter.writeMaterials(octree);
     

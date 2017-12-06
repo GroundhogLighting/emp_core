@@ -343,13 +343,13 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 	double ny = k.getY();
 	double nz = k.getZ();	
 	
-	if (nz < GLARE_TINY) {
+	if (abs(nz) < GLARE_TINY) {
 		// Vertical planes	
 		i = Vector3D(0, 0, 1);
 		j = k%i;	
 	}
 	else {
-		// "normal" planes
+		// horizontal planes
 		if (nx != 0) {
 			i = Vector3D(1, 0, -nz / nx);
 			i.normalize();
@@ -373,5 +373,9 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 	// set values
 	*auxi = i; *auxj = j; *auxk = k;
 	
+    if (i.getLength() < GLARE_TINY || j.getLength() < GLARE_TINY || k.getLength() < GLARE_TINY) {
+      FATAL(errmsg, "Auxiliar axes are bad defined");
+    }
+
 	return true;
 }

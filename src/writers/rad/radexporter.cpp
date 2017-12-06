@@ -42,29 +42,10 @@ RadExporter::~RadExporter()
 	
 }
 
-
-bool RadExporter::exportModelWithWorkplanes()
-{
-	exportModel();
-
-	// write workplanes
-	if (!writeWorkplanes(GLARE_WORKPLANES_SUBFOLDER)) {
-		FATAL(errorMessage,"Error when exporing Layers");
-		return false;
-	}
-	return true;
-}
-
 bool RadExporter::exportModel() 
 {
 	inform("Beggining Radiance export", verbose);
-	/*
-	// Check if directory exists
-	if ((dexist(exportDir) && isDir(exportDir))) {
-		FATAL(errorMessage,"Export directory '" + exportDir + "' alredy exists... please delete it.");
-		return false;
-	}
-	*/
+	
 	// Create the directory
 	if (!createdir(exportDir)) {
 		FATAL(errorMessage,"Imposible to create Output directory");
@@ -577,90 +558,6 @@ bool RadExporter::writeWindows(FILE * file) {
 
   
   return true;
-}
-
-
-
-bool RadExporter::writeWorkplanes(char * dir) {	
-	size_t numWorkplanes = model->getNumWorkplanes();
-	INFORM(iMsg,"Exporting "+std::to_string(numWorkplanes)+" workplanes", verbose);
-	if (numWorkplanes == 0)
-		return true;
-	// create directory
-	std::string baseDir = exportDir + "/" + dir;
-	createdir(baseDir);
-	
-	for (size_t i = 0; i < numWorkplanes; i++) {
-
-		Workplane * wp = model->getWorkplaneRef(i);
-		std::string name = wp->getName();
-
-		size_t numPolygons = wp->getNumPolygons();
-		if (numPolygons <= 0) {
-			WARN(wMsg,"Empty Workplane " + name);
-			continue;
-		}
-
-		std::string ptsFileName = baseDir + "/" + name + ".pts";
-		std::string pxlFileName = baseDir + "/" + name + ".pxl";
-
-		// create and open files
-		std::ofstream ptsFile;
-		ptsFile.open(ptsFileName);
-		std::ofstream pxlFile;
-		pxlFile.open(pxlFileName);
-		
-		bool success;
-		for (size_t j = 0; j < numPolygons; j++) {
-			Polygon3D * p = wp->getPolygonRef(j);
-			success = writeWorkplane(&ptsFile, &pxlFile, p);
-		}
-		pxlFile.close();
-		ptsFile.close();
-
-		// Return false if something went wrong
-		if (!success) {
-			return false;
-		}
-	}
-	return true;
-}
-
-bool RadExporter::writeWorkplane(std::ofstream * ptsFile, std::ofstream * pxlFile, Polygon3D * wp) {
-	Vector3D normal = wp->getNormal();
-	double nx = normal.getX();
-	double ny = normal.getY();
-	double nz = normal.getZ();
-
-	Triangulation * t = new Triangulation(wp);
-	t->mesh(0.5);
-
-	size_t nTriangles = t->getNumTriangles();
-	
-	for (size_t i = 0; i < nTriangles; i ++ ) {
-		Triangle * triangle = t->getTriangleRef(i);
-		if (triangle == NULL)
-			continue;
-
-		double x = 0;
-		double y = 0;
-		double z = 0;
-		for (int j = 0; j < 3; j++) {
-			Point3D * p = triangle->getVertex(j);
-			double px = p->getX();
-			double py = p->getY();
-			double pz = p->getZ();
-			x += px;
-			y += py;
-			z += pz;
-			*pxlFile << px << GLARE_TAB << py << GLARE_TAB << pz << GLARE_TAB;
-		}
-		*pxlFile << "\n";
-		*ptsFile << x / 3 << GLARE_TAB << y / 3 << GLARE_TAB << z / 3 << GLARE_TAB << nx << GLARE_TAB << ny << GLARE_TAB << nz << "\n";
-	}
-
-	delete t;
-	return true;
 }
 
 

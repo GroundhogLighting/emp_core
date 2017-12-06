@@ -27,7 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 int exportToRadiance(lua_State * L)
 {
   GroundhogModel * model = getCurrentModel(L);
-  TaskManager * tm = getCurrentTaskManager(L);
+  
+  // Need an independent TaskManager for this
+  TaskManager * taskManager = new TaskManager();
 
   // Check argument number
   checkNArguments(L, 1);
@@ -37,10 +39,11 @@ int exportToRadiance(lua_State * L)
 
   // get target dir.
   std::string dir = lua_tostring(L, 1);
+    
+  taskManager->addTask(new ExportRadianceDirWithWorkplanes(dir, model, false));
+  taskManager->solve();
 
-  tm->addTask(new ExportRadianceDir(dir, model, false));
-
-  tm->solve();
-
+  delete taskManager;
+  
   return 0;
 }

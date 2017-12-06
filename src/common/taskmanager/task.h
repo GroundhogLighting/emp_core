@@ -70,7 +70,7 @@ public:
 	@author German Molina
 	@param[in] name The name to assign
 	*/
-	void setName(std::string name);
+	void setName(std::string * name);
 
 	
 	//! Retrieves the name of the Task
@@ -78,7 +78,7 @@ public:
 	@author German Molina
 	@return The name
 	*/
-	std::string getName();
+	std::string * getName();
 
 	//! Adds a dependency to the Task
 	/*!

@@ -356,4 +356,12 @@ public:
 	*/
 	RTraceOptions * getRTraceOptions();
 
+    //! Checks if a material with a certain name already exists
+    /*!
+    @author German Molina
+    @param matName The name of the material
+    @return NULL if does not exist, the material if it exist
+    */
+    Material * hasMaterial(std::string * matName);
+
 };

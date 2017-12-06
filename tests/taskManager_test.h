@@ -17,7 +17,8 @@ public:
 	TaskA(int i)
 	{
 		target = i;
-		setName("Task A" + std::to_string(i));
+        std::string name = "Task A" + std::to_string(i);
+		setName(&name);
 	}
 
 	bool isEqual(Task * t)
@@ -43,7 +44,8 @@ public:
 
 	TaskB(int a1, int a2)
 	{
-		setName("Task B");
+      std::string name = "Task B";
+		setName(&name);
 		
 		addDependency(new TaskA(a1));
 		addDependency(new TaskA(a2));
@@ -73,7 +75,8 @@ public:
 
 	TaskC(int a1, int a2, int newMult)
 	{
-		setName("Task C");
+      std::string name = "Task C";
+		setName(&name);
 		mult = newMult;
 		addDependency(new TaskB(a1,a2));
 	}
@@ -102,7 +105,7 @@ TEST(TaskManagerTest, addTask)
 	
 	m.addTask(new TaskC(a1,a2,mult));
 	ASSERT_EQ(m.countTasks(), 4); // C, B, A1, A2
-    m.print("graph.dot");
+    
 
 }
 
@@ -119,4 +122,21 @@ TEST(TaskManagerTest, solve)
 	int r = static_cast<TaskC *>(task)->result;
 
 	ASSERT_EQ(r, (a1 + a2)*mult);
+}
+
+TEST(TaskManagerTest, clean)
+{
+  TaskManager m = TaskManager();
+
+  int a1 = 4, a2 = 2, mult = 3;
+  Task * task = new TaskC(a1, a2, mult);
+  
+  m.addTask(task);
+  
+  ASSERT_EQ(m.countTasks(), 4);
+
+  // Clean
+  m.clean();
+
+  ASSERT_EQ(0, m.countTasks());
 }

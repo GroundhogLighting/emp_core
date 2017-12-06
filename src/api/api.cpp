@@ -138,7 +138,7 @@ void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager,
 
 	Exports the current model to a Radiance directory
 
-	@param[required] directory The name of the workplane	
+	@param[required] directory The directory where to export the model
 	*/
 	lua_register(L, "export_radiance_model", exportToRadiance);
 
