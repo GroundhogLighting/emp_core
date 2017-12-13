@@ -109,6 +109,9 @@ bool Glare::solve(int argc, char* argv[])
 			return false;
 		}
 
+        // Create task dictionary
+        std::map<std::string, TaskFactory> taskDictionary;
+
 		// Process LUA script
 		int status, result;
 
@@ -119,7 +122,7 @@ bool Glare::solve(int argc, char* argv[])
 		luaL_openlibs(L);
 
 		// Load API
-		loadAPI(L,&model,&taskManager,argc,argv);
+		loadAPI(L,&model, &taskDictionary, &taskManager,argc,argv);
 
 		// Load script
 		status = luaL_loadfile(L, secondArgument.c_str());

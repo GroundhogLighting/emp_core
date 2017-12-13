@@ -1019,7 +1019,6 @@ bool SKPReader::loadLayersContent()
 	)) return false;
 
     if (instanceCount > 0) {
-      std::cout << " ----- writing " << instanceCount << " component instances" << std::endl;
 	  std::vector<SUComponentInstanceRef> instances(instanceCount);
 	  if (!checkSUResult(
 		  SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount),
@@ -1043,7 +1042,6 @@ bool SKPReader::loadLayersContent()
     )) return false;
 
     if (groupCount > 0) {
-      std::cout << " ----- writing " << groupCount << " Groups" << std::endl;
       // Declare the vector
       std::vector<SUGroupRef> groups(groupCount);
       
@@ -1266,7 +1264,6 @@ bool SKPReader::bulkComponentInstancesIntoVector(std::vector <ComponentInstance 
       __LINE__
     )) return false;
 
-    std::cout << "----------- group instances " << groupInstanceCount << std::endl;
 
     if (groupInstanceCount != 0) {
       

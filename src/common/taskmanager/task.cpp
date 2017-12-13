@@ -43,20 +43,16 @@ std::string * Task::getName()
 }
 
 void Task::addDependency(Task * t)
-{
-	dependencies.push_back(t);
+{  
+  dependencies.push_back(t);
+  t->addDependant(this);
 }
 
-
-void Task::addDependencyIndex(size_t i)
+void Task::addDependant(Task * t)
 {
-	dependenciesIndexes.push_back(i);
+  dependants.push_back(t);
 }
 
-void Task::addDependantIndex(size_t i)
-{
-	dependantsIndexes.push_back(i);
-}
 
 size_t Task::countDependencies()
 {
@@ -69,22 +65,27 @@ Task * Task::getDependencyRef(size_t i)
 }
 
 
-size_t Task::getDependencyIndex(size_t i)
+Task * Task::getDependantRef(size_t i)
 {
-	return dependenciesIndexes[i];
-}
-
-size_t Task::getDependantIndex(size_t i)
-{
-	return dependantsIndexes[i];
+  return dependants[i];
 }
 
 
 size_t Task::countDependants()
 {
-	return dependantsIndexes.size();
+  return dependants.size();
 }
 
+void Task::replaceDependency(Task * a, Task * b)
+{
+  size_t n = dependencies.size();
+  for (size_t i = 0; i < n; i++) {
+    if (dependencies[i] == a) {
+      dependencies[i] = b;
+      return;
+    }
+  }
+}
 
 bool Task::solve()
 {

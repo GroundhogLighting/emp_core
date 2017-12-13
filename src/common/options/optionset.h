@@ -121,6 +121,18 @@ public:
       return data.at(opt).get<T>();
     }
 
+    //! Retrieves an option from the OptionSet
+    /*!
+    @author German Molina
+    @param[in] opt The option to retrieve
+    */
+    template<typename T>
+    T getOption(size_t i)
+    {            
+      return data.at(i).get<T>();
+    }
+
+
     
 
 

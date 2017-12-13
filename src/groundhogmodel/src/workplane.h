@@ -41,6 +41,7 @@ class Workplane {
 private:
 	std::string name; //!< Name of the workplane
 	std::vector <Polygon3D * > polygons; //!< The polygons in the workplane.
+    double maxArea = 0.25; //!< The desired 'pixel' resolution when triangulating
 
 public:
 
@@ -93,4 +94,11 @@ public:
 	@return The reference
 	*/
 	Polygon3D * getPolygonRef(size_t i);
+
+    //! Retrieves the maximum area for each pixel in the grid
+    /*!
+    @author German Molina
+    @return the area
+    */
+    double getMaxArea();
 };

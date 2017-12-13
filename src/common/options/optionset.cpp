@@ -20,7 +20,7 @@
 
 #include <typeinfo>
 
-#include "api/src/common.h" //  for filling optionsets with LUA tables
+#include "api/common.h" //  for filling optionsets with LUA tables
 #include "./optionset.h"
 #include <fstream>
 
@@ -36,10 +36,14 @@ bool OptionSet::hasOption(std::string opt)
 
 bool OptionSet::isEqual(OptionSet * other)
 {
-  
+
   // return false if both do not have the same size
   if (data.size() != other->size())
     return false;
+
+  // Check if they are empty (we now both sizes are equal)
+  if (data.size() == 0)
+    return true;
 
   for (json::iterator it = data.begin(); it != data.end(); ++it) {   
 

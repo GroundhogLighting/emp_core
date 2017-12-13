@@ -47,8 +47,24 @@ size_t TaskManager::addTask(Task * t)
 	size_t n = currentIndex;
 	for (size_t i = 0; i < n; i++) {
 		if (compareTasks(tasks[i], t)) {
-			// Task is redundant... delete, add dependand and return
-			delete t;
+			// Task is redundant... 
+                        
+            // update dependants.            
+            size_t nDependants = t->countDependants();
+            for (size_t j = 0; j < nDependants; j++) {
+              t->getDependantRef(j)->replaceDependency(t, tasks[i]);              
+            }
+
+            // update dependencies
+            size_t nDependencies = t->countDependencies();
+            for (size_t j = 0; j < nDependencies; j++) {
+              t->getDependencyRef(j)->replaceDependency(t, tasks[i]);
+            }
+            
+            //delete, 
+            delete t;
+
+            // return
 			return i;
 		}
 	}
@@ -61,8 +77,8 @@ size_t TaskManager::addTask(Task * t)
 	for (size_t i = 0; i < n; i++) {
 		Task * dep = t->getDependencyRef(i);
 		size_t added = addTask(dep);
-		t->addDependencyIndex(added);
-		tasks[added]->addDependantIndex(currentIndex);
+		//t->addDependencyIndex(added);
+		//tasks[added]->addDependantIndex(currentIndex);
 
 	}
 
@@ -110,7 +126,7 @@ bool TaskManager::solve()
 		}
 		else {
 			for (size_t j = 0; j < nDependencies; j++) {
-				size_t dep = tasks[i]->getDependencyIndex(j);
+				size_t dep = findTask(tasks[i]->getDependencyRef(j));
 				tbb::flow::make_edge(nodes[dep], nodes[i]);
 			}
 		}
@@ -172,6 +188,7 @@ bool TaskManager::compareTasks(Task * a, Task * b)
 	if (typeid(*a) != typeid(*b))
 		return false;
 
+    // Check deeper
 	return a->isEqual(b);
 }
 
@@ -182,4 +199,16 @@ void TaskManager::clean()
     delete tasks[i];    
   }
   tasks.erase(tasks.begin(), tasks.end());
+}
+
+
+size_t TaskManager::findTask(Task * t)
+{
+  size_t n = tasks.size();
+  for (size_t i = 0; i < n; i++) {
+    if (tasks[i] == t)
+      return i;
+  }
+  FATAL(err, "Task not found on TaskManager!");
+  return -1;
 }

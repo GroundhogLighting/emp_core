@@ -58,3 +58,8 @@ size_t Workplane::getNumPolygons() {
 Polygon3D * Workplane::getPolygonRef(size_t i) {
 	return polygons[i];
 }
+
+double Workplane::getMaxArea()
+{
+  return maxArea;
+}

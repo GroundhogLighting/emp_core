@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 #include <string>
+#include "common/options/optionset.h"
 
 
 //! A Task is an instruction or set of instructions that is required to perform a simulation
@@ -45,9 +46,8 @@ private:
 	
 	std::string name = "ThisTaskHasNoName"; //!< The name of the task
 	std::vector<Task *> dependencies = std::vector<Task * >(); //!< The vector of Task objects that this Task depend upon
-	std::vector<size_t> dependenciesIndexes = std::vector<size_t>(); //! Vector with the position of the dependencies in the tasks array of the SimulationManager
-	std::vector<size_t> dependantsIndexes = std::vector<size_t>(); //! Vector with the position of the dependant tasks in the tasks array of the SimulationManager
-	
+    std::vector<Task *> dependants = std::vector<Task * >(); //!< The vector of Task objects that depend on this Task
+
 public:
 
 	//! Generic constructor
@@ -87,19 +87,12 @@ public:
 	*/
 	void addDependency(Task * t);
 
-	//! Adds a dependency index to the Task
-	/*!
-	@author German Molina
-	@param[in] i The index of the dependency in the Task array
-	*/
-	void addDependencyIndex(size_t i);
-
-	//! Adds a dependant index to the Task
-	/*!
-	@author German Molina
-	@param[in] i The index of the dependant in the Task array
-	*/
-	void addDependantIndex(size_t i);
+    //! Adds a dependant Task
+    /*!
+    @author German Molina
+    @param[in] t The pointer to the Task to add
+    */
+    void addDependant(Task * t);
 
 
 	//! Retrieves a dependency pointer
@@ -109,22 +102,14 @@ public:
 	@return The pointer to the dependency
 	*/
 	Task * getDependencyRef(size_t i);
-
-	//! Retrieves the index of a dependency in the SimulationManager tasks vector
-	/*!
-	@author German Molina
-	@param i The number of the dependency
-	@return The index of such dependency in the SimulationManager tasks vector
-	*/
-	size_t getDependencyIndex(size_t i);
-
-	//! Retrieves the index of a dependant in the SimulationManager tasks vector
-	/*!
-	@author German Molina
-	@param i The number of the dependency
-	@return The index of such dependant in the SimulationManager tasks vector
-	*/
-	size_t getDependantIndex(size_t i);
+    
+    //! Retrieves a dependant pointer
+    /*!
+    @author German Molina
+    @param[in] i The index of the dependency to get
+    @return The pointer to the dependency
+    */
+    Task * getDependantRef(size_t i);
 
 	//! Counts the number of dependants in a Task
 	/*!
@@ -139,6 +124,14 @@ public:
 	@return The number of dependencies
 	*/
 	size_t countDependencies();
+
+    //! Replaces one dependency by another one.
+    /*!
+    @author German Molina
+    @param[in] a The dependency to be replaced
+    @param[in] b The dependency to replace 'a' with
+    */
+    void replaceDependency(Task * a, Task * b);
 
 	//! Function that performs the instructions required
 	/*!
@@ -165,5 +158,10 @@ public:
 	@return is equal?
 	*/
 	virtual bool isEqual(Task * t);
-
+    
 };
+
+
+using TaskFactory = Task* (*)(lua_State *L);
+
+

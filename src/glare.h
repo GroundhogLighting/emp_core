@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -23,6 +23,8 @@
 
 #include "groundhogmodel/groundhogmodel.h"
 #include "common/taskmanager/taskmanager.h"
+
+
 
 //! This is the main class within Glare. It manages the Read, Write, Calculate process.
 

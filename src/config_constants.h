@@ -97,8 +97,11 @@ This module defines constants that are used in the rest of the program.
 /// Name of the global variable pointing to the TaskManager in the Lua API
 #define LUA_TASKMANAGER_VARIABLE "currenttaskmanager"
 
+/// Name of the global variable pointing to the TaskDictionary in the Lua API
+#define LUA_TASKDICTIONARY_VARIABLE "currenttaskdictionary"
+
 /// Name of the variable defining the TaskManager's autoSolve option
-#define LUA_AUTOSOLVE_VARIABLE "solve_automatically"
+#define LUA_AUTOSOLVE_VARIABLE "auto_solve"
 
 /// Name of the directory where we export the model before solving
 #define GLARE_TMP_DIR "tmp"

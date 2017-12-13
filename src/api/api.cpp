@@ -21,16 +21,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "./api.h"
 #include "config_constants.h"
 
-#include "./src/options.h"
-#include "./src/tasks_manager.h"
-#include "./src/gh_model.h"
-#include "./src/api_io.h"
-#include "./src/export_import.h"
-#include "./src/radiance_core.h"
-
 #include "common/utilities/stringutils.h"
+#include "./load_commands.h"
+#include "./load_tasks.h"
 
-void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager, int argc, char* argv[]) {
+#include <utility>
+
+
+
+void registerTask(lua_State * L, const char * name, TaskFactory f)
+{
+  std::map<std::string, TaskFactory> * taskDictionary = getCurrentTaskDictionary(L);
+  
+  (*taskDictionary)[std::string(name)] = f;
+
+  //taskDictionary->insert(std::make_pair(name, f));  
+}
+
+
+
+void loadAPI(lua_State * L, GroundhogModel * ghmodel, std::map<std::string, TaskFactory> * taskDictionary, TaskManager * taskManager, int argc, char* argv[]) {
 
 	/* REGISTER THE GROUNDHOG MODEL */
 	lua_pushlightuserdata(L, ghmodel);
@@ -39,6 +49,10 @@ void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager,
 	/* REGISTER THE TASK MANAGER */
 	lua_pushlightuserdata(L, taskManager);
 	lua_setglobal(L, LUA_TASKMANAGER_VARIABLE);
+
+    /* REGISTER TASK DICTIONARY */
+    lua_pushlightuserdata(L, taskDictionary);
+    lua_setglobal(L, LUA_TASKDICTIONARY_VARIABLE);
 
 	/* LOAD ARGUMENTS TABLE*/
 	lua_newtable(L);
@@ -55,140 +69,12 @@ void loadAPI(lua_State * L, GroundhogModel * ghmodel, TaskManager * taskManager,
 	}
 	lua_setglobal(L, "args");
 
+    /* REGISTER COMMANDS */
+    registerCommands(L);
 
-    /* ======================== */
-	/* @APIgroup INPUT / OUTPUT */
-	/* ======================== */
+    /* REGISTER TASKS */
+    registerTasks(L);
 
-    /* @APIfunction
     
-    Throws an error and exits the script
-
-    @param[required] message The error message to show
-    */
-	lua_register(L, "raise", raise);
-    
-    /* @APIfunction
-
-    Prints a warning to the standard error, but continues processing the 
-    script
-
-    @param[required] message The message to warn
-    */
-	lua_register(L, "warn", warn);
-
-    /* ============================== */
-	/* @APIgroup GROUNDHOG MODEL DATA */	
-	/* ============================== */
-
-	/* @APIfunction	
-
-	Retrieves an array with the workplanes names in the model
-
-	@return workplane_array An array with the workplanes names
-	*/
-	lua_register(L, "get_workplanes_list", get_workplane_list);
-    
-	/* @APIfunction
-
-	Checks if a workplane does exist in the model
-
-	@param[required] workplane_name The name of the workplane
-	@return exist? True or False
-	*/
-	lua_register(L, "workplane_exist", workplane_exists);
-
-
-    /* ====================== */
-	/* @APIgroup TASK MANAGER */
-	/* ====================== */
-
-	/* @APIfunction
-
-	Solves the task manager
-	*/
-	lua_register(L, "solve_tasks", solveTaskManager);
-
-    /* @APIfunction
-    
-    Prints the current task flow to the standard output
-    */
-    lua_register(L,"print_task_flow", printTaskManager);
-
-    /* @APIfunction 
-
-    Removes current tasks from Task Manager
-    */
-    //lua_register(L, "purge_tasks", solveTaskManager);
-	
-    /* @APIfunction
-
-    Adds a task to the task manager
-    */
-    //lua_register(L,"add_task",addTaskToManager);
-
-
-
-
-    /* ========================= */
-	/* @APIgroup EXPORT / IMPORT */
-	/* ========================= */
-
-	/* @APIfunction
-
-	Exports the current model to a Radiance directory
-
-	@param[required] directory The directory where to export the model
-	*/
-	lua_register(L, "export_radiance_model", exportToRadiance);
-
-
-    /* =============================== */
-	/* @APIgroup SET-OPTIONS FUNCTIONS */
-	/* =============================== */
-
-    /* @APIfunction
-    
-    Modifies the ray-tracing options in the current GroundhogModel
-
-    @param[required] options A Table with the ray-tracing options to set
-    */
-	lua_register(L, "ray_trace_options", set_rtrace_options);
-
-    /* @APIfunction
-    Prints the current ray-trace opcions. If a file is given, the options
-    will be printed to such file. If not, the options will be printed
-    to the Standard Output.
-
-    @param[optional] file The name of the file to write
-    */
-	lua_register(L, "print_ray_trace_options", print_rtrace_options);
-
-    /* ======================= */
-	/* @APIgroup RADIANCE CORE */
-	/* ======================= */
-
-    /* @APIfunction
-    Creates an octree of a model in a certain base directory (that complies the
-    Groundhog file distribution). The name of the octree can be chosen, and 
-    several options can be set. They are:
-
-    - include_windows: If true, the windows will be included in the octree. Defaults to true.
-    - sky: If a string is given, a sky will be included in the octree. Else, no sky will be given.
-    - black_geometry: If true, all the non-window geometry becomes black. Defaults to false.
-
-    @param[required] base_dir The directory where the Radiance Model is stored
-    @param[required] octree_name The name of the octree to create
-    @param[optional] options The table of options if the octree
-    */
-    lua_register(L, "oconv", oconv_command);
-
-	
-    
-    
-    
-    //lua_register(L, "calc_DF", addDFTask);
-
-
 }
 

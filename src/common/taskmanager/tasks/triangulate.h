@@ -99,7 +99,8 @@ public:
   {
     return (
       workplane == static_cast<TriangulateWorkplane *>(t)->workplane &&
-      maxArea == static_cast<TriangulateWorkplane *>(t)->maxArea
+      maxArea == static_cast<TriangulateWorkplane *>(t)->maxArea &&
+      maxAspectRatio == static_cast<TriangulateWorkplane *>(t)->maxAspectRatio
       );
   }
 

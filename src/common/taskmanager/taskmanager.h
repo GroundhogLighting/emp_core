@@ -108,4 +108,13 @@ public:
     */
     void clean();
 
+    //! Find Task
+    /*!
+    Retrieves the index of a certain task in the TaskManager
+
+    @param[in] t The Task object
+    @return The position
+    */
+    size_t findTask(Task * t);
+
 };
