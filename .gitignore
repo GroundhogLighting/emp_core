@@ -32,3 +32,5 @@ debug/*
 *.skb
 *.log
 .vscode
+
+test_outputs/*

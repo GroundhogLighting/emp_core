@@ -1,8 +1,0 @@
-digraph {
-"Export model" -> "Export model with WPs";
-"Triangulate workplane WP" -> "Export model with WPs";
-"Triangulate workplane WP2" -> "Export model with WPs";
-"triangulate polygon" -> "Triangulate workplane WP";
-"triangulate polygon" -> "Triangulate workplane WP";
-"triangulate polygon" -> "Triangulate workplane WP2";
-}
