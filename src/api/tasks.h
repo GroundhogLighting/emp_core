@@ -23,7 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Lua/src/lua.hpp"
 
 #include "common/taskmanager/task.h"
-#include "common/taskmanager/tasks/raytrace.h"
 #include "api/common.h"
 
 //! Register an RTraceTask
@@ -35,3 +34,13 @@ Allows calculating the luminance or illuminance of a scene by using a certain sk
 @return The task
 */
 Task * workplaneIlluminanceFactory(lua_State * L);
+
+//! Register an ExportModel task
+/*!
+Exports the model
+
+@author German Molina
+@param[in] L The lua_State * object
+@return The task
+*/
+Task * exportModel(lua_State * L);

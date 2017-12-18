@@ -241,7 +241,11 @@ Polygon3D * Polygon3D::get2DPolygon()
 	// Add outer loop
 	Loop * ol = ret->getOuterLoopRef();
 	for (size_t p = 0; p < outerLoop->size(); p++) {
-		ol->addVertex(new Point3D(outerLoop->getVertexRef(p)->transform(i,j,k)));
+      Point3D * v = outerLoop->getVertexRef(p);
+      if (v == NULL)
+        continue;
+
+	  ol->addVertex(new Point3D(v->transform(i, j, k)));
 	}
 
 	// Add inner loops
@@ -300,7 +304,7 @@ bool Polygon3D::getInverseAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3
 		- i.getY()*(j.getX()*k.getZ() - j.getZ()*k.getX())
 		+ i.getZ()*(j.getX()*k.getY() - j.getY()*k.getX());
 
-	if (det == 0) {
+	if (abs(det) < GLARE_TINY) {
 		FATAL(errorMessage,"Determinant is zero when trying to ");
 		normal.print();
 		return NULL;
@@ -344,24 +348,32 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 	double nz = k.getZ();	
 	
 	if (abs(nz) < GLARE_TINY) {
-		// Vertical planes	
+		// Perfectly vertical planes	
 		i = Vector3D(0, 0, 1);
 		j = k%i;	
 	}
 	else {
-		// horizontal planes
-		if (nx != 0) {
+		// All other workplanes
+		if (abs(nx) > GLARE_TINY) {
+          i = Vector3D(-ny/nx,1,0);
+          i.normalize();
+          /*
 			i = Vector3D(1, 0, -nz / nx);
 			i.normalize();
+          */
 			j = k%i;
 		}
-		else if (ny != 0) {
-			j = Vector3D(0, 1, -nz / ny);
+		else if (abs(ny) > GLARE_TINY) {
+          j = Vector3D(1, -nx / ny, 0);
+          j.normalize();
+          /*
+            j = Vector3D(0, 1, -nz / ny);
 			j.normalize();
+          */
 			i = j%k;
-		}else if(nx == 0 && ny == 0){
-			i = Vector3D(1, 0, 0);
-			j = Vector3D(0, 1, 0);
+		}else if(abs(nx) < GLARE_TINY && abs(ny) < GLARE_TINY){
+            i = Vector3D(1, 0, 0);
+			j = k%i;
 		}
 		else {
 			FATAL(errorMessage,"Not considered situation when calculating auxiliar axes of polygon");
@@ -374,7 +386,12 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 	*auxi = i; *auxj = j; *auxk = k;
 	
     if (i.getLength() < GLARE_TINY || j.getLength() < GLARE_TINY || k.getLength() < GLARE_TINY) {
-      FATAL(errmsg, "Auxiliar axes are bad defined");
+      i.print();
+      j.print();
+      k.print();
+      std::cout << "normal " << std::endl;
+      normal.print();
+      FATAL(errmsg, "Auxiliar axes are bad defined");      
     }
 
 	return true;

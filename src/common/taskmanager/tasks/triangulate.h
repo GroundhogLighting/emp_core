@@ -23,18 +23,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "common/geometry/triangulation.h"
 #include "groundhogmodel/src/workplane.h"
 
+
+//! Transforms a Polygon into a Triangulation
+/*!
+This task is used by Workplane triangulation in order to export 
+the whole model
+*/
 class TriangulatePolygon : public Task {
-private:
-  Triangulation triangulation;
-  double maxArea;
-  double maxAspectRatio;
 
 public:
-  Polygon3D * polygon;
+  double maxArea; //!< The maximum area allowed for each triangle in the triangulation
+  double maxAspectRatio; //!< The maximum aspect ratio allowed for each triangle in the triangulation
+  Triangulation triangulation; //!< The Triangulation object
+  Polygon3D * polygon; //!< The Polygon3D object to triangulate
 
+  //! Constructor
+  /*!
+  @author German Molina
+  @param[in] aPolygon The polygon to triangulate
+  @param[in] area The maximum area allowed for the triangles in the resulting triangulation
+  @param[in] aspectRatio The maximum aspect ratio allowed for the triangles in the resulting triangulation
+  */
   TriangulatePolygon(Polygon3D * aPolygon, double area, double aspectRatio)
   {
-    std::string name = "triangulate polygon";
+    std::string name = "Triangulate polygon";
     setName(&name);
 
     polygon = aPolygon;
@@ -44,6 +56,12 @@ public:
     triangulation = Triangulation(aPolygon);
   }
 
+  //! Compares two of these tasks
+  /*!
+  @author German Molina
+  @param[in] t The other task
+  @return is equal?
+  */
   bool isEqual(Task * t)
   {
     return (
@@ -52,29 +70,39 @@ public:
       );
   }
 
+  //! Solves the task
+  /*!
+  @author German Molina
+  @return success
+  */
   bool solve()
-  {
-    return triangulation.mesh(maxArea, maxAspectRatio);
-  }
-
-  Triangulation * getTriangulation()
-  {
-    return &triangulation;
+  { 
+    return triangulation.mesh(maxArea, maxAspectRatio);            
   }
 
 
 };
 
-class TriangulateWorkplane : public Task {
-private:
 
+//! Triangulates a whole workplane
+/*!
+Triangulates all the Polygon3D inside of a workplane
+*/
+class TriangulateWorkplane : public Task {
 public:
 
-  Workplane * workplane;
-  double maxArea;
-  double maxAspectRatio;
-  std::vector<Triangulation * > triangulations;
+  Workplane * workplane; //!< The workplane to triangulate
+  double maxArea; //!< The maximum area allowed for each triangle in the resulting Triangulation
+  double maxAspectRatio; //!< The maximum aspect ratio allowed for each triangle in the resulting Triangulation
+  std::vector<Triangulation * > triangulations; //!< The final triangulations
 
+  //! Constructor
+  /*!
+  @author German Molina 
+  @param[in] aWorkplane The workplane to triangulate
+  @param[in] area The maximum area allowed for each triangle in the final Triangulation
+  @param[in] aspectRatio The maximum aspect ratio allowed for each triangle in the final Triangulation
+  */
   TriangulateWorkplane(Workplane * aWorkplane, double area, double aspectRatio)
   {
     std::string name = "Triangulate workplane " + *(aWorkplane->getName());
@@ -85,16 +113,21 @@ public:
 
     size_t nWps = workplane->getNumPolygons();
     
-    // This depends on the triangulation of all polygons
+    // This depends on the triangulation of all polygons... 
     for (size_t i = 0; i < nWps; i++) {
       Polygon3D * p = workplane->getPolygonRef(i);
       TriangulatePolygon * t = new TriangulatePolygon(p, maxArea, maxAspectRatio);
-      addDependency(t);
-      triangulations.push_back(t->getTriangulation());
+      addDependency(t);      
     }
 
   }
 
+  //! Compares two of these tasks
+  /*!
+  @author German Molina
+  @param[in] t The other task
+  @return is equal?
+  */
   bool isEqual(Task * t)
   {
     return (
@@ -104,9 +137,19 @@ public:
       );
   }
 
+  //! Solves the task
+  /*!
+  @author German Molina
+  @return success
+  */
   bool solve()
   {
-    // Does not really do anything... just joins all the other dependencies
+    //Gather results
+    size_t n = countDependencies();
+    for (size_t i = 0; i < n; i++) {
+      TriangulatePolygon * d = dynamic_cast<TriangulatePolygon *>(getDependencyRef(i));
+      triangulations.push_back(&(d->triangulation));
+    }
     return true;
   }
 

@@ -3,20 +3,20 @@
 #include "config_constants.h"
 #include "versions.h"
 
+
 #include "./src/glare.h"
 #include "./main.h"
 
 #include <iostream>
 
 
-// Include LUA headers
-extern "C" {
-#include <lua.h>
-	//#include <lualib.h>
-#include <lauxlib.h> 
-}
+#include "Lua/src/lua.hpp"
 
+#include "mem_leak.h"
 
+#ifdef DEBUG
+  MemAllocations memtracker = MemAllocations();
+#endif
 
 int main(int argc, char* argv[]){	
 	
@@ -45,6 +45,10 @@ int main(int argc, char* argv[]){
 	if (!glare.solve(argc, argv)) {
 		return 1;
 	}
+
+#ifdef DEBUG
+    memtracker.checkMemoryLeaks();
+#endif
 
 	return 0;
 }

@@ -124,14 +124,18 @@ $(function() {
 <li>definitions
 : <a class="el" href="class_groundhog_model.html#a6dbca90d5eec33f07f76ecaa4a9e2318">GroundhogModel</a>
 </li>
-<li>dependantsIndexes
-: <a class="el" href="class_task.html#a205ee682c18e2657b9accd7946c3f546">Task</a>
+<li>dependants
+: <a class="el" href="class_task.html#a29d14455404f9d79ae5e7e7007246edf">Task</a>
 </li>
 <li>dependencies
 : <a class="el" href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">Task</a>
 </li>
 <li>diffuse_horizontal
 : <a class="el" href="class_hourly_data.html#a51a2307ae30c7724d61befb95dfd104d">HourlyData</a>
+</li>
+<li>dir
+: <a class="el" href="class_export_radiance_dir.html#ae0775f981dd6292e061fcaa204f5a126">ExportRadianceDir</a>
+, <a class="el" href="class_export_radiance_dir_with_workplanes.html#aa442ce13faf33d4316e701c811a86f96">ExportRadianceDirWithWorkplanes</a>
 </li>
 <li>direct_nomal
 : <a class="el" href="class_hourly_data.html#ac7a552cf6b63ec2404fa0bbb92925f31">HourlyData</a>
@@ -151,6 +155,9 @@ $(function() {
 </li>
 <li>exportDir
 : <a class="el" href="class_rad_exporter.html#af2a41c399c275b9f37967179e509351f">RadExporter</a>
+</li>
+<li>exportName
+: <a class="el" href="class_export_workplane.html#a5cb5ff1e44cbea04ae13d19b29bb90e1">ExportWorkplane</a>
 </li>
 </ul>
 
@@ -224,11 +231,23 @@ $(function() {
 <li>materials
 : <a class="el" href="class_groundhog_model.html#a75d6a6b2df2a4c188cee75724a1e1988">GroundhogModel</a>
 </li>
+<li>maxArea
+: <a class="el" href="class_export_workplane.html#a9585b9d79b9c5519590a67b879af507b">ExportWorkplane</a>
+, <a class="el" href="class_triangulate_polygon.html#a5d503df1475d65d863c96b865574c25f">TriangulatePolygon</a>
+, <a class="el" href="class_triangulate_workplane.html#a12a5d06c372adb06bd2cc7b2e3cd871b">TriangulateWorkplane</a>
+, <a class="el" href="class_workplane.html#a05efeea966752b7df521cf858dbf41f9">Workplane</a>
+</li>
+<li>maxAspectRatio
+: <a class="el" href="class_export_workplane.html#a883952a5828ab23907c28ebedb334521">ExportWorkplane</a>
+, <a class="el" href="class_triangulate_polygon.html#aa642c3a14a2e784e67efda34b5e5c1ee">TriangulatePolygon</a>
+, <a class="el" href="class_triangulate_workplane.html#a8bf699dee98e119942bd7e94f9a85c08">TriangulateWorkplane</a>
+</li>
 <li>minute
 : <a class="el" href="class_date.html#a0c4d2495e3da7ac1e7d3e19ecda210a2">Date</a>
 </li>
 <li>model
-: <a class="el" href="class_glare.html#acc7b759719f9fa02fc5f6a32fa8e4fa8">Glare</a>
+: <a class="el" href="class_export_radiance_dir_with_workplanes.html#a70aa7b0eb4e5f2993d81892629c40e00">ExportRadianceDirWithWorkplanes</a>
+, <a class="el" href="class_glare.html#acc7b759719f9fa02fc5f6a32fa8e4fa8">Glare</a>
 , <a class="el" href="class_rad_exporter.html#aedde4450ed7a6bd873d46edcc9e96b3c">RadExporter</a>
 , <a class="el" href="class_s_k_p_reader.html#a3d2c507e431bd34c268857677e906d95">SKPReader</a>
 </li>
@@ -252,7 +271,7 @@ $(function() {
 , <a class="el" href="class_workplane.html#a2162189d3c91dbc05988ed39a444c879">Workplane</a>
 </li>
 <li>names
-: <a class="el" href="class_option_set.html#a7cd77b2139cd69d04c3e8b8bc8d28c98">OptionSet</a>
+: <a class="el" href="class_export_radiance_dir_with_workplanes.html#ab3aea48fa8e03ad06616dabe34186ff0">ExportRadianceDirWithWorkplanes</a>
 </li>
 <li>neighbors
 : <a class="el" href="class_triangle.html#a37db801776abe0929a6ed6901d07f72b">Triangle</a>
@@ -286,6 +305,7 @@ $(function() {
 </li>
 <li>polygon
 : <a class="el" href="class_face.html#ae0bae3c59bb8e2b4faf39b417cccb014">Face</a>
+, <a class="el" href="class_triangulate_polygon.html#acc0090423de48661d275177c97135225">TriangulatePolygon</a>
 , <a class="el" href="class_triangulation.html#a00de79c0bafec91439796f12b694acb3">Triangulation</a>
 </li>
 <li>polygons
@@ -355,6 +375,15 @@ $(function() {
 <li>triangles
 : <a class="el" href="class_triangulation.html#ae4198ed34230a432c17c01bf57c55a17">Triangulation</a>
 </li>
+<li>triangulatedWorkplanes
+: <a class="el" href="class_export_radiance_dir_with_workplanes.html#a14b05f8a00f39670623a830c03db4341">ExportRadianceDirWithWorkplanes</a>
+</li>
+<li>triangulation
+: <a class="el" href="class_triangulate_polygon.html#acacc9656bd2dcd5fae5771af0bde562d">TriangulatePolygon</a>
+</li>
+<li>triangulations
+: <a class="el" href="class_triangulate_workplane.html#a03f7b963853591471eeed46c80ceaf05">TriangulateWorkplane</a>
+</li>
 <li>type
 : <a class="el" href="class_material.html#a97efb5b3df1f11c422a82ab94535060a">Material</a>
 , <a class="el" href="class_otype.html#ab16b977431e6b20ce9a06000c6c63e45">Otype</a>
@@ -373,11 +402,10 @@ $(function() {
 
 
 <h3><a id="index_v"></a>- v -</h3><ul>
-<li>values
-: <a class="el" href="class_option_set.html#a166807264d1b6fe3fba2818b96d8dc2f">OptionSet</a>
-</li>
 <li>verbose
-: <a class="el" href="class_glare.html#ac5285e79bdf6d9dd1291419814eb1112">Glare</a>
+: <a class="el" href="class_export_radiance_dir.html#ae2a843843b7f31682b7e7eafd4e77aed">ExportRadianceDir</a>
+, <a class="el" href="class_export_radiance_dir_with_workplanes.html#ab6547c1c7d1b1726c05014953974a1c6">ExportRadianceDirWithWorkplanes</a>
+, <a class="el" href="class_glare.html#ac5285e79bdf6d9dd1291419814eb1112">Glare</a>
 , <a class="el" href="class_rad_exporter.html#a4ba53b320011bccd5649d90ad9267b48">RadExporter</a>
 , <a class="el" href="class_s_k_p_reader.html#ad3d6e56179c79d5c2bc08b818e6cb646">SKPReader</a>
 </li>
@@ -419,6 +447,10 @@ $(function() {
 <li>windows
 : <a class="el" href="class_window_group.html#ae33f07fbba3f4dcf9a235d9b812479d7">WindowGroup</a>
 </li>
+<li>workplane
+: <a class="el" href="class_export_workplane.html#aedc987d4cb6ba41e751c15097413a49f">ExportWorkplane</a>
+, <a class="el" href="class_triangulate_workplane.html#abc8150ee5d3e2ebfa74db919921ff443">TriangulateWorkplane</a>
+</li>
 <li>workplanes
 : <a class="el" href="class_groundhog_model.html#aa0c8548015635107fd0383b0b27fdf4f">GroundhogModel</a>
 </li>
@@ -454,7 +486,7 @@ $(function() {
 <!-- HTML footer for doxygen 1.8.13-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 4 2017 09:30:29 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
+Generated on Wed Dec 13 2017 15:31:54 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
 </a> 1.8.13
 </small></address>
 </body>

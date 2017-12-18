@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "./tasks.h"
 
+#include "common/taskmanager/tasks/raytrace.h"
+#include "common/taskmanager/tasks/export.h"
 
 Task * workplaneIlluminanceFactory(lua_State * L)
 {
@@ -53,4 +55,18 @@ Task * workplaneIlluminanceFactory(lua_State * L)
 
   return new RTraceTask(model, &options, wp);
 
+}
+
+Task * exportModel(lua_State * L)
+{
+  OptionSet options = OptionSet();
+  options.addOption("directory", "RadianceModel");
+  options.addOption("verbose", true);
+
+  // Fill with data from the given options
+  options.fillFromLuaTable(L, 2);
+
+  GroundhogModel * model = getCurrentModel(L);
+
+  return new ExportRadianceDirWithWorkplanes(options.getOption<std::string>("directory"), model, options.getOption<bool>("verbose"));
 }

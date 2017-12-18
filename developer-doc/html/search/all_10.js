@@ -7,12 +7,14 @@ var searchData=
   ['timezone',['timeZone',['../class_location.html#a216da30e3adb50c68711d39666d3bef9',1,'Location']]],
   ['todo_20list',['Todo List',['../todo.html',1,'']]],
   ['tokenize',['tokenize',['../group__string_utils.html#gaf50d58e1c8680bc78f58cc524e1e492b',1,'tokenize(std::string *s, std::vector&lt; std::string &gt; *v):&#160;stringutils.cpp'],['../group__string_utils.html#gaf50d58e1c8680bc78f58cc524e1e492b',1,'tokenize(std::string *s, std::vector&lt; std::string &gt; *v):&#160;stringutils.cpp']]],
-  ['transform',['transform',['../class_loop.html#a9bd3a00699b8779e300efdbc76ae79dd',1,'Loop::transform()'],['../class_point3_d.html#abf5ffbc38f8bd91fdc86dbc1bd1f4b45',1,'Point3D::transform()']]],
-  ['translateintoradiance',['translateIntoRadiance',['../class_otype.html#a845eac726847779de94b46407f1d45e4',1,'Otype']]],
+  ['transform',['Transform',['../class_transform.html',1,'Transform'],['../class_transform.html#aa08ca4266efabc768973cdeea51945ab',1,'Transform::Transform()'],['../class_loop.html#a9bd3a00699b8779e300efdbc76ae79dd',1,'Loop::transform()'],['../class_point3_d.html#abf5ffbc38f8bd91fdc86dbc1bd1f4b45',1,'Point3D::transform(Vector3D i, Vector3D j, Vector3D k)'],['../class_point3_d.html#aea202330101b4b9412cfdca13f0d618f',1,'Point3D::transform(Transform *t)']]],
   ['triangle',['Triangle',['../class_triangle.html',1,'Triangle'],['../class_triangle.html#aa7a78e26fa0b252ea09c587537d73c9e',1,'Triangle::Triangle()']]],
   ['triangles',['triangles',['../class_triangulation.html#ae4198ed34230a432c17c01bf57c55a17',1,'Triangulation']]],
-  ['triangulateworkplane',['TriangulateWorkplane',['../class_triangulate_workplane.html',1,'']]],
-  ['triangulation',['Triangulation',['../class_triangulation.html',1,'Triangulation'],['../class_triangulation.html#ad6c1085a4e669dac169d779f88eccf9e',1,'Triangulation::Triangulation()']]],
+  ['triangulatedworkplanes',['triangulatedWorkplanes',['../class_export_radiance_dir_with_workplanes.html#a14b05f8a00f39670623a830c03db4341',1,'ExportRadianceDirWithWorkplanes']]],
+  ['triangulatepolygon',['TriangulatePolygon',['../class_triangulate_polygon.html',1,'TriangulatePolygon'],['../class_triangulate_polygon.html#a82cf99102b947dc0ed33d2f60a0fa4b1',1,'TriangulatePolygon::TriangulatePolygon()']]],
+  ['triangulateworkplane',['TriangulateWorkplane',['../class_triangulate_workplane.html',1,'TriangulateWorkplane'],['../class_triangulate_workplane.html#ac7a25cfe56fac0c43f148c1d5ab7b185',1,'TriangulateWorkplane::TriangulateWorkplane()']]],
+  ['triangulation',['Triangulation',['../class_triangulation.html',1,'Triangulation'],['../class_triangulate_polygon.html#acacc9656bd2dcd5fae5771af0bde562d',1,'TriangulatePolygon::triangulation()'],['../class_triangulation.html#a56118103ad86aa7b37d7a005892bfeca',1,'Triangulation::Triangulation()'],['../class_triangulation.html#ad6c1085a4e669dac169d779f88eccf9e',1,'Triangulation::Triangulation(Polygon3D *polygon)']]],
+  ['triangulations',['triangulations',['../class_triangulate_workplane.html#a03f7b963853591471eeed46c80ceaf05',1,'TriangulateWorkplane']]],
   ['type',['type',['../class_material.html#a97efb5b3df1f11c422a82ab94535060a',1,'Material::type()'],['../class_otype.html#ab16b977431e6b20ce9a06000c6c63e45',1,'Otype::type()']]],
   ['type_5fid',['type_id',['../class_otype.html#af03c91f0a84ea79ae59c50a42b425107',1,'Otype']]]
 ];

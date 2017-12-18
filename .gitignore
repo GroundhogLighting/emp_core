@@ -31,4 +31,6 @@ debug/*
 *Makefile*
 *.skb
 *.log
-.vscode
+.vscode/*
+
+test_outputs/*

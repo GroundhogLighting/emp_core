@@ -25,7 +25,6 @@
 #include "common/taskmanager/taskmanager.h"
 
 
-
 //! This is the main class within Glare. It manages the Read, Write, Calculate process.
 
 
@@ -48,20 +47,6 @@ private:
 	TaskManager taskManager = TaskManager(); //!< The TaskManager that will handle and coordinate what needs to be done.
 
 public:
-	//! Creates a Glare object.
-	/*! 
-	Defaults the 'verbose' option to TRUE, and model to an empty GroundhogModel
-	*/
-	Glare();
-	
-	//! Destroys the Glare object
-	/*! 
-	Deletes all its members as well. Each member should delete its own members (i.e. the model deletes
-	layers, views, etc.)
-
-	@author German Molina
-	*/
-	~Glare();
 	
 	//! Parses the inputs provided through the command line
 	/*!

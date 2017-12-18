@@ -81,54 +81,51 @@ Inheritance diagram for Task:</div>
  <div class="center">
   <img src="class_task.png" usemap="#Task_map" alt=""/>
   <map id="Task_map" name="Task_map">
-<area href="class_calc_d_f.html" alt="CalcDF" shape="rect" coords="0,56,208,80"/>
-<area href="class_d_f_oconv.html" alt="DFOconv" shape="rect" coords="218,56,426,80"/>
-<area href="class_export_radiance_dir.html" alt="ExportRadianceDir" shape="rect" coords="436,56,644,80"/>
-<area href="class_export_radiance_dir_with_workplanes.html" alt="ExportRadianceDirWithWorkplanes" shape="rect" coords="654,56,862,80"/>
-<area href="class_triangulate_workplane.html" alt="TriangulateWorkplane" shape="rect" coords="872,56,1080,80"/>
-<area href="class_whole_scene_oconv.html" alt="WholeSceneOconv" shape="rect" coords="1090,56,1298,80"/>
-<area href="class_write_d_f_sky.html" alt="WriteDFSky" shape="rect" coords="1308,56,1516,80"/>
+<area href="class_export_radiance_dir.html" title="Exports all the geometry in a GroundhogModel into a Radiance directory. " alt="ExportRadianceDir" shape="rect" coords="0,56,208,80"/>
+<area href="class_export_radiance_dir_with_workplanes.html" title="Exports not only the geometry, but the workplanes as well. " alt="ExportRadianceDirWithWorkplanes" shape="rect" coords="218,56,426,80"/>
+<area href="class_export_workplane.html" title="Exports a workplane in Radiance format. " alt="ExportWorkplane" shape="rect" coords="436,56,644,80"/>
+<area href="class_oconv_task.html" alt="OconvTask" shape="rect" coords="654,56,862,80"/>
+<area href="class_r_trace_task.html" alt="RTraceTask" shape="rect" coords="872,56,1080,80"/>
+<area href="class_triangulate_polygon.html" title="Transforms a Polygon into a Triangulation. " alt="TriangulatePolygon" shape="rect" coords="1090,56,1298,80"/>
+<area href="class_triangulate_workplane.html" title="Triangulates a whole workplane. " alt="TriangulateWorkplane" shape="rect" coords="1308,56,1516,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0ca53354bdc006762a0fda68c64f7608"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a0ca53354bdc006762a0fda68c64f7608">Task</a> ()</td></tr>
-<tr class="memdesc:a0ca53354bdc006762a0fda68c64f7608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector with the position of the dependant tasks in the tasks array of the SimulationManager.  <a href="#a0ca53354bdc006762a0fda68c64f7608">More...</a><br /></td></tr>
+<tr class="memdesc:a0ca53354bdc006762a0fda68c64f7608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic constructor.  <a href="#a0ca53354bdc006762a0fda68c64f7608">More...</a><br /></td></tr>
 <tr class="separator:a0ca53354bdc006762a0fda68c64f7608"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ecf499ea35fb4a96853969a1e1cbbce"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a3ecf499ea35fb4a96853969a1e1cbbce">~Task</a> ()</td></tr>
 <tr class="memdesc:a3ecf499ea35fb4a96853969a1e1cbbce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic destructor.  <a href="#a3ecf499ea35fb4a96853969a1e1cbbce">More...</a><br /></td></tr>
 <tr class="separator:a3ecf499ea35fb4a96853969a1e1cbbce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23abd79183a5c2bb1e6d3ff37b1cbf23"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a23abd79183a5c2bb1e6d3ff37b1cbf23">setName</a> (std::string <a class="el" href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">name</a>)</td></tr>
-<tr class="memdesc:a23abd79183a5c2bb1e6d3ff37b1cbf23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assigns a name to the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>.  <a href="#a23abd79183a5c2bb1e6d3ff37b1cbf23">More...</a><br /></td></tr>
-<tr class="separator:a23abd79183a5c2bb1e6d3ff37b1cbf23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d52557ded52f1e071b06abf6ebb35f5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a1d52557ded52f1e071b06abf6ebb35f5">getName</a> ()</td></tr>
-<tr class="memdesc:a1d52557ded52f1e071b06abf6ebb35f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the name of the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>.  <a href="#a1d52557ded52f1e071b06abf6ebb35f5">More...</a><br /></td></tr>
-<tr class="separator:a1d52557ded52f1e071b06abf6ebb35f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6e12f00547778e76bc97428b5dbdf12"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#af6e12f00547778e76bc97428b5dbdf12">setName</a> (std::string *<a class="el" href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">name</a>)</td></tr>
+<tr class="memdesc:af6e12f00547778e76bc97428b5dbdf12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assigns a name to the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>.  <a href="#af6e12f00547778e76bc97428b5dbdf12">More...</a><br /></td></tr>
+<tr class="separator:af6e12f00547778e76bc97428b5dbdf12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a75fdd5e0d45b4e51ca27ba0c33055b"><td class="memItemLeft" align="right" valign="top">std::string *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a0a75fdd5e0d45b4e51ca27ba0c33055b">getName</a> ()</td></tr>
+<tr class="memdesc:a0a75fdd5e0d45b4e51ca27ba0c33055b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the name of the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>.  <a href="#a0a75fdd5e0d45b4e51ca27ba0c33055b">More...</a><br /></td></tr>
+<tr class="separator:a0a75fdd5e0d45b4e51ca27ba0c33055b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ca55c5d2f42144fef9041785ac194bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a8ca55c5d2f42144fef9041785ac194bb">addDependency</a> (<a class="el" href="class_task.html">Task</a> *t)</td></tr>
 <tr class="memdesc:a8ca55c5d2f42144fef9041785ac194bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a dependency to the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>.  <a href="#a8ca55c5d2f42144fef9041785ac194bb">More...</a><br /></td></tr>
 <tr class="separator:a8ca55c5d2f42144fef9041785ac194bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30ed370fb2969bb5912160d70517bd89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a30ed370fb2969bb5912160d70517bd89">addDependencyIndex</a> (size_t i)</td></tr>
-<tr class="memdesc:a30ed370fb2969bb5912160d70517bd89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a dependency index to the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>.  <a href="#a30ed370fb2969bb5912160d70517bd89">More...</a><br /></td></tr>
-<tr class="separator:a30ed370fb2969bb5912160d70517bd89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa323ba0ebbb64e0f1fd8485074bb4808"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#aa323ba0ebbb64e0f1fd8485074bb4808">addDependantIndex</a> (size_t i)</td></tr>
-<tr class="memdesc:aa323ba0ebbb64e0f1fd8485074bb4808"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a dependant index to the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>.  <a href="#aa323ba0ebbb64e0f1fd8485074bb4808">More...</a><br /></td></tr>
-<tr class="separator:aa323ba0ebbb64e0f1fd8485074bb4808"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1f737766c1aa5fb738fa49299869424"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#af1f737766c1aa5fb738fa49299869424">addDependant</a> (<a class="el" href="class_task.html">Task</a> *t)</td></tr>
+<tr class="memdesc:af1f737766c1aa5fb738fa49299869424"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a dependant <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>.  <a href="#af1f737766c1aa5fb738fa49299869424">More...</a><br /></td></tr>
+<tr class="separator:af1f737766c1aa5fb738fa49299869424"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6114f6eafe308af01022a4261ac90b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_task.html">Task</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#aa6114f6eafe308af01022a4261ac90b4">getDependencyRef</a> (size_t i)</td></tr>
 <tr class="memdesc:aa6114f6eafe308af01022a4261ac90b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a dependency pointer.  <a href="#aa6114f6eafe308af01022a4261ac90b4">More...</a><br /></td></tr>
 <tr class="separator:aa6114f6eafe308af01022a4261ac90b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc3267ae11be084a70f914039907b8b5"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#adc3267ae11be084a70f914039907b8b5">getDependencyIndex</a> (size_t i)</td></tr>
-<tr class="memdesc:adc3267ae11be084a70f914039907b8b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the index of a dependency in the SimulationManager tasks vector.  <a href="#adc3267ae11be084a70f914039907b8b5">More...</a><br /></td></tr>
-<tr class="separator:adc3267ae11be084a70f914039907b8b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83f9b52bb27487fe941b2fd74443b013"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a83f9b52bb27487fe941b2fd74443b013">getDependantIndex</a> (size_t i)</td></tr>
-<tr class="memdesc:a83f9b52bb27487fe941b2fd74443b013"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the index of a dependant in the SimulationManager tasks vector.  <a href="#a83f9b52bb27487fe941b2fd74443b013">More...</a><br /></td></tr>
-<tr class="separator:a83f9b52bb27487fe941b2fd74443b013"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47590fd9e311bea1b7c2a0fb2cbf226e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_task.html">Task</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a47590fd9e311bea1b7c2a0fb2cbf226e">getDependantRef</a> (size_t i)</td></tr>
+<tr class="memdesc:a47590fd9e311bea1b7c2a0fb2cbf226e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a dependant pointer.  <a href="#a47590fd9e311bea1b7c2a0fb2cbf226e">More...</a><br /></td></tr>
+<tr class="separator:a47590fd9e311bea1b7c2a0fb2cbf226e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6ccce1e573624f2129fb5e6b90d95e5"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#af6ccce1e573624f2129fb5e6b90d95e5">countDependants</a> ()</td></tr>
 <tr class="memdesc:af6ccce1e573624f2129fb5e6b90d95e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts the number of dependants in a <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>.  <a href="#af6ccce1e573624f2129fb5e6b90d95e5">More...</a><br /></td></tr>
 <tr class="separator:af6ccce1e573624f2129fb5e6b90d95e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23607bae8bd67db1099efd34042cab68"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a23607bae8bd67db1099efd34042cab68">countDependencies</a> ()</td></tr>
 <tr class="memdesc:a23607bae8bd67db1099efd34042cab68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of dependencies.  <a href="#a23607bae8bd67db1099efd34042cab68">More...</a><br /></td></tr>
 <tr class="separator:a23607bae8bd67db1099efd34042cab68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2277c1f9973488cf28b9ae73ef674ab0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a2277c1f9973488cf28b9ae73ef674ab0">replaceDependency</a> (<a class="el" href="class_task.html">Task</a> *a, <a class="el" href="class_task.html">Task</a> *b)</td></tr>
+<tr class="memdesc:a2277c1f9973488cf28b9ae73ef674ab0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces one dependency by another one.  <a href="#a2277c1f9973488cf28b9ae73ef674ab0">More...</a><br /></td></tr>
+<tr class="separator:a2277c1f9973488cf28b9ae73ef674ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade7927fe98f3af44234045afe36e332a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#ade7927fe98f3af44234045afe36e332a">solve</a> ()</td></tr>
 <tr class="memdesc:ade7927fe98f3af44234045afe36e332a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that performs the instructions required.  <a href="#ade7927fe98f3af44234045afe36e332a">More...</a><br /></td></tr>
 <tr class="separator:ade7927fe98f3af44234045afe36e332a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,20 +136,17 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a442a9a7a998c24b533b25575f6edeb3f"><td class="memItemLeft" align="right" valign="top"><a id="a442a9a7a998c24b533b25575f6edeb3f"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">name</a></td></tr>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">name</a> = &quot;ThisTaskHasNoName&quot;</td></tr>
 <tr class="memdesc:a442a9a7a998c24b533b25575f6edeb3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the task. <br /></td></tr>
 <tr class="separator:a442a9a7a998c24b533b25575f6edeb3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5733aba680ce61d89b1a9340ad874d60"><td class="memItemLeft" align="right" valign="top"><a id="a5733aba680ce61d89b1a9340ad874d60"></a>
 std::vector&lt; <a class="el" href="class_task.html">Task</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">dependencies</a> = std::vector&lt;<a class="el" href="class_task.html">Task</a> * &gt;()</td></tr>
 <tr class="memdesc:a5733aba680ce61d89b1a9340ad874d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vector of <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a> objects that this <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a> depend upon. <br /></td></tr>
 <tr class="separator:a5733aba680ce61d89b1a9340ad874d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10e0c9d8f8cb08dfcdeaf7180be007dc"><td class="memItemLeft" align="right" valign="top"><a id="a10e0c9d8f8cb08dfcdeaf7180be007dc"></a>
-std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>dependenciesIndexes</b> = std::vector&lt;size_t&gt;()</td></tr>
-<tr class="separator:a10e0c9d8f8cb08dfcdeaf7180be007dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a205ee682c18e2657b9accd7946c3f546"><td class="memItemLeft" align="right" valign="top"><a id="a205ee682c18e2657b9accd7946c3f546"></a>
-std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a205ee682c18e2657b9accd7946c3f546">dependantsIndexes</a> = std::vector&lt;size_t&gt;()</td></tr>
-<tr class="memdesc:a205ee682c18e2657b9accd7946c3f546"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector with the position of the dependencies in the tasks array of the SimulationManager. <br /></td></tr>
-<tr class="separator:a205ee682c18e2657b9accd7946c3f546"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29d14455404f9d79ae5e7e7007246edf"><td class="memItemLeft" align="right" valign="top"><a id="a29d14455404f9d79ae5e7e7007246edf"></a>
+std::vector&lt; <a class="el" href="class_task.html">Task</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_task.html#a29d14455404f9d79ae5e7e7007246edf">dependants</a> = std::vector&lt;<a class="el" href="class_task.html">Task</a> * &gt;()</td></tr>
+<tr class="memdesc:a29d14455404f9d79ae5e7e7007246edf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vector of <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a> objects that depend on this <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>. <br /></td></tr>
+<tr class="separator:a29d14455404f9d79ae5e7e7007246edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a> is an instruction or set of instructions that is required to perform a simulation. </p>
@@ -175,8 +169,7 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
       </table>
 </div><div class="memdoc">
 
-<p>Vector with the position of the dependant tasks in the tasks array of the SimulationManager. </p>
-<p>Generic constructor</p>
+<p>Generic constructor. </p>
 <p>Initializes a generic <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a> without dependencies or dependants</p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <div class="fragment"><div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div><div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}</div></div><!-- fragment -->
@@ -203,31 +196,31 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa323ba0ebbb64e0f1fd8485074bb4808"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa323ba0ebbb64e0f1fd8485074bb4808">&#9670;&nbsp;</a></span>addDependantIndex()</h2>
+<a id="af1f737766c1aa5fb738fa49299869424"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1f737766c1aa5fb738fa49299869424">&#9670;&nbsp;</a></span>addDependant()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Task::addDependantIndex </td>
+          <td class="memname">void Task::addDependant </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>i</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="class_task.html">Task</a> *&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Adds a dependant index to the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>. </p>
+<p>Adds a dependant <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">i</td><td>The index of the dependant in the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a> array </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>The pointer to the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a> to add </td></tr>
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;{</div><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="class_task.html#a205ee682c18e2657b9accd7946c3f546">dependantsIndexes</a>.push_back(i);</div><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div><div class="ttc" id="class_task_html_a205ee682c18e2657b9accd7946c3f546"><div class="ttname"><a href="class_task.html#a205ee682c18e2657b9accd7946c3f546">Task::dependantsIndexes</a></div><div class="ttdeci">std::vector&lt; size_t &gt; dependantsIndexes</div><div class="ttdoc">Vector with the position of the dependencies in the tasks array of the SimulationManager. </div><div class="ttdef"><b>Definition:</b> task.h:49</div></div>
+<div class="fragment"><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;{</div><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  <a class="code" href="class_task.html#a29d14455404f9d79ae5e7e7007246edf">dependants</a>.push_back(t);</div><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div><div class="ttc" id="class_task_html_a29d14455404f9d79ae5e7e7007246edf"><div class="ttname"><a href="class_task.html#a29d14455404f9d79ae5e7e7007246edf">Task::dependants</a></div><div class="ttdeci">std::vector&lt; Task * &gt; dependants</div><div class="ttdoc">The vector of Task objects that depend on this Task. </div><div class="ttdef"><b>Definition:</b> task.h:49</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -255,35 +248,9 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;{</div><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">dependencies</a>.push_back(t);</div><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div><div class="ttc" id="class_task_html_a5733aba680ce61d89b1a9340ad874d60"><div class="ttname"><a href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">Task::dependencies</a></div><div class="ttdeci">std::vector&lt; Task * &gt; dependencies</div><div class="ttdoc">The vector of Task objects that this Task depend upon. </div><div class="ttdef"><b>Definition:</b> task.h:47</div></div>
+<div class="fragment"><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;{  </div><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <a class="code" href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">dependencies</a>.push_back(t);</div><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  t-&gt;<a class="code" href="class_task.html#af1f737766c1aa5fb738fa49299869424">addDependant</a>(<span class="keyword">this</span>);</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}</div><div class="ttc" id="class_task_html_a5733aba680ce61d89b1a9340ad874d60"><div class="ttname"><a href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">Task::dependencies</a></div><div class="ttdeci">std::vector&lt; Task * &gt; dependencies</div><div class="ttdoc">The vector of Task objects that this Task depend upon. </div><div class="ttdef"><b>Definition:</b> task.h:48</div></div>
+<div class="ttc" id="class_task_html_af1f737766c1aa5fb738fa49299869424"><div class="ttname"><a href="class_task.html#af1f737766c1aa5fb738fa49299869424">Task::addDependant</a></div><div class="ttdeci">void addDependant(Task *t)</div><div class="ttdoc">Adds a dependant Task. </div><div class="ttdef"><b>Definition:</b> task.cpp:51</div></div>
 </div><!-- fragment -->
-</div>
-</div>
-<a id="a30ed370fb2969bb5912160d70517bd89"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30ed370fb2969bb5912160d70517bd89">&#9670;&nbsp;</a></span>addDependencyIndex()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Task::addDependencyIndex </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>i</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Adds a dependency index to the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>. </p>
-<dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">i</td><td>The index of the dependency in the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a> array </td></tr>
-  </table>
-  </dd>
-</dl>
-<div class="fragment"><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;{</div><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    dependenciesIndexes.push_back(i);</div><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
 <a id="af6ccce1e573624f2129fb5e6b90d95e5"></a>
@@ -304,7 +271,7 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 <p>Counts the number of dependants in a <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The number </dd></dl>
-<div class="fragment"><div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;{</div><div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_task.html#a205ee682c18e2657b9accd7946c3f546">dependantsIndexes</a>.size();</div><div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;}</div><div class="ttc" id="class_task_html_a205ee682c18e2657b9accd7946c3f546"><div class="ttname"><a href="class_task.html#a205ee682c18e2657b9accd7946c3f546">Task::dependantsIndexes</a></div><div class="ttdeci">std::vector&lt; size_t &gt; dependantsIndexes</div><div class="ttdoc">Vector with the position of the dependencies in the tasks array of the SimulationManager. </div><div class="ttdef"><b>Definition:</b> task.h:49</div></div>
+<div class="fragment"><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;{</div><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="class_task.html#a29d14455404f9d79ae5e7e7007246edf">dependants</a>.size();</div><div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div><div class="ttc" id="class_task_html_a29d14455404f9d79ae5e7e7007246edf"><div class="ttname"><a href="class_task.html#a29d14455404f9d79ae5e7e7007246edf">Task::dependants</a></div><div class="ttdeci">std::vector&lt; Task * &gt; dependants</div><div class="ttdoc">The vector of Task objects that depend on this Task. </div><div class="ttdef"><b>Definition:</b> task.h:49</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -326,18 +293,18 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 <p>Gets the number of dependencies. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of dependencies </dd></dl>
-<div class="fragment"><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;{</div><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">dependencies</a>.size();</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;}</div><div class="ttc" id="class_task_html_a5733aba680ce61d89b1a9340ad874d60"><div class="ttname"><a href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">Task::dependencies</a></div><div class="ttdeci">std::vector&lt; Task * &gt; dependencies</div><div class="ttdoc">The vector of Task objects that this Task depend upon. </div><div class="ttdef"><b>Definition:</b> task.h:47</div></div>
+<div class="fragment"><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;{</div><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">dependencies</a>.size();</div><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div><div class="ttc" id="class_task_html_a5733aba680ce61d89b1a9340ad874d60"><div class="ttname"><a href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">Task::dependencies</a></div><div class="ttdeci">std::vector&lt; Task * &gt; dependencies</div><div class="ttdoc">The vector of Task objects that this Task depend upon. </div><div class="ttdef"><b>Definition:</b> task.h:48</div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="a83f9b52bb27487fe941b2fd74443b013"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a83f9b52bb27487fe941b2fd74443b013">&#9670;&nbsp;</a></span>getDependantIndex()</h2>
+<a id="a47590fd9e311bea1b7c2a0fb2cbf226e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47590fd9e311bea1b7c2a0fb2cbf226e">&#9670;&nbsp;</a></span>getDependantRef()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">size_t Task::getDependantIndex </td>
+          <td class="memname"><a class="el" href="class_task.html">Task</a> * Task::getDependantRef </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>i</em></td><td>)</td>
@@ -346,45 +313,17 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
       </table>
 </div><div class="memdoc">
 
-<p>Retrieves the index of a dependant in the SimulationManager tasks vector. </p>
+<p>Retrieves a dependant pointer. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">i</td><td>The number of the dependency </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">i</td><td>The index of the dependency to get </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The index of such dependant in the SimulationManager tasks vector </dd></dl>
-<div class="fragment"><div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;{</div><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_task.html#a205ee682c18e2657b9accd7946c3f546">dependantsIndexes</a>[i];</div><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div><div class="ttc" id="class_task_html_a205ee682c18e2657b9accd7946c3f546"><div class="ttname"><a href="class_task.html#a205ee682c18e2657b9accd7946c3f546">Task::dependantsIndexes</a></div><div class="ttdeci">std::vector&lt; size_t &gt; dependantsIndexes</div><div class="ttdoc">Vector with the position of the dependencies in the tasks array of the SimulationManager. </div><div class="ttdef"><b>Definition:</b> task.h:49</div></div>
+<dl class="section return"><dt>Returns</dt><dd>The pointer to the dependency </dd></dl>
+<div class="fragment"><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;{</div><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="class_task.html#a29d14455404f9d79ae5e7e7007246edf">dependants</a>[i];</div><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div><div class="ttc" id="class_task_html_a29d14455404f9d79ae5e7e7007246edf"><div class="ttname"><a href="class_task.html#a29d14455404f9d79ae5e7e7007246edf">Task::dependants</a></div><div class="ttdeci">std::vector&lt; Task * &gt; dependants</div><div class="ttdoc">The vector of Task objects that depend on this Task. </div><div class="ttdef"><b>Definition:</b> task.h:49</div></div>
 </div><!-- fragment -->
-</div>
-</div>
-<a id="adc3267ae11be084a70f914039907b8b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adc3267ae11be084a70f914039907b8b5">&#9670;&nbsp;</a></span>getDependencyIndex()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t Task::getDependencyIndex </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>i</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieves the index of a dependency in the SimulationManager tasks vector. </p>
-<dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">i</td><td>The number of the dependency </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The index of such dependency in the SimulationManager tasks vector </dd></dl>
-<div class="fragment"><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;{</div><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordflow">return</span> dependenciesIndexes[i];</div><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
 <a id="aa6114f6eafe308af01022a4261ac90b4"></a>
@@ -412,18 +351,18 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The pointer to the dependency </dd></dl>
-<div class="fragment"><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;{</div><div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">dependencies</a>[i];</div><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;}</div><div class="ttc" id="class_task_html_a5733aba680ce61d89b1a9340ad874d60"><div class="ttname"><a href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">Task::dependencies</a></div><div class="ttdeci">std::vector&lt; Task * &gt; dependencies</div><div class="ttdoc">The vector of Task objects that this Task depend upon. </div><div class="ttdef"><b>Definition:</b> task.h:47</div></div>
+<div class="fragment"><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;{</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">dependencies</a>[i];</div><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div><div class="ttc" id="class_task_html_a5733aba680ce61d89b1a9340ad874d60"><div class="ttname"><a href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">Task::dependencies</a></div><div class="ttdeci">std::vector&lt; Task * &gt; dependencies</div><div class="ttdoc">The vector of Task objects that this Task depend upon. </div><div class="ttdef"><b>Definition:</b> task.h:48</div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="a1d52557ded52f1e071b06abf6ebb35f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d52557ded52f1e071b06abf6ebb35f5">&#9670;&nbsp;</a></span>getName()</h2>
+<a id="a0a75fdd5e0d45b4e51ca27ba0c33055b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a75fdd5e0d45b4e51ca27ba0c33055b">&#9670;&nbsp;</a></span>getName()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string Task::getName </td>
+          <td class="memname">std::string * Task::getName </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -434,7 +373,7 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 <p>Retrieves the name of the <a class="el" href="class_task.html" title="A Task is an instruction or set of instructions that is required to perform a simulation. ">Task</a>. </p>
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The name </dd></dl>
-<div class="fragment"><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">name</a>;</div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;}</div><div class="ttc" id="class_task_html_a442a9a7a998c24b533b25575f6edeb3f"><div class="ttname"><a href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">Task::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the task. </div><div class="ttdef"><b>Definition:</b> task.h:46</div></div>
+<div class="fragment"><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">return</span> &amp;<a class="code" href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">name</a>;</div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;}</div><div class="ttc" id="class_task_html_a442a9a7a998c24b533b25575f6edeb3f"><div class="ttname"><a href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">Task::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the task. </div><div class="ttdef"><b>Definition:</b> task.h:47</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -474,12 +413,51 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>is equal? </dd></dl>
 
-<p>Reimplemented in <a class="el" href="class_export_radiance_dir_with_workplanes.html#aba2a2c5162b2d95101b147d6e64f5aa0">ExportRadianceDirWithWorkplanes</a>, <a class="el" href="class_d_f_oconv.html#a0f66e6b590bc1a19b41ffa8478c76f42">DFOconv</a>, <a class="el" href="class_triangulate_workplane.html#aa6d8f868f91f3c8660a2b5fa4865d6bb">TriangulateWorkplane</a>, <a class="el" href="class_calc_d_f.html#ab20ad4030c04405b1d21d0aa9bba7dee">CalcDF</a>, <a class="el" href="class_whole_scene_oconv.html#a2db5f20d9b2dc2a6c558691d74c0b462">WholeSceneOconv</a>, <a class="el" href="class_write_d_f_sky.html#a65fccdd49e2768acf7c53341e00ba77d">WriteDFSky</a>, and <a class="el" href="class_export_radiance_dir.html#a05730d21e63289f8445ff9710bb1fba8">ExportRadianceDir</a>.</p>
-<div class="fragment"><div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;{</div><div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div><div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;}</div></div><!-- fragment -->
+<p>Reimplemented in <a class="el" href="class_export_radiance_dir_with_workplanes.html#aba2a2c5162b2d95101b147d6e64f5aa0">ExportRadianceDirWithWorkplanes</a>, <a class="el" href="class_triangulate_workplane.html#aa6d8f868f91f3c8660a2b5fa4865d6bb">TriangulateWorkplane</a>, <a class="el" href="class_export_workplane.html#a59422ca7c5062f64cc5fb8a7f147b26c">ExportWorkplane</a>, <a class="el" href="class_export_radiance_dir.html#a05730d21e63289f8445ff9710bb1fba8">ExportRadianceDir</a>, <a class="el" href="class_triangulate_polygon.html#a02b9b599ee0bfc1458f7e506618dca35">TriangulatePolygon</a>, <a class="el" href="class_r_trace_task.html#a1d0faf694e937fdb348a39a5ff19cf4d">RTraceTask</a>, and <a class="el" href="class_oconv_task.html#a2a692a1832fd39b6c3dcdacd154232b8">OconvTask</a>.</p>
+<div class="fragment"><div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;{</div><div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div><div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
-<a id="a23abd79183a5c2bb1e6d3ff37b1cbf23"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23abd79183a5c2bb1e6d3ff37b1cbf23">&#9670;&nbsp;</a></span>setName()</h2>
+<a id="a2277c1f9973488cf28b9ae73ef674ab0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2277c1f9973488cf28b9ae73ef674ab0">&#9670;&nbsp;</a></span>replaceDependency()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Task::replaceDependency </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_task.html">Task</a> *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_task.html">Task</a> *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Replaces one dependency by another one. </p>
+<dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>The dependency to be replaced </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>The dependency to replace 'a' with </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="fragment"><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;{</div><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="keywordtype">size_t</span> n = <a class="code" href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">dependencies</a>.size();</div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; n; i++) {</div><div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">dependencies</a>[i] == a) {</div><div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      <a class="code" href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">dependencies</a>[i] = b;</div><div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <span class="keywordflow">return</span>;</div><div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    }</div><div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  }</div><div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}</div><div class="ttc" id="class_task_html_a5733aba680ce61d89b1a9340ad874d60"><div class="ttname"><a href="class_task.html#a5733aba680ce61d89b1a9340ad874d60">Task::dependencies</a></div><div class="ttdeci">std::vector&lt; Task * &gt; dependencies</div><div class="ttdoc">The vector of Task objects that this Task depend upon. </div><div class="ttdef"><b>Definition:</b> task.h:48</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="af6e12f00547778e76bc97428b5dbdf12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6e12f00547778e76bc97428b5dbdf12">&#9670;&nbsp;</a></span>setName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -487,7 +465,7 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
         <tr>
           <td class="memname">void Task::setName </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">std::string *&#160;</td>
           <td class="paramname"><em>name</em></td><td>)</td>
           <td></td>
         </tr>
@@ -502,7 +480,7 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">name</a> = n;</div><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div><div class="ttc" id="class_task_html_a442a9a7a998c24b533b25575f6edeb3f"><div class="ttname"><a href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">Task::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the task. </div><div class="ttdef"><b>Definition:</b> task.h:46</div></div>
+<div class="fragment"><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">name</a> = *n;</div><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div><div class="ttc" id="class_task_html_a442a9a7a998c24b533b25575f6edeb3f"><div class="ttname"><a href="class_task.html#a442a9a7a998c24b533b25575f6edeb3f">Task::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">The name of the task. </div><div class="ttdef"><b>Definition:</b> task.h:47</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -534,8 +512,8 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 <dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>success </dd></dl>
 
-<p>Reimplemented in <a class="el" href="class_export_radiance_dir_with_workplanes.html#ac52e1bd8e43e19f07005a4afcfd06db5">ExportRadianceDirWithWorkplanes</a>, <a class="el" href="class_d_f_oconv.html#a4172769e7e9b06d24a88beeba2bb5e0f">DFOconv</a>, <a class="el" href="class_triangulate_workplane.html#a162ed7d7fc16b8904806a557f05f1be5">TriangulateWorkplane</a>, <a class="el" href="class_calc_d_f.html#aefbb99197252f9f70573f78cfa8f8055">CalcDF</a>, <a class="el" href="class_whole_scene_oconv.html#ad5cdfcc43921f739bf606c0ae3a0c178">WholeSceneOconv</a>, <a class="el" href="class_export_radiance_dir.html#aff27e5ceaabb9ac872df7fb07ddcdc9b">ExportRadianceDir</a>, and <a class="el" href="class_write_d_f_sky.html#a8f80d76e18e7fcd175d2360eaa518a50">WriteDFSky</a>.</p>
-<div class="fragment"><div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;{</div><div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div><div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;}</div></div><!-- fragment -->
+<p>Reimplemented in <a class="el" href="class_export_radiance_dir_with_workplanes.html#ac52e1bd8e43e19f07005a4afcfd06db5">ExportRadianceDirWithWorkplanes</a>, <a class="el" href="class_triangulate_workplane.html#a162ed7d7fc16b8904806a557f05f1be5">TriangulateWorkplane</a>, <a class="el" href="class_export_workplane.html#a4480299244d176c91c066b36bd3120b1">ExportWorkplane</a>, <a class="el" href="class_export_radiance_dir.html#aff27e5ceaabb9ac872df7fb07ddcdc9b">ExportRadianceDir</a>, <a class="el" href="class_triangulate_polygon.html#a3b38d1bf23a5780e2c9569a06087b010">TriangulatePolygon</a>, <a class="el" href="class_r_trace_task.html#ad4975081ef29689237a063a4d39dfc16">RTraceTask</a>, and <a class="el" href="class_oconv_task.html#a96a17f0923727440ab80aae80f4d5378">OconvTask</a>.</p>
+<div class="fragment"><div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;{</div><div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div><div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -546,7 +524,7 @@ std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 <!-- HTML footer for doxygen 1.8.13-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 4 2017 09:30:27 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
+Generated on Wed Dec 13 2017 15:31:51 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
 </a> 1.8.13
 </small></address>
 </body>

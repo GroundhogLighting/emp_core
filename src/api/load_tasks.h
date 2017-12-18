@@ -31,4 +31,7 @@ void registerTasks(lua_State * L)
 {
   registerTask(L, "workplane_illuminance", workplaneIlluminanceFactory);
 
+
+  registerTask(L, "export", exportModel);
+
 }

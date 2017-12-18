@@ -21,6 +21,7 @@
 
 #include <string>
 
+#include "mem_leak.h"
 #include "config_constants.h"
 
 #include "./glare.h"
@@ -33,22 +34,9 @@
 
 #include "common/taskmanager/tasks/export.h"
 
-// Include LUA headers
-extern "C" {
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h> 
-}
+#include "Lua/src/lua.hpp"
 
 
-
-Glare::Glare() 
-{
-}
-
-Glare::~Glare() 
-{	
-}
 
 
 
@@ -156,8 +144,9 @@ bool Glare::solve(int argc, char* argv[])
 		// translate
 		if (!stringInclude(secondArgument, ".")) {
 			// Radiance format... no extension
-			taskManager.addTask(new ExportRadianceDirWithWorkplanes(secondArgument,&model,verbose));
-            taskManager.solve();
+          ExportRadianceDirWithWorkplanes * task = new ExportRadianceDirWithWorkplanes(secondArgument, &model, verbose);
+          taskManager.addTask(task);
+          taskManager.solve();          
 		}
 		else {
 			FATAL(errorMessage,"Unrecognized file extension in " + secondArgument);

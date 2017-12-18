@@ -4,5 +4,5 @@ var searchData=
   ['deletetriangle',['deleteTriangle',['../class_triangulation.html#aea7f1aad0776540f33c53ed72091e413',1,'Triangulation']]],
   ['dexist',['dexist',['../group__file.html#ga38102b7b31e4cb1528c49fc073ee924c',1,'dexist(std::string dirname):&#160;file.cpp'],['../group__file.html#ga38102b7b31e4cb1528c49fc073ee924c',1,'dexist(std::string dirname):&#160;file.cpp']]],
   ['distanceto',['distanceTo',['../class_point3_d.html#a17fefcac2175a0870afc221a16e958e6',1,'Point3D']]],
-  ['docdt',['doCDT',['../class_triangulation.html#aae31d2bbb30095b25255fe7d23014d56',1,'Triangulation']]]
+  ['docdt',['doCDT',['../class_triangulation.html#a65ac925155be38e6916e3d571c9b7920',1,'Triangulation']]]
 ];

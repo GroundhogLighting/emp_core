@@ -111,7 +111,13 @@ bool TaskManager::solve()
 	for (size_t i = 0; i < tasks.size(); i++)
 	{
 		nodes.push_back(tbb::flow::continue_node<tbb::flow::continue_msg>(g, [=](const tbb::flow::continue_msg &) {
-			return tasks[i]->solve();
+          try {
+              return tasks[i]->solve();
+          }
+          catch (int e) {
+            throw 999;
+          }
+          
 		}));
 	}
 

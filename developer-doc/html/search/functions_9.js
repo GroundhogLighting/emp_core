@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['layer',['Layer',['../class_layer.html#af4d43c923e8e295ad2eed1afc66c13f3',1,'Layer']]],
+  ['layer',['Layer',['../class_layer.html#a367fab2417768a7cd6d36dd27dca1335',1,'Layer']]],
   ['loadcomponentdefinition',['loadComponentDefinition',['../class_s_k_p_reader.html#af987a7a38ebbb682eec25e000f1c4624',1,'SKPReader']]],
   ['loadcomponentdefinitions',['loadComponentDefinitions',['../class_s_k_p_reader.html#a00dddc66729496ce386d6734e3a1d180',1,'SKPReader']]],
   ['loadfile',['loadFile',['../class_glare.html#aaf7b63337b873366b36ebc03e5c21bbd',1,'Glare']]],
+  ['loadgroupdefinitions',['loadGroupDefinitions',['../class_s_k_p_reader.html#a07cfb0e6bd206b9c6268490c614ce052',1,'SKPReader']]],
+  ['loadinstance',['loadInstance',['../class_s_k_p_reader.html#a9b9c239c8312351898061f2b76f0822a',1,'SKPReader']]],
   ['loadlayers',['loadLayers',['../class_s_k_p_reader.html#a942951baf9f7fb45930dd4a8c25ecb70',1,'SKPReader']]],
   ['loadlayerscontent',['loadLayersContent',['../class_s_k_p_reader.html#a3e4b6027fd7c6e8e33e84239f81b7f8b',1,'SKPReader']]],
   ['loadmodelinfo',['loadModelInfo',['../class_s_k_p_reader.html#ae11a21779f3a86789d7aaf43f0b53280',1,'SKPReader']]],

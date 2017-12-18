@@ -52,6 +52,12 @@ bool RadExporter::exportModel()
 		return false;
 	}
 
+    // Create the directory
+    if (!createdir("./" + exportDir + "/" + GLARE_WORKPLANES_SUBFOLDER)) {
+      FATAL(errorMessage, "Imposible to create Output directory");
+      return false;
+    }
+    
 	// Write layers
 	if (!writeLayers(GLARE_LAYERS_SUBFOLDER)) {
 		FATAL(errorMessage,"Error when exporing Layers");

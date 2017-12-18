@@ -102,6 +102,7 @@ void Point3D::print()
 Point3D Point3D::transform(Vector3D i, Vector3D j, Vector3D k)
 {
 
+  
 #ifdef DEBUG
 	// Check if they are normal... debugging
 	if (std::abs(1 - i.getLength()) > GLARE_TINY || std::abs(1 - j.getLength()) > GLARE_TINY || std::abs(1 - k.getLength()) > GLARE_TINY) {
@@ -123,6 +124,7 @@ Point3D Point3D::transform(Vector3D i, Vector3D j, Vector3D k)
 		std::cerr << "   i*k: " << std::abs(i*k) << std::endl;
 	}
 #endif
+  
 	
 	double rx = i.getX()*x + i.getY()*y + i.getZ()*z;
 	double ry = j.getX()*x + j.getY()*y + j.getZ()*z;

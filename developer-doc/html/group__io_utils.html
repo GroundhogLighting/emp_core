@@ -75,18 +75,30 @@ Macros</h2></td></tr>
 <tr class="memitem:gaf1206b4d3bda8c4c8c9257f369a9e9e1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#gaf1206b4d3bda8c4c8c9257f369a9e9e1">DEBUG_MSG</a>(str)&#160;&#160;&#160;do { } while ( false )</td></tr>
 <tr class="memdesc:gaf1206b4d3bda8c4c8c9257f369a9e9e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">A debug message function. Only reports in DEBUG releases.  <a href="#gaf1206b4d3bda8c4c8c9257f369a9e9e1">More...</a><br /></td></tr>
 <tr class="separator:gaf1206b4d3bda8c4c8c9257f369a9e9e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2a2fa2802588024eeed979d098548ae0"><td class="memItemLeft" align="right" valign="top"><a id="ga2a2fa2802588024eeed979d098548ae0"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>WARN</b>(var,  x)&#160;&#160;&#160;std::string var=x; <a class="el" href="group__io_utils.html#ga03abaff799e10b621989622d48c48bc9">warn</a>(&amp;var[0])</td></tr>
+<tr class="separator:ga2a2fa2802588024eeed979d098548ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae6569cf68015310ae0379a400108db44"><td class="memItemLeft" align="right" valign="top"><a id="gae6569cf68015310ae0379a400108db44"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>FATAL</b>(var,  x)&#160;&#160;&#160;std::string var=x; <a class="el" href="group__io_utils.html#gab67cd0283320ef94ea5750e9f286b118">fatal</a>(&amp;var[0],__LINE__,__FILE__)</td></tr>
+<tr class="separator:gae6569cf68015310ae0379a400108db44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacc2ed550845599e56fba416a96552c31"><td class="memItemLeft" align="right" valign="top"><a id="gacc2ed550845599e56fba416a96552c31"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>INFORM</b>(var,  x,  y)&#160;&#160;&#160;std::string var=x; <a class="el" href="group__io_utils.html#gae8e681f973c2fc40d58b1896e1118324">inform</a>(&amp;var[0],y)</td></tr>
+<tr class="separator:gacc2ed550845599e56fba416a96552c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gaf07f2c9fa66e59ef91c679d45bcebe5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#gaf07f2c9fa66e59ef91c679d45bcebe5d">warn</a> (std::string message)</td></tr>
-<tr class="memdesc:gaf07f2c9fa66e59ef91c679d45bcebe5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Warn something.  <a href="#gaf07f2c9fa66e59ef91c679d45bcebe5d">More...</a><br /></td></tr>
-<tr class="separator:gaf07f2c9fa66e59ef91c679d45bcebe5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8afab6dfaa6023e1c28faf8299acefac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#ga8afab6dfaa6023e1c28faf8299acefac">fatal</a> (std::string message, int ln, char *file)</td></tr>
-<tr class="memdesc:ga8afab6dfaa6023e1c28faf8299acefac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report fatal error.  <a href="#ga8afab6dfaa6023e1c28faf8299acefac">More...</a><br /></td></tr>
-<tr class="separator:ga8afab6dfaa6023e1c28faf8299acefac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5788248e6b10fb7cf115b0e885ef3842"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#ga5788248e6b10fb7cf115b0e885ef3842">inform</a> (std::string message, bool verbose)</td></tr>
-<tr class="memdesc:ga5788248e6b10fb7cf115b0e885ef3842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Informs something.  <a href="#ga5788248e6b10fb7cf115b0e885ef3842">More...</a><br /></td></tr>
-<tr class="separator:ga5788248e6b10fb7cf115b0e885ef3842"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga03abaff799e10b621989622d48c48bc9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#ga03abaff799e10b621989622d48c48bc9">warn</a> (char *message)</td></tr>
+<tr class="memdesc:ga03abaff799e10b621989622d48c48bc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Warn something.  <a href="#ga03abaff799e10b621989622d48c48bc9">More...</a><br /></td></tr>
+<tr class="separator:ga03abaff799e10b621989622d48c48bc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab67cd0283320ef94ea5750e9f286b118"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#gab67cd0283320ef94ea5750e9f286b118">fatal</a> (char *message, int ln, char *file)</td></tr>
+<tr class="memdesc:gab67cd0283320ef94ea5750e9f286b118"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report fatal error.  <a href="#gab67cd0283320ef94ea5750e9f286b118">More...</a><br /></td></tr>
+<tr class="separator:gab67cd0283320ef94ea5750e9f286b118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae8e681f973c2fc40d58b1896e1118324"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#gae8e681f973c2fc40d58b1896e1118324">inform</a> (char *message, bool verbose)</td></tr>
+<tr class="memdesc:gae8e681f973c2fc40d58b1896e1118324"><td class="mdescLeft">&#160;</td><td class="mdescRight">Informs something.  <a href="#gae8e681f973c2fc40d58b1896e1118324">More...</a><br /></td></tr>
+<tr class="separator:gae8e681f973c2fc40d58b1896e1118324"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabbc4cf77ec94ce0d8a351dfa8b37e9c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io_utils.html#gabbc4cf77ec94ce0d8a351dfa8b37e9c5">warnNoMaterial</a> (char *type, char *name)</td></tr>
+<tr class="memdesc:gabbc4cf77ec94ce0d8a351dfa8b37e9c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Warns that a certain window, or <a class="el" href="class_otype.html" title="Class for representing various types of geometrical objects. ">Otype</a> object has no material.  <a href="#gabbc4cf77ec94ce0d8a351dfa8b37e9c5">More...</a><br /></td></tr>
+<tr class="separator:gabbc4cf77ec94ce0d8a351dfa8b37e9c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>This module defines functions that are used in the rest of the program to inform, report or warn about things </p>
@@ -113,8 +125,8 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga8afab6dfaa6023e1c28faf8299acefac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga8afab6dfaa6023e1c28faf8299acefac">&#9670;&nbsp;</a></span>fatal()</h2>
+<a id="gab67cd0283320ef94ea5750e9f286b118"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab67cd0283320ef94ea5750e9f286b118">&#9670;&nbsp;</a></span>fatal()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -122,7 +134,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void fatal </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>message</em>, </td>
         </tr>
         <tr>
@@ -160,8 +172,8 @@ Functions</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{   </div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Fatal: &quot;</span> &lt;&lt; message &lt;&lt; <span class="stringliteral">&quot; -- Line &quot;</span> &lt;&lt; ln &lt;&lt; <span class="stringliteral">&quot; of File &quot;</span> &lt;&lt; file&lt;&lt; std::endl;</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
-<a id="ga5788248e6b10fb7cf115b0e885ef3842"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga5788248e6b10fb7cf115b0e885ef3842">&#9670;&nbsp;</a></span>inform()</h2>
+<a id="gae8e681f973c2fc40d58b1896e1118324"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae8e681f973c2fc40d58b1896e1118324">&#9670;&nbsp;</a></span>inform()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -169,7 +181,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void inform </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>message</em>, </td>
         </tr>
         <tr>
@@ -200,8 +212,8 @@ Functions</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordflow">if</span> (!verbose) {</div><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">return</span>;</div><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    }</div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    std::cout &lt;&lt; <span class="stringliteral">&quot;     ... &quot;</span> &lt;&lt; message &lt;&lt; std::endl;</div><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
-<a id="gaf07f2c9fa66e59ef91c679d45bcebe5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaf07f2c9fa66e59ef91c679d45bcebe5d">&#9670;&nbsp;</a></span>warn()</h2>
+<a id="ga03abaff799e10b621989622d48c48bc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga03abaff799e10b621989622d48c48bc9">&#9670;&nbsp;</a></span>warn()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -209,7 +221,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void warn </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>message</em></td><td>)</td>
           <td></td>
         </tr>
@@ -229,11 +241,50 @@ Functions</h2></td></tr>
 <div class="fragment"><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{   </div><div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    std::cerr &lt;&lt; <span class="stringliteral">&quot;Warning: &quot;</span> &lt;&lt; message &lt;&lt; std::endl;</div><div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
+<a id="gabbc4cf77ec94ce0d8a351dfa8b37e9c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabbc4cf77ec94ce0d8a351dfa8b37e9c5">&#9670;&nbsp;</a></span>warnNoMaterial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void warnNoMaterial </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Warns that a certain window, or <a class="el" href="class_otype.html" title="Class for representing various types of geometrical objects. ">Otype</a> object has no material. </p>
+<dl class="section author"><dt>Author</dt><dd>German Molina </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>The type of surface (e.g. window or other) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>The name of the object </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="fragment"><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;{</div><div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  std::string errmsg = std::string(type)+ <span class="stringliteral">&quot; object called &quot;</span> + std::string(name) + <span class="stringliteral">&quot; has no material. It will be ignored&quot;</span>;</div><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  <a class="code" href="group__io_utils.html#ga03abaff799e10b621989622d48c48bc9">warn</a>(&amp;errmsg[0]);</div><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}</div><div class="ttc" id="group__io_utils_html_ga03abaff799e10b621989622d48c48bc9"><div class="ttname"><a href="group__io_utils.html#ga03abaff799e10b621989622d48c48bc9">warn</a></div><div class="ttdeci">void warn(char *message)</div><div class="ttdoc">Warn something. </div><div class="ttdef"><b>Definition:</b> io.cpp:29</div></div>
+</div><!-- fragment -->
+</div>
+</div>
 </div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.13-->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Nov 4 2017 09:30:25 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
+Generated on Wed Dec 13 2017 15:31:49 for Glare by &#160;<a href="http://www.doxygen.org/index.html"> Doxygen
 </a> 1.8.13
 </small></address>
 </body>
