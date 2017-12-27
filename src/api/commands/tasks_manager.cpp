@@ -28,8 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int solveTaskManager(lua_State * L)
 {
-	getCurrentTaskManager(L)->solve();
-	return 0;
+  json results = json();
+  getCurrentTaskManager(L)->solve(&results);
+  return 0;
 }
 
 int printTaskManager(lua_State * L)
@@ -72,11 +73,11 @@ int addTask(lua_State * L)
     sendError(L, "Unknown Task", &errmsg[0]);
   }
 
-  //TaskFactory f = (*td)[factoryKey];
   TaskFactory f = td->at(&factoryKey[0]);
 
   // get the task 
   Task * task = f(L);
+  task->reportResults = true; // We do want to report the results
 
   // Get current task Manager
   TaskManager * tm = getCurrentTaskManager(L);

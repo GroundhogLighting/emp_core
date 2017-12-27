@@ -247,6 +247,7 @@ project "raycalls"
     language "C"
     files {
         third_party_dir.."/Radiance/src/rt/raycalls.c",
+        third_party_dir.."/Radiance/src/rt/raypwin.c", -- this is only for windows... otherwise it is raypcalls.c        
         third_party_dir.."/Radiance/src/rt/rayfifo.c", 
     }
     includedirs{
@@ -285,20 +286,13 @@ project "glare"
         includedirs {
             third_party_dir.."/SketchUp/WIN/headers", -- this changes in different machines
         }     
-
+  
 
 project "glare_test"
     kind "ConsoleApp"
 
     filter "configurations:DEBUG"
         defines { "DEBUG" }
-
-    includedirs {
-        "./src/",
-        third_party_dir,
-        google_test_dir.."/include", 
-        third_party_dir.."/SketchUp/WIN/headers" 
-    }
     
     filter "platforms:WIN*"
         defines { "WIN" }    
@@ -311,7 +305,9 @@ project "glare_test"
             third_party_dir,
             third_party_dir.."/intelTBB/include",
             lua_dir,
-            third_party_dir.."/Radiance/src/common",        
+            third_party_dir.."/Radiance/src/common", 
+            google_test_dir.."/include",             
+            third_party_dir.."/SketchUp/WIN/headers"
         }  
 
     links {

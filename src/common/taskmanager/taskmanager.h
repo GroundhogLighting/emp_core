@@ -41,7 +41,8 @@ calculating twice the Daylight Autonomy of a workplane)
 class TaskManager {
 private:
 	std::vector <Task * > tasks = std::vector<Task *>(); //!< The Task objects to solve.
-	
+    json results = json();
+
 public:
 
 	//! Constructor
@@ -81,9 +82,10 @@ public:
 
 	//! Solve all the tasks
 	/*!
-	@param German molina
+	@author German molina
+    @param[out] results The JSON where to put the results
 	*/
-	bool solve();
+	bool solve(json * results);
 
 	//! A Debug function...
 	/*!

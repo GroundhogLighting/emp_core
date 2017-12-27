@@ -22,11 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Include LUA headers
-extern "C" {
-#include <lua.h>
-//#include <lualib.h>
-#include <lauxlib.h> 
-}
+#include "Lua/src/lua.hpp"
 
 
 //! Creates an octree from a Radiance Directory
@@ -35,3 +31,10 @@ extern "C" {
 @return the number of return values within the script
 */
 int oconv_command(lua_State * L);
+
+//! Calculates the illuminance of a workplane in a certain octree
+/*
+@param[in] L The Lua state
+@return the number of return values within the script
+*/
+int rtrace_command(lua_State * L);

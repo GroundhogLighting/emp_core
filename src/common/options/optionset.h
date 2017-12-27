@@ -162,4 +162,11 @@ public:
     @return success
     */
     bool fillFromLuaTable(lua_State * L, int tablePosition);
+
+    //! Gets the inline version of the options (i.e. for Radiance commands)
+    /*!
+    @author German Molina
+    */
+    std::string getInlineVersion();
+
 };

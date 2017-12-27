@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "../task.h"
+#include "common/utilities/stringutils.h"
 #include "calculations/oconv_options.h"
 #include "calculations/radiance.h"
 
@@ -75,7 +76,10 @@ public:
     ret += options.getOption<bool>(std::string(OCONV_USE_BLACK_GEOMETRY)) ? "1." : "0.";
     ret += options.getOption<bool>(std::string(OCONV_INCLUDE_SKY)) ? "1." : "0.";
     ret += options.getOption<bool>(std::string(OCONV_LIGHTS_ON)) ? "1." : "0.";
-    ret += options.getOption<std::string>(std::string(OCONV_SKY));
+
+    std::string sky = options.getOption<std::string>(std::string(OCONV_SKY));   
+    fixString(&sky[0],sky.size());
+    ret += sky;
 
     return ret;
   }

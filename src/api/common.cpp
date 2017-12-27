@@ -122,3 +122,16 @@ void badOptionError(lua_State * L, std::string optionName, const char * received
   std::string err = "Option '" + optionName + "' is not supposed to be a "+ receivedType;
   sendError(L, "Bad option type", &err[0]);
 }
+
+Workplane * getWorkplane(lua_State * L, std::string workplaneName)
+{
+  GroundhogModel * model = getCurrentModel(L);
+  Workplane * wp = model->getWorkplaneByName(workplaneName);
+
+  if (wp == nullptr) {
+    std::string errmsg = "Workplane '" + workplaneName + "' does not exist";
+    sendError(L, "No Workplane", &errmsg[0]);
+  }
+
+  return wp;
+}

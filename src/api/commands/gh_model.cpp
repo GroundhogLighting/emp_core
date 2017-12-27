@@ -55,7 +55,7 @@ int workplane_exists(lua_State * L)
 	std::string wpName = lua_tostring(L, 1);
 
     // Check if workplane exists
-	bool exists = (model->getWorkplaneByName(wpName) != NULL);
+	bool exists = (model->getWorkplaneByName(wpName) != nullptr);
 	
     // Push the result
 	lua_pushboolean(L, exists);

@@ -117,7 +117,8 @@ TEST(TaskManagerTest, solve)
 	Task * task = new TaskC(a1, a2, mult);
 	m.addTask(task);
 
-	m.solve();
+    json j = json();
+	m.solve(&j);
 
 	int r = static_cast<TaskC *>(task)->result;
 

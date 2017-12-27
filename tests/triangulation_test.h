@@ -1,4 +1,4 @@
-/* vector3d_test.h */
+﻿/* vector3d_test.h */
 
 #include <cmath>
 
@@ -76,4 +76,40 @@ TEST(TriangulateTest, ResetNeighborhood)
 	ASSERT_TRUE(t3->getNeighbor(0) == t2);
 	ASSERT_TRUE(t3->getNeighbor(1) == NULL);
 	ASSERT_TRUE(t3->getNeighbor(2) == t0);
+}
+
+TEST(TriangulateTest, cleanTest)
+{
+  Polygon3D * p = new Polygon3D();
+  
+  Point3D * a = new Point3D(1.666323, -22.30068,0);
+  Point3D * b = new Point3D(1.666323, -18.399,4);
+  Point3D * c = new Point3D(2.701599,-22.164,0);
+
+  Loop * loop = p->getOuterLoopRef();
+  loop->addVertex(a);
+  loop->addVertex(b);
+  loop->addVertex(c);
+
+  Vector3D normal = Vector3D(0.09269, 0.70406, -0.70406);
+  p->setNormal(normal);
+
+  Triangulation tri = Triangulation(p);
+  tri.mesh(0.25, 1.3);
+
+  Triangulation triClean = Triangulation(p);
+  triClean.mesh(0.25, 1.3);
+  triClean.purge();
+
+  ASSERT_EQ(triClean.getNumTriangles(), tri.realSize());
+
+  size_t size = triClean.getNumTriangles();
+  size_t count = 0;
+  for (size_t i = 0; i < size; i++) {
+    if (tri.getTriangleRef(i) == nullptr)
+      continue;    
+
+    ASSERT_TRUE(tri.getTriangleRef(i)->isEqual(triClean.getTriangleRef(count++)));
+  }
+
 }

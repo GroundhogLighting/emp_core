@@ -87,7 +87,7 @@ void registerCommands(lua_State * L)
 
   Solves the task manager
   */
-  lua_register(L, "solve_tasks", solveTaskManager);
+  lua_register(L, "solve", solveTaskManager);
 
   /* @APIfunction
 
@@ -158,19 +158,33 @@ void registerCommands(lua_State * L)
   /* ======================= */
 
   /* @APIfunction
-  Creates an octree of a model in a certain base directory (that complies the
-  Groundhog file distribution). The name of the octree can be chosen, and
+  Creates an octree of a model. The name of the octree can be chosen, and
   several options can be set. They are:
 
   - include_windows: If true, the windows will be included in the octree. Defaults to true.
   - sky: If a string is given, a sky will be included in the octree. Else, no sky will be given.
   - black_geometry: If true, all the non-window geometry becomes black. Defaults to false.
-
-  @param[required] base_dir The directory where the Radiance Model is stored
+ 
   @param[required] octree_name The name of the octree to create
   @param[optional] options The table of options if the octree
   */
   lua_register(L, "oconv", oconv_command);
+
+  /* @APIfunction
+  Calculates the illuminance in a workplane from a certain octree.
+
+  Options are:
+
+  - max_area: The maximum area allowed in the workplane triangulation
+  - max_aspect_ratio: The maximum aspect ratio allowed in the workplane triangulation
+  - ambient_file: The ambient file to use
+
+  @param[required] workplane_name The name of the directory
+  @param[required] octree_name The name of the octree to create
+  @param[optional] options The table of options if the octree
+  */
+  lua_register(L, "calc_illuminance", rtrace_command);
+
 
 
 

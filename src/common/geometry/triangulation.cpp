@@ -42,7 +42,7 @@ Triangulation::Triangulation(Polygon3D * aPolygon)
 
 Triangulation::~Triangulation()
 {
-	for (size_t i = 0; i < triangles.size();i++) {
+	for (size_t i = 0; i < nTriangles;i++) {
 		if (triangles[i] == NULL)
 			continue;
 
@@ -599,7 +599,13 @@ bool Triangulation::doCDT() {
 	// The maximum number of points you expect to need
 	// This value is used by the library to calculate
 	// working memory required
-	uint32_t MaxPointCount = GLARE_MAX_POINTS_IN_WORKPLANE;
+    uint32_t MaxPointCount;
+    if (polygon2D->getOuterLoopRef()->size() == 3 || ! polygon2D->hasInnerLoops() ) {
+      MaxPointCount = 3;
+    }
+    else {
+      MaxPointCount = GLARE_MAX_POINTS_IN_WORKPLANE;
+    } 
 
 	// Request how much memory (in bytes) you should
 	// allocate for the library
@@ -625,7 +631,7 @@ bool Triangulation::doCDT() {
 		{
 			Point3D * p = outerLoop->getVertexRef(i);
 
-			if (p == NULL)
+			if (p == nullptr)
 				continue;
 
 			// TRANSFORM TO 2D;
@@ -646,9 +652,12 @@ bool Triangulation::doCDT() {
 			MPEPolyPoint* Hole = MPE_PolyPushPointArray(&PolyContext, static_cast<u32>(innerLoop->size()));
 
 			for (size_t j = 0; j < innerLoop->size(); j++) {
-				Point3D * p = innerLoop->getVertexRef(j);
+				
+              Point3D * p = innerLoop->getVertexRef(j);
+
 				if (p == NULL)
 					continue;
+
 				Hole[j].X = p->getX();
 				Hole[j].Y = p->getY();
 			}
@@ -681,7 +690,11 @@ bool Triangulation::doCDT() {
 			for (size_t i = 0; i < 3; i++) {
 				MPEPolyTriangle * polyneighbor = polytriangle->Neighbors[(i + 2) % 3];
 				// If there is no neighbor
-				if (polyneighbor != NULL && (polyneighbor->Flags) < 256)
+
+                if (polyneighbor != nullptr && ! polyneighbor->Flags) {
+                  int a = 1;
+                }
+				if (polyneighbor != nullptr && (polyneighbor->Flags) < 256)
 					t->setConstraint(static_cast<u32>(i));
 			}
 			addTriangle(t);
@@ -745,4 +758,36 @@ void Triangulation::resetNeighborhoods()
 Polygon3D * Triangulation::getPolygon()
 {
   return polygon;
+}
+
+size_t Triangulation::realSize()
+{
+  size_t count = 0;
+  for (auto triangle : triangles) {
+    if (triangle == nullptr)
+      continue;
+
+    count++;
+  }
+  return count;
+}
+
+void Triangulation::purge()
+{
+  size_t realN = realSize();
+  std::vector<Triangle *> realTriangles = std::vector<Triangle *>(realN);
+  size_t count = 0;
+  for (auto triangle : triangles) {
+    // Skip if nullptr
+    if (triangle == nullptr)
+      continue;
+
+    realTriangles[count] = triangle;
+
+    count++;
+  }
+  // Update
+  nTriangles = realN;
+  triangles.resize(realN);
+  triangles = std::vector<Triangle *>(realTriangles);
 }

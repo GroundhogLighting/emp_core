@@ -38,7 +38,6 @@ TaskManager::~TaskManager()
 	}
 }
 
-
 size_t TaskManager::addTask(Task * t)
 {
 	size_t currentIndex = tasks.size();
@@ -72,14 +71,19 @@ size_t TaskManager::addTask(Task * t)
 	// If not exist, add and return true
 	tasks.push_back(t);
 
+    // Check for mutex    
+    for (size_t i = 0; i < currentIndex; i++) {
+      if (tasks[i]->isMutex(t)) {
+        tasks[i]->addDependency(t);          
+      }
+    }
+    
+
 	// Add the dependencies
 	n = t->countDependencies();
 	for (size_t i = 0; i < n; i++) {
 		Task * dep = t->getDependencyRef(i);
-		size_t added = addTask(dep);
-		//t->addDependencyIndex(added);
-		//tasks[added]->addDependantIndex(currentIndex);
-
+		addTask(dep);
 	}
 
 	return currentIndex;
@@ -91,7 +95,7 @@ size_t TaskManager::countTasks()
 }
 
 
-bool TaskManager::solve()
+bool TaskManager::solve(json * results)
 {
 
 
@@ -140,6 +144,16 @@ bool TaskManager::solve()
 
 	start.try_put(tbb::flow::continue_msg());
 	g.wait_for_all();
+
+    if (results == nullptr)
+      return true;
+
+    // submit results
+    for (size_t i = 0; i < tasks.size(); i++) {
+      if (tasks.at(i)->reportResults) {
+        tasks.at(i)->submitResults(results);
+      }
+    }
 
 	return true;
 }

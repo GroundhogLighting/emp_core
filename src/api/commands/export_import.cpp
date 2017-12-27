@@ -41,7 +41,7 @@ int exportToRadiance(lua_State * L)
   std::string dir = lua_tostring(L, 1);
     
   taskManager->addTask(new ExportRadianceDirWithWorkplanes(dir, model, false));
-  taskManager->solve();
+  taskManager->solve(nullptr);
 
   delete taskManager;
   
@@ -78,14 +78,7 @@ int exportWorkplane(lua_State * L)
 
 
   // Retrieve workplane
-  GroundhogModel * model = getCurrentModel(L);
-  Workplane * wp = model->getWorkplaneByName(workplaneName);
-
-  if (wp == NULL) {
-    std::string errmsg = "Workplane " + workplaneName + " does not exist";
-    sendError(L, "No Workplane", errmsg.c_str());
-    return 0;
-  }
+  Workplane * wp = getWorkplane(L,workplaneName);
 
   double maxArea = options.getOption<double>("max_area");
   double maxAspectRatio = options.getOption<double>("max_aspect_ratio");
@@ -93,7 +86,7 @@ int exportWorkplane(lua_State * L)
 
   TaskManager tm = TaskManager();
   tm.addTask(new ExportWorkplane(wp, maxArea, maxAspectRatio, fileName));
-  tm.solve();
+  tm.solve(nullptr);
 
   return 0;
 }

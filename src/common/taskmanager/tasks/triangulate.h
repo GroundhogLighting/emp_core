@@ -19,70 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
 
 #pragma once
+#include "tbb/tbb.h"
+
 #include "../task.h"
 #include "common/geometry/triangulation.h"
 #include "groundhogmodel/src/workplane.h"
 
-
-//! Transforms a Polygon into a Triangulation
-/*!
-This task is used by Workplane triangulation in order to export 
-the whole model
-*/
-class TriangulatePolygon : public Task {
-
-public:
-  double maxArea; //!< The maximum area allowed for each triangle in the triangulation
-  double maxAspectRatio; //!< The maximum aspect ratio allowed for each triangle in the triangulation
-  Triangulation triangulation; //!< The Triangulation object
-  Polygon3D * polygon; //!< The Polygon3D object to triangulate
-
-  //! Constructor
-  /*!
-  @author German Molina
-  @param[in] aPolygon The polygon to triangulate
-  @param[in] area The maximum area allowed for the triangles in the resulting triangulation
-  @param[in] aspectRatio The maximum aspect ratio allowed for the triangles in the resulting triangulation
-  */
-  TriangulatePolygon(Polygon3D * aPolygon, double area, double aspectRatio)
-  {
-    std::string name = "Triangulate polygon";
-    setName(&name);
-
-    polygon = aPolygon;
-    maxArea = area;
-    maxAspectRatio = aspectRatio;
-
-    triangulation = Triangulation(aPolygon);
-  }
-
-  //! Compares two of these tasks
-  /*!
-  @author German Molina
-  @param[in] t The other task
-  @return is equal?
-  */
-  bool isEqual(Task * t)
-  {
-    return (
-      polygon == static_cast<TriangulatePolygon *>(t)->polygon &&
-      maxArea == static_cast<TriangulatePolygon *>(t)->maxArea
-      );
-  }
-
-  //! Solves the task
-  /*!
-  @author German Molina
-  @return success
-  */
-  bool solve()
-  { 
-    return triangulation.mesh(maxArea, maxAspectRatio);            
-  }
-
-
-};
-
+#define GLARE_TRIANGULATION_GRAIN_SIZE 24
 
 //! Triangulates a whole workplane
 /*!
@@ -105,20 +48,27 @@ public:
   */
   TriangulateWorkplane(Workplane * aWorkplane, double area, double aspectRatio)
   {
-    std::string name = "Triangulate workplane " + *(aWorkplane->getName());
-    setName(&name);
     workplane = aWorkplane;
     maxArea = area;
     maxAspectRatio = aspectRatio;
-
-    size_t nWps = workplane->getNumPolygons();
     
-    // This depends on the triangulation of all polygons... 
-    for (size_t i = 0; i < nWps; i++) {
+    std::string name = "Triangulate workplane " + *(aWorkplane->getName()) + "-" +std::to_string(maxArea)+"_"+std::to_string(maxAspectRatio);
+    setName(&name);
+
+    size_t nPols = workplane->getNumPolygons();
+    for (size_t i = 0; i < nPols; i++) {
       Polygon3D * p = workplane->getPolygonRef(i);
-      TriangulatePolygon * t = new TriangulatePolygon(p, maxArea, maxAspectRatio);
-      addDependency(t);      
+      triangulations.push_back(new Triangulation(p));
     }
+
+  }
+
+  //! Destructor
+  /*!
+  @author German Molina
+  */
+  ~TriangulateWorkplane()
+  {
 
   }
 
@@ -144,12 +94,17 @@ public:
   */
   bool solve()
   {
-    //Gather results
-    size_t n = countDependencies();
-    for (size_t i = 0; i < n; i++) {
-      TriangulatePolygon * d = dynamic_cast<TriangulatePolygon *>(getDependencyRef(i));
-      triangulations.push_back(&(d->triangulation));
-    }
+    size_t nPols = workplane->getNumPolygons();
+    
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols, GLARE_TRIANGULATION_GRAIN_SIZE),
+      [=](const tbb::blocked_range<size_t>& r) {       
+        for (size_t i = r.begin(); i != r.end(); ++i) {
+          triangulations.at(i)->mesh(maxArea, maxAspectRatio);
+          triangulations.at(i)->purge();
+        }
+      }
+    );
+
     return true;
   }
 

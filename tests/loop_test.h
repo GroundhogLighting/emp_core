@@ -1,4 +1,4 @@
-/* loop_test.h */
+﻿/* loop_test.h */
 #include "../src/common/geometry/loop.h"
 
 
@@ -199,14 +199,14 @@ TEST(LoopTests, clean2)
 TEST(LoopTests, transform)
 {
 	Loop loop = Loop();
-	Point3D a = Point3D(0, -1, -1);
-	Point3D b = Point3D(0, 1, -1);
-	Point3D c = Point3D(0, 1, 1);
-	Point3D d = Point3D(0, -1, 1);
-	loop.addVertex(&a);
-	loop.addVertex(&b);
-	loop.addVertex(&c);
-	loop.addVertex(&d);
+	Point3D * a = new Point3D(0, -1, -1);
+	Point3D * b = new Point3D(0, 1, -1);
+	Point3D * c = new Point3D(0, 1, 1);
+	Point3D * d = new Point3D(0, -1, 1);
+	loop.addVertex(a);
+	loop.addVertex(b);
+	loop.addVertex(c);
+	loop.addVertex(d);
 
 	// Identity transform
 	Vector3D i = Vector3D(1, 0, 0);

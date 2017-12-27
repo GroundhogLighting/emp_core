@@ -126,3 +126,19 @@ void OptionSet::print(char * filename)
     file.close();
   }
 }
+
+
+std::string OptionSet::getInlineVersion()
+{
+
+  std::string res = "";
+  for (json::iterator it = data.begin(); it != data.end(); ++it) {
+    if (it.value().is_number_integer()) {
+      res = res + " -" + it.key() + " " + std::to_string(getOption<int>(it.key()));    
+    }
+    else {
+      res = res + " -" + it.key() + " " + std::to_string(getOption<double>(it.key()));
+    }
+  }
+  return res;
+}

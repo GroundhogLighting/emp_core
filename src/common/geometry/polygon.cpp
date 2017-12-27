@@ -355,21 +355,21 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 	else {
 		// All other workplanes
 		if (abs(nx) > GLARE_TINY) {
-          i = Vector3D(-ny/nx,1,0);
-          i.normalize();
-          /*
+          //i = Vector3D(-ny/nx,1,0);
+          //i.normalize();
+          
 			i = Vector3D(1, 0, -nz / nx);
 			i.normalize();
-          */
+          
 			j = k%i;
 		}
 		else if (abs(ny) > GLARE_TINY) {
-          j = Vector3D(1, -nx / ny, 0);
-          j.normalize();
-          /*
+          //j = Vector3D(1, -nx / ny, 0);
+          //j.normalize();
+          
             j = Vector3D(0, 1, -nz / ny);
 			j.normalize();
-          */
+          
 			i = j%k;
 		}else if(abs(nx) < GLARE_TINY && abs(ny) < GLARE_TINY){
             i = Vector3D(1, 0, 0);

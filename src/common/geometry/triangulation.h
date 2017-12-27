@@ -274,4 +274,17 @@ public:
   */
   Polygon3D * getPolygon();
 
+  //! Counts the non-NULL triangles
+  /*!
+  @author German Molina
+  @return Triangles
+  */
+  size_t realSize();
+
+  //! Removes NULL triangles from the triangles array
+  /*!
+  @author German Molina
+  */
+  void purge();
+
 };

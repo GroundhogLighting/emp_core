@@ -141,3 +141,13 @@ void executionError(lua_State * L, const char * err);
 @param[in] err The error message
 */
 void sendError(lua_State * L, const char * kind, const char * err);
+
+//! Retrieves a workplane from the current model
+/*!
+Raises an error if it does not exist
+
+@author German Molina
+@param[in] L The lua_State
+@param[in] workplaneName The name of the workplane
+*/
+Workplane * getWorkplane(lua_State * L, std::string workplaneName);

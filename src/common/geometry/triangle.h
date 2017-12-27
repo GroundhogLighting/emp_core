@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
 	Glare
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -202,11 +202,19 @@ public:
 	*/
 	bool testPoint(Point3D * p, int * code);
 
-	//! Checks if a Glar triangle is equal to a fast-poly2tri triangle
+	//! Checks if a Glare triangle is equal to a fast-poly2tri triangle
 	/*!
 	@author German Molina
 	@param triangle The MPEPolyTriangle to compare with
 	@return is equal
 	*/
 	bool isEqual(MPEPolyTriangle * triangle);
+
+    //! Checks if a Glare triangle is equal to another
+    /*!
+    @author German Molina
+    @param t The other triangle
+    @return is equal?
+    */
+    bool isEqual(Triangle * t);
 };

@@ -89,10 +89,21 @@ void Task::replaceDependency(Task * a, Task * b)
 
 bool Task::solve()
 {
-	return true;
+  FATAL(errmsg, "A task has not been defined a Solve functio!");
+  return true;
 }
 
 bool Task::isEqual(Task * t)
 {
 	return false;
+}
+
+bool Task::isMutex(Task * t)
+{
+  return false;
+}
+
+bool Task::submitResults(json * results)
+{
+  return true;
 }

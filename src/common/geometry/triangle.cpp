@@ -39,8 +39,8 @@ Triangle::Triangle(Point3D * a, Point3D * b, Point3D * c)
 
 Triangle::~Triangle()
 {
-	for (int i = 0; i < 3; i++) {
-		delete segments[i];
+	for (int i = 0; i < 3; i++) {      	
+      delete segments[i];
 	}
 }
 
@@ -196,7 +196,7 @@ Point3D Triangle::getCircumCenter()
 
 	Vector3D abXac = ab%ac;
 
-	Vector3D aCenter = ((abXac%ab)*ac.getSquaredLength() + ac%abXac * ab.getSquaredLength())*(1 / (2 * abXac.getSquaredLength()));
+	Vector3D aCenter = ((abXac%ab)*ac.getSquaredLength() + ac%abXac * ab.getSquaredLength()) / (2 * abXac.getSquaredLength());
 
 	return *vertices[0] + aCenter;
 
@@ -287,4 +287,14 @@ bool Triangle::isEqual(MPEPolyTriangle * triangle)
 
 	return true;
 	//Point3D a = Point3D()
+}
+
+
+bool Triangle::isEqual(Triangle * t)
+{
+  for (int i = 0; i < 3; i++) {
+    if (!vertices[i]->isEqual(t->getVertex(i)))
+      return false;    
+  }
+  return true;
 }

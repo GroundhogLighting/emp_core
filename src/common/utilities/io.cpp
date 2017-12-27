@@ -36,7 +36,7 @@ void inform(char * message, bool verbose)
 	if (!verbose) {
 		return;
 	}
-	std::cout << "     ... " << message << std::endl;
+	std::cerr << "     ... " << message << std::endl;
 }
 
 void fatal(char * message, int ln, char * file) 

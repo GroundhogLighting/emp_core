@@ -135,7 +135,9 @@ bool Glare::solve(int argc, char* argv[])
 		}
 
 		if (autoSolve) {
-			taskManager.solve();
+          json results = json();
+		  taskManager.solve(&results);
+          std::cout << results;
 		}
 
 
@@ -146,7 +148,7 @@ bool Glare::solve(int argc, char* argv[])
 			// Radiance format... no extension
           ExportRadianceDirWithWorkplanes * task = new ExportRadianceDirWithWorkplanes(secondArgument, &model, verbose);
           taskManager.addTask(task);
-          taskManager.solve();          
+          taskManager.solve(nullptr);          
 		}
 		else {
 			FATAL(errorMessage,"Unrecognized file extension in " + secondArgument);

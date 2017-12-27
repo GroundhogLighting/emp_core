@@ -59,7 +59,7 @@ This module defines constants that are used in the rest of the program.
 #define GLARE_MINUS_TINY -GLARE_TINY //!< This is a very small number that may be used by several sections of the program
 
 /// Maximum number of points in a triangulation before refining
-#define GLARE_MAX_POINTS_IN_WORKPLANE 10000 //!< This number is required on the poly2tri function
+#define GLARE_MAX_POINTS_IN_WORKPLANE 1000 //!< This number is required on the poly2tri function
 
 /// Subfolder to export Layer objects
 #define GLARE_LAYERS_SUBFOLDER "Geometry" //!< The default subfolder where the Layer objects will be exported

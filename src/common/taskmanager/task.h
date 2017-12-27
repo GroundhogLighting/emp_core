@@ -49,6 +49,7 @@ private:
     std::vector<Task *> dependants = std::vector<Task * >(); //!< The vector of Task objects that depend on this Task
 
 public:
+    bool reportResults = false; //!< True if the TaskManager should report the results or not
 
 	//! Generic constructor
 	/*!
@@ -158,6 +159,24 @@ public:
 	@return is equal?
 	*/
 	virtual bool isEqual(Task * t);
+
+    //! Checks if two tasks are compatible to run in parallel
+    /*!
+    If two Tasks are defined as Mutex, they cannot run in parallel; thus
+    the task manager will put a dependency to one another
+    
+    @author German Molina
+	@param[in] t The pointer to the other Task
+	@return is mutex?
+    */
+    virtual bool isMutex(Task * t);
+
+    //! Adds the Task reuslts to a result JSON
+    /*!
+    @author German Molina
+    @param[in] results The results JSON to fill
+    */
+    virtual bool submitResults(json * results);
     
 };
 

@@ -2,6 +2,7 @@
 libs/Sketchup/win64/binaries/*
 libs/Sketchup/win64/headers/*
 
+.DS_Store
 *.vcxproj
 *.filters
 *.obj

@@ -69,7 +69,7 @@ RTraceOptions::RTraceOptions()
 	addOption("ms", 0.000000);		// mist sampling distance
 	
 	
-	addOption("am", 0.0);			// max photon search radius
+	addOption("am", 0.1);			// max photon search radius
 };
 
 void RTraceOptions::exposeOptions()
@@ -106,3 +106,4 @@ void RTraceOptions::exposeOptions()
 	seccg = getOption<double>("mg");
 	ssampdist = getOption<double>("ms");
 }
+
