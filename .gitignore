@@ -2,7 +2,9 @@
 libs/Sketchup/win64/binaries/*
 libs/Sketchup/win64/headers/*
 
-.DS_Store
+**.DS_Store**
+*.xcodeproj
+*.xcworkspace
 *.vcxproj
 *.filters
 *.obj
@@ -32,6 +34,6 @@ debug/*
 *Makefile*
 *.skb
 *.log
-.vscode/*
+.vscode
 
 test_outputs/*
