@@ -6,6 +6,8 @@ libs/Sketchup/win64/headers/*
 *.xcodeproj
 *.xcworkspace
 *.vcxproj
+*.make
+*.mk
 *.filters
 *.obj
 *.tlog
@@ -34,6 +36,6 @@ debug/*
 *Makefile*
 *.skb
 *.log
-.vscode
+**.vscode**
 
 test_outputs/*
