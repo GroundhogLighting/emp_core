@@ -41,21 +41,10 @@
 
 
 bool Glare::parseInputs(int argc, char* argv[]) 
-{
-	if (argc == 1) {
-		/* Only input is program name. i.e. no inputs... wrong */
-		std::cout << USAGE << std::endl;
-		return false;
-	}else if (argc == 2) {
-		// Input file... calculation will be performed.
-		// call in the shape of 'Glare inputFile'
-		inputFile = std::string(argv[1]);		
-	}
-	else {
-		// Input file and at least one more.
-		inputFile = std::string(argv[1]);
-		secondArgument = std::string(argv[2]);		
-	}
+{	
+	// Input file and lua script.
+	inputFile = std::string(argv[1]);
+	script = std::string(argv[2]);			
 
 	// Check if inputFile makes sense.
 	char * supportedInputs[] = { ".skp" };
@@ -70,7 +59,29 @@ bool Glare::parseInputs(int argc, char* argv[])
 		return false;
 	}
 
+    /* SEARCH FOR SCRIPT */
+    // add the .lua if needed
+    if (!stringInclude(script, ".lua")) {
+      script = script + ".lua";
+    }
 
+    // check if script exists
+    if (!fexists(script)) {
+      // if it does not exist, we look into the GLAREPATH
+      if (const char * glarepath = std::getenv(GLAREPATH)) {
+        if (fexists(std::string(glarepath) + "/" + script)) {
+          script = std::string(glarepath) + "/" + script;
+          return true;
+        }
+        else {
+          FATAL(errorMessage, "Lua script '" + std::string(script) + "' not found (not even in "+GLAREPATH+")");
+          return false;
+        }
+      } else { // if there is no GLAREPATH variable, just error.
+        FATAL(errorMessage, "Lua script '" + std::string(script) + "' not found");
+        return false;
+      }
+    }
 	
 	return true;
 } // END OF PARSE INPUTS
@@ -78,84 +89,55 @@ bool Glare::parseInputs(int argc, char* argv[])
 
 bool Glare::solve(int argc, char* argv[])
 {
-	
-	
-	// Load file
+		
+	/* LOAD FILE */
 	loadFile(inputFile);
+		
+    /* LOAD API */
+    // Create task dictionary
+    std::map<std::string, TaskFactory> taskDictionary;
 
-	// Analize second argument
-	if (secondArgument.empty()) {				
-      FATAL(errorMessage,"Solving a model is not yet supported!");
-	  return false;		
+	// Process LUA script
+	int status, result;
 
-	} else if (stringInclude(secondArgument, ".lua")) {
-		// Lua script was input... process
+	// Create lua state
+	lua_State * L = luaL_newstate();
 
-		// check if script exists
-		if (!fexists(secondArgument)) {
-			FATAL(errorMessage,"Lua script '" + std::string(secondArgument) + "' not found");
-			return false;
-		}
+	// Open libraries
+	luaL_openlibs(L);
 
-        // Create task dictionary
-        std::map<std::string, TaskFactory> taskDictionary;
+	// Load API
+	loadAPI(L,&model, &taskDictionary, &taskManager,argc,argv);
 
-		// Process LUA script
-		int status, result;
-
-		// Create lua state
-		lua_State * L = luaL_newstate();
-
-		// Open libraries
-		luaL_openlibs(L);
-
-		// Load API
-		loadAPI(L,&model, &taskDictionary, &taskManager,argc,argv);
-
-		// Load script
-		status = luaL_loadfile(L, secondArgument.c_str());
-		if (status) {
-			std::cerr <<  lua_tostring(L, -1) << std::endl;
-			return false;
-		}
-
-		result = lua_pcall(L, 0, LUA_MULTRET, 0);
-		if (result) {
-			std::cerr << lua_tostring(L, -1) << std::endl;
-			return false;
-		}
-
-		// Autosolve?
-		bool autoSolve = true;
-
-		lua_getglobal(L, LUA_AUTOSOLVE_VARIABLE);
-		// Check type
-		if (lua_type(L, 1) == LUA_TBOOLEAN) {
-			autoSolve = lua_toboolean(L, 1);
-		}
-
-		if (autoSolve) {
-          json results = json();
-		  taskManager.solve(&results);
-          std::cout << results;
-		}
-
-
-	}
-	else {
-		// translate
-		if (!stringInclude(secondArgument, ".")) {
-			// Radiance format... no extension
-          ExportRadianceDirWithWorkplanes * task = new ExportRadianceDirWithWorkplanes(secondArgument, &model, verbose);
-          taskManager.addTask(task);
-          taskManager.solve(nullptr);          
-		}
-		else {
-			FATAL(errorMessage,"Unrecognized file extension in " + secondArgument);
-			return false;
-		}
+	// Load script
+	status = luaL_loadfile(L, &script[0]);
+	if (status) {
+		std::cerr <<  lua_tostring(L, -1) << std::endl;
+		return false;
 	}
 
+    // Solve script
+	result = lua_pcall(L, 0, LUA_MULTRET, 0);
+	if (result) {
+		std::cerr << lua_tostring(L, -1) << std::endl;
+		return false;
+	}
+
+	// Autosolve?
+	bool autoSolve = true; // defaults to true
+	lua_getglobal(L, LUA_AUTOSOLVE_VARIABLE);
+	// Check type
+	if (lua_type(L, 1) == LUA_TBOOLEAN) {
+		autoSolve = lua_toboolean(L, 1);
+	}
+
+    // solve if required
+	if (autoSolve) {
+      json results = json();
+	  taskManager.solve(&results);
+      std::cout << results;
+	}
+	
 	return true;
 };
 

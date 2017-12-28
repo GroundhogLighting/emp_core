@@ -31,14 +31,10 @@
 class Glare {
 
 private:
-
-	const std::string usage =	"usage v1: Glare inputFile outFile --> exports file\n"
-								"usage v2: Glare inputFile --> performs standard calculation \n"
-								"usage v3: Glare inputFile.lua --> performs custom calculations\n"; /*!< This is the string representing the usage intructions.*/
 	
 	std::string inputFile; //!< The file that is being read
 
-	std::string secondArgument; //!< The second argument given to the program. It may be a Lua scrip, a name of a new model or a specific task
+	std::string script; //!< The lua script to solve
 	
 	bool verbose = true; //!< An option that controls what sort of things will be "informed" or not
 	
