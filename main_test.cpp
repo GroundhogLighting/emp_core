@@ -13,7 +13,7 @@
 #include "./tests/optionset_test.h"
 #include "./tests/matrix4x4_test.h"
 #include "./tests/radiance_test.h"
-#include "./tests/sky_test.h"
+#include "./tests/reinhart_test.h"
 
 int main(int argc, char* argv[]){	
 	

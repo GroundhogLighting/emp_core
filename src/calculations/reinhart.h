@@ -54,6 +54,19 @@ size_t raccum(size_t r, size_t MF);
 
 //! Returns the Reinhart direction according to a certain bin number and MF scheme
 /*!
+Will also calculate the solid angle of the patch, if provided a non NULL pointer
+
+@author German Molina
+@param[in] nbin The bin number
+@param[in] MF the sky subdivition scheme
+@param[out] solidAngle The solid angle of the patch
+@return The direction of the center of the patch
+@note Patch 0 is ground!
+*/
+Vector3D reinhartDir(size_t nbin, size_t MF, double * solidAngle);
+
+//! Returns the Reinhart direction according to a certain bin number and MF scheme
+/*!
 @author German Molina
 @param[in] nbin The bin number
 @param[in] MF the sky subdivition scheme
@@ -61,3 +74,21 @@ size_t raccum(size_t r, size_t MF);
 @note Patch 0 is ground!
 */
 Vector3D reinhartDir(size_t nbin, size_t MF);
+
+
+//! Returns the Reinhart's patch solid angle
+/*!
+@author German Molina
+@param[in] nbin The bin number
+@param[in] MF the sky subdivition scheme
+@return The solid angle
+@note Patch 0 is ground!
+*/
+double reinhartSolidAngle(size_t nbin, size_t MF);
+
+//! Returns the solid angle of a cone
+/*!
+@return the solid angle
+@param[in] the angle
+*/
+double coneSolidAngle(double angle);

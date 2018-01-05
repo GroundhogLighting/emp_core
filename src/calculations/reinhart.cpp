@@ -60,7 +60,20 @@ size_t Rfindrow(size_t r, size_t rem, size_t MF)
   }
 }
 
+
 Vector3D reinhartDir(size_t nbin, size_t MF)
+{
+  return reinhartDir(nbin, MF, NULL);
+}
+
+double reinhartSolidAngle(size_t nbin, size_t MF)
+{
+  double ret;
+  Vector3D dir = reinhartDir(nbin, MF, &ret);
+  return ret;
+}
+
+Vector3D reinhartDir(size_t nbin, size_t MF, double * solidAngle)
 {
   const double PI = 3.141592654;
   const double alpha = 90.0 / (MF * 7 + 0.5);
@@ -87,9 +100,11 @@ Vector3D reinhartDir(size_t nbin, size_t MF)
     Ralt = asin(-x1);
   }
 
+  size_t nBins = rnaz(Rrow, MF);
+
   // Find Razi
   const size_t Rcol = nbin - raccum(Rrow,MF) -1 ;
-  double Razi_width = 2 * PI / rnaz(Rrow, MF);
+  double Razi_width = 2 * PI / nBins;
 
   double Razi;
   if (nbin > 0) {
@@ -105,5 +120,21 @@ Vector3D reinhartDir(size_t nbin, size_t MF)
   double dy = cos(Razi)*cos_ralt;
   double dz = sin(Ralt);
 
+  if (solidAngle != NULL) {
+    if (Rrow == (RowMax-1)) {
+      // if polar cap
+      *solidAngle = coneSolidAngle(RAH/2.0);
+    }
+    else {
+      *solidAngle = 2.0 * PI * (sin(Ralt + RAH/2.0)-sin(Ralt - RAH/2.0)) / (double)nBins;
+    }
+  }
+
   return Vector3D(dx, dy, dz);
+}
+
+
+double coneSolidAngle(double angle)
+{
+  return 2.0 * 3.141592654 * (1 - cos(angle));
 }

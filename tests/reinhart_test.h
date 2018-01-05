@@ -107,3 +107,60 @@ TEST(ReinhartTest, binDir) {
   ASSERT_NEAR(a.getZ(), 0.109371, 1e-5);
     
 }
+
+
+TEST(ReinhartTest, binSolidAngle) {
+
+  size_t mf = 1;
+  size_t bin = 1;
+  size_t acc = 0;
+
+  // First row
+  acc += 30;
+  while (bin <= acc) {
+    ASSERT_NEAR(reinhartSolidAngle(bin++, mf), 0.0435, 1e-4);
+  }
+
+  // Second row
+  acc += 30;
+  while (bin <= acc) {
+    ASSERT_NEAR(reinhartSolidAngle(bin++, mf), 0.0416, 1e-4);
+  }
+
+  // third row
+  acc += 24;
+  while (bin <= acc) {
+    ASSERT_NEAR(reinhartSolidAngle(bin++, mf), 0.0474, 1e-4);
+  }
+
+  // 4th row
+  acc += 24;
+  while (bin <= acc) {
+    ASSERT_NEAR(reinhartSolidAngle(bin++, mf), 0.0407, 1e-4);
+  }
+
+  // 5th row
+  acc += 18;
+  while (bin <= acc) {
+    ASSERT_NEAR(reinhartSolidAngle(bin++, mf), 0.0429, 1e-4);
+  }
+
+  // 6th row
+  acc += 12;
+  while (bin <= acc) {
+    ASSERT_NEAR(reinhartSolidAngle(bin++, mf), 0.0445, 1e-4);
+  }
+
+  // 7th row
+  acc += 6;
+  while (bin <= acc) {
+    ASSERT_NEAR(reinhartSolidAngle(bin++, mf), 0.0455, 1e-4);
+  }
+
+  // 8th: Polar Cap
+  acc += 1;
+  while (bin <= acc) {
+    ASSERT_NEAR(reinhartSolidAngle(bin++, mf), 0.0344, 1e-4);
+  }
+
+}
