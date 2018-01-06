@@ -4,6 +4,3 @@
 [submodule "src/3rdparty/Radiance"]
 	path = src/3rdparty/Radiance
 	url = https://github.com/NREL/Radiance.git
-[submodule "glare-doc"]
-	path = glare-doc
-	url = https://github.com/GroundhogLighting/glare-doc.git
