@@ -25,7 +25,7 @@ Emp is not an acronym, but the short version of 'Empedocles'; who, according to 
 
 >> ... is credited with the first comprehensive theory of light and vision. He put forward the idea that we see objects because light streams out of our eyes and touches them. 
 
-Despite being wrong, this theory will sound highly familiar to anyone who has read about (Backward Ray-tracing)[https://en.wikipedia.org/wiki/Ray_tracing_(graphics)] algorithms.
+Despite being wrong, this theory will sound highly familiar to anyone who has read about [Backward Ray-tracing](https://en.wikipedia.org/wiki/Ray_tracing_(graphics)) algorithms.
 
 ## Relevant features
 
