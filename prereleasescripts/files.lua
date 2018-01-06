@@ -7,8 +7,7 @@ f.delete_file = function(flnm)
         os.execute("del "..flnm)
     else
         os.execute("rm "..flnm)
-    end
-    -- os.remove(flnm)    
+    end 
 end
 
 f.delete_dir = function(dirname)

@@ -8,7 +8,7 @@
 dofile(premakescripts_dir.."/config.lua")
 
 -- Load Radiance version
-version_file = io.open("../"..rad_rt.."/VERSION","r")
+version_file = io.open(rad_rt.."/VERSION","r")
 rad_version = version_file:read()
 version_file:close()
 
@@ -19,7 +19,7 @@ version_file:close()
 
 -- Write Radiance version for itself
 file = io.open("../"..rad_rt.."/Version.c",'w')
-file:write("VersionID = \""..rad_version.."\";")
+file:write("char * VersionID = \""..rad_version.."\";")
 file:close()
 
 -- Write Radiance and Glare versions

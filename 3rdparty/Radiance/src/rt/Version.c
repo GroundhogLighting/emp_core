@@ -1,1 +1,1 @@
-VersionID = "RADIANCE 5.2a";
+char * VersionID = "RADIANCE 5.2a";
