@@ -1,4 +1,4 @@
-# Glare: a scriptable lighting calculation engine
+# Emp: a scriptable lighting calculation engine
 
 After years of development, [Groundhog](http://www.groundhoglighting.com) has 
 become stable and intuitive enough to be used by industry, students and 
@@ -19,32 +19,39 @@ This project intends to become the calculation engine behind [Groundhog](http://
 and a tool for helping researchers, students and practitioners make their
 work in a more efficient way.
 
+## Origin of the name
+
+Emp is not an acronym, but the short version of 'Empedocles'; who, according to Wikipedia:
+
+>> ... is credited with the first comprehensive theory of light and vision. He put forward the idea that we see objects because light streams out of our eyes and touches them. 
+
+Despite being wrong, this theory will sound highly familiar to anyone who has read about (Backward Ray-tracing)[https://en.wikipedia.org/wiki/Ray_tracing_(graphics)] algorithms.
 
 ## Relevant features
 
-- **Cross-platform:** Glare is designed to work on Linux, macOS and Windows... although 
+- **Cross-platform:** Emp is designed to work on Linux, macOS and Windows... although 
 it has only been developed and tested on Windows so far.
-- **Radiance-based:** Thanks to [Radiance](http://www.radiance-online.org), Glare is
+- **Radiance-based:** Thanks to [Radiance](http://www.radiance-online.org), Emp is
 built upon years of experience, research and testing.
-- **Capable of reading CAD formats:** Glare was designed in order to work directly from
+- **Capable of reading CAD formats:** Emp was designed in order to work directly from
 different CAD files. SKB format is the only one supported for now.
-- **Scriptable:** Thanks to [Lua](https://www.lua.org/), Glare can be scripted and thus 
+- **Scriptable:** Thanks to [Lua](https://www.lua.org/), Emp can be scripted and thus 
 used for research and practice in a very efficient way. This also helps non-experts
 programmers help develop new features and functions in the shape of scripts.
-- **Do not repeat processes:** Based on Groundhog's simulation manager, Glare
+- **Do not repeat processes:** Based on Groundhog's simulation manager, Emp
 was provided with a Task-manager, which is able to understand several broad tasks (i.e. 
 calculate Daylight Autonomy and Useful Daylight Illuminance) and eliminate redundant 
 tasks (i.e. perform an annual simulation).
 - **Parallel computing:** Thanks to [Intel Threading Building Blocks](https://github.com/01org/tbb),
-Glare's Task Manager can schedule tasks and use parallel computing to leverage 
+Emp's Task Manager can schedule tasks and use parallel computing to leverage 
 all the power in your machine and reduce calculation time.
-- **Embeddable:** Glare was designed to be shipped with Groundhog and/or other tools.
+- **Embeddable:** Emp was designed to be shipped with Groundhog and/or other tools.
 
 ## Important notice
 
-So far, the SKP models that are read by Glare are meant to be created with Groundhog.
+So far, the SKP models that are read by Emp are meant to be created with Groundhog.
 This is because a Groundhog model is a simple SKP model with metadata added to it, 
-enabling Glare to understand what surface is 'real' and what surface is, for examaple,
+enabling Emp to understand what surface is 'real' and what surface is, for examaple,
 a workplane.
 
 
@@ -60,27 +67,27 @@ It is used sort of like a make file
 - Doxyfile : The file used by Doxygen to generate the developer's documentation
 - .gitmodules / .gitignore : Files used by Git version managing
 - tests : Directory with automated tests (uses [Google Tests](https://github.com/google/googletest))
-- standardscripts : Directory with standard scripts used as example and shipped with Glare for
+- standardscripts : Directory with standard scripts used as example and shipped with Emp for
 performing common tasks
-- src : The main directory with Glare's actual code
+- src : The main directory with Emp's actual code
 - prereleasescripts : lua scripts that are called by 'make.lua'
 - premakescripts : lua scripts called before premake is called.
 - guides : Directory with developer guidelines and specifications. They get documented in
 the developer-doc
 - googletest : Fork to [Google Tests](https://github.com/google/googletest), used for 
 compiling and running tests.
-- glare-doc : The user documentation (i.e. API reference, standard script reference, tutorials, etc.). 
-It is synced with the (Gitbook doc)[https://www.gitbook.com/book/groundhoglighting/glare-doc/welcome]
+- Emp-doc : The user documentation (i.e. API reference, standard script reference, tutorials, etc.). 
+It is synced with the (Gitbook doc)[https://www.gitbook.com/book/groundhoglighting/Emp-doc/welcome]
 - developer-doc : The developer documentation generated with Doxygen
 - 3rdparty : Directory with external dependencies
 
 ## Building
 
-Glare is intended to be cross-platform, thus we are using an automatic building tool. As Lua is the 
-languange chosen to accompany C++ within Glare, it was natural to use premake5 (which is based on Lua)
+Emp is intended to be cross-platform, thus we are using an automatic building tool. As Lua is the 
+languange chosen to accompany C++ within Emp, it was natural to use premake5 (which is based on Lua)
 as such tool.
 
-Glare is built using the simplest premake command... as mentioned in [Lua's documentation](https://github.com/premake/premake-core/wiki/Using-Premake):
+Emp is built using the simplest premake command... as mentioned in [Lua's documentation](https://github.com/premake/premake-core/wiki/Using-Premake):
 
 > The simplest Premake command is:
 >
