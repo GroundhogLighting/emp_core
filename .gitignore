@@ -1,6 +1,5 @@
 
-libs/Sketchup/win64/binaries/*
-libs/Sketchup/win64/headers/*
+3rdparty/SketchUp/*
 
 **.DS_Store**
 *.xcodeproj
