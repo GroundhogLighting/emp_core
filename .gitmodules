@@ -7,3 +7,6 @@
 [submodule "emp-doc"]
 	path = emp-doc
 	url = https://github.com/GroundhogLighting/emp-doc.git
+[submodule "3rdparty/nvwa"]
+	path = 3rdparty/nvwa
+	url = https://github.com/adah1972/nvwa.git
