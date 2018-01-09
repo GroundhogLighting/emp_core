@@ -8,7 +8,7 @@ third_party_dir = "../3rdparty"
 google_test_dir = "../googletest/googletest"
 
 -- Lua base directory
-lua_dir = "../3rdparty/Lua/src/"
+lua_dir = "../3rdparty/Lua/"
 
 -- Radiance specific locations
 rad_common = third_party_dir.."/Radiance/src/common"

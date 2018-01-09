@@ -28,7 +28,7 @@ filter "configurations:RELEASE"
     }
     
 
-dofile(premakescripts_dir.."/lualib.lua")  
+dofile(premakescripts_dir.."/lua.lua")  
 dofile(premakescripts_dir.."/rtrad.lua")
 dofile(premakescripts_dir.."/radiance.lua")
 dofile(premakescripts_dir.."/raycalls.lua")
