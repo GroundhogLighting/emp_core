@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-	Glare
+	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -10,7 +10,7 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANGLARE_TABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANEMP_TABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
@@ -53,68 +53,68 @@ bool RadExporter::exportModel()
 	}
 
     // Create the directory
-    if (!createdir("./" + exportDir + "/" + GLARE_WORKPLANES_SUBFOLDER)) {
+    if (!createdir("./" + exportDir + "/" + EMP_WORKPLANES_SUBFOLDER)) {
       FATAL(errorMessage, "Imposible to create Output directory");
       return false;
     }
     
 	// Write layers
-	if (!writeLayers(GLARE_LAYERS_SUBFOLDER)) {
+	if (!writeLayers(EMP_LAYERS_SUBFOLDER)) {
 		FATAL(errorMessage,"Error when exporing Layers");
 		return false;
 	}
 
 	// Write component definitions
-	if(!writeComponentDefinitions(GLARE_COMPONENTS_SUBFOLDER)) {
+	if(!writeComponentDefinitions(EMP_COMPONENTS_SUBFOLDER)) {
 		FATAL(errorMessage,"Error when exporing Layers");
 		return false;
 	}
 
 	// write views
-	if(!writeViews(GLARE_VIEWS_SUBFOLDER)) {
+	if(!writeViews(EMP_VIEWS_SUBFOLDER)) {
 		FATAL(errorMessage,"Error when exporing Layers");
 		return false;
 	}
 
 	// write north correction
-	if(!writeModelInfo(GLARE_MODEL_INFO_FILE)) {
+	if(!writeModelInfo(EMP_MODEL_INFO_FILE)) {
 		FATAL(errorMessage,"Error when exporing Layers");
 		return false;
 	}
 
 	// write windows
-	if(!writeWindows(GLARE_WINDOWS_SUBFOLDER)) {
+	if(!writeWindows(EMP_WINDOWS_SUBFOLDER)) {
 		FATAL(errorMessage,"Error when exporting Layers");
 		return false;
 	}
 
 	
 	// write materials
-	if (!writeMaterials(GLARE_MATERIALS_SUBFOLDER)) {
+	if (!writeMaterials(EMP_MATERIALS_SUBFOLDER)) {
 		FATAL(errorMessage,"Error when exporing materials");
 		return false;
 	}
 
 	// Write sky
-	if (!writeSky(GLARE_SKY_SUBFOLDER)) {
+	if (!writeSky(EMP_SKY_SUBFOLDER)) {
 		FATAL(errorMessage,"Error when writing the Sky");
 		return false;
 	}
 
 	// Write weather
-	if (!writeWeather(GLARE_SKY_SUBFOLDER)) {
+	if (!writeWeather(EMP_SKY_SUBFOLDER)) {
 		FATAL(errorMessage,"Error when writing the Weather file");
 		return false;
 	}
 
 	// Write Scene file
-	if (!writeSceneFile(GLARE_SCENE_FILE)) {
+	if (!writeSceneFile(EMP_SCENE_FILE)) {
 		FATAL(errorMessage,"Error when writing the Scene file");
 		return false;
 	}
 
 	// write photosensors
-	if (!writePhotosensors(GLARE_PHOTOSENSORS_SUBFOLDER)) {
+	if (!writePhotosensors(EMP_PHOTOSENSORS_SUBFOLDER)) {
 		FATAL(errorMessage,"Error when exporting Photosensors");
 		return false;
 	}
@@ -654,7 +654,7 @@ bool RadExporter::writeSceneFile(char * dir)
 
 	// Write Header
 	file << "###############" << "\n";
-	file << "## Scene exported using " << GLARE_VERSION << "\n";
+	file << "## Scene exported using " << EMP_VERSION << "\n";
 	file << "###############" << "\n";
 
 	file << "\n" << "\n" << "\n";
@@ -699,20 +699,20 @@ bool RadExporter::writePhotosensors(char * dir)
 		std::ofstream file;
 		file.open(baseDir + "/" + name + ".pt");
 
-		file << position.getX() << GLARE_TAB;
-		file << position.getY() << GLARE_TAB;
-		file << position.getZ() << GLARE_TAB;
-		file << direction.getX() << GLARE_TAB;
-		file << direction.getY() << GLARE_TAB;
+		file << position.getX() << EMP_TAB;
+		file << position.getY() << EMP_TAB;
+		file << position.getZ() << EMP_TAB;
+		file << direction.getX() << EMP_TAB;
+		file << direction.getY() << EMP_TAB;
 		file << direction.getZ() << "\n";
 		file.close();
 
 		// Add the sensor to the main file
-		mainFile << position.getX() << GLARE_TAB;
-		mainFile << position.getY() << GLARE_TAB;
-		mainFile << position.getZ() << GLARE_TAB;
-		mainFile << direction.getX() << GLARE_TAB;
-		mainFile << direction.getY() << GLARE_TAB;
+		mainFile << position.getX() << EMP_TAB;
+		mainFile << position.getY() << EMP_TAB;
+		mainFile << position.getZ() << EMP_TAB;
+		mainFile << direction.getX() << EMP_TAB;
+		mainFile << direction.getY() << EMP_TAB;
 		mainFile << direction.getZ() << "\n";
 
 		// add the Sensor to the dictionary

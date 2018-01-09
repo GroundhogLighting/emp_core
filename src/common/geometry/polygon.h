@@ -1,5 +1,5 @@
 /*****************************************************************************
-	Glare
+	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -32,7 +32,7 @@
 Polygons are geometrical abstraction containing a single exterior Loop and 
 (optionally) one or more interior loops (holes). 
 
-It should be noted that Glare will define the external Loop counter clock wise
+It should be noted that Emp will define the external Loop counter clock wise
 (i.e. right hand rule), and the holes in the oposite direction.
 
 The area may or may not 

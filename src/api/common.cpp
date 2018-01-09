@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-Glare
+Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -117,9 +117,9 @@ void sendError(lua_State * L, const char * kind, const char * err)
 }
 
 
-void badOptionError(lua_State * L, std::string optionName, const char * receivedType)
+void badOptionError(lua_State * L, std::string optionName, const char * receivedType, const char * expectedType)
 {
-  std::string err = "Option '" + optionName + "' is not supposed to be a "+ receivedType;
+  std::string err = "Option '" + optionName + "' is not supposed to be a '"+ receivedType + "' but a '"+expectedType+"'";
   sendError(L, "Bad option type", &err[0]);
 }
 
@@ -134,4 +134,11 @@ Workplane * getWorkplane(lua_State * L, std::string workplaneName)
   }
 
   return wp;
+}
+
+
+void missingOption(lua_State * L, std::string optionName, std::string optionType)
+{
+  std::string errmsg = "Required option '"+optionName+"' of type '"+optionType+"' was not given";
+  sendError(L,"Missing option", &errmsg[0]);
 }

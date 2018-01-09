@@ -1,6 +1,6 @@
 ﻿#include <gtest/gtest.h>
 #include <iostream>
-#include "./src/glare.h"
+#include "./src/emp.h"
 
 #include "./tests/loop_test.h" 
 #include "./tests/point3d_test.h"

@@ -1,6 +1,6 @@
 ﻿
 /*****************************************************************************
-Glare
+Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
 

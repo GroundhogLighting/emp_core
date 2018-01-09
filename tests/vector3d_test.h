@@ -65,7 +65,7 @@ TEST(Vector3DTest, normalize)
 {	
 	Vector3D v = Vector3D(12, 32, 211);
 	v.normalize();
-	ASSERT_TRUE(std::abs(v.getLength()-1) < GLARE_TINY);
+	ASSERT_TRUE(std::abs(v.getLength()-1) < EMP_TINY);
 }
 
 TEST(Vector3DTest, scaling)

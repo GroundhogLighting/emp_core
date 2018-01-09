@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-	Glare
+	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -299,7 +299,7 @@ void Triangulation::restoreDelaunay()
 			if (ar == -1) // Null neighbor or constraint
 				continue;
 			
-			if ( (currentAspectRatio - ar) > GLARE_TINY  &&  (bestAspectRatio-ar) > GLARE_TINY) {
+			if ( (currentAspectRatio - ar) > EMP_TINY  &&  (bestAspectRatio-ar) > EMP_TINY) {
 				bestNeighbor = j;
 				bestAspectRatio = ar;
 			}		
@@ -604,7 +604,7 @@ bool Triangulation::doCDT() {
       MaxPointCount = 3;
     }
     else {
-      MaxPointCount = GLARE_MAX_POINTS_IN_WORKPLANE;
+      MaxPointCount = EMP_MAX_POINTS_IN_WORKPLANE;
     } 
 
 	// Request how much memory (in bytes) you should

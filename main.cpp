@@ -1,7 +1,7 @@
 ﻿#include <string>
 #include "config_constants.h"
 #include "versions.h"
-#include "./src/glare.h"
+#include "./src/emp.h"
 #include "./main.h"
 #include <iostream>
 #include "Lua/src/lua.hpp"
@@ -9,7 +9,7 @@
 #include "mem_leak.h"
 
 #ifdef DEBUG
-  MemAllocations memtracker = MemAllocations();
+  //MemAllocations memtracker = MemAllocations();
 #endif
 
 int main(int argc, char* argv[]){	
@@ -22,16 +22,16 @@ int main(int argc, char* argv[]){
 		std::cout << ABOUT << std::endl;		
 	}
 	else if (strcmp(argv[1],"--version") == 0 || strcmp(argv[1],"-v") == 0) {
-		std::cout << GLARE_VERSION << std::endl;
+		std::cout << EMP_VERSION << std::endl;
 		std::cout << RADIANCE_VERSION << std::endl;
 		std::cout << LUA_VERSION << std::endl;		
     }
     else if (strcmp(argv[1], "--checkpath") == 0 ) {
-      if (const char * glarepath = std::getenv(GLAREPATH)) {
+      if (const char * glarepath = std::getenv(EMPATH)) {
         std::cout << glarepath << std::endl;
       }
       else {
-        std::cout << "There is no "<< GLAREPATH << " variable stored" << std::endl;
+        std::cout << "There is no "<< EMPATH << " variable stored" << std::endl;
       }
     }
     else if (argc < 3) {
@@ -41,21 +41,21 @@ int main(int argc, char* argv[]){
     else {
 
 
-	  Glare glare;
+	  Emp emp;
 
-	  if (!glare.parseInputs(argc, argv)) {
+	  if (!emp.parseInputs(argc, argv)) {
 		  return 1;
 	  }
 
-	  if (!glare.solve(argc, argv)) {
+	  if (!emp.solve(argc, argv)) {
 		  return 1;
 	  }
 
   #ifdef DEBUG
-      memtracker.checkMemoryLeaks();
+      //memtracker.checkMemoryLeaks();
   #endif
 
-      }
+    }
 	return 0;
 }
 

@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-	Glare
+	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -29,11 +29,11 @@ using nlohmann::json;
 //! Class that represent various materials
 
 /*!
-	Since Glare is intended to obtaing numerical and physically correct output, 
+	Since Emp is intended to obtaing numerical and physically correct output, 
 	materials are very important. Wrong material definition would lead to incorrect
 	output.
 
-	Glare materials must be physically correct and not only "look good". Most (if not all) 
+	Emp materials must be physically correct and not only "look good". Most (if not all) 
 	of them will be derived from Radiance materials.
 */
 

@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-	Glare
+	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -248,24 +248,24 @@ bool Triangle::testPoint(Point3D * p, int * code)
 	double w = 1 - u - v;
 
 	// Check if point is in triangle
-	if (u >= GLARE_MINUS_TINY && v >= GLARE_MINUS_TINY && w >= GLARE_MINUS_TINY) {
+	if (u >= EMP_MINUS_TINY && v >= EMP_MINUS_TINY && w >= EMP_MINUS_TINY) {
 		// Somewhere in the triangle
-		if (u <= GLARE_TINY && v <= GLARE_TINY) {
+		if (u <= EMP_TINY && v <= EMP_TINY) {
 			*code = 0; // vertex a
 		}
-		else if (u <= GLARE_TINY && w <= GLARE_TINY) {
+		else if (u <= EMP_TINY && w <= EMP_TINY) {
 			*code = 1; // vertex b
 		}
-		else if (v <= GLARE_TINY && w <= GLARE_TINY) {
+		else if (v <= EMP_TINY && w <= EMP_TINY) {
 			*code = 2; // vertex c
 		}
-		else if (u <= GLARE_TINY) {
+		else if (u <= EMP_TINY) {
 			*code = 3; // edge AB
 		}
-		else if (w <= GLARE_TINY) {
+		else if (w <= EMP_TINY) {
 			*code = 4; // edge BC
 		}
-		else if (v <= GLARE_TINY) {
+		else if (v <= EMP_TINY) {
 			*code = 5; // edge AC
 		}
 		else {

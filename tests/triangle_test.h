@@ -13,7 +13,7 @@ TEST(TriangleTest, getArea)
 
 	Triangle t = Triangle(a, b, c);
 
-	ASSERT_TRUE(std::abs(t.getArea()-l*l) < GLARE_TINY);
+	ASSERT_TRUE(std::abs(t.getArea()-l*l) < EMP_TINY);
 
 }
 

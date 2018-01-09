@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-	Glare
+	Emp
 
 	Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -97,26 +97,37 @@ bool  Vector3D::isParallel(Vector3D v)
 
 	// If they point in the same direction, K should be the same in all cases.
 	double k;
-	if(std::abs(v.x) > GLARE_TINY)
+    if (std::abs(v.x) > EMP_TINY) {
 		k = x / v.x;
+    }
+    else {
+      if (std::abs(v.y) > EMP_TINY) {
+        k = y / v.y;
+      }
+      else {
+        if (std::abs(v.z) > EMP_TINY) {
+          k = z / v.z;
+        }
+      }
+    }
 
 	// compare Y
-	if (std::abs(v.y) < GLARE_TINY) {
-		if (std::abs(y) > GLARE_TINY)
+	if (std::abs(v.y) < EMP_TINY) {
+		if (std::abs(y) > EMP_TINY)
 			return false;
 	}
 	else {
-		if (std::abs(k - y/v.y) > GLARE_TINY)
+		if (std::abs(k - y/v.y) > EMP_TINY)
 			return true;
 	}
 	
 	// compare Z
-	if (std::abs(v.z) < GLARE_TINY) {
-		if (std::abs(z) > GLARE_TINY)
+	if (std::abs(v.z) < EMP_TINY) {
+		if (std::abs(z) > EMP_TINY)
 			return false;
 	}
 	else {
-		if (std::abs(k - z / v.z) > GLARE_TINY)
+		if (std::abs(k - z / v.z) > EMP_TINY)
 			return true;
 	}
 
@@ -128,13 +139,13 @@ bool Vector3D::sameDirection(Vector3D v)
 	if (!isParallel(v))
 		return false;
 
-	if (std::abs(v.x) > GLARE_TINY) {
+	if (std::abs(v.x) > EMP_TINY) {
 		return x / v.x > 0;
 	}
-	else if (std::abs(v.y) > GLARE_TINY) {
+	else if (std::abs(v.y) > EMP_TINY) {
 		return y / v.y > 0;
 	}
-	else if (std::abs(v.z) > GLARE_TINY) {
+	else if (std::abs(v.z) > EMP_TINY) {
 		return z / v.z > 0;
 	}
 	return false;
@@ -143,12 +154,12 @@ bool Vector3D::sameDirection(Vector3D v)
 
 bool Vector3D::isZero()
 {
-	return (std::abs(x) < GLARE_TINY &&  std::abs(y) < GLARE_TINY && std::abs(z) < GLARE_TINY);
+	return (std::abs(x) < EMP_TINY &&  std::abs(y) < EMP_TINY && std::abs(z) < EMP_TINY);
 }
 
 bool Vector3D::isEqual(Vector3D v)
 {
-	return (std::abs(x - v.x) < GLARE_TINY &&  std::abs(y - v.y) < GLARE_TINY && std::abs(z - v.z) < GLARE_TINY);
+	return (std::abs(x - v.x) < EMP_TINY &&  std::abs(y - v.y) < EMP_TINY && std::abs(z - v.z) < EMP_TINY);
 }
 
 

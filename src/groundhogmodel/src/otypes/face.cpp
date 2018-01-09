@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-	Glare
+	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -53,7 +53,7 @@ bool Face::hasInnerLoops()
 
 bool Face::hasTooManyInnerLoops() 
 {
-	return polygon->countInnerLoops() > GLARE_TOO_MANY_LOOPS;
+	return polygon->countInnerLoops() > EMP_TOO_MANY_LOOPS;
 }
 
 Loop * Face::getOuterLoopRef() 

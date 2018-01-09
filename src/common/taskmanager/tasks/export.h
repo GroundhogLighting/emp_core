@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-Glare
+Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -194,10 +194,10 @@ public:
           x += px;
           y += py;
           z += pz;
-          pxlFile << px << GLARE_TAB << py << GLARE_TAB << pz << GLARE_TAB;
+          pxlFile << px << EMP_TAB << py << EMP_TAB << pz << EMP_TAB;
         }
         pxlFile << "\n";
-        ptsFile << x / 3 << GLARE_TAB << y / 3 << GLARE_TAB << z / 3 << GLARE_TAB << nx << GLARE_TAB << ny << GLARE_TAB << nz << "\n";
+        ptsFile << x / 3 << EMP_TAB << y / 3 << EMP_TAB << z / 3 << EMP_TAB << nx << EMP_TAB << ny << EMP_TAB << nz << "\n";
 
       }
 
@@ -261,7 +261,7 @@ public:
         double maxArea = wp->getMaxArea();
        
         // create the Triangulate Task ... dependency i
-        exportWorkplaneTask = new ExportWorkplane(wp, maxArea, 1.3, dir + "/" + GLARE_WORKPLANES_SUBFOLDER+"/"+*(wp->getName()));
+        exportWorkplaneTask = new ExportWorkplane(wp, maxArea, 1.3, dir + "/" + EMP_WORKPLANES_SUBFOLDER+"/"+*(wp->getName()));
         exportWorkplaneTask->addDependency(new ExportRadianceDir(dir, model, verbose));
         
         // Add the triangulate as a dependency to this task

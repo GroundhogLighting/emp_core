@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-Glare
+Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -104,8 +104,20 @@ void nArgumentError(lua_State * L, int nArgs[], int length);
 @param[in] L The lua_State * object
 @param[in] optionName The name of the option
 @param[in] receivedType The type of the received option
+@param[in] expectedType The type that the option is supposed to be
 */
-void badOptionError(lua_State * L, std::string optionName, const char * receivedType);
+void badOptionError(lua_State * L, std::string optionName, const char * receivedType, const char * expectedType);
+
+
+//! Throws a Lua error informing that a certain required option was not given
+/*!
+@author German Molina
+@param[in] L The lua_State * object
+@param[in] optionName The name of the option
+@param[in] optionType The type of the option
+*/
+void missingOption(lua_State * L, std::string optionName,std::string optionType);
+
 
 //! Checks if a certain argument (in the stack) is of a certain type
 /*!

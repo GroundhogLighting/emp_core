@@ -1,4 +1,4 @@
-/* RCSid $Id$ */
+﻿/* RCSid $Id$ */
 /*
  *  object.h - header file for routines using objects and object sets.
  *
@@ -14,7 +14,7 @@ extern "C" {
 #define  OCTREE		int
 #endif
 
-#ifdef GLARE
+#ifdef EMP
 #include "Radiance/src/common/fvect.h"
 #endif
 

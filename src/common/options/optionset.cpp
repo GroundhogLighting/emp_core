@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-	Glare
+	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -65,7 +65,7 @@ bool OptionSet::fillFromLuaTable(lua_State * L, int tablePosition)
     std::string optionName = it.key();
     auto value = it.value();
     
-    // Now the value we are looking for is in the position 2 of the stack
+    // Now the value we are looking for is in the position 'tablePosition' of the stack
     int field = lua_getfield(L, tablePosition, &optionName[0]);
     // If the value is there (i.e. it is not nil)
     if (field != LUA_TNIL) {
@@ -79,18 +79,18 @@ bool OptionSet::fillFromLuaTable(lua_State * L, int tablePosition)
           setOption(optionName, lua_tonumber(L, tablePosition + 1));
         }
         else {                   
-          badOptionError(L, optionName, lua_typename(L, field));
+          badOptionError(L, optionName, lua_typename(L, field),"number");
         }
       }
       else if (field == LUA_TSTRING) {
         if (!value.is_string()) {
-          badOptionError(L, optionName, lua_typename(L, field));
+          badOptionError(L, optionName, lua_typename(L, field),"string");
         }        
         setOption(optionName, lua_tostring(L, tablePosition + 1));
       }
       else if (field == LUA_TBOOLEAN ) {
         if (!value.is_boolean()) {
-          badOptionError(L, optionName, lua_typename(L, field));
+          badOptionError(L, optionName, lua_typename(L, field),"boolean");
         }
         setOption(optionName, lua_toboolean(L, tablePosition + 1) ? true : false);
       }

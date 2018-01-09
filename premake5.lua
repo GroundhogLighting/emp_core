@@ -9,7 +9,8 @@ dofile(premakescripts_dir.."/prebuild.lua")
 workspace "Emp"
     architecture "x86_64"
     platforms { "WIN64", "MACOS", "LINUX" }
-    configurations { "DEBUG", "RELEASE" }    
+    configurations { "DEBUG", "RELEASE" } 
+    defines { "EMP" }   
 
 filter "configurations:DEBUG"
     symbols "On"

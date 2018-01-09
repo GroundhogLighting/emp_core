@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-Glare
+Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
 
 #pragma once
-
+/*
 #ifdef DEBUG
 
 #include <vector>
@@ -76,3 +76,4 @@ extern MemAllocations memtracker;
 #else
 #define debug_new(var,x) new x
 #endif 
+*/

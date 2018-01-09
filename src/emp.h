@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-	Glare
+	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -25,10 +25,10 @@
 #include "common/taskmanager/taskmanager.h"
 
 
-//! This is the main class within Glare. It manages the Read, Write, Calculate process.
+//! This is the main class within Emp. It manages the Read, Write, Calculate process.
 
 
-class Glare {
+class Emp {
 
 private:
 	
@@ -85,4 +85,4 @@ public:
 	*/
 	bool loadFile(std::string inputFile);
 
-}; // END OF GLARE CLASS
+}; // END OF Emp CLASS

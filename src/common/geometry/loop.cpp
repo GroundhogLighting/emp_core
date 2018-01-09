@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-	Glare
+	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -146,7 +146,7 @@ bool Loop::testPoint(Point3D p, Vector3D * normal)
 	// yp and normal are unit vectors, thus yp also
 	
 	// Check if coplanar
-	if (std::abs(*normal*xp) > GLARE_TINY) {
+	if (std::abs(*normal*xp) > EMP_TINY) {
 		warn("Testing a Point3D on Loop: Point3D is not coplanar with Loop");
 		return false;
 	}
@@ -179,10 +179,10 @@ bool Loop::testPoint(Point3D p, Vector3D * normal)
 		double y = v*yp;
 		double x = v*xp;
 		
-		if (std::abs(y)<GLARE_TINY && std::abs(previousY)<GLARE_TINY) {
+		if (std::abs(y)<EMP_TINY && std::abs(previousY)<EMP_TINY) {
 			continue; // no rotation! Moving along the X-axis
 		}
-		else if (previousY*y < GLARE_MINUS_TINY) {
+		else if (previousY*y < EMP_MINUS_TINY) {
 			// Crosses the axis
 			double r = previousX + previousY*(x - previousX) / (previousY-y);
 			if (r > 0) { // if crosses on the correct side
@@ -195,7 +195,7 @@ bool Loop::testPoint(Point3D p, Vector3D * normal)
 				}
 			}
 		}
-		else if (std::abs(previousY) < GLARE_TINY && previousX > 0) {
+		else if (std::abs(previousY) < EMP_TINY && previousX > 0) {
 			// previous V was on the positive X-axis
 			if (y > 0) {
 				wNumber += 0.5;
@@ -204,7 +204,7 @@ bool Loop::testPoint(Point3D p, Vector3D * normal)
 				wNumber -= 0.5;
 			}
 		}
-		else if (std::abs(y) < GLARE_TINY && x > 0) {
+		else if (std::abs(y) < EMP_TINY && x > 0) {
 			// current V is on positive X-axis
 			if (previousY < 0) {
 				wNumber += 0.5;

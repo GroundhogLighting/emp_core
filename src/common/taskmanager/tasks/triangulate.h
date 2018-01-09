@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-Glare
+Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "common/geometry/triangulation.h"
 #include "groundhogmodel/src/workplane.h"
 
-#define GLARE_TRIANGULATION_GRAIN_SIZE 24
+#define EMP_TRIANGULATION_GRAIN_SIZE 24
 
 //! Triangulates a whole workplane
 /*!
@@ -96,7 +96,7 @@ public:
   {
     size_t nPols = workplane->getNumPolygons();
     
-    tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols, GLARE_TRIANGULATION_GRAIN_SIZE),
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols, EMP_TRIANGULATION_GRAIN_SIZE),
       [=](const tbb::blocked_range<size_t>& r) {       
         for (size_t i = r.begin(); i != r.end(); ++i) {
           triangulations.at(i)->mesh(maxArea, maxAspectRatio);

@@ -6,7 +6,7 @@ local c = {}
 local files = require(scripts_dir.."/files")
 
 c.clean = function()    
-    files.delete_file("./premakescripts/*.vcxproj")
+    files.delete_file("*.vcxproj*")
     files.delete_file("*.sln*")
     
     files.delete_dir("./premakescripts/*.xcodeproj")

@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-Glare
+Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -55,27 +55,61 @@ int printTaskManager(lua_State * L)
 int addTask(lua_State * L)
 {  
   // Check number of arguments
-  int args[2] = { 2 };
+  int args[1] = { 1 };
   int n = checkNArguments(L, args, 1);
 
   // Check the type of arguments
-  checkArgType(L, LUA_TSTRING, 1); // octreeName  
-  checkArgType(L, LUA_TTABLE, 2); // Options
-    
+  checkArgType(L, LUA_TTABLE, 1); // Options
+      
+  // Check minimum arguments
+  std::string factoryKey;
+  int field = lua_getfield(L, 1, "class"); // "field" is now n position 2.
+  if (field != LUA_TSTRING) {
+    if (field == LUA_TNIL) {
+      missingOption(L, "class", "string");
+    }
+    else {
+      badOptionError(L, "class", lua_typename(L, 2),"string");
+    }
+  }
+  else {
+    factoryKey = std::string(lua_tostring(L, 2)); 
+  };
+  // remove one value from the stack (or nil, if it was not there)
+  lua_pop(L, 1);
+
+  std::string taskName;
+  field = lua_getfield(L, 1, "name"); // "field" is now n position 2.
+  if (field != LUA_TSTRING) {
+    if (field == LUA_TNIL) {
+      missingOption(L, "name", "string");
+    }
+    else {
+      badOptionError(L, "name", lua_typename(L, 2), "string");
+    }
+  }
+  else {
+    factoryKey = std::string(lua_tostring(L, 2));
+  };
+  // remove one value from the stack (or nil, if it was not there)
+  lua_pop(L, 1);
+
+
+
   // Get the task dictionary
   std::map<std::string, TaskFactory> * td = getCurrentTaskDictionary(L);
   
-  // Get TaskFactory
-  std::string factoryKey = std::string(lua_tostring(L, 1));
+  // Check that the Task Factory exists
   size_t q = td->count(factoryKey);
   if (q == 0) {
     std::string errmsg = "Task '" + std::string(factoryKey) + "' is not registered";
     sendError(L, "Unknown Task", &errmsg[0]);
   }
 
+  // Get the Task factory
   TaskFactory f = td->at(&factoryKey[0]);
 
-  // get the task 
+  // build the task 
   Task * task = f(L);
   task->reportResults = true; // We do want to report the results
 

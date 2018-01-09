@@ -1,6 +1,6 @@
 ﻿
 /*****************************************************************************
-	Glare
+	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -58,7 +58,7 @@ using nlohmann::json;
 This object has a short life, and it is only meant to parse a SKP file
 into a GroundhogModel.
 
-The main function used by the Glare object is the parseSKPModel function.
+The main function used by the Emp object is the parseSKPModel function.
 */
 
 class SKPReader {

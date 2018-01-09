@@ -25,6 +25,6 @@ file:close()
 -- Write Radiance and Glare versions
 file = io.open("../src/versions.h",'w')
 file:write("#pragma once","\n")
-file:write("#define GLARE_VERSION \"Glare "..glare_version.."\"","\n")
+file:write("#define EMP_VERSION \"Emp "..glare_version.."\"","\n")
 file:write("#define RADIANCE_VERSION \""..rad_version.."\"","\n")
 file:close()

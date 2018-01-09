@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-	Glare
+	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
 
@@ -24,7 +24,7 @@
 #include "mem_leak.h"
 #include "config_constants.h"
 
-#include "./glare.h"
+#include "./emp.h"
 #include "./common/utilities/io.h"
 #include "./common/utilities/stringutils.h"
 #include "./common/utilities/file.h"
@@ -40,7 +40,7 @@
 
 
 
-bool Glare::parseInputs(int argc, char* argv[]) 
+bool Emp::parseInputs(int argc, char* argv[]) 
 {	
 	// Input file and lua script.
 	inputFile = std::string(argv[1]);
@@ -67,14 +67,14 @@ bool Glare::parseInputs(int argc, char* argv[])
 
     // check if script exists
     if (!fexists(script)) {
-      // if it does not exist, we look into the GLAREPATH
-      if (const char * glarepath = std::getenv(GLAREPATH)) {
+      // if it does not exist, we look into the EMPATH
+      if (const char * glarepath = std::getenv(EMPATH)) {
         if (fexists(std::string(glarepath) + "/" + script)) {
           script = std::string(glarepath) + "/" + script;
           return true;
         }
         else {
-          FATAL(errorMessage, "Lua script '" + std::string(script) + "' not found (not even in "+GLAREPATH+")");
+          FATAL(errorMessage, "Lua script '" + std::string(script) + "' not found (not even in "+ EMPATH +")");
           return false;
         }
       } else { // if there is no GLAREPATH variable, just error.
@@ -87,7 +87,7 @@ bool Glare::parseInputs(int argc, char* argv[])
 } // END OF PARSE INPUTS
 
 
-bool Glare::solve(int argc, char* argv[])
+bool Emp::solve(int argc, char* argv[])
 {
 		
 	/* LOAD FILE */
@@ -143,7 +143,7 @@ bool Glare::solve(int argc, char* argv[])
 
 
 
-bool Glare::loadFile(std::string input) 
+bool Emp::loadFile(std::string input) 
 {
 	// inputFile is a Sketchup model
 	if (stringInclude(input, ".skp")) {
