@@ -1079,7 +1079,7 @@ comperrs(			/* compute initial error estimates */
 	dp = da;
 	for (i = 0; i < hp->nt; i++)
 		for (j = 0; j < hp->np; j++) {
-#ifdef  DEBUG
+#ifdef  _DEBUG
 			if (dp->t != i || dp->p != j)
 				error(CONSISTENCY,
 					"division order in comperrs");
@@ -1137,7 +1137,7 @@ posgradient(					/* compute position gradient */
 		mag0 = mag1 = 0.0;
 		lastsine = 0.0;
 		for (i = 0; i < hp->nt; i++) {
-#ifdef  DEBUG
+#ifdef  _DEBUG
 			if (dp->t != i || dp->p != j)
 				error(CONSISTENCY,
 					"division order in posgradient");
@@ -1193,7 +1193,7 @@ dirgradient(					/* compute direction gradient */
 		dp = da + j;
 		mag = 0.0;
 		for (i = 0; i < hp->nt; i++) {
-#ifdef  DEBUG
+#ifdef  _DEBUG
 			if (dp->t != i || dp->p != j)
 				error(CONSISTENCY,
 					"division order in dirgradient");

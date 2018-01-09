@@ -10,6 +10,17 @@ files {
     "../tests/*.h"
 }
 
+
+ 
+filter "configurations:Debug"
+    files {
+        third_party_dir.."/nvwa/nvwa/debug_new.cpp", 
+    }
+    includedirs{
+        third_party_dir.."/nvwa/nvwa",     
+    }
+
+
 filter "platforms:WIN*"
 
     defines { "WIN" }    

@@ -20,7 +20,17 @@ files {
      lua_dir,
      third_party_dir.."/Radiance/src/common",        
  }
+
  
+ filter "configurations:Debug"
+    files {
+        third_party_dir.."/nvwa/nvwa/debug_new.cpp", 
+    }
+    includedirs{
+        third_party_dir.."/nvwa/nvwa",     
+    }
+
+    
  filter "platforms:WIN*"
      defines { "WIN" }    
      links {

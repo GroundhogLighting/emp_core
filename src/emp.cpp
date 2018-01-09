@@ -21,7 +21,6 @@
 
 #include <string>
 
-#include "mem_leak.h"
 #include "config_constants.h"
 
 #include "./emp.h"

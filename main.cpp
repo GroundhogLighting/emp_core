@@ -6,10 +6,9 @@
 #include <iostream>
 #include "Lua/src/lua.hpp"
 
-#include "mem_leak.h"
 
-#ifdef DEBUG
-  //MemAllocations memtracker = MemAllocations();
+#ifdef _DEBUG
+#include "debug_new.h"
 #endif
 
 int main(int argc, char* argv[]){	
@@ -51,7 +50,7 @@ int main(int argc, char* argv[]){
 		  return 1;
 	  }
 
-  #ifdef DEBUG
+  #ifdef _DEBUG
       //memtracker.checkMemoryLeaks();
   #endif
 

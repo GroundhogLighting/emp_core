@@ -515,7 +515,7 @@ direct(					/* add direct component */
 		hwt = (double)nhits / hwt;
 	else
 		hwt = 0.5;
-#ifdef DEBUG
+#ifdef _DEBUG
 	sprintf(errmsg, "%d tested, %d untested, %f conditional hit rate\n",
 			sn, ncnts-sn, hwt);
 	eputs(errmsg);

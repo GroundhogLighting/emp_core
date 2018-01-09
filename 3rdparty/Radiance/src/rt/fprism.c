@@ -707,7 +707,7 @@ d = 10; tolsource = funvalue("arg", 1, &d);
 X(r_initial) = varvalue("Dx");
 Y(r_initial) = varvalue("Dy");
 Z(r_initial) = varvalue("Dz");
-#ifdef DEBUG
+#ifdef _DEBUG
 fprintf(stderr,"dx=%lf dy=%lf dz=%lf\n",X(r_initial),Y(r_initial),Z(r_initial));
 #endif
 
@@ -792,7 +792,7 @@ l_get_val(
  trouve = curseur = 0;
  if ( !nosource && nb==2 ) nb=1; /* on est en train de tracer la source
 				     a partir de sa seconde source virtuelle */ 
-#ifdef DEBUG
+#ifdef _DEBUG
  fprintf(stderr, " On considere le rayon no: %d\n", nb);
 #endif
  for(i=0; i < nbrayons &&!trouve; i++)
@@ -816,7 +816,7 @@ l_get_val(
 		 break;
 	default : errno = EDOM; return(0.0);
     } 
-#ifdef DEBUG
+#ifdef _DEBUG
   fprintf(stderr, "get_val( %i, %i, %i) = %lf\n",val,dir,nb,valeur);
 #endif
   return valeur;

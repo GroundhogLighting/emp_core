@@ -72,7 +72,7 @@ markvirtuals(void)			/* find and mark virtual sources */
 	}
 	if (nvobjects == 0)
 		return;
-#ifdef DEBUG
+#ifdef _DEBUG
 	fprintf(stderr, "found %d virtual source objects\n", nvobjects);
 #endif
 					/* append virtual sources */
@@ -124,7 +124,7 @@ vproject(		/* create projected source(s) if they exist */
 		if ((*vsmat->vproj)(proj, o, &source[sn], i))
 			if ((ns = makevsrc(o, sn, proj)) >= 0) {
 				source[ns].sa.sv.pn = i;
-#ifdef DEBUG
+#ifdef _DEBUG
 				virtverb(ns, stderr);
 #endif
 				addvirtuals(ns, n);
@@ -348,7 +348,7 @@ vstestvis(		/* pretest source visibility */
 			n = 2.*PI * (1.-sqrt(1./(1.+or2/d)))*vspretest + .5;
 	}
 	if (n < MINSAMPLES) n = MINSAMPLES;
-#ifdef DEBUG
+#ifdef _DEBUG
 	fprintf(stderr, "pretesting source %d in object %s with %d rays\n",
 			sn, o->oname, n);
 #endif
@@ -362,7 +362,7 @@ vstestvis(		/* pretest source visibility */
 					/* get sample point */
 		do {
 			if (ssn >= stestlim) {
-#ifdef DEBUG
+#ifdef _DEBUG
 				fprintf(stderr, "\ttoo hard to hit\n");
 #endif
 				return(f);	/* too small a target! */
@@ -399,7 +399,7 @@ vstestvis(		/* pretest source visibility */
 		rayvalue(&sr);
 		if ((d1 = bright(sr.rcol)) > FTINY) {
 			if (d - d1 > FTINY) {
-#ifdef DEBUG
+#ifdef _DEBUG
 				fprintf(stderr, "\tpartially shadowed\n");
 #endif
 				return(f);	/* intervening transmitter */
@@ -407,26 +407,26 @@ vstestvis(		/* pretest source visibility */
 			nhit++;
 		}
 		if (nhit > 0 && nhit < nok) {
-#ifdef DEBUG
+#ifdef _DEBUG
 			fprintf(stderr, "\tpartially occluded\n");
 #endif
 			return(f);		/* need to shadow test */
 		}
 	}
 	if (nhit == 0) {
-#ifdef DEBUG
+#ifdef _DEBUG
 		fprintf(stderr, "\t0%% hit rate\n");
 #endif
 		return(f | SSKIP);	/* 0% hit rate:  totally occluded */
 	}
-#ifdef DEBUG
+#ifdef _DEBUG
 	fprintf(stderr, "\t100%% hit rate\n");
 #endif
 	return(f & ~SFOLLOW);		/* 100% hit rate:  no occlusion */
 }
 	
 
-#ifdef DEBUG
+#ifdef _DEBUG
 void
 virtverb(	/* print verbose description of virtual source */
 	int  sn,

@@ -32,11 +32,11 @@ This module defines functions that are used in the rest of the program to inform
 
 /* @{ */
 
-//! A debug message function. Only reports in DEBUG releases
+//! A debug message function. Only reports in _DEBUG releases
 /*!
 @author German Molina (based on information on the internet)
 */
-#ifdef DEBUG
+#ifdef _DEBUG
 #define DEBUG_MSG(str) do { std::cerr << "     >>> DEBUGG MSG: "  << str << std::endl; } while( false )
 #else
 #define DEBUG_MSG(str) do { } while ( false )
