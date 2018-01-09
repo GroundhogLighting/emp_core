@@ -1143,7 +1143,7 @@ av2list(
 	AMBVAL *av
 )
 {
-#ifdef DEBUG
+#ifdef _DEBUG
 	if (i_avlist >= nambvals)
 		error(CONSISTENCY, "too many ambient values in av2list1");
 #endif
@@ -1249,14 +1249,14 @@ sortambvals(			/* resort ambient values */
 		 * everyone at least twice, and this is an expensive process
 		 * when we're thrashing, which is when we need to do it.
 		 */
-#ifdef DEBUG
+#ifdef _DEBUG
 		sprintf(errmsg, "sorting %u ambient values at ambclock=%lu...",
 				nambvals, ambclock);
 		eputs(errmsg);
 #endif
 		i_avlist = 0;
 		unloadatree(&atrunk, av2list);	/* empty current tree */
-#ifdef DEBUG
+#ifdef _DEBUG
 		if (i_avlist < nambvals)
 			error(CONSISTENCY, "missing ambient values in sortambvals");
 #endif
@@ -1285,7 +1285,7 @@ sortambvals(			/* resort ambient values */
 			sortintvl = MAX_SORT_INTVL;
 		else
 			sortintvl <<= 1;	/* wait twice as long next */
-#ifdef DEBUG
+#ifdef _DEBUG
 		eputs("done\n");
 #endif
 	}

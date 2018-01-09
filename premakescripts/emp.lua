@@ -47,16 +47,11 @@ project "emp"
 
     end
 
-    --[[
+    filter "configurations:Debug"
+    files {
+        third_party_dir.."/nvwa/nvwa/debug_new.cpp", 
+    }
+    includedirs{
+        third_party_dir.."/nvwa/nvwa",     
+    }
 
-        filter "platforms:WIN*"
-        defines { "WIN" }    
-        links {
-            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/*",            
-            third_party_dir.."/intelTBB/lib/intel64/vc14/*",            
-        }
-        includedirs {
-            third_party_dir.."/SketchUp/WIN/headers", -- this changes in different machines
-        }     
-    ]]
-    

@@ -61,7 +61,7 @@ free_os(			/* free unneeded memory for object */
 		op->os = NULL;
 		return(1);
 	}
-#ifdef DEBUG
+#ifdef _DEBUG
 	objerror(op, WARNING, "cannot free structure");
 #endif
 	return(0);

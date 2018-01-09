@@ -15,13 +15,13 @@ workspace "Emp"
 filter "configurations:DEBUG"
     symbols "On"
     defines { 
-        "DEBUG", 
+        "_DEBUG", 
         "TBB_DO_ASSERT=1", 
         "TBB_DO_THREADING_TOOLS=1" 
     }
 
 filter "configurations:RELEASE"
-    optimize "On"
+    --optimize "On"
     defines { 
         "TBB_DO_ASSERT=0", 
         "TBB_DO_THREADING_TOOLS=0" 
