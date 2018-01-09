@@ -1,4 +1,4 @@
-﻿#include <string>
+#include <string>
 #include "config_constants.h"
 #include "versions.h"
 #include "./src/emp.h"

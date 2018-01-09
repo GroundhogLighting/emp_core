@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -56,7 +56,7 @@ int addTask(lua_State * L)
 {  
   // Check number of arguments
   int args[1] = { 1 };
-  int n = checkNArguments(L, args, 1);
+  checkNArguments(L, args, 1);
 
   // Check the type of arguments
   checkArgType(L, LUA_TTABLE, 1); // Options

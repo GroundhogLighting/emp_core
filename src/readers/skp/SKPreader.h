@@ -1,4 +1,4 @@
-﻿
+
 /*****************************************************************************
 	Emp
 
@@ -20,6 +20,8 @@
 *****************************************************************************/
 
 #pragma once
+
+#ifndef AVOID_SKP
 
 #include "groundhogmodel/groundhogmodel.h"
 #include "common/geometry/polygon.h"
@@ -428,7 +430,6 @@ public:
 	*/
 	bool getValueFromEntityGHDictionary(SUEntityRef entity, char * key, SUTypedValueRef * value);
 
-
 	//! Transforms a SUStringRef into an ASCII std::string
 	/*!
 	@author German Molina
@@ -545,3 +546,5 @@ public:
 
     
 };
+
+#endif

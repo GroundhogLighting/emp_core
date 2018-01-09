@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -18,6 +18,8 @@
 
 *****************************************************************************/
 
+
+#include <cmath>
 #include "./polygon.h"
 #include "config_constants.h"
 #include "common/utilities/io.h"
@@ -304,7 +306,7 @@ bool Polygon3D::getInverseAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3
 		- i.getY()*(j.getX()*k.getZ() - j.getZ()*k.getX())
 		+ i.getZ()*(j.getX()*k.getY() - j.getY()*k.getX());
 
-	if (abs(det) < EMP_TINY) {
+    if (std::abs(det) < EMP_TINY) {
 		FATAL(errorMessage,"Determinant is zero when trying to ");
 		normal.print();
 		return NULL;
@@ -347,14 +349,14 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 	double ny = k.getY();
 	double nz = k.getZ();	
 	
-	if (abs(nz) < EMP_TINY) {
+    if (std::abs(nz) < EMP_TINY) {
 		// Perfectly vertical planes	
 		i = Vector3D(0, 0, 1);
 		j = k%i;	
 	}
 	else {
 		// All other workplanes
-		if (abs(nx) > EMP_TINY) {
+        if (std::abs(nx) > EMP_TINY) {
           //i = Vector3D(-ny/nx,1,0);
           //i.normalize();
           
@@ -363,7 +365,7 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
           
 			j = k%i;
 		}
-		else if (abs(ny) > EMP_TINY) {
+        else if (std::abs(ny) > EMP_TINY) {
           //j = Vector3D(1, -nx / ny, 0);
           //j.normalize();
           
@@ -371,7 +373,7 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 			j.normalize();
           
 			i = j%k;
-		}else if(abs(nx) < EMP_TINY && abs(ny) < EMP_TINY){
+        }else if(std::abs(nx) < EMP_TINY && abs(ny) < EMP_TINY){
             i = Vector3D(1, 0, 0);
 			j = k%i;
 		}

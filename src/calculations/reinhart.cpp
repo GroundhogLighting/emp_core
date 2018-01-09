@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -69,7 +69,7 @@ Vector3D reinhartDir(size_t nbin, size_t MF)
 double reinhartSolidAngle(size_t nbin, size_t MF)
 {
   double ret;
-  Vector3D dir = reinhartDir(nbin, MF, &ret);
+  reinhartDir(nbin, MF, &ret);
   return ret;
 }
 

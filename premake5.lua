@@ -8,7 +8,7 @@ dofile(premakescripts_dir.."/prebuild.lua")
 
 workspace "Emp"
     architecture "x86_64"
-    platforms { "WIN64", "MACOS", "LINUX" }
+    --platforms { "WIN64", "MACOS", "LINUX" }
     configurations { "DEBUG", "RELEASE" } 
     defines { "EMP" }   
 
@@ -27,6 +27,7 @@ filter "configurations:RELEASE"
         "TBB_DO_THREADING_TOOLS=0" 
     }
     
+
 dofile(premakescripts_dir.."/lualib.lua")  
 dofile(premakescripts_dir.."/rtrad.lua")
 dofile(premakescripts_dir.."/radiance.lua")

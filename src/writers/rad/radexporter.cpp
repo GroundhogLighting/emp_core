@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -123,7 +123,7 @@ bool RadExporter::exportModel()
 	return true;
 }
 
-bool RadExporter::writeModelInfo(char * filename)
+bool RadExporter::writeModelInfo(const char * filename)
 {
 	// create and open file
 	std::ofstream file;
@@ -147,7 +147,7 @@ bool RadExporter::writeModelInfo(char * filename)
 	return true;
 }
 
-bool RadExporter::writeViews(char * dir) 
+bool RadExporter::writeViews(const char * dir)
 {
 	size_t numViews = model->getNumViews();
 	
@@ -214,7 +214,7 @@ bool RadExporter::writeViews(char * dir)
 	return true;
 }
 
-bool RadExporter::writeComponentDefinitions(char * dir) 
+bool RadExporter::writeComponentDefinitions(const char * dir)
 {
 	size_t numDefinitions= model->getNumComponentDefinitions();
 
@@ -272,7 +272,7 @@ bool RadExporter::writeComponentDefinitions(char * dir)
 	return true;
 }
 
-bool RadExporter::writeLayers(char * dir) 
+bool RadExporter::writeLayers(const char * dir)
 {
 
 	size_t numLayers = model->getNumLayers();
@@ -332,7 +332,7 @@ bool RadExporter::writeLayers(char * dir)
 }
 
 
-bool RadExporter::writeLayers(FILE * file, char * newMaterial)
+bool RadExporter::writeLayers(FILE * file, const char * newMaterial)
 {
 
   size_t numLayers = model->getNumLayers();
@@ -370,7 +370,7 @@ bool RadExporter::writeLayers(FILE * file, char * newMaterial)
       Otype * object = layer->getObjectRef(j);
 
       // Select Material
-      char * material;
+      const char * material;
 
       if (newMaterial == NULL) {
         // get the material
@@ -416,7 +416,7 @@ void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instan
 }
 
 
-void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * parentTransform, char * newMaterial)
+void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * parentTransform, const char * newMaterial)
 {
   
   ComponentDefinition * definition = instance->getDefinitionRef();
@@ -459,7 +459,7 @@ void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instan
     Otype * object = definition->getObjectRef(j);
 
     // Select Material
-    char * material;
+    const char * material;
 
     if (newMaterial == NULL) {
       // get the material
@@ -482,7 +482,7 @@ void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instan
 }
 
 
-bool RadExporter::writeWindows(char * dir) {
+bool RadExporter::writeWindows(const char * dir) {
 	size_t numGroups = model->getNumWindowGroups();
 	if (numGroups == 0)
 		return true;
@@ -498,7 +498,7 @@ bool RadExporter::writeWindows(char * dir) {
 		std::string name = group->getName();
 
 		size_t numWindows = group->getNumWindows();
-		if (numWindows < 0) {
+		if (numWindows <= 0) {
 			WARN(wMsg,"Empty WindowGroup " + name);
 			continue;
 		}
@@ -542,7 +542,7 @@ bool RadExporter::writeWindows(FILE * file) {
     std::string name = group->getName();
 
     size_t numWindows = group->getNumWindows();
-    if (numWindows < 0) {
+    if (numWindows <= 0) {
       WARN(wMsg,"Empty WindowGroup " + name);
       continue;
     }
@@ -567,7 +567,7 @@ bool RadExporter::writeWindows(FILE * file) {
 }
 
 
-bool RadExporter::writeMaterials(char * dir)
+bool RadExporter::writeMaterials(const char * dir)
 {
 	size_t numMaterials = model->getNumMaterials();
 	if (numMaterials == 0)
@@ -610,7 +610,7 @@ bool RadExporter::writeMaterials(FILE * file)
   return true;
 }
 
-bool RadExporter::writeSky(char * dir)
+bool RadExporter::writeSky(const char * dir)
 {
   // create directory
   std::string baseDir = exportDir + "/" + dir;
@@ -646,7 +646,7 @@ bool RadExporter::writeSky(FILE * file)
 	return true;
 }
 
-bool RadExporter::writeSceneFile(char * dir)
+bool RadExporter::writeSceneFile(const char * dir)
 {
 
 	std::ofstream file;
@@ -672,7 +672,7 @@ bool RadExporter::writeSceneFile(char * dir)
 }
 
 
-bool RadExporter::writePhotosensors(char * dir)
+bool RadExporter::writePhotosensors(const char * dir)
 {
 	size_t numPhotosensors = model->countPhotosensors();
 	
@@ -727,7 +727,7 @@ bool RadExporter::writePhotosensors(char * dir)
 
 
 
-bool RadExporter::writeWeather(char * dir)
+bool RadExporter::writeWeather(const char * dir)
 {
 	std::ofstream file;
 	std::string baseDir = exportDir + "/" + dir;

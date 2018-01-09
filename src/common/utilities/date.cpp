@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -22,7 +22,6 @@
 #include "./io.h"
 #include "./date.h"
 
-#include <ctime>
 
 Date::Date(int m, int d, int h, int min) 
 {
@@ -35,7 +34,8 @@ Date::Date(int m, int d, int h, int min)
 
 Date::Date(int64_t t) 
 {
-	tm * time = gmtime(&t);
+
+	tm * time = gmtime((const time_t *)(&t));
 	month = (time->tm_mon) + 1;
 	day = time->tm_mday;
 	hour = time->tm_hour;

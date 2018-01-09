@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "../material.h"
 
@@ -34,7 +34,7 @@ public:
 	@author German Molina
 	@param j The JSON object describing the Plastic
 	*/
-	Plastic::Plastic(json * j);
+	Plastic(json * j);
 
 	//! Retrieves the 'r' member
 	/*!

@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -106,6 +106,6 @@ public:
     @param[in] transform The optional Transform object
     @return success
     */
-    bool writeInRadianceFormat(FILE * file, char * material, Transform * transform);
+    bool writeInRadianceFormat(FILE * file, const char * material, Transform * transform);
 
 };

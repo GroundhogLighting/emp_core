@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define LIGHT(v) 47.435*v[0]+119.93*v[1]+11.635*v[2]
 
 
-#include <tbb/tbb.h>
+#include "tbb/tbb.h"
 #include "./oconv_options.h"
 #include "groundhogmodel/src/rtraceoptions.h"
 #include "./Radiance/src/rt/ray.h"

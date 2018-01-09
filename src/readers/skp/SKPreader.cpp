@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -18,6 +18,7 @@
 
 *****************************************************************************/
 
+#ifndef AVOID_SKP
 
 #include "./SKPreader.h"
 #include "config_constants.h"
@@ -1921,3 +1922,4 @@ bool SKPReader::loadWeather()
 	return loc->fillWeatherFromJSON(&j);
 }
 
+#endif

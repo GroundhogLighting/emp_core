@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -691,9 +691,6 @@ bool Triangulation::doCDT() {
 				MPEPolyTriangle * polyneighbor = polytriangle->Neighbors[(i + 2) % 3];
 				// If there is no neighbor
 
-                if (polyneighbor != nullptr && ! polyneighbor->Flags) {
-                  int a = 1;
-                }
 				if (polyneighbor != nullptr && (polyneighbor->Flags) < 256)
 					t->setConstraint(static_cast<u32>(i));
 			}

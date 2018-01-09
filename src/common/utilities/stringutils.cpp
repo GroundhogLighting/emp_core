@@ -72,12 +72,12 @@ void utf8toASCII(char * input, size_t inputLength, char * output, size_t * outpu
 			output[i] = input[i];
 			i++; 		
 		}
-		else if( c < 2047){
+		else if( (int)c < 2047){
 			// two byte
 			output[i] = '_';
 			i++; i++;
 		}
-		else if ( c < 65535) {
+		else if ( (int)c < 65535) {
 			// 3 byte
 			output[i] = '_';
 			i++; i++;

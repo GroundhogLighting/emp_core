@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -70,7 +70,7 @@ void Otype::setMaterial(Material * mat)
 }
 
 
-bool Otype::writeInRadianceFormat(FILE * file, char * material, Transform * transform)
+bool Otype::writeInRadianceFormat(FILE * file, const char * material, Transform * transform)
 {
 	return true;
 }

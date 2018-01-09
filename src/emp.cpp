@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -29,7 +29,10 @@
 #include "./common/utilities/stringutils.h"
 #include "./common/utilities/file.h"
 
-#include "readers/skp/SKPreader.h"
+#ifndef AVOID_SKP
+    #include "readers/skp/SKPreader.h"
+#endif
+
 #include "api/api.h"
 
 #include "common/taskmanager/tasks/export.h"
@@ -47,7 +50,11 @@ bool Emp::parseInputs(int argc, char* argv[])
 	script = std::string(argv[2]);			
 
 	// Check if inputFile makes sense.
-	char * supportedInputs[] = { ".skp" };
+	char * supportedInputs[] = {
+#ifndef AVOID_SKP
+        ".skp"
+#endif        
+    };
 	if (!stringIncludeAny(inputFile, supportedInputs,2)) {
 		FATAL(errorMessage,"Only .SKP input files are supported for now");
 		return false;
@@ -145,6 +152,7 @@ bool Emp::solve(int argc, char* argv[])
 
 bool Emp::loadFile(std::string input) 
 {
+#ifndef AVOID_SKP
 	// inputFile is a Sketchup model
 	if (stringInclude(input, ".skp")) {
 		SKPReader reader(&model,verbose);
@@ -153,6 +161,7 @@ bool Emp::loadFile(std::string input)
 			return false;
 		}
 	}
+#endif
 	return true;
 }
 

@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include <fstream>
-#include "taskManager.h"
+#include "./taskManager.h"
 #include "common/utilities/io.h"
 #include "tbb/tbb.h"
 

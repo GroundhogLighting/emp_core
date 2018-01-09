@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -123,7 +123,7 @@ public:
 	@return success
 	@note This function should be overriden by a function with the same name in each Material derived class
 	*/
-    virtual bool writeInRadianceFormat(FILE * file, char * material, Transform * transform);
+    virtual bool writeInRadianceFormat(FILE * file, const char * material, Transform * transform);
 	
     
 };

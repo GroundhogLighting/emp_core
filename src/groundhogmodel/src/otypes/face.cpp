@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -66,7 +66,7 @@ Loop * Face::getClosedLoop()
 	return polygon->getClosedLoop();
 }
 
-bool Face::writeInRadianceFormat(FILE * file, char * material, Transform * transform)
+bool Face::writeInRadianceFormat(FILE * file, const char * material, Transform * transform)
 {
   // get the name of the face
   std::string * faceName = getName();

@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -26,12 +26,12 @@
 
 
 
-void warn(char * message) 
+void warn(const char * message)
 {	
 	std::cerr << "Warning: " << message << std::endl;
 }
 
-void inform(char * message, bool verbose) 
+void inform(const char * message, bool verbose)
 {
 	if (!verbose) {
 		return;
@@ -39,14 +39,14 @@ void inform(char * message, bool verbose)
 	std::cerr << "     ... " << message << std::endl;
 }
 
-void fatal(char * message, int ln, char * file) 
+void fatal(const char * message, int ln, const char * file)
 {	
 	std::cerr << "Fatal: " << message << " -- Line " << ln << " of File " << file<< std::endl;
 }
 
 
 
-void warnNoMaterial(char * type, char * name)
+void warnNoMaterial(const char * type, char * name)
 {
   std::string errmsg = std::string(type)+ " object called " + std::string(name) + " has no material. It will be ignored";
   warn(&errmsg[0]);

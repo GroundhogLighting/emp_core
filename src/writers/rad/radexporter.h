@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -70,7 +70,7 @@ public:
 	@return success
 	@param[in] filename The subdirectory to export
 	*/
-	bool writeModelInfo(char * filename);
+	bool writeModelInfo(const char * filename);
 	
 	//! Writes all the View objects in Radiance format in different files
 	/*!
@@ -80,7 +80,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeViews(char * dir);
+	bool writeViews(const char * dir);
 
 	//! Writes all the component definitions in different files
 	/*!
@@ -94,7 +94,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeComponentDefinitions(char * dir);
+	bool writeComponentDefinitions(const char * dir);
 	
 	//! Writes all the layers in different files
 	/*!
@@ -108,7 +108,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeLayers(char * dir);
+	bool writeLayers(const char * dir);
 
     //! Writes all the layers in a single file
     /*!
@@ -123,7 +123,7 @@ public:
     @param[in] file The file
     @param[in] newMaterial The name of the material
     */
-    bool writeLayers(FILE * file, char * newMaterial);
+    bool writeLayers(FILE * file, const char * newMaterial);
 
 	//! Writes an XFORM call to a ComponentInstance in Radiance format
 	/*!
@@ -145,7 +145,7 @@ public:
     @param[in] transform A transformation to apply to the instance geometry
     @param[in] A material name that overrides the actual materials of the geometry (i.e. xform -m 'newMaterial' option)
     */
-    void writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * transform, char * newMaterial);
+    void writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * transform, const char * newMaterial);
 
 
 	//! Writes all the window groups in Radiance format
@@ -154,7 +154,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeWindows(char * dir);
+	bool writeWindows(const char * dir);
 
     //! Writes all the windows in a single file
     /*!
@@ -170,7 +170,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeMaterials(char * dir);
+	bool writeMaterials(const char * dir);
 
     //! Writes all the Material objects in a single FILE * object
     /*!
@@ -194,7 +194,7 @@ public:
     @param[in] dir The directory to write to
     @return [Boolean] Success
     */
-    bool writeSky(char * dir);
+    bool writeSky(const char * dir);
 
 	//! Writes the scene file
 	/*!
@@ -203,7 +203,7 @@ public:
 	@param[in] dir The directory to export
 	@todo There is a bug that would cause an error if the exporting Directory of Layers changes.
 	*/
-	bool writeSceneFile(char * dir);
+	bool writeSceneFile(const char * dir);
 
 	//! Writes the Photosensors
 	/*!
@@ -211,7 +211,7 @@ public:
 	@param[in] dir The directory to export
 	@return [Boolean] Success
 	*/
-	bool writePhotosensors(char * dir);
+	bool writePhotosensors(const char * dir);
 
 	//! Writes the weather file
 	/*!
@@ -219,5 +219,5 @@ public:
 	@param[in] dir The directory
 	@return sucess
 	*/
-	bool writeWeather(char * dir);
+	bool writeWeather(const char * dir);
 };
