@@ -85,9 +85,16 @@ It is synced with the (Gitbook doc)[https://www.gitbook.com/book/groundhoglighti
 
 Emp is intended to be cross-platform, thus we are using an automatic building tool. As Lua is the 
 languange chosen to accompany C++ within Emp, it was natural to use premake5 (which is based on Lua)
-as such tool.
+as such tool. However, Emp uses [Intel's Threading Building Blocks]()https://github.com/01org/tbb 
+(TBB) for allowing cross-platform parallel computing. Unfortunately, Intel TBB should be built using
+make. So, for building you should:
 
-Emp is built using the simplest premake command... as mentioned in [Lua's documentation](https://github.com/premake/premake-core/wiki/Using-Premake):
+### Build Intel TBB
+
+
+### Create the project for your IDE
+
+Emp is built using the simplest premake command... as mentioned in [Premake's documentation](https://github.com/premake/premake-core/wiki/Using-Premake):
 
 > The simplest Premake command is:
 >
@@ -117,7 +124,9 @@ Emp is built using the simplest premake command... as mentioned in [Lua's docume
 >     premake5 --help
 > 
 
-Then, you should compile with whatever IDE or toolset you use.
+### Edit and compile
+
+Finally, you should edit and compile with whatever IDE or toolset you use.
 
 ## License
 
