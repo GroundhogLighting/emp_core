@@ -22,7 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Include LUA headers
-#include "lua.hpp"
+extern "C" {
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+}
 
 //! Retrieves a list of the Workplane objects in the GroundhogModel
 /*!

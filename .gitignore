@@ -38,3 +38,4 @@ debug/*
 **.vscode**
 
 test_outputs/*
+libs/*

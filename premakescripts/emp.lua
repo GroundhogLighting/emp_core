@@ -33,11 +33,22 @@ project "emp"
             third_party_dir.."/SketchUp/WIN/headers", 
         }    
     elseif is_macos then
-    defines { "MACOS", "AVOID_SKP" }    
-    links {
-        --third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/*",            
-        third_party_dir.."/intelTBB/lib/intel64/vc14/*",            
-    }  
+        defines { "MACOS" }    
+        links {
+            "tbb_debug",
+            third_party_dir.."/SketchUp/MACOS/headers/SketchUpAPI.framework",
+            "GoogleTest",
+            "Lua",
+            "radiance",
+            "raycalls",
+            "rtrad"                                     
+        }  
+        targetdir "../bin"
+        buildoptions {"-F "..third_party_dir.."/SketchUp/MACOS/headers"}
+        linkoptions {
+            "-F "..third_party_dir.."/SketchUp/MACOS/headers", 
+            "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"
+        }    
     elseif is_linux then
         defines { "LINUX", "AVOID_SKP" }    
         links {

@@ -438,7 +438,7 @@ public:
 	@param[in] fix Should we fixString()?
 	@return success
 	*/
-	bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string, bool fix);
+	bool SUStringtoString(SUStringRef suString, std::string * string, bool fix);
 
 	//! Retrieves a std::string from a SUTypedValue object
 	/*!

@@ -24,8 +24,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 // Include LUA headers
-#include "lua.hpp"
-
+extern "C" {
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+}
 
 //! Adds the Export To Radiance task to the TaskManager
 /*!

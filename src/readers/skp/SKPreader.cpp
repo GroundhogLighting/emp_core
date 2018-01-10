@@ -1570,7 +1570,7 @@ Material * SKPReader::addMaterialToModel(SUMaterialRef material)
     // Check if the material exists
     std::string name;
     if (!getSUMaterialName(material, &name))
-      return false;
+      return NULL;
 
     Material * m = model->hasMaterial(&name);
     if (m != NULL)

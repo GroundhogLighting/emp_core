@@ -23,7 +23,11 @@
 
 
 // Include LUA headers
-#include "lua.hpp"
+extern "C" {
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+}
 
 #include "common/utilities/io.h"
 

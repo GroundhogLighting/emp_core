@@ -66,7 +66,7 @@ files {
     rad_rt.."/virtuals.c",
     rad_rt.."/../common/paths.c",
 }
-targetdir (libs_dir.."/%{cfg.platform}".."/%{cfg.buildcfg}")   
+targetdir (libs_dir.."/%{cfg.buildcfg}")   
 includedirs{
     third_party_dir.."/Radiance/src/**",
     third_party_dir
