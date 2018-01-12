@@ -3,6 +3,9 @@
 project "rtrad"
 kind "StaticLib"
 language "C"
+defines {
+    "lint"
+}
 files {
     rad_common.."/addobjnotify.c", 
     rad_common.."/badarg.c",

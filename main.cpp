@@ -4,8 +4,12 @@
 #include "./src/emp.h"
 #include "./main.h"
 #include <iostream>
-#include "Lua/src/lua.hpp"
 
+extern "C" {
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+}
 
 #ifdef _DEBUG
 #include "debug_new.h"

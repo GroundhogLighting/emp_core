@@ -51,7 +51,7 @@ bool Emp::parseInputs(int argc, char* argv[])
 	script = std::string(argv[2]);			
 
 	// Check if inputFile makes sense.
-	char * supportedInputs[] = {
+    const char * supportedInputs[] = {
 #ifndef AVOID_SKP
         ".skp"
 #endif        

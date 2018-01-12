@@ -6,6 +6,9 @@ project "emp_tests"
     buildoptions { '-std=c++11' }
     language "C++" 
 
+
+    targetdir "../bin/%{cfg.buildcfg}"
+
     files { 
         "../main_test.cpp",
         "../main_test.h",
@@ -22,6 +25,15 @@ project "emp_tests"
         google_test_dir.."/include",                     
     }  
 
+    links {
+        "tbb_debug",
+        "GoogleTest",
+        "Lua",
+        "radiance",
+        "raycalls",
+        "rtrad"                                     
+    }  
+
 
     -- Add the platform specific
     if is_windows then
@@ -36,16 +48,12 @@ project "emp_tests"
     elseif is_macos then
         defines { "MACOS" }    
         links {
-            "tbb_debug",
             third_party_dir.."/SketchUp/MACOS/headers/SketchUpAPI.framework",
-            "GoogleTest",
-            "Lua",
-            "radiance",
-            "raycalls",
-            "rtrad"                                     
-        }  
-        targetdir "../bin"
-        buildoptions {"-F "..third_party_dir.."/SketchUp/MACOS/headers"}
+        }
+        buildoptions {
+            "-F "..third_party_dir.."/SketchUp/MACOS/headers"            
+        }
+        runpathdirs { "libs" }
         linkoptions {
             "-F "..third_party_dir.."/SketchUp/MACOS/headers", 
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"

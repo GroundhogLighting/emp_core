@@ -28,3 +28,7 @@ file:write("#pragma once","\n")
 file:write("#define EMP_VERSION \"Emp "..glare_version.."\"","\n")
 file:write("#define RADIANCE_VERSION \""..rad_version.."\"","\n")
 file:close()
+
+-- Create the bin/Debug and bin/Release directories
+os.mkdir("../bin/DEBUG")
+os.mkdir("../bin/RELEASE")

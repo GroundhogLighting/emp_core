@@ -172,7 +172,7 @@ bool RadExporter::writeViews(const char * dir)
 			vt = "vtl";
 			break;
 		default:
-			FATAL(errorMessage,"Unkown type of view coded " + view->getViewType());
+			FATAL(errorMessage,"Unkown type of view coded " + std::to_string(view->getViewType()));
 			return false;
 		}
 

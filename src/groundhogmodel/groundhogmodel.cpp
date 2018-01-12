@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -223,19 +223,22 @@ Material * GroundhogModel::addMaterial(json * j)
 		if (materials[i]->compareName(&name))
 			return materials[i];
 	}
-		
-	if ((*j)["class"] == "plastic") {
+    std::string cl = (*j)["class"];
+    
+	if (cl == "plastic") {
 		Plastic * p = new Plastic(j);
 		materials.push_back(p);
 		return p;
 	}
-	else if ((*j)["class"] == "glass") {
+	else if (cl == "glass") {
 		Glass * g = new Glass(j);
 		materials.push_back(g);
 		return g;
 	}
 	else {
-		FATAL(errorMessage,"Unsupported material class "+ (*j)["class"] );
+        
+        std::string e = "Unsupported material class "+ cl;
+        FATAL(errorMessage,e);
 		return NULL;
 	}
 }

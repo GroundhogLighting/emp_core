@@ -2,6 +2,9 @@
 project "radiance"
 kind "StaticLib"
 language "C"
+defines {
+    "lint"
+}
 files {
     rad_rt.."/Version.c", -- this one is generated on prebuild scripts
     rad_rt.."/ambcomp.c", 

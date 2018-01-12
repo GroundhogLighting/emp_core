@@ -25,7 +25,12 @@ filter "configurations:RELEASE"
         "TBB_DO_ASSERT=0", 
         "TBB_DO_THREADING_TOOLS=0" 
     }
-    
+
+-- Fix to set Windows 10 instead of 8.1
+if is_windows then
+    systemversion(os.winSdkVersion() .. ".0")
+end
+
 dofile(premakescripts_dir.."/lua.lua")  
 dofile(premakescripts_dir.."/rtrad.lua")
 dofile(premakescripts_dir.."/radiance.lua")

@@ -217,7 +217,7 @@ bool SKPReader::parseSKPModel(std::string inputFile)
 };
 
 
-bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, std::string * value) 
+bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, std::string * value) 
 {
 	SUTypedValueRef suValue = SU_INVALID;
 	if (!checkSUResult(
@@ -253,7 +253,7 @@ bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, 
 	return true;
 }
 
-bool SKPReader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo,char * key, double * value) 
+bool SKPReader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, double * value) 
 {
 	SUTypedValueRef suValue= SU_INVALID;
 	if (!checkSUResult(
@@ -435,19 +435,23 @@ bool SKPReader::SUCameraToView(std::string * viewName, SUCameraRef camera, View 
 	
 	// this needs to be checked manually	
 	switch (aspectRatioResult) {
-	case SU_ERROR_NONE:
-		break; // all OK.
-	case SU_ERROR_INVALID_INPUT:
-		fatal("SU_ERROR_INVALID_INPUT when trying to get aspect ratio of view",__LINE__,__FILE__);
-		break;
-	case SU_ERROR_NO_DATA:
-		// the camera uses the screen aspect ratio... will assume the following
-		aspectRatio = 16.0 / 9.0;
-		break;
-	case SU_ERROR_NULL_POINTER_OUTPUT:
-		fatal("SU_ERROR_NULL_POINTER_OUTPUT when trying to get aspect ratio of view",__LINE__,__FILE__);
-		break;
-	}
+        case SU_ERROR_NONE:
+            break; // all OK.
+        case SU_ERROR_INVALID_INPUT:
+            fatal("SU_ERROR_INVALID_INPUT when trying to get aspect ratio of view",__LINE__,__FILE__);
+            break;
+        case SU_ERROR_NO_DATA:
+            // the camera uses the screen aspect ratio... will assume the following
+            aspectRatio = 16.0 / 9.0;
+            break;
+        case SU_ERROR_NULL_POINTER_OUTPUT:
+            fatal("SU_ERROR_NULL_POINTER_OUTPUT when trying to get aspect ratio of view",__LINE__,__FILE__);
+            break;
+        case SU_ERROR_NULL_POINTER_INPUT:
+            break;
+        default:
+            break;
+    }
 	
 
 	view->setViewHorizontal(aspectRatio * viewHeight);
@@ -1419,7 +1423,7 @@ int32_t SKPReader::getEntityID(SUEntityRef entity)
 }
 
 
-bool SKPReader::getValueFromEntityGHDictionary(SUEntityRef entity, char * key, SUTypedValueRef * value)
+bool SKPReader::getValueFromEntityGHDictionary(SUEntityRef entity, const char * key, SUTypedValueRef * value)
 {
 	// check how many dictionaries
 	size_t dictionaryCount;
@@ -1824,7 +1828,7 @@ bool SKPReader::addPhotosensorsToModel(SUComponentDefinitionRef definition)
 }
 
 
-bool SKPReader::getValueFromModelGHDictionary(char * key, SUTypedValueRef * value)
+bool SKPReader::getValueFromModelGHDictionary(const char * key, SUTypedValueRef * value)
 {
 	// check how many dictionaries
 	size_t dictionaryCount;

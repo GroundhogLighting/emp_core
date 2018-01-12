@@ -31,18 +31,18 @@ bool stringInclude(std::string word, std::string substring)
 	return word.find(substring) != -1;
 }
 
-bool stringInclude(char * word, std::string substring) 
+bool stringInclude(const char * word, std::string substring) 
 {
 	return std::string(word).find(substring) != -1;
 }
 
-bool stringInclude(char * word, char * substring) 
+bool stringInclude(const char * word, const char * substring) 
 {
 	return std::string(word).find(substring) != -1;
 }
 
 
-bool stringIncludeAny(std::string word, char ** substringArray, int nItems) 
+bool stringIncludeAny(std::string word, const char ** substringArray, int nItems)
 {
 	for (int i = 0; i < nItems; i++) {
 		if (stringInclude(word, substringArray[i])) {
@@ -53,7 +53,7 @@ bool stringIncludeAny(std::string word, char ** substringArray, int nItems)
 }
 
 
-bool stringIncludeAny(char * word, char ** substringArray, int nItems) 
+bool stringIncludeAny(const char * word, const char ** substringArray, int nItems)
 {
 	return stringIncludeAny(std::string(word), substringArray, nItems);
 }

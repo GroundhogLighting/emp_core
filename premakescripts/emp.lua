@@ -4,6 +4,8 @@ project "emp"
     language "C++"
     buildoptions { '-std=c++11' }
 
+    targetdir "../bin/%{cfg.buildcfg}"
+
     files { 
         "../main.cpp",
         "../main.h",
@@ -43,8 +45,9 @@ project "emp"
             "raycalls",
             "rtrad"                                     
         }  
-        targetdir "../bin"
-        buildoptions {"-F "..third_party_dir.."/SketchUp/MACOS/headers"}
+        buildoptions {
+            "-F "..third_party_dir.."/SketchUp/MACOS/headers",            
+        }
         linkoptions {
             "-F "..third_party_dir.."/SketchUp/MACOS/headers", 
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"
