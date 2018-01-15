@@ -16,7 +16,7 @@ extern "C" {
 #endif
 
 int main(int argc, char* argv[]){	
-	
+    
 	// Check if only some help is needed
 	if (argc == 1 || strcmp(argv[1], "--help") == 0 || strcmp(argv[1] , "-h")== 0) {
 		std::cout << USAGE << std::endl;		
@@ -54,11 +54,8 @@ int main(int argc, char* argv[]){
 		  return 1;
 	  }
 
-  #ifdef _DEBUG
-      //memtracker.checkMemoryLeaks();
-  #endif
-
     }
+    
 	return 0;
 }
 

@@ -30,19 +30,27 @@ GroundhogModel::GroundhogModel()
 
 GroundhogModel::~GroundhogModel()
 {
-	//destroy layers
-	for (size_t i = 0; i < layers.size(); i++) {
-		delete layers[i];
-	}
-
-	for (size_t i = 0; i < definitions.size(); i++) {
-		delete definitions[i];
-	}
-
-	for (size_t i = 0; i < views.size(); i++) {
-		delete views[i];
-	}	
-
+    
+    for(auto x : layers)
+        delete x;
+    
+    for(auto x : workplanes)
+        delete x;
+    
+    for(auto x : photosensors)
+        delete x;
+    
+    for(auto x : materials)
+        delete x;
+    
+    for(auto x : views)
+        delete x;
+    
+    for(auto x : definitions)
+        delete x;
+    
+    for(auto x : windowGroups)
+        delete x;
 }
 
 

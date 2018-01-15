@@ -8,13 +8,16 @@ project "emp"
 
     files { 
         "../main.cpp",
-        "../main.h",
-        "../src/**",        
+        "../src/**",    
+        "../main.h"    
     }
-
     links {
-        "Lua", "radiance","raycalls","rtrad"
-    }
+        "tbb_debug",
+        "Lua",
+        "radiance",
+        "raycalls",
+        "rtrad"                                     
+    }  
 
     includedirs{
         "../src/",
@@ -36,20 +39,15 @@ project "emp"
         }    
     elseif is_macos then
         defines { "MACOS" }    
-        links {
-            "tbb_debug",
-            third_party_dir.."/SketchUp/MACOS/headers/SketchUpAPI.framework",
-            "GoogleTest",
-            "Lua",
-            "radiance",
-            "raycalls",
-            "rtrad"                                     
-        }  
+        
         buildoptions {
             "-F "..third_party_dir.."/SketchUp/MACOS/headers",            
         }
+        links {
+            third_party_dir.."/SketchUp/MACOS/headers/SketchUpAPI.framework",
+        }
         linkoptions {
-            "-F "..third_party_dir.."/SketchUp/MACOS/headers", 
+            --"-F "..third_party_dir.."/SketchUp/MACOS/headers", 
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"
         }    
     elseif is_linux then
@@ -64,8 +62,14 @@ project "emp"
     filter "configurations:Debug"
     files {
         third_party_dir.."/nvwa/nvwa/debug_new.cpp", 
+        third_party_dir.."/nvwa/nvwa/debug_new.h", 
+        
     }
     includedirs{
         third_party_dir.."/nvwa/nvwa",     
+    }
+
+    buildoptions {
+        "-Wl,-no_pie"            
     }
 

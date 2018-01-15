@@ -188,16 +188,16 @@ bool RadExporter::writeViews(const char * dir)
 		file << vt;
 
 		// view point
-		Point3D * vp = view->getViewPoint();
-		file << " -vp " << vp->getX() << " " << vp->getY() << " " << vp->getZ();
+		Point3D vp = view->getViewPoint();
+		file << " -vp " << vp.getX() << " " << vp.getY() << " " << vp.getZ();
 
 		// view direction
-		Vector3D * vd = view->getViewDirection();
-		file << " -vd " << vd->getX() << " " << vd->getY() << " " << vd->getZ();
+		Vector3D vd = view->getViewDirection();
+		file << " -vd " << vd.getX() << " " << vd.getY() << " " << vd.getZ();
 
 		// view up
-		Vector3D * up = view->getViewUp();
-		file << " -vu " << up->getX() << " " << up->getY() << " " << up->getZ();
+		Vector3D up = view->getViewUp();
+		file << " -vu " << up.getX() << " " << up.getY() << " " << up.getZ();
 
 		// view horizontal
 		file << " -vh " << view->getViewHorizontal();

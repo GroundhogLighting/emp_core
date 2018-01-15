@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -81,7 +81,7 @@ double Location::getAlbedo()
 bool Location::fillWeatherFromJSON(json * j)
 {
 	elevation = j->at("elevation").get<double>();
-	return weather->fillFromJSON(j);
+	return weather.fillFromJSON(j);
 }
 
 
@@ -92,10 +92,10 @@ double Location::getElevation()
 
 bool Location::hasWeather()
 {
-	return weather->hasData();
+	return weather.hasData();
 }
 
 HourlyData * Location::getHourlyData(size_t hour)
 {
-	return &(weather->data[hour]);
+	return &(weather.data[hour]);
 }

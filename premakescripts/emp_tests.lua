@@ -74,5 +74,8 @@ project "emp_tests"
     includedirs{
         third_party_dir.."/nvwa/nvwa",     
     }
+    buildoptions {
+        "-Wl,-no_pie"            
+    }
 
 

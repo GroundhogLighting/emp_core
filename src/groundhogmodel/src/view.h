@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -34,9 +34,9 @@
 class View {
 private:
 	std::string name; //!< The name of the view
-	Point3D * viewPoint; //!< The view point position
-	Vector3D * viewDirection; //!< The view direction vector
-	Vector3D * viewUp; //!< The view up vector
+	Point3D viewPoint = Point3D(0,0,0); //!< The view point position
+	Vector3D viewDirection = Vector3D(0,0,1); //!< The view direction vector
+	Vector3D viewUp = Vector3D(0,0,1); //!< The view up vector
 	double viewHorizontal; //!< The field of view in the horizontal direction
 	double viewVertical; //!< The field of view in the vertical direction
 	int viewType; //!<  The view type according to defined macros
@@ -77,42 +77,42 @@ public:
 	@author German Molina
 	@param[in] point The View Point of the view
 	*/
-	void setViewPoint(Point3D * point);
+	void setViewPoint(Point3D point);
 
 	//! Retrieves the View Point of the view
 	/*!
 	@author German Molina
 	@return The View Point of the view
 	*/
-	Point3D * getViewPoint();
+	Point3D getViewPoint();
 	
 	//! Assigns a View Up to the view
 	/*!
 	@author German Molina
 	@param[in] vector The View Up of the view
 	*/
-	void setViewUp(Vector3D * vector);
+	void setViewUp(Vector3D vector);
 	
 	//! Retrieves the View Up of the view
 	/*!
 	@author German Molina
 	@return The View Up of the view
 	*/
-	Vector3D * getViewUp();
+	Vector3D getViewUp();
 	
 	//! Assigns a View Direction to the view
 	/*!
 	@author German Molina
 	@param[in] vector The View Direction of the view
 	*/
-	void setViewDirection(Vector3D * vector);
+	void setViewDirection(Vector3D vector);
 	
 	//! Retrieves the View Direction of the view
 	/*!
 	@author German Molina
 	@return The View Direction of the view
 	*/
-	Vector3D * getViewDirection();
+	Vector3D getViewDirection();
 	
 	//! Assigns the View Horizontal value of the view
 	/*!

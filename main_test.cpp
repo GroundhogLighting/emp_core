@@ -16,6 +16,12 @@
 #include "./tests/radiance_test.h"
 #include "./tests/reinhart_test.h"
 
+//#ifdef _DEBUG
+#include <stdlib.h>
+#include "debug_new.h"
+//#endif
+
+
 int main(int argc, char* argv[]){	
 	
 	::testing::InitGoogleTest(&argc, argv);

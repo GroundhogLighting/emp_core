@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -29,9 +29,8 @@ WindowGroup::WindowGroup(std::string groupName) {
 }
 
 WindowGroup::~WindowGroup() {
-	for (size_t i = 0; i < windows.size(); i++) {
-		delete windows[i];
-	}
+    for(auto x : windows)
+        delete x;
 }
 
 

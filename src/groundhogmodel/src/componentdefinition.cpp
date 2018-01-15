@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -33,14 +33,12 @@ ComponentDefinition::ComponentDefinition(std::string * componentName)
 
 ComponentDefinition::~ComponentDefinition() 
 {
-
-	for (size_t i = 0; i < objects.size(); i++) {
-		delete objects[i];
-	}
+    for(auto x : objects)
+        delete x;
+    
+    for(auto x : instances)
+        delete x;
 	
-	for (size_t i = 0; i < instances.size(); i++) {
-		delete instances[i];
-	}
 }
 
 

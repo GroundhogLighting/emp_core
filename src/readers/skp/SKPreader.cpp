@@ -390,7 +390,7 @@ bool SKPReader::SUCameraToView(std::string * viewName, SUCameraRef camera, View 
 		__LINE__
 	)) return false;
 	view->setViewPoint(new Point3D(TO_M(position.x), TO_M(position.y), TO_M(position.z)));
-	view->setViewUp(new Vector3D(up.x, up.y, up.z));
+	view->setViewUp(Vector3D(up.x, up.y, up.z));
 
 	// get and set the view direction
 	SUVector3D direction;
@@ -399,7 +399,7 @@ bool SKPReader::SUCameraToView(std::string * viewName, SUCameraRef camera, View 
 		"SUCameraGetDirection",
 		__LINE__
 	)) return false;
-	view->setViewDirection(new Vector3D(direction.x, direction.y, direction.z));
+	view->setViewDirection(Vector3D(direction.x, direction.y, direction.z));
 
 	// get and set type
 	bool perspective;
