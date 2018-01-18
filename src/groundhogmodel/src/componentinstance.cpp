@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -38,6 +38,7 @@ ComponentInstance::ComponentInstance(ComponentDefinition * definitionRef) {
 
 
 ComponentInstance::~ComponentInstance() {
+    
 }
 
 void ComponentInstance::setX(double newX) {

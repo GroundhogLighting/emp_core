@@ -18,6 +18,7 @@
 
 *****************************************************************************/
 
+#include <cmath>
 #include <string>
 #include "common/utilities/io.h"
 
@@ -79,7 +80,9 @@ bool Segment::intersect(Segment * input, Point3D * output)
 		det = a.getX()*b.getZ() - a.getZ()*b.getX();
 		tA = (b.getX()*delta.getZ() - b.getZ()*delta.getX()) / det;
 		tB = (a.getX()*delta.getZ() - a.getZ()*delta.getX()) / det;
-	}
+    }else{
+        return false;
+    }
 
 	if (tA >= 0 && tA <= 1 && tB >= 0 && tB <= 1) {
 		if (output != NULL) {

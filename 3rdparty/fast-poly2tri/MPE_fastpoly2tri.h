@@ -1,4 +1,4 @@
-﻿/* fast-poly2tri - v1.0
+/* fast-poly2tri - v1.0
 
   Rewrite of the poly2tri library (https://github.com/jhasse/poly2tri)
   by Unspongeful (@unspongeful).
@@ -1803,8 +1803,8 @@ void MPE_PolyAddEdge(MPEPolyContext* PolyContext)
       Edge->Q = B;
     }
 
-    MPE_Assert(fabsf(A->Y - B->Y) > MPE_POLY2TRI_EPSILON ||
-               fabsf(A->X - B->X) > MPE_POLY2TRI_EPSILON);
+    MPE_Assert(fabsf((float)(A->Y - B->Y)) > MPE_POLY2TRI_EPSILON ||
+               fabsf((float)(A->X - B->X)) > MPE_POLY2TRI_EPSILON);
 
     if (Edge->Q->FirstEdge)
     {

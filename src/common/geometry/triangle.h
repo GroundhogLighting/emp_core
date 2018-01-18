@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -202,14 +202,7 @@ public:
 	*/
 	bool testPoint(Point3D * p, int * code);
 
-	//! Checks if a Emp triangle is equal to a fast-poly2tri triangle
-	/*!
-	@author German Molina
-	@param triangle The MPEPolyTriangle to compare with
-	@return is equal
-	*/
-	bool isEqual(MPEPolyTriangle * triangle);
-
+	
     //! Checks if a Emp triangle is equal to another
     /*!
     @author German Molina

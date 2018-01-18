@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -18,6 +18,7 @@
 
 *****************************************************************************/
 
+#ifndef AVOID_SKP
 
 #include "./SKPreader.h"
 #include "config_constants.h"
@@ -216,7 +217,7 @@ bool SKPReader::parseSKPModel(std::string inputFile)
 };
 
 
-bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, std::string * value) 
+bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, std::string * value) 
 {
 	SUTypedValueRef suValue = SU_INVALID;
 	if (!checkSUResult(
@@ -252,7 +253,7 @@ bool SKPReader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, 
 	return true;
 }
 
-bool SKPReader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo,char * key, double * value) 
+bool SKPReader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, double * value) 
 {
 	SUTypedValueRef suValue= SU_INVALID;
 	if (!checkSUResult(
@@ -389,7 +390,7 @@ bool SKPReader::SUCameraToView(std::string * viewName, SUCameraRef camera, View 
 		__LINE__
 	)) return false;
 	view->setViewPoint(new Point3D(TO_M(position.x), TO_M(position.y), TO_M(position.z)));
-	view->setViewUp(new Vector3D(up.x, up.y, up.z));
+	view->setViewUp(Vector3D(up.x, up.y, up.z));
 
 	// get and set the view direction
 	SUVector3D direction;
@@ -398,7 +399,7 @@ bool SKPReader::SUCameraToView(std::string * viewName, SUCameraRef camera, View 
 		"SUCameraGetDirection",
 		__LINE__
 	)) return false;
-	view->setViewDirection(new Vector3D(direction.x, direction.y, direction.z));
+	view->setViewDirection(Vector3D(direction.x, direction.y, direction.z));
 
 	// get and set type
 	bool perspective;
@@ -434,19 +435,23 @@ bool SKPReader::SUCameraToView(std::string * viewName, SUCameraRef camera, View 
 	
 	// this needs to be checked manually	
 	switch (aspectRatioResult) {
-	case SU_ERROR_NONE:
-		break; // all OK.
-	case SU_ERROR_INVALID_INPUT:
-		fatal("SU_ERROR_INVALID_INPUT when trying to get aspect ratio of view",__LINE__,__FILE__);
-		break;
-	case SU_ERROR_NO_DATA:
-		// the camera uses the screen aspect ratio... will assume the following
-		aspectRatio = 16.0 / 9.0;
-		break;
-	case SU_ERROR_NULL_POINTER_OUTPUT:
-		fatal("SU_ERROR_NULL_POINTER_OUTPUT when trying to get aspect ratio of view",__LINE__,__FILE__);
-		break;
-	}
+        case SU_ERROR_NONE:
+            break; // all OK.
+        case SU_ERROR_INVALID_INPUT:
+            fatal("SU_ERROR_INVALID_INPUT when trying to get aspect ratio of view",__LINE__,__FILE__);
+            break;
+        case SU_ERROR_NO_DATA:
+            // the camera uses the screen aspect ratio... will assume the following
+            aspectRatio = 16.0 / 9.0;
+            break;
+        case SU_ERROR_NULL_POINTER_OUTPUT:
+            fatal("SU_ERROR_NULL_POINTER_OUTPUT when trying to get aspect ratio of view",__LINE__,__FILE__);
+            break;
+        case SU_ERROR_NULL_POINTER_INPUT:
+            break;
+        default:
+            break;
+    }
 	
 
 	view->setViewHorizontal(aspectRatio * viewHeight);
@@ -1418,7 +1423,7 @@ int32_t SKPReader::getEntityID(SUEntityRef entity)
 }
 
 
-bool SKPReader::getValueFromEntityGHDictionary(SUEntityRef entity, char * key, SUTypedValueRef * value)
+bool SKPReader::getValueFromEntityGHDictionary(SUEntityRef entity, const char * key, SUTypedValueRef * value)
 {
 	// check how many dictionaries
 	size_t dictionaryCount;
@@ -1569,7 +1574,7 @@ Material * SKPReader::addMaterialToModel(SUMaterialRef material)
     // Check if the material exists
     std::string name;
     if (!getSUMaterialName(material, &name))
-      return false;
+      return NULL;
 
     Material * m = model->hasMaterial(&name);
     if (m != NULL)
@@ -1823,7 +1828,7 @@ bool SKPReader::addPhotosensorsToModel(SUComponentDefinitionRef definition)
 }
 
 
-bool SKPReader::getValueFromModelGHDictionary(char * key, SUTypedValueRef * value)
+bool SKPReader::getValueFromModelGHDictionary(const char * key, SUTypedValueRef * value)
 {
 	// check how many dictionaries
 	size_t dictionaryCount;
@@ -1921,3 +1926,4 @@ bool SKPReader::loadWeather()
 	return loc->fillWeatherFromJSON(&j);
 }
 
+#endif

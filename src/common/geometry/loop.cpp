@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -18,7 +18,7 @@
 
 *****************************************************************************/
 
-
+#include <cmath>
 #include "./loop.h"
 #include "common/utilities/io.h"
 #include "config_constants.h"
@@ -144,7 +144,7 @@ bool Loop::testPoint(Point3D p, Vector3D * normal)
 	xp.normalize();
 	Vector3D yp = *normal % xp; 
 	// yp and normal are unit vectors, thus yp also
-	
+
 	// Check if coplanar
 	if (std::abs(*normal*xp) > EMP_TINY) {
 		warn("Testing a Point3D on Loop: Point3D is not coplanar with Loop");

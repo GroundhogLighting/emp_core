@@ -103,7 +103,7 @@ Point3D Point3D::transform(Vector3D i, Vector3D j, Vector3D k)
 {
 
   
-#ifdef DEBUG
+#ifdef _DEBUG
 	// Check if they are normal... debugging
 	if (std::abs(1 - i.getLength()) > EMP_TINY || std::abs(1 - j.getLength()) > EMP_TINY || std::abs(1 - k.getLength()) > EMP_TINY) {
 		warn("Trying to transform a point with non normalized vectors");

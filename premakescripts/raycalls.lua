@@ -3,6 +3,9 @@ project "raycalls"
 radiance_dir = ""
 kind "StaticLib"
 language "C"
+defines {
+    "lint"
+}
 files {
     third_party_dir.."/Radiance/src/rt/raycalls.c",
     third_party_dir.."/Radiance/src/rt/raypwin.c", -- this is only for windows... otherwise it is raypcalls.c        

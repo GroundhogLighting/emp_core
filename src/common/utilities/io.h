@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -32,11 +32,11 @@ This module defines functions that are used in the rest of the program to inform
 
 /* @{ */
 
-//! A debug message function. Only reports in DEBUG releases
+//! A debug message function. Only reports in _DEBUG releases
 /*!
 @author German Molina (based on information on the internet)
 */
-#ifdef DEBUG
+#ifdef _DEBUG
 #define DEBUG_MSG(str) do { std::cerr << "     >>> DEBUGG MSG: "  << str << std::endl; } while( false )
 #else
 #define DEBUG_MSG(str) do { } while ( false )
@@ -52,7 +52,7 @@ Should be used when something weird or worth informing has happened
 @author German Molina
 @param[in] message the message
 */
-void warn(char * message);
+void warn(const char * message);
 
 #define WARN(var,x) std::string var=x; warn(&var[0])
 
@@ -67,9 +67,8 @@ Should be used when something fatal happens. Usually, something will go wrong.
 @param[in] ln The line number where this function was called
 @param[in] file The file name where this function was called
 */
-void fatal(char * message, int ln, char * file);
-
-#define FATAL(var,x) std::string var=x; fatal(&var[0],__LINE__,__FILE__)
+void fatal(const char * message, int ln, const char * file);
+#define FATAL(var,x) std::string var=std::string(x); fatal(&var[0],__LINE__,__FILE__)
 
 //! Informs something
 /*!
@@ -81,7 +80,7 @@ Should be used for informing progress and things that are certainly not errors.
 @param[in] message the message
 @param[in] verbose Should we inform?
 */
-void inform(char * message, bool verbose);
+void inform(const char * message, bool verbose);
 
 #define INFORM(var,x,y) std::string var=x; inform(&var[0],y)
 
@@ -91,6 +90,6 @@ void inform(char * message, bool verbose);
 @param[in] type The type of surface (e.g. window or other)
 @param[in] name The name of the object
 */
-void warnNoMaterial(char * type , char * name);
+void warnNoMaterial(const char * type , char * name);
 
 /* @} */

@@ -1,19 +1,22 @@
-﻿#include <string>
+#include <string>
 #include "config_constants.h"
 #include "versions.h"
 #include "./src/emp.h"
 #include "./main.h"
 #include <iostream>
-#include "Lua/src/lua.hpp"
 
-#include "mem_leak.h"
+extern "C" {
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+}
 
-#ifdef DEBUG
-  //MemAllocations memtracker = MemAllocations();
+#ifdef _DEBUG
+#include "debug_new.h"
 #endif
 
 int main(int argc, char* argv[]){	
-	
+    
 	// Check if only some help is needed
 	if (argc == 1 || strcmp(argv[1], "--help") == 0 || strcmp(argv[1] , "-h")== 0) {
 		std::cout << USAGE << std::endl;		
@@ -51,11 +54,8 @@ int main(int argc, char* argv[]){
 		  return 1;
 	  }
 
-  #ifdef DEBUG
-      //memtracker.checkMemoryLeaks();
-  #endif
-
     }
+    
 	return 0;
 }
 

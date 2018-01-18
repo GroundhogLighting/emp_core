@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -27,9 +27,6 @@ View::View() {
 }
 
 View::~View() {
-	delete viewPoint;
-	delete viewDirection;
-	delete viewUp;
 }
 
 void View::setName(std::string * newName) {
@@ -40,27 +37,28 @@ std::string * View::getName() {
 	return &name;
 }
 
-void View::setViewPoint(Point3D * point) {
+void View::setViewPoint(Point3D point) {
 	viewPoint = point;
 }
-Point3D * View::getViewPoint() {
+
+Point3D View::getViewPoint() {
 	return viewPoint;
 }
 
 
-void View::setViewDirection(Vector3D * vector) {
+void View::setViewDirection(Vector3D vector) {
 	viewDirection = vector;
 }
 
-Vector3D * View::getViewDirection() {
+Vector3D View::getViewDirection() {
 	return viewDirection;
 }
 
-void View::setViewUp(Vector3D * vector) {
+void View::setViewUp(Vector3D vector) {
 	viewUp = vector;
 }
 
-Vector3D * View::getViewUp() {
+Vector3D View::getViewUp() {
 	return viewUp;
 }
 

@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -30,104 +30,17 @@
 #include <fstream>
 
 
-RadExporter::RadExporter(GroundhogModel * the_model, std::string the_exportDir, bool the_verbose) 
+RadExporter::RadExporter(GroundhogModel * the_model)
 {
 	model = the_model;
-	exportDir = the_exportDir;
-	verbose = the_verbose;
 }
 
-RadExporter::~RadExporter() 
-{
-	
-}
 
-bool RadExporter::exportModel() 
-{
-	inform("Beggining Radiance export", verbose);
-	
-	// Create the directory
-	if (!createdir(exportDir)) {
-		FATAL(errorMessage,"Imposible to create Output directory");
-		return false;
-	}
-
-    // Create the directory
-    if (!createdir("./" + exportDir + "/" + EMP_WORKPLANES_SUBFOLDER)) {
-      FATAL(errorMessage, "Imposible to create Output directory");
-      return false;
-    }
-    
-	// Write layers
-	if (!writeLayers(EMP_LAYERS_SUBFOLDER)) {
-		FATAL(errorMessage,"Error when exporing Layers");
-		return false;
-	}
-
-	// Write component definitions
-	if(!writeComponentDefinitions(EMP_COMPONENTS_SUBFOLDER)) {
-		FATAL(errorMessage,"Error when exporing Layers");
-		return false;
-	}
-
-	// write views
-	if(!writeViews(EMP_VIEWS_SUBFOLDER)) {
-		FATAL(errorMessage,"Error when exporing Layers");
-		return false;
-	}
-
-	// write north correction
-	if(!writeModelInfo(EMP_MODEL_INFO_FILE)) {
-		FATAL(errorMessage,"Error when exporing Layers");
-		return false;
-	}
-
-	// write windows
-	if(!writeWindows(EMP_WINDOWS_SUBFOLDER)) {
-		FATAL(errorMessage,"Error when exporting Layers");
-		return false;
-	}
-
-	
-	// write materials
-	if (!writeMaterials(EMP_MATERIALS_SUBFOLDER)) {
-		FATAL(errorMessage,"Error when exporing materials");
-		return false;
-	}
-
-	// Write sky
-	if (!writeSky(EMP_SKY_SUBFOLDER)) {
-		FATAL(errorMessage,"Error when writing the Sky");
-		return false;
-	}
-
-	// Write weather
-	if (!writeWeather(EMP_SKY_SUBFOLDER)) {
-		FATAL(errorMessage,"Error when writing the Weather file");
-		return false;
-	}
-
-	// Write Scene file
-	if (!writeSceneFile(EMP_SCENE_FILE)) {
-		FATAL(errorMessage,"Error when writing the Scene file");
-		return false;
-	}
-
-	// write photosensors
-	if (!writePhotosensors(EMP_PHOTOSENSORS_SUBFOLDER)) {
-		FATAL(errorMessage,"Error when exporting Photosensors");
-		return false;
-	}
-
-
-	return true;
-}
-
-bool RadExporter::writeModelInfo(char * filename)
+bool RadExporter::writeModelInfo(const char * filename)
 {
 	// create and open file
 	std::ofstream file;
-	file.open(exportDir + "/" + filename);
+	file.open(filename);
 
 	Date * d = model->getDate();
 	Location * loc = model->getLocation();
@@ -147,7 +60,7 @@ bool RadExporter::writeModelInfo(char * filename)
 	return true;
 }
 
-bool RadExporter::writeViews(char * dir) 
+bool RadExporter::writeViews(const char * dir)
 {
 	size_t numViews = model->getNumViews();
 	
@@ -155,7 +68,7 @@ bool RadExporter::writeViews(char * dir)
 		return true;
 
 	// create Views directory
-	std::string baseDir = exportDir + "/" + dir;
+    std::string baseDir = std::string(dir);
 	createdir(baseDir);
 
 	// export each view
@@ -172,7 +85,7 @@ bool RadExporter::writeViews(char * dir)
 			vt = "vtl";
 			break;
 		default:
-			FATAL(errorMessage,"Unkown type of view coded " + view->getViewType());
+			FATAL(errorMessage,"Unkown type of view coded " + std::to_string(view->getViewType()));
 			return false;
 		}
 
@@ -188,16 +101,16 @@ bool RadExporter::writeViews(char * dir)
 		file << vt;
 
 		// view point
-		Point3D * vp = view->getViewPoint();
-		file << " -vp " << vp->getX() << " " << vp->getY() << " " << vp->getZ();
+		Point3D vp = view->getViewPoint();
+		file << " -vp " << vp.getX() << " " << vp.getY() << " " << vp.getZ();
 
 		// view direction
-		Vector3D * vd = view->getViewDirection();
-		file << " -vd " << vd->getX() << " " << vd->getY() << " " << vd->getZ();
+		Vector3D vd = view->getViewDirection();
+		file << " -vd " << vd.getX() << " " << vd.getY() << " " << vd.getZ();
 
 		// view up
-		Vector3D * up = view->getViewUp();
-		file << " -vu " << up->getX() << " " << up->getY() << " " << up->getZ();
+		Vector3D up = view->getViewUp();
+		file << " -vu " << up.getX() << " " << up.getY() << " " << up.getZ();
 
 		// view horizontal
 		file << " -vh " << view->getViewHorizontal();
@@ -214,7 +127,7 @@ bool RadExporter::writeViews(char * dir)
 	return true;
 }
 
-bool RadExporter::writeComponentDefinitions(char * dir) 
+bool RadExporter::writeComponentDefinitions(const char * dir)
 {
 	size_t numDefinitions= model->getNumComponentDefinitions();
 
@@ -222,7 +135,7 @@ bool RadExporter::writeComponentDefinitions(char * dir)
 		return true;
 
 	// create components directory
-	std::string baseDir = exportDir + "/" + dir;
+    std::string baseDir = std::string(dir);
 	createdir(baseDir);
 
 	for (size_t i = 0; i < numDefinitions; i++) {
@@ -272,7 +185,7 @@ bool RadExporter::writeComponentDefinitions(char * dir)
 	return true;
 }
 
-bool RadExporter::writeLayers(char * dir) 
+bool RadExporter::writeLayers(const char * dir)
 {
 
 	size_t numLayers = model->getNumLayers();
@@ -282,7 +195,7 @@ bool RadExporter::writeLayers(char * dir)
 	}
 
 	// create geometry directory
-	std::string baseDir = exportDir + "/" + dir;
+    std::string baseDir = std::string(dir);
 	createdir(baseDir);
 	
 	for (size_t i = 0; i < numLayers; i++) {
@@ -332,7 +245,7 @@ bool RadExporter::writeLayers(char * dir)
 }
 
 
-bool RadExporter::writeLayers(FILE * file, char * newMaterial)
+bool RadExporter::writeLayers(FILE * file, const char * newMaterial)
 {
 
   size_t numLayers = model->getNumLayers();
@@ -370,7 +283,7 @@ bool RadExporter::writeLayers(FILE * file, char * newMaterial)
       Otype * object = layer->getObjectRef(j);
 
       // Select Material
-      char * material;
+      const char * material;
 
       if (newMaterial == NULL) {
         // get the material
@@ -416,7 +329,7 @@ void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instan
 }
 
 
-void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * parentTransform, char * newMaterial)
+void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * parentTransform, const char * newMaterial)
 {
   
   ComponentDefinition * definition = instance->getDefinitionRef();
@@ -459,7 +372,7 @@ void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instan
     Otype * object = definition->getObjectRef(j);
 
     // Select Material
-    char * material;
+    const char * material;
 
     if (newMaterial == NULL) {
       // get the material
@@ -482,13 +395,13 @@ void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instan
 }
 
 
-bool RadExporter::writeWindows(char * dir) {
+bool RadExporter::writeWindows(const char * dir) {
 	size_t numGroups = model->getNumWindowGroups();
 	if (numGroups == 0)
 		return true;
 
 	// create directory
-	std::string baseDir = exportDir + "/" + dir;
+	std::string baseDir = std::string(dir);
 	createdir(baseDir);
 	std::ofstream mainFile;
 	mainFile.open(baseDir + "/windows.rad");
@@ -498,7 +411,7 @@ bool RadExporter::writeWindows(char * dir) {
 		std::string name = group->getName();
 
 		size_t numWindows = group->getNumWindows();
-		if (numWindows < 0) {
+		if (numWindows <= 0) {
 			WARN(wMsg,"Empty WindowGroup " + name);
 			continue;
 		}
@@ -542,7 +455,7 @@ bool RadExporter::writeWindows(FILE * file) {
     std::string name = group->getName();
 
     size_t numWindows = group->getNumWindows();
-    if (numWindows < 0) {
+    if (numWindows <= 0) {
       WARN(wMsg,"Empty WindowGroup " + name);
       continue;
     }
@@ -567,18 +480,18 @@ bool RadExporter::writeWindows(FILE * file) {
 }
 
 
-bool RadExporter::writeMaterials(char * dir)
+bool RadExporter::writeMaterials(const char * dir, const std::string flnm)
 {
 	size_t numMaterials = model->getNumMaterials();
 	if (numMaterials == 0)
 		return true;
 
 	// create directory
-	std::string baseDir = exportDir + "/" + dir;
+	std::string baseDir = std::string(dir);
 	createdir(baseDir);
 
 	std::ofstream mainFile;
-	mainFile.open(baseDir + "/materials.mat");
+	mainFile.open(baseDir + "/" + flnm);
 
 	for (size_t i = 0; i < numMaterials; i++) {
 
@@ -610,12 +523,12 @@ bool RadExporter::writeMaterials(FILE * file)
   return true;
 }
 
-bool RadExporter::writeSky(char * dir)
+bool RadExporter::writeSky(const char * dir, const std::string flnm)
 {
   // create directory
-  std::string baseDir = exportDir + "/" + dir;
+  std::string baseDir = std::string(dir);
   createdir(baseDir);
-  std::string filename = baseDir + "/sky.rad";
+  std::string filename = baseDir + "/" + flnm;
   FOPEN(file, &filename[0], "w");
 
   writeSky(file);
@@ -646,11 +559,11 @@ bool RadExporter::writeSky(FILE * file)
 	return true;
 }
 
-bool RadExporter::writeSceneFile(char * dir)
+bool RadExporter::writeSceneFile(const char * dir, OptionSet * options)
 {
 
 	std::ofstream file;
-	file.open(exportDir + "/" + dir);
+	file.open(dir);
 
 	// Write Header
 	file << "###############" << "\n";
@@ -659,11 +572,14 @@ bool RadExporter::writeSceneFile(char * dir)
 
 	file << "\n" << "\n" << "\n";
 
+    // Retrieve directories
+    std::string layersLocation = options->getOption<std::string>("layers_directory");
+    
 	// Write Geometry
 	file << "###### GEOMETRY" << "\n" << "\n";
 	for (size_t i = 0; i < model->getNumLayers(); i++) {
 		std::string * name = model->getLayerRef(i)->getName();
-		file << "!xform ./Geometry/" << *name << ".rad" << "\n";
+		file << "!xform ./" << layersLocation << "/" << *name << ".rad" << "\n";
 	}
 
 	file.close();
@@ -672,7 +588,94 @@ bool RadExporter::writeSceneFile(char * dir)
 }
 
 
-bool RadExporter::writePhotosensors(char * dir)
+bool RadExporter::writeRifFile(const char * dir, OptionSet * options)
+{
+    std::ofstream file;
+    file.open(dir);
+
+    // Retrieve directories
+    std::string layersLocation = options->getOption<std::string>("layers_directory");
+    std::string viewsLocation = options->getOption<std::string>("views_directory");
+    std::string skiesLocation = options->getOption<std::string>("skies_directory");
+    std::string materialsLocation = options->getOption<std::string>("materials_directory");
+    std::string materialsFile = options->getOption<std::string>("materials_file");
+    std::string sceneFile = options->getOption<std::string>("scene_file");
+    std::string componentsLocation = options->getOption<std::string>("components_directory");
+    std::string windowsLocation = options->getOption<std::string>("windows_directory");
+    std::string illumsLocation = options->getOption<std::string>("illums_directory");
+    
+    
+    file << "###############" << std::endl;
+    file << "## RIF exported using Emp v" << EMP_VERSION << std::endl;
+    file << "###############" << std::endl << std::endl << std::endl ;
+    
+    
+    // Get BBOx
+    file << "#ZONE= I #{min.x.to_m} #{max.x.to_m} #{min.y.to_m} #{max.y.to_m} #{min.z.to_m}  #{max.z.to_m}" << "\n";
+    file << "UP=Z" << "\n";
+    file << "scene=./" << skiesLocation << "/sky.rad ./" << sceneFile  << "\n";
+    file << "materials=./" << materialsLocation << "/" << materialsFile << "\n";
+    file << "QUAL=LOW" << "\n";
+    file << "DETAIL=LOW" << "\n";
+    file << "VAR=High" << "\n";
+    file << "RESOLUTION=560 560" << "\n";
+    file << "AMBFILE=ambient.amb" << "\n";
+    file << "INDIRECT=3" << "\n";
+    file << "PENUMBRAS=True" << "\n";
+    file << "REPORT=2" << "\n";
+    
+    
+    //then the pages
+    file << "\n\n#VIEWS\n\n" << "\n";
+    
+    size_t nViews = model->getNumViews();
+    for(size_t i=0; i<nViews;i++){
+        View * view = model->getViewRef(i);
+        std::string name = *(view->getName());
+        file << "view=" << name << " -vf " << viewsLocation << "/" << name << ".vf" << "\n";
+        
+    }
+    
+        /*
+    //Then the illums
+        f.puts("\n\n#ILLUMS\n\n")
+        illums.each do |ill|
+            name=Labeler.get_fixed_name(ill)
+            f.puts("illum=./Illums/"+name+".rad\n")
+            end
+            
+            
+            
+    //Then the window groups
+            f.puts("\n\n#WINDOW GROUPS\n\n")
+            groups=Utilities.get_win_groups(windows)
+            groups.each do |gr|
+                f.puts("illum=./Windows/"+gr.tr(" ","_")+".rad\n")
+                end
+                
+    //then the rest of the windows
+                f.puts("\n\n#OTHER WINDOWS\n\n")
+                nwin=1 #this will count the windows
+                windows.each do |win|
+                    c=Labeler.get_win_group(win)
+                    if c==nil then # if the window has no group
+                        
+                        winname=win.get_attribute("Groundhog","Name") #get the name
+                        if winname==nil then #if it does not have one
+                            f.puts("./Windows/WindowSet_"+nwin.to_s+".rad\n")
+                            nwin=nwin+1
+                            else #if it has one
+                                f.puts("./Windows/"+winname+".rad\n")
+                                end
+                                end
+                                end
+*/
+    
+    file.close();
+    return true;
+}
+
+bool RadExporter::writePhotosensors(const char * dir)
 {
 	size_t numPhotosensors = model->countPhotosensors();
 	
@@ -680,7 +683,7 @@ bool RadExporter::writePhotosensors(char * dir)
 		return true;
 
 	// create directory
-	std::string baseDir = exportDir + "/" + dir;
+	std::string baseDir = std::string(dir);
 	createdir(baseDir);
 
 	std::ofstream mainFile;
@@ -727,15 +730,16 @@ bool RadExporter::writePhotosensors(char * dir)
 
 
 
-bool RadExporter::writeWeather(char * dir)
+bool RadExporter::writeWeather(const char * dir, const std::string filename)
 {
-	std::ofstream file;
-	std::string baseDir = exportDir + "/" + dir;
-	file.open(baseDir + "/weather.wea");
+    Location * loc = model->getLocation();
+    if (!loc -> hasWeather())
+        return true;
 
-	Location * loc = model->getLocation();
-	if (!loc -> hasWeather())
-		return true;
+    std::ofstream file;
+	std::string baseDir = std::string(dir);
+	file.open(baseDir + "/" + filename);
+
 
 	file << "place " << loc->getCity() << "\n";
 	file << "latitude " << loc->getLatitude() << "\n";

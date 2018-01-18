@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include <fstream>
-#include "taskManager.h"
+#include "./taskmanager.h"
 #include "common/utilities/io.h"
 #include "tbb/tbb.h"
 
@@ -150,7 +150,7 @@ bool TaskManager::solve(json * results)
 
     // submit results
     for (size_t i = 0; i < tasks.size(); i++) {
-      if (tasks.at(i)->reportResults) {
+      if (tasks.at(i)->generatesResults && tasks.at(i)->reportResults) {
         tasks.at(i)->submitResults(results);
       }
     }

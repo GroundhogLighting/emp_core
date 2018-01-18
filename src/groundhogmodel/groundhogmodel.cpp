@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -30,19 +30,27 @@ GroundhogModel::GroundhogModel()
 
 GroundhogModel::~GroundhogModel()
 {
-	//destroy layers
-	for (size_t i = 0; i < layers.size(); i++) {
-		delete layers[i];
-	}
-
-	for (size_t i = 0; i < definitions.size(); i++) {
-		delete definitions[i];
-	}
-
-	for (size_t i = 0; i < views.size(); i++) {
-		delete views[i];
-	}	
-
+    
+    for(auto x : layers)
+        delete x;
+    
+    for(auto x : workplanes)
+        delete x;
+    
+    for(auto x : photosensors)
+        delete x;
+    
+    for(auto x : materials)
+        delete x;
+    
+    for(auto x : views)
+        delete x;
+    
+    for(auto x : definitions)
+        delete x;
+    
+    for(auto x : windowGroups)
+        delete x;
 }
 
 
@@ -223,19 +231,22 @@ Material * GroundhogModel::addMaterial(json * j)
 		if (materials[i]->compareName(&name))
 			return materials[i];
 	}
-		
-	if ((*j)["class"] == "plastic") {
+    std::string cl = (*j)["class"];
+    
+	if (cl == "plastic") {
 		Plastic * p = new Plastic(j);
 		materials.push_back(p);
 		return p;
 	}
-	else if ((*j)["class"] == "glass") {
+	else if (cl == "glass") {
 		Glass * g = new Glass(j);
 		materials.push_back(g);
 		return g;
 	}
 	else {
-		FATAL(errorMessage,"Unsupported material class "+ (*j)["class"] );
+        
+        std::string e = "Unsupported material class "+ cl;
+        FATAL(errorMessage,e);
 		return NULL;
 	}
 }

@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -32,10 +32,8 @@ Workplane::Workplane(std::string workplaneName) {
 
 Workplane::~Workplane() {
 
-
-	for (size_t i = 0; i < polygons.size(); i++) {
-		delete polygons[i];
-	}
+    for(auto x : polygons)
+        delete x;
 }
 
 void Workplane::addPolygon(Polygon3D * polygon) {

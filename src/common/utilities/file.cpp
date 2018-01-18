@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -21,8 +21,16 @@
 
 #include <string>
 #include <fstream>
+
+#ifdef MACOS
+#include <sys/uio.h>
+#endif
+
+#ifdef WIN
 #include <io.h>
 #include <direct.h>
+#endif
+
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -30,6 +38,7 @@
 
 #include "./file.h"
 #include "./io.h"
+#include "os_definitions.h"
 
 bool createdir(std::string dirname) 
 {
@@ -38,7 +47,7 @@ bool createdir(std::string dirname)
 		return true;
 	}
 	else {
-		_mkdir(dirname.c_str());
+		MKDIR(dirname.c_str());
 		return true;
 	}
 }
@@ -51,12 +60,12 @@ bool fexists(std::string filename)
 
 bool dexist(std::string dirname)
 {
-	return _access(dirname.c_str(), 0) == 0;
+	return ACCESS(dirname.c_str(), 0) == 0;
 }
 
 bool isDir(std::string dirname) 
 {
-	if (_access(dirname.c_str(), 0) == 0) {
+	if (ACCESS(dirname.c_str(), 0) == 0) {
 		struct stat status;
 		stat(dirname.c_str(), &status);
 		if (status.st_mode & S_IFDIR) {

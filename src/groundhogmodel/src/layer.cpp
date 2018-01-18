@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -29,13 +29,11 @@ Layer::Layer(std::string * layerName)
 
 Layer::~Layer() 
 {
-	// delete faces
-	for (unsigned int i = 0; i < objects.size(); i++) {
-		delete objects[i];
-	}
-	for (unsigned int i = 0; i < instances.size(); i++) {
-		delete instances[i];
-	}	
+    for(auto x : objects)
+        delete x;
+    
+    for(auto x : instances)
+        delete x;
 };
 
 bool Layer::compareName(std::string * layerName) 

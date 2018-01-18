@@ -1,4 +1,4 @@
-﻿
+
 #include <stdio.h>
 #include <fstream>
 
@@ -49,7 +49,8 @@ TEST(RadianceTest, calcDF)
 
     // Use results
     for(auto ray:rays){
-      ASSERT_GT(0.1, std::abs(LIGHT(ray.rcol) - 100.0));
+        ASSERT_NEAR(LIGHT(ray.rcol),100.0,0.1);
+        //ASSERT_GT(0.1, std::abs(LIGHT(ray.rcol) - 100.0));
     }
     remove(&amb[0]);
 

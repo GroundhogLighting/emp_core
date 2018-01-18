@@ -31,18 +31,18 @@ bool stringInclude(std::string word, std::string substring)
 	return word.find(substring) != -1;
 }
 
-bool stringInclude(char * word, std::string substring) 
+bool stringInclude(const char * word, std::string substring) 
 {
 	return std::string(word).find(substring) != -1;
 }
 
-bool stringInclude(char * word, char * substring) 
+bool stringInclude(const char * word, const char * substring) 
 {
 	return std::string(word).find(substring) != -1;
 }
 
 
-bool stringIncludeAny(std::string word, char ** substringArray, int nItems) 
+bool stringIncludeAny(std::string word, const char ** substringArray, int nItems)
 {
 	for (int i = 0; i < nItems; i++) {
 		if (stringInclude(word, substringArray[i])) {
@@ -53,7 +53,7 @@ bool stringIncludeAny(std::string word, char ** substringArray, int nItems)
 }
 
 
-bool stringIncludeAny(char * word, char ** substringArray, int nItems) 
+bool stringIncludeAny(const char * word, const char ** substringArray, int nItems)
 {
 	return stringIncludeAny(std::string(word), substringArray, nItems);
 }
@@ -72,12 +72,12 @@ void utf8toASCII(char * input, size_t inputLength, char * output, size_t * outpu
 			output[i] = input[i];
 			i++; 		
 		}
-		else if( c < 2047){
+		else if( (int)c < 2047){
 			// two byte
 			output[i] = '_';
 			i++; i++;
 		}
-		else if ( c < 65535) {
+		else if ( (int)c < 65535) {
 			// 3 byte
 			output[i] = '_';
 			i++; i++;

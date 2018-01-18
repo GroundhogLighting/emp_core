@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "./tasks_manager.h"
 #include "../common.h"
 
-#include "common/taskmanager/tasks/export.h"
+#include "writers/rad/tasks.h"
 
 int solveTaskManager(lua_State * L)
 {
@@ -54,70 +54,73 @@ int printTaskManager(lua_State * L)
 
 int addTask(lua_State * L)
 {  
-  // Check number of arguments
-  int args[1] = { 1 };
-  int n = checkNArguments(L, args, 1);
+    // Check number of arguments
+    int args[1] = { 1 };
+    checkNArguments(L, args, 1);
 
-  // Check the type of arguments
-  checkArgType(L, LUA_TTABLE, 1); // Options
-      
-  // Check minimum arguments
-  std::string factoryKey;
-  int field = lua_getfield(L, 1, "class"); // "field" is now n position 2.
-  if (field != LUA_TSTRING) {
-    if (field == LUA_TNIL) {
-      missingOption(L, "class", "string");
+    // Check the type of arguments
+    checkArgType(L, LUA_TTABLE, 1); // Options
+    
+    // Check minimum arguments
+    std::string factoryKey;
+    int field = lua_getfield(L, 1, "class"); // "field" is now n position 2.
+    if (field != LUA_TSTRING) {
+        if (field == LUA_TNIL) {
+          missingOption(L, "class", "string");
+        }
+        else {
+          badOptionError(L, "class", lua_typename(L, 2),"string");
+        }
     }
     else {
-      badOptionError(L, "class", lua_typename(L, 2),"string");
+        factoryKey = std::string(lua_tostring(L, 2));
+    };
+    // remove one value from the stack (or nil, if it was not there)
+    lua_pop(L, 1);
+
+    // Get the task dictionary
+    std::map<std::string, TaskFactory> * td = getCurrentTaskDictionary(L);
+    
+    // Check that the Task Factory exists
+    size_t q = td->count(factoryKey);
+    if (q == 0) {
+        std::string errmsg = "Task '" + std::string(factoryKey) + "' is not registered";
+        sendError(L, "Unknown Task", &errmsg[0]);
     }
-  }
-  else {
-    factoryKey = std::string(lua_tostring(L, 2)); 
-  };
-  // remove one value from the stack (or nil, if it was not there)
-  lua_pop(L, 1);
-
-  std::string taskName;
-  field = lua_getfield(L, 1, "name"); // "field" is now n position 2.
-  if (field != LUA_TSTRING) {
-    if (field == LUA_TNIL) {
-      missingOption(L, "name", "string");
+    
+    // Get the Task factory
+    TaskFactory f = td->at(&factoryKey[0]);
+    
+    // build the task
+    Task * task = f(L);
+    
+    // Check if the name is required.
+    if(task->generatesResults){
+        task->reportResults = true; // We do want to report the results
+        
+        std::string taskName;
+        field = lua_getfield(L, 1, "name"); // "field" is now n position 2.
+        if (field != LUA_TSTRING) {
+            if (field == LUA_TNIL) {
+                missingOption(L, "name", "string");
+            }
+            else {
+                badOptionError(L, "name", lua_typename(L, 2), "string");
+            }
+        }
+        else {
+            taskName = std::string(lua_tostring(L, 2));
+        };
+        // remove one value from the stack (or nil, if it was not there)
+        lua_pop(L, 1);
+        task->setName(&taskName);
     }
-    else {
-      badOptionError(L, "name", lua_typename(L, 2), "string");
-    }
-  }
-  else {
-    factoryKey = std::string(lua_tostring(L, 2));
-  };
-  // remove one value from the stack (or nil, if it was not there)
-  lua_pop(L, 1);
+    
+    // Get current task Manager
+    TaskManager * tm = getCurrentTaskManager(L);
 
+    // Add the task
+    tm->addTask(task);
 
-
-  // Get the task dictionary
-  std::map<std::string, TaskFactory> * td = getCurrentTaskDictionary(L);
-  
-  // Check that the Task Factory exists
-  size_t q = td->count(factoryKey);
-  if (q == 0) {
-    std::string errmsg = "Task '" + std::string(factoryKey) + "' is not registered";
-    sendError(L, "Unknown Task", &errmsg[0]);
-  }
-
-  // Get the Task factory
-  TaskFactory f = td->at(&factoryKey[0]);
-
-  // build the task 
-  Task * task = f(L);
-  task->reportResults = true; // We do want to report the results
-
-  // Get current task Manager
-  TaskManager * tm = getCurrentTaskManager(L);
-  
-  // Add the task
-  tm->addTask(task);
-
-  return 0;
+    return 0;
 }

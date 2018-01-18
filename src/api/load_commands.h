@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -18,8 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
-#include "Lua/src/lua.hpp"
-
+extern "C" {
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+}
 
 #include "./commands/options.h"
 #include "./commands/tasks_manager.h"
@@ -117,20 +120,13 @@ void registerCommands(lua_State * L)
   /* @APIgroup EXPORT / IMPORT */
   /* ========================= */
 
-  /* @APIfunction
-
-  Exports the current model to a Radiance directory
-
-  @param[required] directory The directory where to export the model
-  */
-  lua_register(L, "export_radiance_model", exportToRadiance);
 
   /* @APIfunction
 
   Exprts a
 
   */
-  lua_register(L, "export_workplane", exportWorkplane);
+  lua_register(L, "export_workplane", exportWorkplaneToRadiance);
 
   /* =============================== */
   /* @APIgroup SET-OPTIONS FUNCTIONS */

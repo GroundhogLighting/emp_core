@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -24,9 +24,9 @@
 
 // Include LUA headers
 extern "C" {
-#include <lua.h>
-//#include <lualib.h>
-#include <lauxlib.h> 
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
 }
 
 #include "common/utilities/io.h"
@@ -99,8 +99,9 @@ public:
     bool setOption(std::string opt, T value)
     {
       if (!hasOption(opt)) {
-        FATAL(errorMessage,"OptionSet has no " + opt + " option... impossible to set such value");
-        return false;
+          std::string er = "OptionSet has no " + opt + " option... impossible to set such value";
+          FATAL(errorMessage,&er[0]);
+          return false;
       }
       
 

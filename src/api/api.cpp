@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -67,7 +67,7 @@ void loadAPI(lua_State * L, GroundhogModel * ghmodel, std::map<std::string, Task
 		
 		lua_seti(L, table_pos, i-2);		
 	}
-	lua_setglobal(L, "args");
+	lua_setglobal(L, "argv");
 
     /* REGISTER COMMANDS */
     registerCommands(L);

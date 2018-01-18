@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -192,7 +192,7 @@ Point3D Triangle::getCircumCenter()
 {
 	Vector3D ab = *vertices[1] - *vertices[0];
 	Vector3D ac = *vertices[2] - *vertices[0];
-	Vector3D bc = *vertices[2] - *vertices[1];
+	//Vector3D bc = *vertices[2] - *vertices[1];
 
 	Vector3D abXac = ab%ac;
 
@@ -279,15 +279,6 @@ bool Triangle::testPoint(Point3D * p, int * code)
 }
 
 
-bool Triangle::isEqual(MPEPolyTriangle * triangle)
-{
-	MPEPolyPoint* PointA = triangle->Points[0];
-	MPEPolyPoint* PointB = triangle->Points[1];
-	MPEPolyPoint* PointC = triangle->Points[2];
-
-	return true;
-	//Point3D a = Point3D()
-}
 
 
 bool Triangle::isEqual(Triangle * t)

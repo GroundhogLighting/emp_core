@@ -38,7 +38,7 @@ private:
 	std::string city; //!< The name of the city
 	std::string country; //!< The name of the country
 	double albedo = 0.2; //!< The albedo in the location
-	Weather * weather = new Weather(); //!< The weather of the location obtained from a weather file
+	Weather weather = Weather(); //!< The weather of the location obtained from a weather file
 	double elevation = 0; //!< The elevation
 
 public:

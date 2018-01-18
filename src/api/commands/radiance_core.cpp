@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "./radiance_core.h"
 #include "calculations/radiance.h"
 #include "../common.h"
-#include "common/taskmanager/tasks/raytrace.h"
+#include "calculations/tasks.h"
 
 int oconv_command(lua_State * L)
 {
@@ -44,7 +44,7 @@ int oconv_command(lua_State * L)
     options.fillFromLuaTable(L, 2);
   
   GroundhogModel * model = getCurrentModel(L);  
-  RadExporter exporter = RadExporter(model, "WILL NOT BE USED", false);
+  RadExporter exporter = RadExporter(model);
   
   if (!oconv(octreeName, &options, exporter))
     executionError(L, "Error while trying to create an octree");
@@ -72,7 +72,6 @@ int rtrace_command(lua_State * L)
   std::string octreeName = lua_tostring(L, 2);
  
   GroundhogModel * model = getCurrentModel(L);
-  RadExporter exporter = RadExporter(model, "WILL NOT BE USED", false);
 
   // Retrieve the workplane
   Workplane * wp = getWorkplane(L, workplaneName);

@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -33,8 +33,6 @@ The main function to be called is RadExporter::exportModel()
 class RadExporter {
 private:	
 	GroundhogModel * model; //!< The GroundhogModel to export
-	std::string exportDir; //!< The directory to exporit to
-	bool verbose; //!< Should we inform progress?
 
 public:
 
@@ -44,23 +42,8 @@ public:
 
 	@author German Molina
 	*/
-	RadExporter(GroundhogModel * model, std::string exportDir, bool verbose);
+	RadExporter(GroundhogModel * model);
 	
-	//! Destroys a RadExporter object
-	/*!
-	@author German Molina
-	*/
-	~RadExporter();
-
-	//! Exports a GroundhogModel in Radiance format.
-	/*!
-	Will call other functions of the object with the purpose of creating
-	directories and writing different files
-
-	@author German Molina
-	@return success
-	*/
-	bool exportModel();
 	
 	//! Writes the information of the model (north correction and location)
 	/*!
@@ -70,7 +53,7 @@ public:
 	@return success
 	@param[in] filename The subdirectory to export
 	*/
-	bool writeModelInfo(char * filename);
+	bool writeModelInfo(const char * filename);
 	
 	//! Writes all the View objects in Radiance format in different files
 	/*!
@@ -80,7 +63,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeViews(char * dir);
+	bool writeViews(const char * dir);
 
 	//! Writes all the component definitions in different files
 	/*!
@@ -94,7 +77,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeComponentDefinitions(char * dir);
+	bool writeComponentDefinitions(const char * dir);
 	
 	//! Writes all the layers in different files
 	/*!
@@ -108,7 +91,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeLayers(char * dir);
+	bool writeLayers(const char * dir);
 
     //! Writes all the layers in a single file
     /*!
@@ -123,7 +106,7 @@ public:
     @param[in] file The file
     @param[in] newMaterial The name of the material
     */
-    bool writeLayers(FILE * file, char * newMaterial);
+    bool writeLayers(FILE * file, const char * newMaterial);
 
 	//! Writes an XFORM call to a ComponentInstance in Radiance format
 	/*!
@@ -145,7 +128,7 @@ public:
     @param[in] transform A transformation to apply to the instance geometry
     @param[in] A material name that overrides the actual materials of the geometry (i.e. xform -m 'newMaterial' option)
     */
-    void writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * transform, char * newMaterial);
+    void writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * transform, const char * newMaterial);
 
 
 	//! Writes all the window groups in Radiance format
@@ -154,7 +137,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeWindows(char * dir);
+	bool writeWindows(const char * dir);
 
     //! Writes all the windows in a single file
     /*!
@@ -169,8 +152,9 @@ public:
 	@author German Molina
 	@return success
 	@param[in] dir The subdirectory to export
+     @param[in] filename The name of the file that references all materials
 	*/
-	bool writeMaterials(char * dir);
+	bool writeMaterials(const char * dir, const std::string filename);
 
     //! Writes all the Material objects in a single FILE * object
     /*!
@@ -192,32 +176,45 @@ public:
     /*!
     @author German Molina
     @param[in] dir The directory to write to
+     @param[in] filename The name of the file to write
     @return [Boolean] Success
     */
-    bool writeSky(char * dir);
+    bool writeSky(const char * dir, const std::string filename);
 
 	//! Writes the scene file
 	/*!
 	@author German Molina
 	@return [Boolean] Success
 	@param[in] dir The directory to export
-	@todo There is a bug that would cause an error if the exporting Directory of Layers changes.
+	@todo There is a bug that would cause an error if the exporting Directory of Layers and Views changes.
 	*/
-	bool writeSceneFile(char * dir);
+	bool writeSceneFile(const char * dir, OptionSet * options);
 
+    //! Writes the rif file
+    /*!
+     @author German Molina
+     @return [Boolean] Success
+     @param[in] dir The directory to export
+     @todo There is a bug that would cause an error if the exporting Directory of Layers changes.
+     @todo Get the bounding box of the model
+     */
+    bool writeRifFile(const char * dir, OptionSet * options);
+
+    
 	//! Writes the Photosensors
 	/*!
 	@author German Molina
 	@param[in] dir The directory to export
 	@return [Boolean] Success
 	*/
-	bool writePhotosensors(char * dir);
+	bool writePhotosensors(const char * dir);
 
 	//! Writes the weather file
 	/*!
 	@author German Molina
 	@param[in] dir The directory
+     @param[in] filename The name of the file to write
 	@return sucess
 	*/
-	bool writeWeather(char * dir);
+    bool writeWeather(const char * dir, const std::string filename);
 };

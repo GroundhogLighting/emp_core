@@ -51,7 +51,7 @@ bool stringInclude(std::string word, std::string substring);
 @param[in] substring the substring to be found in the word
 @return the word contains the substring
 */
-bool stringInclude(char * word, std::string substring);
+bool stringInclude(const char * word, std::string substring);
 
 //! Checks if a word includes a substring
 /*!
@@ -60,7 +60,7 @@ bool stringInclude(char * word, std::string substring);
 @param[in] substring the substring to be found in the word
 @return the word contains the substring
 */
-bool stringInclude(char * word, char * substring);
+bool stringInclude(const char * word, const char * substring);
 
 
 //! Checks if a word includes any of the given substring
@@ -71,7 +71,7 @@ bool stringInclude(char * word, char * substring);
 @param[in] nItems the number of items in the array
 @return the word contains one of the substrings
 */
-bool stringIncludeAny(std::string word, char ** substringArray, int nItems);
+bool stringIncludeAny(std::string word, const char ** substringArray, int nItems);
 
 
 //! Checks if a word includes any of the given substring
@@ -82,7 +82,7 @@ bool stringIncludeAny(std::string word, char ** substringArray, int nItems);
 @param[in] nItems the number of items in the array
 @return the word contains one of the substrings
 */
-bool stringIncludeAny(char * word, char ** substringArray, int nItems);
+bool stringIncludeAny(const char * word, const char ** substringArray, int nItems);
 
 
 //! Clones a UTF-8 string into an ASCII one. 

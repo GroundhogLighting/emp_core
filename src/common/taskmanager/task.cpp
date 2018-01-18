@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -21,15 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "./task.h"
 
-Task::Task()
-{
-
-}
-
-Task::~Task()
-{
-	
-}
 
 void Task::setName(std::string * n)
 {
@@ -87,23 +78,3 @@ void Task::replaceDependency(Task * a, Task * b)
   }
 }
 
-bool Task::solve()
-{
-  FATAL(errmsg, "A task has not been defined a Solve functio!");
-  return true;
-}
-
-bool Task::isEqual(Task * t)
-{
-	return false;
-}
-
-bool Task::isMutex(Task * t)
-{
-  return false;
-}
-
-bool Task::submitResults(json * results)
-{
-  return true;
-}

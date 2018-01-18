@@ -1,6 +1,7 @@
-﻿#include <gtest/gtest.h>
 #include <iostream>
 #include "./src/emp.h"
+
+#include "gtest/gtest.h"
 
 #include "./tests/loop_test.h" 
 #include "./tests/point3d_test.h"
@@ -12,8 +13,14 @@
 #include "./tests/taskManager_test.h"
 #include "./tests/optionset_test.h"
 #include "./tests/matrix4x4_test.h"
-#include "./tests/radiance_test.h"
 #include "./tests/reinhart_test.h"
+#include "./tests/radiance_test.h"
+
+#ifdef _DEBUG
+#include <stdlib.h>
+#include "debug_new.h"
+#endif
+
 
 int main(int argc, char* argv[]){	
 	

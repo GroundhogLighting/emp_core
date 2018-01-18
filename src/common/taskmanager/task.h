@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -50,21 +50,7 @@ private:
 
 public:
     bool reportResults = false; //!< True if the TaskManager should report the results or not
-
-	//! Generic constructor
-	/*!
-	Initializes a generic Task without dependencies
-	or dependants
-
-	@author German Molina	
-	*/
-	Task();
-	
-	//! Generic destructor
-	/*!
-	@author German Molina
-	*/
-	~Task();
+    bool generatesResults = false; //!< Indicates whether or not this task is worth reporting results
 	
 	//! Assigns a name to the Task
 	/*!
@@ -142,7 +128,7 @@ public:
 	@author German Molina
 	@return success
 	*/
-	virtual bool solve();
+	virtual bool solve() = 0;
 
 	//! Function that compares two Task objects
 	/*!
@@ -158,7 +144,7 @@ public:
 	@param[in] t The pointer to the other Task
 	@return is equal?
 	*/
-	virtual bool isEqual(Task * t);
+	virtual bool isEqual(Task * t) = 0;
 
     //! Checks if two tasks are compatible to run in parallel
     /*!
@@ -169,14 +155,14 @@ public:
 	@param[in] t The pointer to the other Task
 	@return is mutex?
     */
-    virtual bool isMutex(Task * t);
+    virtual bool isMutex(Task * t) = 0;
 
     //! Adds the Task reuslts to a result JSON
     /*!
     @author German Molina
     @param[in] results The results JSON to fill
     */
-    virtual bool submitResults(json * results);
+    virtual bool submitResults(json * results) = 0;
     
 };
 

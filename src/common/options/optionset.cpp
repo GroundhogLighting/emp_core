@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -61,7 +61,6 @@ bool OptionSet::isEqual(OptionSet * other)
 bool OptionSet::fillFromLuaTable(lua_State * L, int tablePosition)
 {
   for (json::iterator it = data.begin(); it != data.end(); ++it) {
-
     std::string optionName = it.key();
     auto value = it.value();
     

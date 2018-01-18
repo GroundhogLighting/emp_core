@@ -1,4 +1,4 @@
-﻿
+
 /*****************************************************************************
 	Emp
 
@@ -20,6 +20,8 @@
 *****************************************************************************/
 
 #pragma once
+
+#ifndef AVOID_SKP
 
 #include "groundhogmodel/groundhogmodel.h"
 #include "common/geometry/polygon.h"
@@ -118,7 +120,7 @@ public:
 	@param[out] value The string where the value will be placed
 	@return success
 	*/
-	bool getStringFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, std::string * value);
+	bool getStringFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, std::string * value);
 
 	//! Retrieves a double from a SUShadowInfoRef object.
 	/*!
@@ -128,7 +130,7 @@ public:
 	@param[out] value The double where the value will be placed
 	@return success
 	*/
-	bool getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo, char * key, double * value);
+	bool getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, double * value);
 
 	//! Retrieves a time (epoch) from a SUShadowInfoRef object.
 	/*!
@@ -426,8 +428,7 @@ public:
 	@param[in] key The key to retrieve from the dictionary
 	@param[out] value The SUTypedValue retrieved
 	*/
-	bool getValueFromEntityGHDictionary(SUEntityRef entity, char * key, SUTypedValueRef * value);
-
+	bool getValueFromEntityGHDictionary(SUEntityRef entity, const char * key, SUTypedValueRef * value);
 
 	//! Transforms a SUStringRef into an ASCII std::string
 	/*!
@@ -437,7 +438,7 @@ public:
 	@param[in] fix Should we fixString()?
 	@return success
 	*/
-	bool SKPReader::SUStringtoString(SUStringRef suString, std::string * string, bool fix);
+	bool SUStringtoString(SUStringRef suString, std::string * string, bool fix);
 
 	//! Retrieves a std::string from a SUTypedValue object
 	/*!
@@ -533,7 +534,7 @@ public:
 	@param[in] key The key to check
 	@param[out] value The value retrieved
 	*/
-	bool getValueFromModelGHDictionary(char * key, SUTypedValueRef * value);
+	bool getValueFromModelGHDictionary(const char * key, SUTypedValueRef * value);
 
     //! Loads a SUComponentInstanceRef in the corresponding layer
     /*!
@@ -545,3 +546,5 @@ public:
 
     
 };
+
+#endif

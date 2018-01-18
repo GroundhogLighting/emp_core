@@ -20,6 +20,7 @@
 
 
 #pragma once
+#include <ctime>
 
 //! Represents a Date object
 

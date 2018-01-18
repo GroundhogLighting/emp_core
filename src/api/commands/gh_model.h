@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -23,9 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Include LUA headers
 extern "C" {
-#include <lua.h>
-	//#include <lualib.h>
-#include <lauxlib.h> 
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
 }
 
 //! Retrieves a list of the Workplane objects in the GroundhogModel

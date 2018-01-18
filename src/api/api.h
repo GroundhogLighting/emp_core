@@ -1,4 +1,4 @@
-﻿
+
 /*****************************************************************************
 Emp
 
@@ -26,8 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "api/common.h"
 
 
-#include "Lua/src/lua.hpp"
-
+extern "C" {
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+}
 
 
 //! Adds a TaskFactory function to the Task Dictionary
