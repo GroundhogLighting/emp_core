@@ -32,10 +32,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tbb/tbb.h"
 #include "./oconv_options.h"
 #include "groundhogmodel/src/rtraceoptions.h"
-#include "./Radiance/src/rt/ray.h"
+//#include "./Radiance/src/rt/ray.h"
 #include "config_constants.h"
 
-#include "Radiance/src/common/otypes.h"
+//#include "Radiance/src/common/otypes.h"
 
 #include "common/geometry/triangulation.h"
 

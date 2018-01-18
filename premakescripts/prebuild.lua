@@ -18,7 +18,7 @@ glare_version = version_file:read()
 version_file:close()
 
 -- Write Radiance version for itself
-file = io.open("../"..rad_rt.."/Version.c",'w')
+file = io.open(rad_rt.."/Version.c",'w')
 file:write("char * VersionID = \""..rad_version.."\";")
 file:close()
 

@@ -28,7 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "common/utilities/stringutils.h"
 #include "os_definitions.h"
 
-tbb::mutex testMutex;
 
 /*
 extern "C" {
