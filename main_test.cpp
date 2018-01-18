@@ -13,13 +13,13 @@
 #include "./tests/taskManager_test.h"
 #include "./tests/optionset_test.h"
 #include "./tests/matrix4x4_test.h"
-#include "./tests/radiance_test.h"
 #include "./tests/reinhart_test.h"
+#include "./tests/radiance_test.h"
 
-//#ifdef _DEBUG
+#ifdef _DEBUG
 #include <stdlib.h>
 #include "debug_new.h"
-//#endif
+#endif
 
 
 int main(int argc, char* argv[]){	

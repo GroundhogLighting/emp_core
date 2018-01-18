@@ -40,12 +40,13 @@ Date::Date(int64_t t)
 	day = time->tm_mday;
 	hour = time->tm_hour;
 	minute = time->tm_min;
-	delete time;
+	//delete time;
 
 }
 
 Date::~Date() 
 {
+    
 }
 
 void Date::setMonth(int m) 

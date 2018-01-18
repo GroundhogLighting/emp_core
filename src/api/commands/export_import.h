@@ -32,20 +32,10 @@ extern "C" {
 
 //! Adds the Export To Radiance task to the TaskManager
 /*!
-Exports the GroundhogModel into a Radiance format
-
-@author German Molina
-@param[in] L the lua_State object
-@return the number of return values within the script
-*/
-int exportToRadiance(lua_State * L);
-
-//! Adds the Export To Radiance task to the TaskManager
-/*!
 Exports a single workplane into files
 
 @author German Molina
 @param[in] L the lua_State object
 @return the number of return values within the script
 */
-int exportWorkplane(lua_State * L);
+int exportWorkplaneToRadiance(lua_State * L);

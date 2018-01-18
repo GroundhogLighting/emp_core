@@ -33,9 +33,27 @@ extern "C" {
 */
 void registerTasks(lua_State * L)
 {
-  registerTask(L, "workplane_illuminance", workplaneIlluminanceFactory);
+    registerTask(L, "workplane_illuminance", workplaneIlluminanceFactory);
 
+    registerTask(L, "write_scene_file",writeRadSceneFile);
+    
+    registerTask(L,"write_model_info",writeModelInfo);
+    
+    registerTask(L,"write_rif_file",writeRadRifFile);
+    
+    registerTask(L,"write_components",writeComponentDefinitions);
+    
+    registerTask(L,"write_views",writeViews);
+    
+    registerTask(L,"write_current_sky",writeCurrentSky);
+    
+    registerTask(L,"write_current_weather",writeCurrentWeather);
 
-  registerTask(L, "export", exportModel);
+    registerTask(L,"write_materials",writeMaterials);
+    
+    registerTask(L,"write_layers",writeLayers);
 
+    registerTask(L,"write_photosensors",writePhotosensors);
+
+    registerTask(L,"write_workplane",writeWorkplane);
 }

@@ -120,20 +120,13 @@ void registerCommands(lua_State * L)
   /* @APIgroup EXPORT / IMPORT */
   /* ========================= */
 
-  /* @APIfunction
-
-  Exports the current model to a Radiance directory
-
-  @param[required] directory The directory where to export the model
-  */
-  lua_register(L, "export_radiance_model", exportToRadiance);
 
   /* @APIfunction
 
   Exprts a
 
   */
-  lua_register(L, "export_workplane", exportWorkplane);
+  lua_register(L, "export_workplane", exportWorkplaneToRadiance);
 
   /* =============================== */
   /* @APIgroup SET-OPTIONS FUNCTIONS */

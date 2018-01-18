@@ -150,7 +150,7 @@ bool TaskManager::solve(json * results)
 
     // submit results
     for (size_t i = 0; i < tasks.size(); i++) {
-      if (tasks.at(i)->reportResults) {
+      if (tasks.at(i)->generatesResults && tasks.at(i)->reportResults) {
         tasks.at(i)->submitResults(results);
       }
     }

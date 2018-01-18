@@ -33,8 +33,7 @@
 #endif
 
 #include "api/api.h"
-
-#include "common/taskmanager/tasks/export.h"
+#include "writers/rad/tasks.h"
 
 extern "C" {
 #include "lua.h"
