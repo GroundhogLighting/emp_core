@@ -52,13 +52,19 @@ public:
     bool reportResults = false; //!< True if the TaskManager should report the results or not
     bool generatesResults = false; //!< Indicates whether or not this task is worth reporting results
 	
-	//! Assigns a name to the Task
+
+    //! Virtual destructor
+    /*!
+     @author German Molina     
+     */
+    virtual ~Task()=0;
+    
+    //! Assigns a name to the Task
 	/*!
 	@author German Molina
 	@param[in] name The name to assign
 	*/
 	void setName(std::string * name);
-
 	
 	//! Retrieves the name of the Task
 	/*!

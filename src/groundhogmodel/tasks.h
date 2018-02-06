@@ -22,7 +22,7 @@
 #pragma once
 #include "groundhogmodel/groundhogmodel.h"
 #include "groundhogmodel/tasks.h"
-#include "./triangulate.h"
+#include "calculations/radiance.h"
 #include "common/taskmanager/task.h"
 #include "tbb/tbb.h"
 #include "common/geometry/triangulation.h"
@@ -42,9 +42,8 @@ public:
     Workplane * workplane; //!< The workplane to triangulate
     double maxArea; //!< The maximum area allowed for each triangle in the resulting Triangulation
     double maxAspectRatio; //!< The maximum aspect ratio allowed for each triangle in the resulting Triangulation
-    std::vector<Triangulation * > triangulations; //!< The final triangulations
-    
-    
+    std::vector <RAY> rays; //!< The generated rays
+    std::vector <Triangle> triangles; //!< The generated triangles
     
     //! Constructor
     /*!
@@ -61,17 +60,12 @@ public:
         
         // Always report this
         reportResults = true;
+        
         // It Does generate results
         generatesResults = true;
         
         std::string name = "Triangulate workplane " + *(aWorkplane->getName()) + "-" +std::to_string(maxArea)+"_"+std::to_string(maxAspectRatio);
         setName(&name);
-        
-        size_t nPols = workplane->getNumPolygons();
-        for (size_t i = 0; i < nPols; i++) {
-            Polygon3D * p = workplane->getPolygonRef(i);
-            triangulations.push_back(new Triangulation(p));
-        }
         
     }
     
@@ -100,14 +94,63 @@ public:
     {
         size_t nPols = workplane->getNumPolygons();
         
+        // Initialize the triangulations
+        std::vector<Triangulation * > triangulations = std::vector<Triangulation * >();
+        
+        // Fill the triangulations
+        for(size_t i=0; i < nPols; i++){
+            Polygon3D * p = workplane->getPolygonRef(i);
+            Triangulation * t = new Triangulation(p);
+            triangulations.push_back(t);
+        }
+        
+        // Triangulate in parallel
         tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols, EMP_TRIANGULATION_GRAIN_SIZE),
                           [=](const tbb::blocked_range<size_t>& r) {
                               for (size_t i = r.begin(); i != r.end(); ++i) {
-                                  triangulations.at(i)->mesh(maxArea, maxAspectRatio);
+                                  
+                                  triangulations.at(i)->mesh(maxArea,maxAspectRatio);
                                   triangulations.at(i)->purge();
                               }
                           }
-                          );
+        );
+        
+        // Fill the results... in series
+        size_t rayCount = 0;
+        
+        for(size_t i=0; i < nPols; i++){
+            Triangulation * t = triangulations.at(i);
+            size_t nTriangles = t->getNumTriangles();
+            
+            
+            for(size_t j = 0; j < nTriangles; j++){
+                
+                // Add a Ray
+                rays.push_back(RAY());
+                
+                // Get the Triangle
+                Triangle * triangle = t->getTriangleRef(j);
+                
+                // Add the Triangle
+                triangles.push_back(*triangle);
+                
+                // Add the center to the ray
+                Point3D o = triangle->getCenter();
+                Vector3D n = t->getPolygon()->getNormal();
+                
+                FVECT origin = {(float)o.getX(),(float)o.getY(),(float)o.getZ()};
+                FVECT dir = {(float)n.getX(),(float)n.getY(),(float)n.getZ()};
+                
+                VCOPY(rays.at(rayCount).rorg, origin);
+                VCOPY(rays.at(rayCount).rdir, dir);
+                
+                // Increase ray count
+                rayCount++;
+            }
+            
+            // Delete the Triangulation
+            delete t;
+        }
         
         return true;
     }

@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 /*
+ THIS IS USED WHEN RTRACE IS CALLED INTERNALLY
 extern "C" {
 
 	static void
@@ -54,153 +55,229 @@ extern "C" {
 }
 */
 
-bool rtrace(Triangulation * t, RTraceOptions * options, char * octname, bool do_irradiance, bool imm_irrad, std::string amb, std::vector<RAY> * rays)
+#include "reinhart.h"
+
+bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool imm_irrad, std::vector<RAY> * rays, int mf,const char * modifier, bool vMode, ColorMatrix * result)
 {
-	
-  // Build the command
-  std::string rgbfile = octname + std::to_string(rand()) + std::string(".rgb");
-
-  std::string mode = "";
-  if (imm_irrad) {
-    mode = " -I ";
-  }
-  else if (do_irradiance) {
-    mode = " -i ";
-  }
-  std::string ropts = options->getInlineVersion();  
-
-  std::string command = "rtrace -h" + mode + ropts + " -af " + amb + + " " + octname + " > " + rgbfile ; // -I - ab 2 octree.oct > A.txt";
-  
-  // Create the file
-  FILE *rt = POPEN(&command[0], "w");
-
-  // trace a ray for each triangle	
-  size_t nTriangles = t->getNumTriangles(); 
-  
-  Vector3D normal = t->getPolygon()->getNormal();
-
-  for (size_t i = 0; i < nTriangles; i++) {
-    // Get Triangle and Ray
-    Triangle * tr = t->getTriangleRef(i);
+    // Build the command
+    std::string rgbfile = octname + std::to_string(rand()) + std::string(".mtx");
     
-    // then process
-    Point3D o = tr->getCenter();
-
-    fprintf(rt, "%f %f %f %f %f %f\n", o.getX(),o.getY(), o.getZ(), normal.getX(), normal.getY(), normal.getZ() );    
-  }
-  PCLOSE(rt);
-
-  // Read results back
-  //FILE * result = fopen(&rgbfile[0], "r");
-  FOPEN(result, &rgbfile[0], "r");
-
-  if (result != NULL)
-  {
-    float r;
-    float g;
-    float b;
-
-    size_t i = 0;
-    while (FSCANF(result, "%f %f %f", &r, &g, &b) != EOF)
-    {                
-      rays->at(i).rcol[0] = r;
-      rays->at(i).rcol[1] = g;
-      rays->at(i++).rcol[2] = b;
+    std::string mode;
+    if (imm_irrad) {
+        mode = " -I ";
     }
-
-    fclose(result);
-  }
-  else {
-    FATAL(err,"Unable to open RGB result file '" + rgbfile +"' while soliving RTraceTask");
-    return false;
-  }
-
-  if (remove(&rgbfile[0])) {
-    std::string msg = "Impossible to remove file" + rgbfile;
-    FATAL(errms, msg);
-  }
-
-  /* 
-    For now, to allow parallel processing, we will 
-    call RTRACE from the command line
-  */
-
-
-  /* Direct C++ call... not yet supported */
-  /*
-  do_irrad = do_irradiance ? 1 : 0;
-  ray_pnprocs = 1;
-
-
-  // Expose the provided options
-  options->exposeOptions();
-
-  // set the ambient file
-  ambfile = &amb[0];
+    else if (do_irradiance) {
+        mode = " -i ";
+    }
     
-  // save the parameters
-  RAYPARAMS rp;
-  ray_save(&rp);
-	
+    std::string v = vMode ? " -V " : "";
+    std::string ropts = options->getInlineVersion();
+    
+    std::string command = "rcontrib -h " + v + mode + ropts + " -e MF:"+ std::to_string(mf) + " -f reinhart.cal -b rbin -bn Nrbins -m " + std::string(modifier) + " " + octname + " > " + rgbfile ;
+    
+    
+    // Create the file
+    FILE *rt = POPEN(&command[0], "w");
+    
+    
+    for(auto ray : *rays){
+        fprintf(rt, "%f %f %f %f %f %f\n", ray.rorg[0], ray.rorg[1], ray.rorg[2], ray.rdir[0], ray.rdir[1], ray.rdir[2]);
+    }
+    
+    PCLOSE(rt);
+    
+    std::ifstream in;
+    in.open(rgbfile);
+    std::string line;
+    if(in.is_open())
+    {
+        size_t nsensors = rays->size();
+        size_t nsensor = 0;
+        size_t nbins = nReinhartBins(mf);
+        
+        if(result->ncols() != nsensors || result->nrows() != nbins){
+            WARN(msg,"Inconsistent size of result matrix when RCONTRIB... resizing");
+            result->resize(nsensors,nbins);
+        }
+        
+        std::string rval;
+        float red, green, blue;
+        
+        while(std::getline(in, line)) //get 1 row as a string
+        {
+            std::istringstream iss(line); //put line into stringstream
+            for(size_t nbin = 0; nbin < nbins; nbin++){
+                
+                // Red
+                iss >> rval;
+                red = stof(rval);
+                
+                // Green
+                iss >> rval;
+                green = stof(rval);
+                
+                // Blue
+                iss >> rval;
+                blue = stof(rval);
+                
+                (*result->redChannel())[nsensor]->at(nbin) = red;
+                (*result->greenChannel())[nsensor]->at(nbin) = green;
+                (*result->blueChannel())[nsensor]->at(nbin) = blue;
+            }
+        
+            nsensor ++;
+        }
+    }
+    
+    
+    if (remove(&rgbfile[0])) {
+        std::string msg = "Impossible to remove file" + rgbfile;
+        FATAL(errms, msg);
+    }
+    
+    return true;
+}
 
-  ray_init(octname);
-
-  for (size_t i = 0; i < nTriangles; i++) {
-      // Get Triangle and Ray
-	  Triangle * tr = t->getTriangleRef(i);		
-      RAY * ray = &(rays->at(i));
-
-	  // then process
-	  Point3D o = tr->getCenter();
-		
-      // set origin and direction
-	  FVECT org = { o.getX(), o.getY(), o.getZ() };
-	  FVECT dir = { 0, 0, 1 };
-	  VCOPY(ray->rorg, org);
-	  VCOPY(ray->rdir, dir);
-	  ray->rmax = 0;
-
-	  double dmax = 0;
-
-      // calculate
-	  rayorigin(ray, PRIMARY, NULL, NULL);
-	  if (imm_irrad) {
-		  VSUM(ray->rorg, org, dir, 1.1e-4);
-		  ray->rdir[0] = -dir[0];
-          ray->rdir[1] = -dir[1];
-          ray->rdir[2] = -dir[2];
-          ray->rmax = 0.0;
-          ray->revf = rayirrad;
-	  }
-	  else {
-		  VCOPY(ray->rorg, org);
-		  VCOPY(ray->rdir, dir);
-          ray->rmax = dmax;
-	  }
-
-      // increase one
-	  //samplendx++;
-
-      // copy value
-	  rayvalue(ray);
-               		
-  }        
-  ray_done(1);
-  */
-
-  return true;
+bool rtrace(RTraceOptions * options, char * octname, bool do_irradiance, bool imm_irrad, std::string amb, std::vector<RAY> * rays)
+{
+    // Build the command
+    std::string rgbfile = octname + std::to_string(rand()) + std::string(".rgb");
+    
+    std::string mode;
+    if (imm_irrad) {
+        mode = " -I ";
+    }
+    else if (do_irradiance) {
+        mode = " -i ";
+    }
+    std::string ropts = options->getInlineVersion();
+    
+    std::string command = "rtrace -h" + mode + ropts + " -af " + amb + " " + octname + " > " + rgbfile ;
+    
+    
+    // Create the file
+    FILE *rt = POPEN(&command[0], "w");
+    
+    
+    for(auto ray : *rays){
+        fprintf(rt, "%f %f %f %f %f %f\n", ray.rorg[0], ray.rorg[1], ray.rorg[2], ray.rdir[0], ray.rdir[1], ray.rdir[2]);
+    }
+        
+    PCLOSE(rt);
+    
+    // Read results back
+    FOPEN(result, &rgbfile[0], "r");
+    
+    if (result != NULL)
+    {
+        float r;
+        float g;
+        float b;
+        
+        size_t i = 0;
+        while (FSCANF(result, "%f %f %f", &r, &g, &b) != EOF)
+        {
+            rays->at(i).rcol[RED] = r;
+            rays->at(i).rcol[GRN] = g;
+            rays->at(i).rcol[BLU] = b;
+            i++;
+        }
+        
+        fclose(result);
+    }
+    else {
+        FATAL(err,"Unable to open RGB result file '" + rgbfile +"' while soliving RTraceTask");
+        return false;
+    }
+    
+    if (remove(&rgbfile[0])) {
+        std::string msg = "Impossible to remove file" + rgbfile;
+        FATAL(errms, msg);
+    }
+    
+    
+    /*
+     THIS IS USED WHEN RTRACE IS CALLED INTERNALLY
+     
+     For now, to allow parallel processing, we will
+     call RTRACE from the command line
+     */
+    
+    
+    /* Direct C++ call... not yet supported */
+    /*
+     do_irrad = do_irradiance ? 1 : 0;
+     ray_pnprocs = 1;
+     
+     
+     // Expose the provided options
+     options->exposeOptions();
+     
+     // set the ambient file
+     ambfile = &amb[0];
+     
+     // save the parameters
+     RAYPARAMS rp;
+     ray_save(&rp);
+     
+     
+     ray_init(octname);
+     
+     for (size_t i = 0; i < nTriangles; i++) {
+     // Get Triangle and Ray
+     Triangle * tr = t->getTriangleRef(i);
+     RAY * ray = &(rays->at(i));
+     
+     // then process
+     Point3D o = tr->getCenter();
+     
+     // set origin and direction
+     FVECT org = { o.getX(), o.getY(), o.getZ() };
+     FVECT dir = { 0, 0, 1 };
+     VCOPY(ray->rorg, org);
+     VCOPY(ray->rdir, dir);
+     ray->rmax = 0;
+     
+     double dmax = 0;
+     
+     // calculate
+     rayorigin(ray, PRIMARY, NULL, NULL);
+     if (imm_irrad) {
+     VSUM(ray->rorg, org, dir, 1.1e-4);
+     ray->rdir[0] = -dir[0];
+     ray->rdir[1] = -dir[1];
+     ray->rdir[2] = -dir[2];
+     ray->rmax = 0.0;
+     ray->revf = rayirrad;
+     }
+     else {
+     VCOPY(ray->rorg, org);
+     VCOPY(ray->rdir, dir);
+     ray->rmax = dmax;
+     }
+     
+     // increase one
+     //samplendx++;
+     
+     // copy value
+     rayvalue(ray);
+     
+     }
+     ray_done(1);
+     */
+    return true;
 }
 
 
-bool rtrace_i(Triangulation * t, RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays)
+bool rtrace_i( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays)
 {
-	return rtrace(t, options, octname, true, false, amb, rays);
+    return rtrace( options, octname, true, false, amb, rays);
 }
 
 
-bool rtrace_I(Triangulation * t, RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays)
+bool rtrace_I( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays)
 {
-	return rtrace(t, options, octname, false, true, amb, rays);
+    return rtrace(options, octname, false, true, amb, rays);
 }
 
 

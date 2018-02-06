@@ -13,18 +13,14 @@ project "emp"
     }
     links {
         "tbb_debug",
-        "Lua",
-        "radiance",
-        "raycalls",
-        "rtrad"                                     
+        "Lua",                           
     }  
 
     includedirs{
         "../src/",
         third_party_dir,
         third_party_dir.."/intelTBB/include",
-        lua_dir,
-        third_party_dir.."/Radiance/src/common",        
+        lua_dir,      
     }
     
     -- Add the platform specific
@@ -47,7 +43,7 @@ project "emp"
             third_party_dir.."/SketchUp/MACOS/headers/SketchUpAPI.framework",
         }
         linkoptions {
-            --"-F "..third_party_dir.."/SketchUp/MACOS/headers", 
+            "-F "..third_party_dir.."/SketchUp/MACOS/headers", 
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"
         }    
     elseif is_linux then

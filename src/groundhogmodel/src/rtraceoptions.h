@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -22,7 +22,7 @@
 
 #pragma once
 #include "common/options/optionset.h"
-#include "Radiance/src/rt/ray.h"
+//#include "Radiance/src/rt/ray.h"
 
 class RTraceOptions : public OptionSet {
 public:
@@ -39,8 +39,8 @@ public:
     /*
     @author German Molina
     @todo Expose all options
-    */
+    
 	void exposeOptions();
-
+     */
     
 };

@@ -54,66 +54,66 @@ int oconv_command(lua_State * L)
 
 int rtrace_command(lua_State * L)
 {
-  // Check number of arguments
-  int args[2] = { 2,3 };
-  int n = checkNArguments(L, args, 2);
+    // Check number of arguments
+    int args[2] = { 2,3 };
+    int n = checkNArguments(L, args, 2);
 
-  // Check the type of arguments
-  checkArgType(L, LUA_TSTRING, 1); // Workplane name
-  if (n >= 2) {
-    checkArgType(L, LUA_TSTRING, 2); // Octree name
-  }
-  if (n == 3) {
-    checkArgType(L, LUA_TTABLE, 3); // optons
-  }
-
-  // All ok as inputs.
-  std::string workplaneName = lua_tostring(L, 1);
-  std::string octreeName = lua_tostring(L, 2);
- 
-  GroundhogModel * model = getCurrentModel(L);
-
-  // Retrieve the workplane
-  Workplane * wp = getWorkplane(L, workplaneName);
-  
-  // Get the current RTraceOptions
-  RTraceOptions * options = model->getRTraceOptions();
-
-  // Build other options
-  OptionSet otherOptions = OptionSet();
-  otherOptions.addOption("max_area", 0.25);
-  otherOptions.addOption("max_aspect_ratio", 1.3);
-  otherOptions.addOption("ambient_file", octreeName+".amb");
-  if (n == 3) {
-    otherOptions.fillFromLuaTable(L, 3);
-  }
-
-  OconvOptions oconvOptions = OconvOptions();
-  if (n == 3) {
-    oconvOptions.fillFromLuaTable(L, 3);
-  }
-  // Create the task
-  RTraceTask * task = new RTraceTask(model, options, &otherOptions, wp, &oconvOptions);
-  
-  // Need an independent TaskManager for this
-  TaskManager * taskManager = new TaskManager();  
-  taskManager->addTask(task);  
-  json results = json();
-  taskManager->solve(&results);
-
-  // Report
-  for (auto rayset : task->rays) {
-    for (auto ray : rayset) {      
-
-      // USE RESULTS
-      double red = colval(ray.rcol, RED);
-      double green = colval(ray.rcol, GRN);
-      double blue = colval(ray.rcol, BLU);
-      std::cout << red << ", " << green << ", " << blue << ", " << " === " << blue*179.0 << std::endl;
+    // Check the type of arguments
+    checkArgType(L, LUA_TSTRING, 1); // Workplane name
+    if (n >= 2) {
+        checkArgType(L, LUA_TSTRING, 2); // Octree name
     }
-  }
+    if (n == 3) {
+        checkArgType(L, LUA_TTABLE, 3); // optons
+    }
 
-  delete taskManager;
+    // All ok as inputs.
+    std::string workplaneName = lua_tostring(L, 1);
+    std::string octreeName = lua_tostring(L, 2);
 
+    GroundhogModel * model = getCurrentModel(L);
+
+    // Retrieve the workplane
+    Workplane * wp = getWorkplane(L, workplaneName);
+
+    // Get the current RTraceOptions
+    RTraceOptions * options = model->getRTraceOptions();
+
+    // Build other options
+    OptionSet otherOptions = OptionSet();
+    otherOptions.addOption("max_area", 0.25);
+    otherOptions.addOption("max_aspect_ratio", 1.3);
+    otherOptions.addOption("ambient_file", octreeName+".amb");
+    if (n == 3) {
+        otherOptions.fillFromLuaTable(L, 3);
+    }
+
+    OconvOptions oconvOptions = OconvOptions();
+    if (n == 3) {
+        oconvOptions.fillFromLuaTable(L, 3);
+    }
+
+    // Create Task
+    RTraceTask * task = new RTraceTask(model, options, &otherOptions, wp, &oconvOptions);
+    
+    // Need an independent TaskManager for this
+    TaskManager taskManager = TaskManager();
+    taskManager.addTask(task);
+    json results = json();
+    taskManager.solve(&results);
+
+    // Report
+    for (auto rayset : task->rays) {
+        for (auto ray : rayset) {
+
+          // USE RESULTS
+          double red = colval(ray.rcol, RED);
+          double green = colval(ray.rcol, GRN);
+          double blue = colval(ray.rcol, BLU);
+          std::cout << red << ", " << green << ", " << blue << ", " << " === " << blue*179.0 << std::endl;
+        }
+    }
+
+    
   return 0;
 }

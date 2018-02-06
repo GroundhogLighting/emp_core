@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -38,7 +38,7 @@
 #include "./src/materials/glass.h"
 #include "./src/materials/plastic.h"
 
-#include "../3rdparty/json/json.hpp"
+#include "json/json.hpp"
 using nlohmann::json;
 
 //! The main class, that contains all the Layer, Workplane and much more

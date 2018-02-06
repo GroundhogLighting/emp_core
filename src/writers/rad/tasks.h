@@ -338,49 +338,35 @@ public:
         TriangulateWorkplane * dependency = static_cast<TriangulateWorkplane *>(getDependencyRef(0));
         
         // Write down all polygons in triangulation
-        std::vector<Triangulation * > * triangulations = &(dependency->triangulations);
-        size_t nP = triangulations->size();
+        size_t nRays = dependency->rays.size();
         
         // Iterate
-        for (size_t j = 0; j < nP; j++) {
+        for (size_t i = 0; i < nRays; i++) {
             
-            // Get the triangulated polygon
-            Triangulation * triangulatedPolygon = triangulations->at(j);
+            // Get the Triangle and ray
+            Triangle * triangle = &(dependency->triangles.at(i));
+            RAY * ray = &(dependency->rays.at(i));
             
-            // Retrieve the normal
-            Vector3D normal = triangulatedPolygon->getPolygon()->getNormal();
-            double nx = normal.getX();
-            double ny = normal.getY();
-            double nz = normal.getZ();
+            if (triangle == NULL)
+                continue;
             
-            // Count triangles
-            size_t nTriangles = triangulatedPolygon->getNumTriangles();
-            
-            for (size_t k = 0; k < nTriangles; k++) {
-                Triangle * triangle = triangulatedPolygon->getTriangleRef(k);
-                
-                if (triangle == NULL)
-                    continue;
-                
-                double x = 0;
-                double y = 0;
-                double z = 0;
-                for (int l = 0; l < 3; l++) {
-                    Point3D * p = triangle->getVertex(l);
-                    double px = p->getX();
-                    double py = p->getY();
-                    double pz = p->getZ();
-                    x += px;
-                    y += py;
-                    z += pz;
-                    pxlFile << px << EMP_TAB << py << EMP_TAB << pz << EMP_TAB;
-                }
-                pxlFile << "\n";
-                ptsFile << x / 3 << EMP_TAB << y / 3 << EMP_TAB << z / 3 << EMP_TAB << nx << EMP_TAB << ny << EMP_TAB << nz << "\n";
-                
+            // Write in Pixel file
+            for (int l = 0; l < 3; l++) {
+                Point3D * p = triangle->getVertex(l);
+                double px = p->getX();
+                double py = p->getY();
+                double pz = p->getZ();
+                pxlFile << px << EMP_TAB << py << EMP_TAB << pz << EMP_TAB;
             }
+            pxlFile << "\n";
+            
+            ptsFile << ray->rorg[0] << EMP_TAB << ray->rorg[1] << EMP_TAB << ray->rorg[2] << EMP_TAB;
+            ptsFile << ray->rdir[0] << EMP_TAB << ray->rdir[1] << EMP_TAB << ray->rdir[2] << "\n";
+            
             
         }
+            
+        
         
         
         // Close the files

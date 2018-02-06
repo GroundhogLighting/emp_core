@@ -20,63 +20,99 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include "./color_matrix.h"
+
 /// Do not change this, please... it is required to compile Radiance in C++
 #define FUN_ARGLIST ...
 
-//#define GETLUX(r,g,b) (r*47.45 + g*119.95 + b*11.60)
 
-#define RAD(v) 0.265*v[0]+0.67*v[1]+0.065*v[2]
-#define LIGHT(v) 47.435*v[0]+119.93*v[1]+11.635*v[2]
+#define RAD(v) (0.265*v[0]+0.67*v[1]+0.065*v[2])
+#define LIGHT(v) (47.435*v[0]+119.93*v[1]+11.635*v[2])
 
+
+/* EMULATE RADIANCE'S RAY AND OTHERS... A SHORT VERSION OF THEM */
+extern "C" {
+#define  RED        0
+#define  GRN        1
+#define  BLU        2
+
+#define  colval(col,pri)    ((col)[pri])
+#define  VCOPY(v1,v2)    ((v1)[0]=(v2)[0],(v1)[1]=(v2)[1],(v1)[2]=(v2)[2])
+
+typedef float COLORV;
+typedef COLORV  COLOR[3];    /* red, green, blue (or X,Y,Z) */
+
+#define RREAL float
+typedef RREAL  FVECT[3];
+
+/* Arrange so double's come first for optimal alignment */
+/* Pointers and long's come second for 64-bit mode */
+/* Int's next (unknown length), then floats, followed by short's & char's */
+typedef struct ray {
+    COLOR    rcol;        /* returned radiance value */
+    FVECT    rorg;        /* origin of ray */
+    FVECT    rdir;        /* normalized direction of ray */
+    
+}  RAY;
+}
 
 #include "tbb/tbb.h"
 #include "./oconv_options.h"
 #include "groundhogmodel/src/rtraceoptions.h"
-//#include "./Radiance/src/rt/ray.h"
 #include "config_constants.h"
-
-//#include "Radiance/src/common/otypes.h"
-
 #include "common/geometry/triangulation.h"
-
 #include "writers/rad/radexporter.h"
+
+//! This function emulates the use of Radiance's RCONTRIB program
+/*!
+ 
+ @author German Molina
+ @param[in] options The RTRACE options
+ @param[in] octname The name of the octree to read
+ @param[in] do_irrad The parameter that emulates the '-i' option
+ @param[in] imm_irrad The parameter that emulates the '-I' option
+ @param[in] rays
+ @param[in] mf The Reinhart subdivition scheme to use
+ @param[in] modifier The modifier passed to the -m option
+ @param[in] vMode The -V option
+ @param[out] result The result ColorMatrix
+ @note Always enables the -V option
+ */
+bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool imm_irrad, std::vector<RAY> * rays, int mf,const char * modifier, bool vMode, ColorMatrix * result);
 
 //! This function emulates the use of Radiance's RTRACE program
 /*!
-@author German Molina
-@param[in] t The Triangulation object from which rays will be traced
-@param[in] options The RTRACE options
-@param[in] octname The name of the octree to read
-@param[in] do_irrad The parameter that emulates the '-i' option in RTRACE
-@param[in] imm_irrad The parameter that emulates the '-I' option in RTRACE
-@param[in] amb The name of the ambient file to use
-@param[out] rays The place where the resulting rays will be stored
-*/
-bool rtrace(Triangulation * t, RTraceOptions * options, char * octname, bool do_irrad, bool imm_irrad, std::string amb, std::vector<RAY> * rays);
+ @author German Molina
+ @param[in] options The RTRACE options
+ @param[in] octname The name of the octree to read
+ @param[in] do_irrad The parameter that emulates the '-i' option in RTRACE
+ @param[in] imm_irrad The parameter that emulates the '-I' option in RTRACE
+ @param[in] amb The name of the ambient file to use
+ @param rays The place where the resulting rays will be stored
+ */
+bool rtrace(RTraceOptions * options, char * octname, bool do_irrad, bool imm_irrad, std::string amb, std::vector<RAY> * rays);
 
 
 //! This function emulates the use of Radiance's RTRACE program with the -I option enabled
 /*!
-@author German Molina
-@param[in] t The Triangulation object from which rays will be traced
-@param[in] options The RTRACE options
-@param[in] octname The name of the octree to read
-@param[in] amb The name of the ambient file to use
-@param[out] rays The place where the resulting rays will be stored
-*/
-bool rtrace_I(Triangulation * t, RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays);
+ @author German Molina
+ @param[in] options The RTRACE options
+ @param[in] octname The name of the octree to read
+ @param[in] amb The name of the ambient file to use
+ @param[out] rays The place where the resulting rays will be stored
+ */
+bool rtrace_I( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays);
 
 
 //! This function emulates the use of Radiance's RTRACE program with the -i option enabled
 /*!
-@author German Molina
-@param[in] t The Triangulation object from which rays will be traced
-@param[in] options The RTRACE options
-@param[in] octname The name of the octree to read
-@param[in] amb The name of the ambient file to use
-@param[out] rays The place where the resulting rays will be stored
-*/
-bool rtrace_i(Triangulation * t, RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays);
+ @author German Molina
+ @param[in] options The RTRACE options
+ @param[in] octname The name of the octree to read
+ @param[in] amb The name of the ambient file to use
+ @param[out] rays The place where the resulting rays will be stored
+ */
+bool rtrace_i( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays);
 
 
 //! Creates an octree according to certain option

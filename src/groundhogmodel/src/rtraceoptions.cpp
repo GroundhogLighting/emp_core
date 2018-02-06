@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -71,10 +71,10 @@ RTraceOptions::RTraceOptions()
 	
 	addOption("am", 0.1);			// max photon search radius
 };
-
+/*
 void RTraceOptions::exposeOptions()
 {
-	/* DIRECT */
+	// DIRECT
 	shadthresh = getOption<double>("dt");
 	shadcert = getOption<double>("dc");
 	dstrsrc = getOption<double>("dj");
@@ -83,15 +83,15 @@ void RTraceOptions::exposeOptions()
 	//directvis = getOption("dv");
 	srcsizerat = getOption<double>("ds");
 
-	/* SPECULAR */
+	// SPECULAR
 	specthresh = getOption<double>("st");
 	specjitter = getOption<double>("ss");
 
-	/* LIMIT */
+	// LIMIT
 	maxdepth = getOption<int>("lr");
 	minweight = getOption<double>("lw");
 
-	/* AMBIENT */
+	// AMBIENT
 	// ambval
 	ambvwt = getOption<int>("aw");
 	ambacc = getOption<double>("aa");
@@ -100,10 +100,11 @@ void RTraceOptions::exposeOptions()
 	ambssamp = getOption<int>("as");
 	ambounce = getOption<int>("ab");
 
-	/* MEDIUM */
+	// MEDIUM
 	//cextinction
 	//salbedo
 	seccg = getOption<double>("mg");
 	ssampdist = getOption<double>("ms");
 }
 
+*/

@@ -21,17 +21,13 @@ project "emp_tests"
         third_party_dir,
         third_party_dir.."/intelTBB/include",
         lua_dir,
-        third_party_dir.."/Radiance/src/common", 
         google_test_dir.."/include",                     
     }  
 
     links {
         "tbb_debug",
         "GoogleTest",
-        "Lua",
-        "radiance",
-        "raycalls",
-        "rtrad"                                     
+        "Lua",        
     }  
 
 

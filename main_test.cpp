@@ -12,6 +12,7 @@
 #include "./tests/triangle_test.h" 
 #include "./tests/taskManager_test.h"
 #include "./tests/optionset_test.h"
+#include "./tests/matrix_test.h"
 #include "./tests/matrix4x4_test.h"
 #include "./tests/reinhart_test.h"
 #include "./tests/radiance_test.h"

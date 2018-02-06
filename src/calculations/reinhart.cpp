@@ -53,32 +53,45 @@ size_t Rfindrow(size_t r, size_t rem, size_t MF)
   size_t rnazr = rnaz(r, MF);
   int aux = (int)(rem - rnazr);
   if (aux > 0.5) {
-    return Rfindrow(r + 1, rem - rnazr,MF);
+    return Rfindrow(r + 1, rem - rnazr, MF);
   }
   else {
     return r;
   }
 }
 
-
-Vector3D reinhartDir(size_t nbin, size_t MF)
+size_t Rfindrow(size_t rem, size_t MF)
 {
-  return reinhartDir(nbin, MF, NULL);
+    return  Rfindrow(0, rem, MF);
+}
+
+
+Vector3D reinhartCenterDir(size_t nbin, size_t MF)
+{
+  return reinhartCenterDir(nbin, MF, NULL);
 }
 
 double reinhartSolidAngle(size_t nbin, size_t MF)
 {
   double ret;
-  reinhartDir(nbin, MF, &ret);
+  reinhartCenterDir(nbin, MF, &ret);
   return ret;
 }
 
-Vector3D reinhartDir(size_t nbin, size_t MF, double * solidAngle)
+Vector3D reinhartCenterDir(size_t nbin, size_t MF, double * solidAngle)
+{
+    return reinhartDir(nbin, MF, 0.5, 0.5, solidAngle) ;
+}
+
+Vector3D reinhartDir(size_t nbin, size_t MF,  const double x1, const double x2)
+{
+    return reinhartDir(nbin, MF, x1, x2, NULL);
+}
+
+Vector3D reinhartDir(size_t nbin, size_t MF,  const double x1, const double x2, double * solidAngle)
 {
   const double PI = 3.141592654;
-  const double alpha = 90.0 / (MF * 7 + 0.5);
-  const double x2 = 0.5;
-  const double x1 = 0.5;
+  const double alpha = 90.0 / (MF * 7 + 0.5);  
   const double RAH = alpha *PI / 180.0;
   const size_t RowMax = 7 * MF + 1;
   const size_t Rmax = raccum(RowMax,MF);
@@ -88,7 +101,7 @@ Vector3D reinhartDir(size_t nbin, size_t MF, double * solidAngle)
     Rrow = RowMax - 1;
   }
   else {
-    Rrow = Rfindrow(0, nbin,MF);
+    Rrow = Rfindrow(0, nbin, MF);
   }
 
 

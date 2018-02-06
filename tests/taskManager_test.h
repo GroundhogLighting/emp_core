@@ -1,4 +1,4 @@
-﻿// simulationManager_test.h
+// simulationManager_test.h
 
 #include "common/taskmanager/taskmanager.h"
 
@@ -31,6 +31,15 @@ public:
 		result = target;
 		return true;
 	}
+    bool isMutex(Task * t)
+    {
+        return false;
+    }
+    
+    bool submitResults(json * results)
+    {
+        return true;
+    }
 	
 };
 
@@ -64,6 +73,15 @@ public:
 		result = static_cast<TaskA *>(a1)->result + static_cast<TaskA * >(a2)->result;
 		return true;
 	}
+    bool isMutex(Task * t)
+    {
+        return false;
+    }
+    
+    bool submitResults(json * results)
+    {
+        return true;
+    }
 };
 
 class TaskC : public Task {
@@ -92,6 +110,16 @@ public:
 		result = mult* (static_cast<TaskB *>(B)->result);
 		return true;
 	}
+    
+    bool isMutex(Task * t)
+    {
+        return false;
+    }
+    
+    bool submitResults(json * results)
+    {
+        return true;
+    }
 };
 
 

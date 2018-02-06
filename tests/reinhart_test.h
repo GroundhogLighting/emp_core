@@ -1,8 +1,9 @@
-﻿#include <cmath>
 
 #include "../src/common/geometry/segment.h"
 #include "calculations/reinhart.h"
 
+#define PI 3.14159265359
+#define RADIANS(x) (x*PI/180.0)
 
 TEST(ReinhartTest, rnaz) {
   size_t mf = 1;
@@ -58,56 +59,77 @@ TEST(ReinhartTest, NRBins) {
   ASSERT_EQ(nReinhartBins(10), 14402);
 }
 
-TEST(ReinhartTest, binDir) {
+TEST(ReinhartTest, binCenterDir) {
   size_t mf = 1;
 
-  Vector3D a = reinhartDir(1, mf);
+  Vector3D a = reinhartCenterDir(1, mf);
   ASSERT_NEAR(a.getX(), 0.0, 1e-5);
   ASSERT_NEAR(a.getY(), 0.994522, 1e-5);
   ASSERT_NEAR(a.getZ(), 0.104528, 1e-5);
 
 
-  a = reinhartDir(14, mf);    
+  a = reinhartCenterDir(14, mf);
   ASSERT_NEAR(a.getX(), 0.404508, 1e-5);
   ASSERT_NEAR(a.getY(), -0.908541, 1e-5);
   ASSERT_NEAR(a.getZ(), 0.104528, 1e-5);
 
-  a = reinhartDir(62, mf);
+  a = reinhartCenterDir(62, mf);
   ASSERT_NEAR(a.getX(), 0.224144, 1e-5);
   ASSERT_NEAR(a.getY(), 0.836516, 1e-5);
   ASSERT_NEAR(a.getZ(), 0.5, 1e-5);
 
-  a = reinhartDir(107, mf);
+  a = reinhartCenterDir(107, mf);
   ASSERT_NEAR(a.getX(), -0.371572, 1e-5);
   ASSERT_NEAR(a.getY(), 0.643582, 1e-5);
   ASSERT_NEAR(a.getZ(), 0.669131, 1e-5);
 
   mf = 3;
 
-  a = reinhartDir(1, mf);
+  a = reinhartCenterDir(1, mf);
   ASSERT_NEAR(a.getX(), 0.0, 1e-5);
   ASSERT_NEAR(a.getY(), 0.999333, 1e-5);
   ASSERT_NEAR(a.getZ(), 0.036522, 1e-5);
 
 
-  a = reinhartDir(14, mf);    
+  a = reinhartCenterDir(14, mf);
   ASSERT_NEAR(a.getX(), 0.787485, 1e-5);
   ASSERT_NEAR(a.getY(), 0.615251, 1e-5);
   ASSERT_NEAR(a.getZ(), 0.036522, 1e-5);
 
   
-  a = reinhartDir(62, mf);
+  a = reinhartCenterDir(62, mf);
   ASSERT_NEAR(a.getX(), -0.898194, 1e-5);
   ASSERT_NEAR(a.getY(), -0.438079, 1e-5);
   ASSERT_NEAR(a.getZ(), 0.036522, 1e-5);
 
-  a = reinhartDir(107, mf);
+  a = reinhartCenterDir(107, mf);
   ASSERT_NEAR(a.getX(), 0.893402, 1e-5);
   ASSERT_NEAR(a.getY(), 0.435741, 1e-5);
   ASSERT_NEAR(a.getZ(), 0.109371, 1e-5);
     
 }
 
+
+TEST(ReinhartTest, binDir) {
+    size_t mf = 1;
+    Vector3D a = reinhartDir(1, 1, 0, 0.5); // Patch in first row
+    ASSERT_NEAR(a.getX(), 0.0, 1e-2);
+    ASSERT_NEAR(a.getY(), 1, 1e-2);
+    ASSERT_NEAR(a.getZ(), 0, 1e-2);
+    
+    a = reinhartDir(1, mf, 1, 0.5); // Patch in first row
+    ASSERT_NEAR(a.getZ(), sin(RADIANS(12.0)) , 1e-2);
+    
+    mf = 2;
+    a = reinhartDir(1, 1, 0, 0.5); // Patch in first row
+    ASSERT_NEAR(a.getX(), 0.0, 1e-2);
+    ASSERT_NEAR(a.getY(), 1, 1e-2);
+    ASSERT_NEAR(a.getZ(), 0, 1e-2);
+    
+    a = reinhartDir(1, mf, 1, 0.5); // Patch in first row
+    ASSERT_NEAR(a.getZ(), sin(RADIANS(6.0)) , 1e-2);
+    
+}
 
 TEST(ReinhartTest, binSolidAngle) {
 
@@ -164,3 +186,18 @@ TEST(ReinhartTest, binSolidAngle) {
   }
 
 }
+
+TEST(ReinhartTest, Rfindrow){
+    const size_t tnaz[7] = { 30, 30, 24, 24, 18, 12, 6 };
+    size_t npatch = 0;
+    for(size_t nrow = 0; nrow < 7; nrow++){
+        for(size_t i = 1; i<= tnaz[nrow]; i++){            
+            ASSERT_EQ(Rfindrow(npatch+1,1),nrow);
+            npatch++;
+        }
+    }
+    // Polar Cap
+    ASSERT_EQ(Rfindrow(0,npatch+1,1),7);
+    
+}
+
