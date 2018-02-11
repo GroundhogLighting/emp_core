@@ -53,6 +53,14 @@ size_t raccum(size_t r, size_t MF);
  */
 size_t nReinhartBins(int MF);
 
+//! Calculates the MF number for a certain number of bins
+/*!
+ @author German Molina
+ @param The number of bins
+ @return the MF number
+ */
+size_t mfFromNBins(const int nbins);
+
 //! Returns the row on which a patch is located
 /*!
  Counts from 0

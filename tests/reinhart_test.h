@@ -59,6 +59,21 @@ TEST(ReinhartTest, NRBins) {
   ASSERT_EQ(nReinhartBins(10), 14402);
 }
 
+
+TEST(ReinhartTest, mfFromNBins) {
+    
+    ASSERT_EQ(1, mfFromNBins(146));
+    ASSERT_EQ(2, mfFromNBins(578));
+    ASSERT_EQ(3, mfFromNBins(1298));
+    ASSERT_EQ(4, mfFromNBins(2306));
+    ASSERT_EQ(5, mfFromNBins(3602));
+    ASSERT_EQ(6, mfFromNBins(5186));
+    ASSERT_EQ(7, mfFromNBins(7058));
+    ASSERT_EQ(8, mfFromNBins(9218));
+    ASSERT_EQ(9, mfFromNBins(11666));
+    ASSERT_EQ(10, mfFromNBins(14402));
+}
+
 TEST(ReinhartTest, binCenterDir) {
   size_t mf = 1;
 

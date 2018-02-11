@@ -26,8 +26,10 @@ bool Weather::fillFromJSON(json * j)
 	filled = true;
 
 	json d = j->at("data").get<json>();
-	
-	for (size_t i = 0; i < 8760; i++) {
+    size_t nData = d.size(); 
+    
+	for (size_t i = 0; i < nData; i++) {
+        data.push_back( HourlyData() );
 		data[i].month = d[i].at("month").get<int>();
 		data[i].day = d[i].at("day").get<int>();
 		data[i].hour = d[i].at("hour").get<double>();

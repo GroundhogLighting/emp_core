@@ -16,6 +16,9 @@
 #include "./tests/matrix4x4_test.h"
 #include "./tests/reinhart_test.h"
 #include "./tests/radiance_test.h"
+#include "./tests/4cm_test.h"
+#include "./tests/DDC_test.h"
+#include "./tests/genperezskyvec_test.h"
 
 #ifdef _DEBUG
 #include <stdlib.h>

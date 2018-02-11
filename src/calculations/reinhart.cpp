@@ -48,6 +48,21 @@ size_t nReinhartBins(int MF)
   return 1+raccum(7*MF+1, MF);
 }
 
+size_t mfFromNBins(const int nbins)
+{
+    size_t mf = 1;
+    size_t currentNBins = nReinhartBins(mf);
+    
+    while( nbins >= currentNBins ){
+        if(nbins == currentNBins)
+            return mf;
+        
+        currentNBins = nReinhartBins(++mf);
+        
+    }
+    return -1;
+}
+
 size_t Rfindrow(size_t r, size_t rem, size_t MF)
 {
   size_t rnazr = rnaz(r, MF);

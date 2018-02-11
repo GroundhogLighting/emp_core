@@ -81,9 +81,9 @@ bool Matrix::multiply(Matrix * m, Matrix * res)
     if (NCOLS != m->nrows())
         throw std::invalid_argument("Size mismatch between matrices when trying to multiply()");
     
-    
     const size_t ncols = m->ncols();
     const size_t aux = m->nrows();
+    
     // Check size consistency with res
     if(res->ncols() != m->ncols() || res->nrows() != NROWS){
         WARN(msg, "Size mismatch between resulting matrix and factors... resizing results");
@@ -102,5 +102,38 @@ bool Matrix::multiply(Matrix * m, Matrix * res)
     }
     
     return true;
+}
+
+bool Matrix::multiplyToColumn(Matrix * vec, size_t col, Matrix * res)
+{
+    if ( 1 != vec->ncols())
+        throw std::invalid_argument("vector needs to have only one column multiplyToLocation()");
+    
+    // Check size consistency with m
+    if (NCOLS != vec->nrows())
+        throw std::invalid_argument("Size mismatch between matrices when trying to multiply()");
+    
+    // Check size consistency with res
+    if(res->ncols() <= col || res->nrows() != NROWS){
+        WARN(msg, "Size mismatch between resulting matrix and factors... resizing results");
+        res->resize(NROWS,col);
+    }
+    
+    // Multiply
+    const size_t ncols = vec->nrows();
+    for (int row = 0; row < NROWS; row++) {
+        double v = 0;
+        for (int i = 0; i < ncols; i++) {
+            v += (data[row][i] * (*vec)[i]->at(0));
+        }
+        (*res)[row]->at(col) = v;
+    }
+    
+    return true;
+}
+
+void Matrix::setElement(size_t row, size_t col, double value)
+{
+    data[row][col] = value;
 }
 

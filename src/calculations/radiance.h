@@ -42,7 +42,7 @@ extern "C" {
 typedef float COLORV;
 typedef COLORV  COLOR[3];    /* red, green, blue (or X,Y,Z) */
 
-#define RREAL float
+#define RREAL double
 typedef RREAL  FVECT[3];
 
 /* Arrange so double's come first for optimal alignment */
@@ -122,6 +122,27 @@ bool rtrace_i( RTraceOptions * options, char * octname, std::string amb, std::ve
 @param[in] options The OconvOptions set
 @param[in] exporter The RadianceExporter that will write all the necessary geometry
 @todo Lights on
+@return success
 */
 bool oconv(std::string octreeName, OconvOptions * options, RadExporter exporter);
 
+//! Calculates a single sky vector according to the Perez model
+/*!
+ @author German Molina
+ @return success
+ @param month The month of the year
+ @param day The day of the month
+ @param hour The hour of the day
+ @param direct The direct normal irradiance
+ @param diffuse The diffuse horizontal irradiance
+ @param albedo The albedo in the location
+ @param latitude The latitude
+ @param longitude The longitude
+ @param standardMeridian The standard meridian
+ @param skyMF The sky subdivition scheme
+ @param sunOnly Option for avoiding the sky, calculating only the sun
+ @param sharpSun An option to use the -5 option in gendaymtx
+ @param rotation Rotate the sky (in degrees)
+ @param[out] skyVec The resulting sky vector
+ */
+bool genPerezSkyVector(int month, int day, float hour, float direct, float diffuse, float albedo, float latitude, float longitude, float standardMeridian, int skyMF, bool sunOnly, bool sharpSun, float rotation, ColorMatrix * skyVec);

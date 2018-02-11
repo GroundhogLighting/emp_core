@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config_constants.h"
 #include "common/utilities/stringutils.h"
 #include "os_definitions.h"
+#include "./gendaymtx.h"
 
 
 /*
@@ -74,7 +75,6 @@ bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool 
     std::string ropts = options->getInlineVersion();
     
     std::string command = "rcontrib -h " + v + mode + ropts + " -e MF:"+ std::to_string(mf) + " -f reinhart.cal -b rbin -bn Nrbins -m " + std::string(modifier) + " " + octname + " > " + rgbfile ;
-    
     
     // Create the file
     FILE *rt = POPEN(&command[0], "w");
@@ -328,4 +328,108 @@ bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
 
     return true;
 }
+
+bool genPerezSkyVector(int month, int day, float hour, float direct, float diffuse, float albedo, float latitude, float longitude, float standardMeridian, int skyMF, bool sunOnly, bool sharpSun, float rotate, ColorMatrix * skyVec)
+{
+    double	rotation = rotate;		/* site rotation (degrees) */
+    int	dir_is_horiz;		/* direct is meas. on horizontal? */
+    float	*mtx_data = NULL;	/* our matrix data */
+    int	ntsteps = 0;		/* number of rows in matrix */
+    int	step_alloc = 0;
+    int	mo = month; int da = day;			/* month (1-12) and day (1-31) */
+    double	hr = hour;			/* hour (local standard time) */
+    double	dir = direct, dif=diffuse;		/* direct and diffuse values */
+    int	mtx_offset;
+    
+    s_latitude = latitude;
+    s_longitude = longitude;
+    s_meridian = standardMeridian;    
+    
+    
+    // Get options
+    grefl[0] = grefl[1] = grefl[2] = albedo;
+    rhsubdiv = skyMF;
+    if(sunOnly){
+        skycolor[0] = skycolor[1] = skycolor[0] = 0;
+    }
+    
+    if(sharpSun){
+        nsuns = 1;
+        fixed_sun_sa = PI/360.*0.533;
+        fixed_sun_sa *= fixed_sun_sa*PI;
+    }
+    
+    switch (input) {        /* translate units */
+        case 1:
+            input = 1;        /* radiometric quantities */
+            dir_is_horiz = 0;    /* direct is perpendicular meas. */
+            break;
+        case 2:
+            input = 1;        /* radiometric quantities */
+            dir_is_horiz = 1;    /* solar measured horizontally */
+            break;
+        case 3:
+            input = 2;        /* photometric quantities */
+            dir_is_horiz = 0;    /* direct is perpendicular meas. */
+            break;
+        default:
+            FATAL(x,"Impossible input format");
+            return false;
+    }
+    
+    /* START CALCULATION */
+    
+    rh_init();			/* initialize sky patches */
+
+        /* convert quantities to radians */
+    s_latitude = DegToRad(s_latitude);
+    s_longitude = DegToRad(s_longitude);
+    s_meridian = DegToRad(s_meridian);
+    
+    
+    double		sda, sta;
+                /* make space for next time step */
+    mtx_offset = 3*nskypatch*ntsteps++;
+    if (ntsteps > step_alloc) {
+        step_alloc += (step_alloc>>1) + ntsteps + 7;
+        mtx_data = resize_dmatrix(mtx_data, step_alloc, nskypatch);
+    }
+    if (dif <= 1e-4) { // it is night
+        memset(mtx_data+mtx_offset, 0, sizeof(float)*3*nskypatch);
+    }else { // it is daytime
+        /* compute solar position */
+        julian_date = jdate(mo, da);
+        sda = sdec(julian_date);
+        sta = stadj(julian_date);
+        altitude = salt(sda, hr+sta);
+        azimuth = sazi(sda, hr+sta) + PI - DegToRad(rotation);
+        /* convert measured values */
+        if (dir_is_horiz && altitude > 0.)
+            dir /= sin(altitude);
+        if (input == 1) {
+            dir_irrad = dir;
+            diff_irrad = dif;
+        } else /* input == 2 */ {
+            dir_illum = dir;
+            diff_illum = dif;
+        }
+        /* compute sky patch values */
+        ComputeSky(mtx_data+mtx_offset);
+        AddDirect(mtx_data+mtx_offset);        
+    }
+    
+    
+    /* Translate values from mtx_data into ColorMatrix */
+    size_t nBins = nReinhartBins(skyMF);
+    size_t aux = 0;
+    for(size_t bin=0; bin < nBins; bin++){
+        skyVec->redChannel()->setElement(bin,0,mtx_data[aux++]);
+        skyVec->greenChannel()->setElement(bin,0,mtx_data[aux++]);
+        skyVec->blueChannel()->setElement(bin,0,mtx_data[aux++]);
+    }
+
+    return true;
+}
+
+
 

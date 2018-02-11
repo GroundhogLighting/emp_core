@@ -65,3 +65,40 @@ TEST(Matrix_TEST, Multiplication) {
     ASSERT_EQ(res[1]->at(0),90);
     ASSERT_EQ(res[1]->at(1),-23);
 }
+
+
+TEST(Matrix_TEST, MultiplyLocate) {
+    
+    int nrows = 5;
+    int ncols = 5;
+    int destCol = rand()%ncols;
+    
+    Matrix res = Matrix(nrows,ncols);
+    Matrix res2 = Matrix(nrows,1);
+    Matrix A = Matrix(nrows,ncols);
+    Matrix b = Matrix(nrows,1);
+    
+    // Fill with random
+    for(int row=0; row < nrows; row++){
+        b[row]->at(0)=rand();
+        for(int col=0; col < ncols; col++){
+            A[row]->at(col)=rand();
+        }
+    }
+    
+    
+    A.multiply(&b,&res2);
+    A.multiplyToColumn(&b,destCol,&res);
+        
+    // Check results
+    for(int row = 0; row<nrows; row++){
+        for(int col = 0; col < ncols; col++){
+            if(col == destCol){
+                ASSERT_EQ(res2[row]->at(0),res[row]->at(col));
+            }else{
+                ASSERT_EQ(res[row]->at(col),0.0);
+            }
+        }
+    }
+    
+}

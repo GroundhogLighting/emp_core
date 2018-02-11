@@ -88,7 +88,16 @@ public:
      @return success
      */
     bool multiply(ColorMatrix * m, ColorMatrix * res);
-        
+    
+    //! Multiplies a vector (Nx1 sized matrix) by a matrix and puts the result in a column of another matrix
+    /*!
+     @author German Molina
+     @param[in] vec A pointer to the Vector
+     @param[in] col The column of res where to put the answer
+     @param[out] res The resulting matrix
+     @return success
+     */
+    bool multiplyToColumn(ColorMatrix * vec, size_t col, ColorMatrix * res);
     
     //! Resizes the matrix to new sizes
     /*!

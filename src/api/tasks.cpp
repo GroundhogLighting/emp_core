@@ -20,7 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "./tasks.h"
 
-#include "calculations/tasks.h"
+#include "calculations/tasks/RTraceTask.h"
+#include "calculations/tasks/OconvTask.h"
 #include "writers/rad/tasks.h"
 
 Task * workplaneIlluminanceFactory(lua_State * L)

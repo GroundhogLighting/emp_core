@@ -21,7 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "./radiance_core.h"
 #include "calculations/radiance.h"
 #include "../common.h"
-#include "calculations/tasks.h"
+#include "calculations/tasks/RTraceTask.h"
+#include "calculations/tasks/OconvTask.h"
 
 int oconv_command(lua_State * L)
 {

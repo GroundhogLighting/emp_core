@@ -96,5 +96,22 @@ public:
      */
     bool multiply(Matrix * m, Matrix * res);
 
+    //! Multiplies a vector (Nx1 sized matrix) by a matrix and puts the result in a column of another matrix
+    /*!
+     @author German Molina
+     @param[in] vec A pointer to the Vector
+     @param[in] col The column of res where to put the answer
+     @param[out] res The resulting matrix
+     @return success
+     */
+    bool multiplyToColumn(Matrix * vec, size_t col, Matrix * res);
 
+    
+    //! Sets a certain element to a certain value
+    /*!
+    @param nrow The row number of the element
+    @param ncol The column number of the element
+    @param value The value to set
+    */
+    void setElement(size_t nrow, size_t ncol, double value);
 };

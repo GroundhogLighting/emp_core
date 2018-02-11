@@ -13,7 +13,8 @@ project "emp_tests"
         "../main_test.cpp",
         "../main_test.h",
         "../src/**",
-        "../tests/*.h"
+        "../tests/*.h",
+        -- third_party_dir.."/Radiance/src/gen/sun.c" -- For generating sky vectors    
     }
    
     includedirs{
@@ -21,13 +22,18 @@ project "emp_tests"
         third_party_dir,
         third_party_dir.."/intelTBB/include",
         lua_dir,
-        google_test_dir.."/include",                     
+        google_test_dir.."/include",  
+        rad_common,
+        rad_rt                   
     }  
 
     links {
         "tbb_debug",
         "GoogleTest",
-        "Lua",        
+        "Lua",  
+        --"radiance",
+        --"raycalls",
+        "rtrad"
     }  
 
 
@@ -70,8 +76,8 @@ project "emp_tests"
     includedirs{
         third_party_dir.."/nvwa/nvwa",     
     }
-    buildoptions {
-        "-Wl,-no_pie"            
-    }
+    --buildoptions {
+    --    "-Wl,-no_pie"            
+    --}
 
 
