@@ -95,7 +95,7 @@ int rtrace_command(lua_State * L)
     }
 
     // Create Task
-    RTraceTask * task = new RTraceTask(model, options, &otherOptions, wp, &oconvOptions);
+    RTraceTask * task = new RTraceTask(model, options, wp, &oconvOptions);
     
     // Need an independent TaskManager for this
     TaskManager taskManager = TaskManager();
@@ -104,16 +104,16 @@ int rtrace_command(lua_State * L)
     taskManager.solve(&results);
 
     // Report
-    for (auto rayset : task->rays) {
-        for (auto ray : rayset) {
+    
+    for (auto ray : *(task->rays)) {
 
-          // USE RESULTS
-          double red = colval(ray.rcol, RED);
-          double green = colval(ray.rcol, GRN);
-          double blue = colval(ray.rcol, BLU);
-          std::cout << red << ", " << green << ", " << blue << ", " << " === " << blue*179.0 << std::endl;
-        }
+      // USE RESULTS
+      double red = colval(ray.rcol, RED);
+      double green = colval(ray.rcol, GRN);
+      double blue = colval(ray.rcol, BLU);
+      std::cout << red << ", " << green << ", " << blue << ", " << " === " << blue*179.0 << std::endl;
     }
+
 
     
   return 0;

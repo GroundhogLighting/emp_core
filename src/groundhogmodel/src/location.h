@@ -51,12 +51,7 @@ public:
 	@author German Molina	
 	*/
 	Location();
-	
-	//! Destroys a Location object
-	/*!
-	@author German Molina
-	*/
-	~Location();
+		
 
 	//! Retrieves the latitude
 	/*!
@@ -164,6 +159,20 @@ public:
 	@return The data
 	*/
 	HourlyData * getHourlyData(size_t hour);
+    
+    //! Add hourly data
+    /*!
+     @author German Molina
+     @param h The hourly data to add
+     */
+    void addHourlyData(HourlyData h);
+    
+    //! Gets the number of samples in the weather data
+    /*!
+     @author German Molina
+     @return The weather data length
+     */
+    size_t getWeatherSize();
 
 	//! Checks if the weather has been filled with data
 	/*!

@@ -137,3 +137,9 @@ void Matrix::setElement(size_t row, size_t col, double value)
     data[row][col] = value;
 }
 
+
+double Matrix::getElement(size_t row, size_t col)
+{
+    return data[row][col];
+}
+

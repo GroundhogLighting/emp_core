@@ -63,7 +63,7 @@ bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool 
     // Build the command
     std::string rgbfile = octname + std::to_string(rand()) + std::string(".mtx");
     
-    std::string mode;
+    std::string mode = "";
     if (imm_irrad) {
         mode = " -I ";
     }
@@ -95,7 +95,7 @@ bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool 
         size_t nsensor = 0;
         size_t nbins = nReinhartBins(mf);
         
-        if(result->ncols() != nsensors || result->nrows() != nbins){
+        if(result->nrows() != nsensors || result->ncols() != nbins){
             WARN(msg,"Inconsistent size of result matrix when RCONTRIB... resizing");
             result->resize(nsensors,nbins);
         }
@@ -138,7 +138,7 @@ bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool 
     return true;
 }
 
-bool rtrace(RTraceOptions * options, char * octname, bool do_irradiance, bool imm_irrad, std::string amb, std::vector<RAY> * rays)
+bool rtrace(RTraceOptions * options, char * octname, bool do_irradiance, bool imm_irrad, std::string amb, std::vector<RAY> * rays, ColorMatrix * result)
 {
     // Build the command
     std::string rgbfile = octname + std::to_string(rand()) + std::string(".rgb");
@@ -166,24 +166,28 @@ bool rtrace(RTraceOptions * options, char * octname, bool do_irradiance, bool im
     PCLOSE(rt);
     
     // Read results back
-    FOPEN(result, &rgbfile[0], "r");
+    FOPEN(resultFile, &rgbfile[0], "r");
     
-    if (result != NULL)
+    if (resultFile != NULL)
     {
         float r;
         float g;
         float b;
         
         size_t i = 0;
-        while (FSCANF(result, "%f %f %f", &r, &g, &b) != EOF)
+        while (FSCANF(resultFile, "%f %f %f", &r, &g, &b) != EOF)
         {
-            rays->at(i).rcol[RED] = r;
-            rays->at(i).rcol[GRN] = g;
-            rays->at(i).rcol[BLU] = b;
+            result->redChannel()->setElement(i,0,r);
+            result->greenChannel()->setElement(i,0,g);
+            result->blueChannel()->setElement(i,0,b);
+            //rays->at(i).rcol[RED] = r;
+            //rays->at(i).rcol[GRN] = g;
+            //rays->at(i).rcol[BLU] = b;
+            
             i++;
         }
         
-        fclose(result);
+        fclose(resultFile);
     }
     else {
         FATAL(err,"Unable to open RGB result file '" + rgbfile +"' while soliving RTraceTask");
@@ -269,15 +273,15 @@ bool rtrace(RTraceOptions * options, char * octname, bool do_irradiance, bool im
 }
 
 
-bool rtrace_i( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays)
+bool rtrace_i( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays, ColorMatrix * result)
 {
-    return rtrace( options, octname, true, false, amb, rays);
+    return rtrace( options, octname, true, false, amb, rays, result);
 }
 
 
-bool rtrace_I( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays)
+bool rtrace_I( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays, ColorMatrix * result)
 {
-    return rtrace(options, octname, false, true, amb, rays);
+    return rtrace(options, octname, false, true, amb, rays, result);
 }
 
 
@@ -287,6 +291,9 @@ bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
   	
     FILE *octree = POPEN(&command[0], "w");
     
+    // Avoid empty
+    std::cout << octname << std::endl;
+    
     // check sky
     if (options->getOption<bool>(OCONV_INCLUDE_SKY)) {
       std::string sky = options->getOption<std::string>(OCONV_SKY);
@@ -294,7 +301,8 @@ bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
         exporter.writeSky(octree);
       }
       else {
-        fprintf(octree, "!%s\n", &sky[0]);
+          fprintf(octree, "!%s\n", &sky[0]);
+          fprintf(octree, RADIANCE_SKY_COMPLEMENT);
       }
     }
 
@@ -331,45 +339,46 @@ bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
 
 bool genPerezSkyVector(int month, int day, float hour, float direct, float diffuse, float albedo, float latitude, float longitude, float standardMeridian, int skyMF, bool sunOnly, bool sharpSun, float rotate, ColorMatrix * skyVec)
 {
+    GenDayMtx g = GenDayMtx();
+    
     double	rotation = rotate;		/* site rotation (degrees) */
     int	dir_is_horiz;		/* direct is meas. on horizontal? */
     float	*mtx_data = NULL;	/* our matrix data */
-    int	ntsteps = 0;		/* number of rows in matrix */
+    //int	ntsteps = 1;		/* number of rows in matrix */
     int	step_alloc = 0;
     int	mo = month; int da = day;			/* month (1-12) and day (1-31) */
     double	hr = hour;			/* hour (local standard time) */
     double	dir = direct, dif=diffuse;		/* direct and diffuse values */
-    int	mtx_offset;
     
-    s_latitude = latitude;
-    s_longitude = longitude;
-    s_meridian = standardMeridian;    
+    g.s_latitude = latitude;
+    g.s_longitude = longitude;
+    g.s_meridian = standardMeridian;
     
     
     // Get options
-    grefl[0] = grefl[1] = grefl[2] = albedo;
-    rhsubdiv = skyMF;
+    g.grefl[0] = g.grefl[1] = g.grefl[2] = albedo;
+    g.rhsubdiv = skyMF;
     if(sunOnly){
-        skycolor[0] = skycolor[1] = skycolor[0] = 0;
+        g.skycolor[0] = g.skycolor[1] = g.skycolor[2] = 0;
     }
     
     if(sharpSun){
-        nsuns = 1;
-        fixed_sun_sa = PI/360.*0.533;
-        fixed_sun_sa *= fixed_sun_sa*PI;
+        g.nsuns = 1;
+        g.fixed_sun_sa = PI/360.0*0.533;
+        g.fixed_sun_sa *= g.fixed_sun_sa*PI;
     }
     
-    switch (input) {        /* translate units */
+    switch (g.input) {        /* translate units */
         case 1:
-            input = 1;        /* radiometric quantities */
+            g.input = 1;        /* radiometric quantities */
             dir_is_horiz = 0;    /* direct is perpendicular meas. */
             break;
         case 2:
-            input = 1;        /* radiometric quantities */
+            g.input = 1;        /* radiometric quantities */
             dir_is_horiz = 1;    /* solar measured horizontally */
             break;
         case 3:
-            input = 2;        /* photometric quantities */
+            g.input = 2;        /* photometric quantities */
             dir_is_horiz = 0;    /* direct is perpendicular meas. */
             break;
         default:
@@ -379,45 +388,43 @@ bool genPerezSkyVector(int month, int day, float hour, float direct, float diffu
     
     /* START CALCULATION */
     
-    rh_init();			/* initialize sky patches */
+    g.rh_init();			/* initialize sky patches */
 
         /* convert quantities to radians */
-    s_latitude = DegToRad(s_latitude);
-    s_longitude = DegToRad(s_longitude);
-    s_meridian = DegToRad(s_meridian);
+    g.s_latitude = DegToRad(g.s_latitude);
+    g.s_longitude = DegToRad(g.s_longitude);
+    g.s_meridian = DegToRad(g.s_meridian);
     
     
     double		sda, sta;
                 /* make space for next time step */
-    mtx_offset = 3*nskypatch*ntsteps++;
-    if (ntsteps > step_alloc) {
-        step_alloc += (step_alloc>>1) + ntsteps + 7;
-        mtx_data = resize_dmatrix(mtx_data, step_alloc, nskypatch);
+    if (1 > step_alloc) {
+        step_alloc += (step_alloc>>1) + 8;
+        mtx_data = g.resize_dmatrix(mtx_data, step_alloc, g.nskypatch);
     }
     if (dif <= 1e-4) { // it is night
-        memset(mtx_data+mtx_offset, 0, sizeof(float)*3*nskypatch);
+        memset(mtx_data, 0, sizeof(float)*3*g.nskypatch);
     }else { // it is daytime
         /* compute solar position */
-        julian_date = jdate(mo, da);
-        sda = sdec(julian_date);
-        sta = stadj(julian_date);
-        altitude = salt(sda, hr+sta);
-        azimuth = sazi(sda, hr+sta) + PI - DegToRad(rotation);
+        g.julian_date = g.jdate(mo, da);
+        sda = g.sdec(g.julian_date);
+        sta = g.stadj(g.julian_date);
+        g.altitude = g.salt(sda, hr+sta);
+        g.azimuth = g.sazi(sda, hr+sta) + PI - DegToRad(rotation);
         /* convert measured values */
-        if (dir_is_horiz && altitude > 0.)
-            dir /= sin(altitude);
-        if (input == 1) {
-            dir_irrad = dir;
-            diff_irrad = dif;
+        if (dir_is_horiz && g.altitude > 0.)
+            dir /= sin(g.altitude);
+        if (g.input == 1) {
+            g.dir_irrad = dir;
+            g.diff_irrad = dif;
         } else /* input == 2 */ {
-            dir_illum = dir;
-            diff_illum = dif;
+            g.dir_illum = dir;
+            g.diff_illum = dif;
         }
         /* compute sky patch values */
-        ComputeSky(mtx_data+mtx_offset);
-        AddDirect(mtx_data+mtx_offset);        
+        g.ComputeSky(mtx_data);
+        g.AddDirect(mtx_data);
     }
-    
     
     /* Translate values from mtx_data into ColorMatrix */
     size_t nBins = nReinhartBins(skyMF);

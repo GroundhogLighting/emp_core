@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -42,7 +42,8 @@ private:
 	std::string name; //!< Name of the workplane
 	std::vector <Polygon3D * > polygons; //!< The polygons in the workplane.
     double maxArea = 0.25; //!< The desired 'pixel' resolution when triangulating
-
+    double maxAspectRatio = 1.3; //!< The desired maximum aspect ratio
+    
 public:
 
 	//! Creates an empty Workplane object
@@ -101,4 +102,11 @@ public:
     @return the area
     */
     double getMaxArea();
+    
+    //! Retrieves the maximum aspect ratio for each pixel in the grid
+    /*!
+     @author German Molina
+     @return the area
+     */
+    double getMaxAspectRatio();
 };

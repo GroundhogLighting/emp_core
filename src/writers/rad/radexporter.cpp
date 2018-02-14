@@ -753,7 +753,7 @@ bool RadExporter::writeWeather(const char * dir, const std::string filename)
 		file << h->month << " ";
 		file << h->day << " ";
 		file << h->hour << " ";
-		file << h->direct_nomal << " ";
+		file << h->direct_normal << " ";
 		file << h->diffuse_horizontal << "\n";
 	}
 

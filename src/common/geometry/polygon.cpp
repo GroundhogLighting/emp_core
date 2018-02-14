@@ -309,7 +309,7 @@ bool Polygon3D::getInverseAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3
     if (std::abs(det) < EMP_TINY) {
 		FATAL(errorMessage,"Determinant is zero when trying to ");
 		normal.print();
-		return NULL;
+		return false;
 	}
 
 	// CALCULATE INVERSE MATRIX

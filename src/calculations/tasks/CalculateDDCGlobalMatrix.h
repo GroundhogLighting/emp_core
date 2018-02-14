@@ -30,7 +30,7 @@ public:
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     ColorMatrix result; //!< The resulting matrix
-    RTraceOptions options; //!< The options passed to RContrib
+    RTraceOptions * options; //!< The options passed to RContrib
     
     //* Process a Workplane
     /*!
@@ -39,21 +39,18 @@ public:
     CalculateDDCGlobalMatrix(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions)
     {
         
-        std::string name = "Calculate DDCGlobalMatrix";
+        std::string name = "DDC Global Matrix";
         setName(&name);
         model = theModel;
         mf = theMF;
-        options = *theOptions;
+        options = theOptions;
         
         // Dependency 0: oconv task
         CreateDDCGlobalOctree * oconvTask = new CreateDDCGlobalOctree(model);
         addDependency(oconvTask);
         
-        // Dependecy 1: Triangulate workplane
-        double maxArea = 0.25; //otherOptions.getOption<double>("max_area");
-        double maxAspectRatio = 1.3; //otherOptions.getOption<double>("max_aspect_ratio");
-        
-        TriangulateWorkplane * triangulateWorkplaneTask = new TriangulateWorkplane(wp, maxArea, maxAspectRatio);
+        // Dependecy 1: Triangulate workplane        
+        TriangulateWorkplane * triangulateWorkplaneTask = new TriangulateWorkplane(wp);
         addDependency(triangulateWorkplaneTask);
         
         
@@ -68,11 +65,11 @@ public:
     CalculateDDCGlobalMatrix(GroundhogModel * theModel, std::vector<RAY> * theRays, int theMF, RTraceOptions * theOptions)
     {
         
-        std::string name = "Calculate DDCGlobalMatrix";
+        std::string name = "DDC Global Matrix";
         setName(&name);
         model = theModel;
         mf = theMF;
-        options = *theOptions;
+        options = theOptions;
         
         // Dependency 0: oconv task
         CreateDDCGlobalOctree * oconvTask = new CreateDDCGlobalOctree(model);
@@ -107,7 +104,8 @@ public:
         if(workplane != nullptr){
             rays = &(static_cast<TriangulateWorkplane *>(getDependencyRef(1))->rays);
         }
-        rcontrib(&options, &octname[0], false, true, rays, mf, "ground_glow", false, &result);
+        result.resize(rays->size(),nReinhartBins(mf));
+        rcontrib(options, &octname[0], false, true, rays, mf, "ground_glow", false, &result);
         
         return true;
     }

@@ -26,7 +26,7 @@
 #include "calculations/oconv_options.h"
 #include "calculations/radiance.h"
 #include "writers/rad/radexporter.h"
-#include "reinhart.h"
+#include "../reinhart.h"
 
 class OconvTask : public Task {
     

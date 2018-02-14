@@ -8,7 +8,7 @@ TEST(FourCM, UnitDirectSkyLightSources)
     Create4CMDirectSkyOctree * task = new Create4CMDirectSkyOctree(&model);
     tm.addTask(task);
     
-    tm.solve(NULL);
+    tm.solve();
     
     std::string octname = task->octreeName;
     
@@ -29,12 +29,12 @@ TEST(FourCM, UnitDirectSkyLightSources)
     
     
     std::string amb = "./test_outputs/aa.amb";
-    
-    rtrace_I(&options, &octname[0], &amb[0], &rays);
+    ColorMatrix result = ColorMatrix(1,1);
+    rtrace_I(&options, &octname[0], &amb[0], &rays,&result);
     
     remove(&amb[0]);
     
-    ASSERT_NEAR(RAD(rays.at(0).rcol),PI,1e-3);
+    ASSERT_NEAR(result.redChannel()->getElement(0,0),PI,1e-3);
 }
 
 TEST(FourCM, DirectSkyMatrix)

@@ -290,7 +290,7 @@ public:
         generatesResults = true;
         
         // Add the dependency 0
-        TriangulateWorkplane * triangulateDependency = new TriangulateWorkplane(workplane, maxArea, maxAspectRatio);
+        TriangulateWorkplane * triangulateDependency = new TriangulateWorkplane(workplane);
         addDependency(triangulateDependency);
         exportName = name;
         

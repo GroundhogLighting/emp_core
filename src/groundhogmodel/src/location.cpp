@@ -30,9 +30,6 @@ Location::Location() {
 	timeZone = 0;
 }
 
-Location::~Location() {
-}
-
 double Location::getLatitude() {
 	return latitude;
 }
@@ -98,4 +95,14 @@ bool Location::hasWeather()
 HourlyData * Location::getHourlyData(size_t hour)
 {
 	return &(weather.data[hour]);
+}
+
+size_t Location::getWeatherSize()
+{
+    return weather.data.size();
+}
+
+void Location::addHourlyData(HourlyData h)
+{
+    weather.data.push_back(h);
 }

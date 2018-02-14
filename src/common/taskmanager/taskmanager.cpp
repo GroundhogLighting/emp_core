@@ -73,7 +73,7 @@ size_t TaskManager::addTask(Task * t)
 
     // Check for mutex    
     for (size_t i = 0; i < currentIndex; i++) {
-      if (tasks[i]->isMutex(t)) {
+      if ( checkMutex(tasks[i],t) ) {
         tasks[i]->addDependency(t);          
       }
     }
@@ -116,7 +116,14 @@ bool TaskManager::solve(json * results)
 	{
 		nodes.push_back(tbb::flow::continue_node<tbb::flow::continue_msg>(g, [=](const tbb::flow::continue_msg &) {
           try {
-              return tasks[i]->solve();
+#ifdef _DEBUG
+              std::cout << "Starting -> " << *(tasks[i]->getName()) << std::endl;
+#endif
+              bool success= tasks[i]->solve();
+#ifdef _DEBUG
+              std::cout << "Ended -> " << *(tasks[i]->getName()) << std::endl;
+#endif
+              return success;
           }
           catch (int e) {
             throw 999;
@@ -163,12 +170,12 @@ void TaskManager::print(char * filename)
 {
 
   std::ofstream file;
-  if (filename != NULL) {
+  if (filename != nullptr) {
     file.open(filename);
   }
 
   
-  if (filename == NULL) {
+  if (filename == nullptr) {
     std::cout << "digraph {\n";
   }
   else {
@@ -180,7 +187,7 @@ void TaskManager::print(char * filename)
       size_t nDep = task->countDependencies();
       for (size_t j = 0; j < nDep; j++) {                   
         std::string ln = "\"" + *(task->getDependencyRef(j)->getName()) + "\" -> \"" + *(task->getName())+ "\"";
-        if (filename == NULL) {
+        if (filename == nullptr) {
           std::cout << ln << ";\n";
         }
         else {
@@ -188,7 +195,7 @@ void TaskManager::print(char * filename)
         }    
       }		
   }
-  if (filename == NULL) {
+  if (filename == nullptr) {
     std::cout << "}\n";
   }
   else {
@@ -202,6 +209,11 @@ void TaskManager::print(char * filename)
 
 }
 
+bool TaskManager::solve()
+{
+    return solve(nullptr);
+}
+
 bool TaskManager::compareTasks(Task * a, Task * b)
 {
 	// Check if same class.
@@ -211,6 +223,18 @@ bool TaskManager::compareTasks(Task * a, Task * b)
     // Check deeper
 	return a->isEqual(b);
 }
+
+
+bool TaskManager::checkMutex(Task * a, Task * b)
+{
+    // Check if same class.
+    if (typeid(*a) != typeid(*b))
+        return false;
+    
+    // Check deeper
+    return a->isMutex(b);
+}
+
 
 void TaskManager::clean()
 {

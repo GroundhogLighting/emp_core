@@ -29,7 +29,7 @@ public:
     CreateDDCGlobalOctree(GroundhogModel * theModel)
     {
         
-        std::string name = "Create DDCGlobalOctree";
+        std::string name = "DDC Global Octree";
         setName(&name);
         model = theModel;        
         
@@ -39,7 +39,6 @@ public:
         
         OconvTask * oconvTask = new OconvTask(model,&oconvOptions);
         addDependency(oconvTask);// --> Dependency 0
-        
     }
     
     ~CreateDDCGlobalOctree()

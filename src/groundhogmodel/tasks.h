@@ -40,8 +40,6 @@ class TriangulateWorkplane : public Task {
 public:
     
     Workplane * workplane; //!< The workplane to triangulate
-    double maxArea; //!< The maximum area allowed for each triangle in the resulting Triangulation
-    double maxAspectRatio; //!< The maximum aspect ratio allowed for each triangle in the resulting Triangulation
     std::vector <RAY> rays; //!< The generated rays
     std::vector <Triangle> triangles; //!< The generated triangles
     
@@ -52,11 +50,9 @@ public:
      @param[in] area The maximum area allowed for each triangle in the final Triangulation
      @param[in] aspectRatio The maximum aspect ratio allowed for each triangle in the final Triangulation
      */
-    TriangulateWorkplane(Workplane * aWorkplane, double area, double aspectRatio)
+    TriangulateWorkplane(Workplane * aWorkplane)
     {
         workplane = aWorkplane;
-        maxArea = area;
-        maxAspectRatio = aspectRatio;
         
         // Always report this
         reportResults = true;
@@ -64,7 +60,7 @@ public:
         // It Does generate results
         generatesResults = true;
         
-        std::string name = "Triangulate workplane " + *(aWorkplane->getName()) + "-" +std::to_string(maxArea)+"_"+std::to_string(maxAspectRatio);
+        std::string name = "Triangulate workplane " + *(aWorkplane->getName());
         setName(&name);
         
     }
@@ -78,11 +74,7 @@ public:
      */
     bool isEqual(Task * t)
     {
-        return (
-                workplane == static_cast<TriangulateWorkplane *>(t)->workplane &&
-                maxArea == static_cast<TriangulateWorkplane *>(t)->maxArea &&
-                maxAspectRatio == static_cast<TriangulateWorkplane *>(t)->maxAspectRatio
-                );
+        return workplane == static_cast<TriangulateWorkplane *>(t)->workplane;
     }
     
     //! Solves the task
@@ -103,6 +95,9 @@ public:
             Triangulation * t = new Triangulation(p);
             triangulations.push_back(t);
         }
+        
+        double maxArea = workplane->getMaxArea();
+        double maxAspectRatio = workplane->getMaxAspectRatio();
         
         // Triangulate in parallel
         tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols, EMP_TRIANGULATION_GRAIN_SIZE),

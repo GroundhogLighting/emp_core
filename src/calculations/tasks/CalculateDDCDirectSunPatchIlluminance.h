@@ -20,32 +20,33 @@
  *****************************************************************************/
 
 #pragma once
-#include "radiance.h"
+#include "../radiance.h"
+#include "CalculateDDCDirectSkyMatrix.h"
 
 class CalculateDDCDirectSunPatchIlluminance : public Task {
 public:
     GroundhogModel * model; //!< The model
-    int skyMF; //!< The Reinhart sky subdivition scheme for the sky
-    int sunMF; //!< The Reinhart sky subdivition scheme for the sun
+    int mf; //!< The Reinhart sky subdivition scheme for the sky
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     ColorMatrix result; //!< The resulting matrix
-    Weather * weather; //!< Weather
+    RTraceOptions * options; //!< The options passed to rcontrib... will be modified
     
     //* Process a Workplane
     /*!
      @author German Molina
      */
-    CalculateDDCDirectSunPatchIlluminance(GroundhogModel * theModel, Workplane * wp, int theMF)
+    CalculateDDCDirectSunPatchIlluminance(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions)
     {
-        std::string name = "Calculate DDCDirectSkyIlluminance";
+        std::string name = "DDC Direct Sun Patch";
         setName(&name);
         model = theModel;
         mf = theMF;
         workplane = wp;
+        options = theOptions;
         
         // Dependency 0: matrix task
-        CalculateDDCDirectSkyMatrix * calcMatrixTask = new CalculateDDCDirectSkyMatrix(model,workplane,mf);
+        CalculateDDCDirectSkyMatrix * calcMatrixTask = new CalculateDDCDirectSkyMatrix(model,workplane,mf,options);
         addDependency(calcMatrixTask);                
     }
     
@@ -53,18 +54,19 @@ public:
     /*!
      @author German Molina
      */
-    CalculateDDCDirectSunPatchIlluminance(GroundhogModel * theModel, std::vector<RAY> * theRays, int theMF)
+    CalculateDDCDirectSunPatchIlluminance(GroundhogModel * theModel, std::vector<RAY> * theRays, int theMF, RTraceOptions * theOptions)
     {
-        std::string name = "Calculate DDCDirectSkyIlluminance";
+        std::string name = "DDC Direct Sun Patch";
         setName(&name);
         model = theModel;
         mf = theMF;
+        options = theOptions;
         
         // Set the rays
         rays = theRays;
         
         // Dependency 0: matrix task
-        CalculateDDCDirectSkyMatrix * calcMatrixTask = new CalculateDDCDirectSkyMatrix(model,rays,mf);
+        CalculateDDCDirectSkyMatrix * calcMatrixTask = new CalculateDDCDirectSkyMatrix(model,rays,mf,options);
         addDependency(calcMatrixTask);
         
     }
@@ -88,23 +90,10 @@ public:
     
     bool solve()
     {
-        if (!weather->hasData()){
-            FATAL(m,"No Weather Data when CalculateDDCDirectSunPatchIlluminance");
-            return false;
-        }
-        
-        ColorMatrix * DC = static_cast<CalculateDDCDirectSkyMatrix *>(getDependency(0));
+                
+        ColorMatrix * DC = &(static_cast<CalculateDDCDirectSkyMatrix *>(getDependencyRef(0))->result);
         size_t nBins = DC->ncols();
         ColorMatrix skyVector = ColorMatrix(nBins,1);
-        
-        // Make space for all results
-        size_t nSensors = DC->nrows();
-        size_t nSamples = weather->data.size();
-        result.resize(nSensors,nSamples);
-        
-        Matrix * red = result.redChannel();
-        Matrix * green = result.greenChannel();
-        Matrix * blue = result.blueChannel();
         
         Location * location = model->getLocation();
         float albedo = location->getAlbedo();
@@ -113,24 +102,25 @@ public:
         float meridian = location->getTimeZone()*(-15.0);
         double rotation = model -> getNorthCorrection();
         
+        // Make space for all results
+        size_t nSensors = DC->nrows();
+        size_t nSamples = location->getWeatherSize();
+        if (nSamples == 0){
+            FATAL(m,"No Weather Data when CalculateDDCDirectSunPatchIlluminance");
+            return false;
+        }
+        result.resize(nSensors,nSamples);
+        
         for(size_t timestep = 0 ; timestep < nSamples; timestep++ ){
-            HourlyData d = weather->data[i];
+            HourlyData * d = location->getHourlyData(timestep);
             
-            if(d.diffuse_horizontal < 1e-3){
-                // it is night... trivial solution
-                for(size_t i = 0; i < nSensors; i++){
-                    red[i].at(timestep) = 0.0;
-                    green[i].at(timestep) = 0.0;
-                    blue[i].at(timestep) = 0.0;
-                }
-            }else{
-                
+            if(d->diffuse_horizontal > 1e-4){
                 // Is day... calculate
-                genPerezSkyVector(d.month, d.day, d.hour, d.direct_normal, d.diffuse_horizontal, albedo, latitude, longitude, meridian, mf, true, false, rotation, &skyVector);
+                genPerezSkyVector(d->month, d->day, d->hour, d->direct_normal, d->diffuse_horizontal, albedo, latitude, longitude, meridian, mf, true, false, rotation, &skyVector);
                 
                 // Multiply
                 DC->multiplyToColumn(&skyVector,timestep,&result);
-            }
+            } // Else nothing... matrices are initialized in 0
         }
         
         return true;

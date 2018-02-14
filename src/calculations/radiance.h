@@ -90,7 +90,7 @@ bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool 
  @param[in] amb The name of the ambient file to use
  @param rays The place where the resulting rays will be stored
  */
-bool rtrace(RTraceOptions * options, char * octname, bool do_irrad, bool imm_irrad, std::string amb, std::vector<RAY> * rays);
+bool rtrace(RTraceOptions * options, char * octname, bool do_irrad, bool imm_irrad, std::string amb, std::vector<RAY> * rays, ColorMatrix * result);
 
 
 //! This function emulates the use of Radiance's RTRACE program with the -I option enabled
@@ -101,7 +101,7 @@ bool rtrace(RTraceOptions * options, char * octname, bool do_irrad, bool imm_irr
  @param[in] amb The name of the ambient file to use
  @param[out] rays The place where the resulting rays will be stored
  */
-bool rtrace_I( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays);
+bool rtrace_I( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays, ColorMatrix * result);
 
 
 //! This function emulates the use of Radiance's RTRACE program with the -i option enabled
@@ -112,7 +112,7 @@ bool rtrace_I( RTraceOptions * options, char * octname, std::string amb, std::ve
  @param[in] amb The name of the ambient file to use
  @param[out] rays The place where the resulting rays will be stored
  */
-bool rtrace_i( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays);
+bool rtrace_i( RTraceOptions * options, char * octname, std::string amb, std::vector<RAY> * rays, ColorMatrix * result);
 
 
 //! Creates an octree according to certain option

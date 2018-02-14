@@ -61,3 +61,8 @@ double Workplane::getMaxArea()
 {
   return maxArea;
 }
+
+double Workplane::getMaxAspectRatio()
+{
+    return maxAspectRatio;
+}

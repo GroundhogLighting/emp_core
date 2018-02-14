@@ -3,9 +3,9 @@
 project "emp_tests"
 
     kind "ConsoleApp"
-    buildoptions { '-std=c++11' }
+    buildoptions { '-std=c++11','-stdlib=libc++' }
     language "C++" 
-
+    runpathdirs { "." }
 
     targetdir "../bin/%{cfg.buildcfg}"
 
@@ -27,8 +27,7 @@ project "emp_tests"
         rad_rt                   
     }  
 
-    links {
-        "tbb_debug",
+    links {                
         "GoogleTest",
         "Lua",  
         --"radiance",
@@ -69,12 +68,20 @@ project "emp_tests"
 
     end
 
+    filter "configurations:Release"    
+    links {
+        "tbb"
+    }
+
     filter "configurations:Debug"
     files {
         third_party_dir.."/nvwa/nvwa/debug_new.cpp", 
     }
     includedirs{
         third_party_dir.."/nvwa/nvwa",     
+    }
+    links {
+        "tbb_debug"
     }
     --buildoptions {
     --    "-Wl,-no_pie"            

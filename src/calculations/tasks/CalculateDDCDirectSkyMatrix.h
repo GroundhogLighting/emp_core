@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "./CreateDDCDirectSkyOctree.h"
 
 class CalculateDDCDirectSkyMatrix : public Task {
 public:
@@ -30,29 +31,28 @@ public:
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     ColorMatrix result; //!< The resulting matrix
+    RTraceOptions * options; //!< The options passed to rcontrib... will be modified
     
     //* Process a Workplane
     /*!
      @author German Molina
      */
-    CalculateDDCDirectSkyMatrix(GroundhogModel * theModel, Workplane * wp, int theMF)
+    CalculateDDCDirectSkyMatrix(GroundhogModel * theModel, Workplane * wp, int theMF,RTraceOptions * theOptions)
     {
         
-        std::string name = "Calculate DDCGlobalMatrix";
+        std::string name = "DDC Direct Sky Matrix";
         setName(&name);
         model = theModel;
         mf = theMF;
         workplane = wp;
+        options = theOptions;
         
         // Dependency 0: oconv task
         CreateDDCGlobalOctree * oconvTask = new CreateDDCGlobalOctree(model);
         addDependency(oconvTask);
         
         // Dependecy 1: Triangulate workplane
-        double maxArea = 0.25; //otherOptions.getOption<double>("max_area");
-        double maxAspectRatio = 1.3; //otherOptions.getOption<double>("max_aspect_ratio");
-        
-        TriangulateWorkplane * triangulateWorkplaneTask = new TriangulateWorkplane(wp, maxArea, maxAspectRatio);
+        TriangulateWorkplane * triangulateWorkplaneTask = new TriangulateWorkplane(wp);
         addDependency(triangulateWorkplaneTask);
         
         
@@ -64,13 +64,14 @@ public:
     /*!
      @author German Molina
      */
-    CalculateDDCDirectSkyMatrix(GroundhogModel * theModel, std::vector<RAY> * theRays, int theMF)
+    CalculateDDCDirectSkyMatrix(GroundhogModel * theModel, std::vector<RAY> * theRays, int theMF,RTraceOptions * theOptions)
     {
         
-        std::string name = "Calculate DDCGlobalMatrix";
+        std::string name = "DDC Direct Sky Matrix";
         setName(&name);
         model = theModel;
         mf = theMF;
+        options = theOptions;
         
         // Dependency 0: oconv task
         CreateDDCDirectSkyOctree * oconvTask = new CreateDDCDirectSkyOctree(model);
@@ -100,17 +101,15 @@ public:
     bool solve()
     {
         std::string octname = static_cast<CreateDDCDirectSkyOctree *>(getDependencyRef(0))->octreeName;
-        RTraceOptions options = RTraceOptions();
-        options.setOption("ab",3);
-        options.setOption("dc",1);
-        options.setOption("dt",0);
+        options->setOption("ab",1);
         
         
         // If there is a workplane, get rays from triangulation
         if(workplane != nullptr){
             rays = &(static_cast<TriangulateWorkplane *>(getDependencyRef(1))->rays);
         }
-        rcontrib(&options, &octname[0], false, true, rays, mf, "ground_glow", true, &result);
+        result.resize(rays->size(),nReinhartBins(mf));
+        rcontrib(options, &octname[0], false, true, rays, mf, "ground_glow", false, &result);
         
         return true;
     }

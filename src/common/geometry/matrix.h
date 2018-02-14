@@ -114,4 +114,12 @@ public:
     @param value The value to set
     */
     void setElement(size_t nrow, size_t ncol, double value);
+    
+    //! Retrieves a certain element
+    /*!
+     @param nrow The row number of the element
+     @param ncol The column number of the element
+     @return the value of the element
+     */
+    double getElement(size_t nrow, size_t ncol);
 };

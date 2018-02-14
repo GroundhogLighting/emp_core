@@ -27,91 +27,91 @@
 class RTraceTask : public Task {
     
 public:
-    GroundhogModel * model;
-    RTraceOptions rTraceOptions;
-    OptionSet otherOptions;
-    Workplane * workplane;
-    OconvOptions oconvOptions;
-    std::vector < std::vector<RAY>> rays;
+    GroundhogModel * model; //!< The model
+    Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
+    std::vector<RAY> * rays = nullptr; //!< The rays to process
+    ColorMatrix result; //!< The resulting matrix
+    RTraceOptions * rtraceOptions; //!< The options passed to rcontrib
+    OconvOptions * oconvOptions; //!< The OconvOptions
+    std::string ambientFileName; //!< The name of the ambient file used
     
-    RTraceTask(GroundhogModel * theModel, RTraceOptions * theOptions, OptionSet * theOtherOptions, Workplane * wp, OconvOptions * theOconvOptions)
+    RTraceTask(GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, OconvOptions * theOconvOptions)
     {
         model = theModel;
-        rTraceOptions = *theOptions;
-        oconvOptions = *theOconvOptions;
+        rtraceOptions = theOptions;
+        oconvOptions = theOconvOptions;
         workplane = wp;
-        otherOptions = *theOtherOptions;
         
-        // Create and add the OCONV dependency ---> 0
-        OconvTask * oconvTask = new OconvTask(model, &oconvOptions);
+        // Dependency 0
+        OconvTask * oconvTask = new OconvTask(model, oconvOptions);
         std::string octname = *(oconvTask->getName()) + ".oct";
         addDependency(oconvTask);
-        otherOptions.addOption("ambient_file", octname + ".amb");
         
-        // Create and add the TriangulateWorkplane dependency
-        double maxArea = otherOptions.getOption<double>("max_area");
-        double maxAspectRatio = otherOptions.getOption<double>("max_aspect_ratio");
-        
-        TriangulateWorkplane * triangulateWorkplaneTask = new TriangulateWorkplane(wp, maxArea, maxAspectRatio);
-        addDependency(triangulateWorkplaneTask); // Dependency 1
-        
+        // Dependency 1
+        TriangulateWorkplane * triangulateWorkplaneTask = new TriangulateWorkplane(wp);
+        addDependency(triangulateWorkplaneTask);
         
         // Set the name
-        std::string name = "Rtrace "+(*wp->getName())+ "_"+ octname +"_"+std::to_string(maxArea) + "_" + std::to_string(maxAspectRatio);
+        std::string name = "Rtrace_"+ octname;
         setName(&name);
     }
     
+    RTraceTask(GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays , OconvOptions * theOconvOptions)
+    {
+        model = theModel;
+        rtraceOptions = theOptions;
+        oconvOptions = theOconvOptions;
+        rays = theRays;
+        
+        // Dependency 0
+        OconvTask * oconvTask = new OconvTask(model, oconvOptions);
+        std::string octname = *(oconvTask->getName()) + ".oct";
+        addDependency(oconvTask);
+        
+        // Set the name
+        std::string name = "Rtrace_"+ octname;
+        setName(&name);
+    }
+    
+    ~RTraceTask()
+    {
+        remove(&ambientFileName[0]);
+    }
     
     bool isEqual(Task * t)
     {
+        
         return (
-                rTraceOptions.isEqual(& static_cast<RTraceTask *>(t)->rTraceOptions) &&
-                oconvOptions.isEqual(& static_cast<RTraceTask *>(t)->oconvOptions) &&
-                workplane == static_cast<RTraceTask *>(t)->workplane
+                rtraceOptions->isEqual(static_cast<RTraceTask *>(t)->rtraceOptions) &&
+                oconvOptions->isEqual(static_cast<RTraceTask *>(t)->oconvOptions) &&
+                workplane == static_cast<RTraceTask *>(t)->workplane &&
+                rays == static_cast<RTraceTask *>(t)->rays
                 );
     }
     
     bool solve()
     {
-        if (!otherOptions.hasOption("ambient_file")) {
-            FATAL(err, "No 'ambient_file' option in RTraceTask");
-            return false;
-        };
-        std::string ambient = otherOptions.getOption<std::string>("ambient_file");
+        
+        
         
         std::string octname = static_cast<OconvTask *>(getDependencyRef(0))->octreeName;
-        
-        
-        std::vector<RAY> * rays = &(static_cast<TriangulateWorkplane *>(getDependencyRef(1))->rays);
-        rtrace_I(&rTraceOptions, &octname[0], ambient, rays);
+        ambientFileName = octname + ".amb";
+        result.resize(rays->size(),1);
+        if(workplane != nullptr){
+            rays = &(static_cast<TriangulateWorkplane *>(getDependencyRef(1))->rays);
+        }
+        rtrace_I(rtraceOptions, &octname[0], ambientFileName, rays, &result);        
         
         return true;
     }
     
     bool isMutex(Task * t)
     {
-        //return (typeid(*this) == typeid(*t));
-        return oconvOptions.isEqual(&static_cast<RTraceTask *>(t)->oconvOptions);
+        return oconvOptions->isEqual(static_cast<RTraceTask *>(t)->oconvOptions);        
     }
     
     bool submitResults(json * results)
     {
-        // count total rays
-        size_t nrays = 0;
-        for (auto rayArray : rays) {
-            nrays += rayArray.size();
-        }
-        std::vector<double> res = std::vector<double>(nrays);
-        size_t i = 0;
-        for (auto rayArray: rays) {
-            for (auto ray : rayArray) {
-                res[i++] = LIGHT( ray.rcol );
-            }
-        }
-        std::string * name = getName();
-        
-        (*results)[*name] = res;
-        
         return true;
     }
     

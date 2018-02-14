@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -84,9 +84,18 @@ public:
 	/*!
 	@author German molina
     @param[out] results The JSON where to put the results
+    @return success
 	*/
 	bool solve(json * results);
 
+    //! Solve all the tasks, but does not put results anywhere
+    /*!
+     @author German molina
+     @return succes
+     */
+    bool solve();
+
+    
 	//! A Debug function...
 	/*!
     if file is NULL, it will be printed to STDOUT
@@ -98,12 +107,26 @@ public:
 
 	//! Compares two Task object
 	/*!
+     Will immediatly return false if the two tasks are of different class
+     
 	@author German Molina
 	@param[in] a The pointer to Task number 1
 	@param[in] b The pointer to Task number 2
+    @return are equal ?
 	*/
 	bool compareTasks(Task * a, Task * b);
 
+    //! Checks if two Tasks are mutual exclusive
+    /*!
+     Will immediatly return false if the two tasks are of different class
+     
+     @author German Molina
+     @param[in] a The pointer to Task number 1
+     @param[in] b The pointer to Task number 2
+     @return are equal ?
+     */
+    bool checkMutex(Task * a, Task * b);
+    
     //! Removes all tasks
     /*!
     @author German Molina

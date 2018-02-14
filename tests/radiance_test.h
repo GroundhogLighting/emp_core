@@ -4,7 +4,7 @@
 
 #include "calculations/radiance.h"
 #include "os_definitions.h"
-#include "groundhogmodel.h"
+#include "groundhogmodel/groundhogmodel.h"
 
 #include "calculations/tasks/OconvTask.h"
 #include "calculations/tasks/RTraceTask.h"
@@ -37,13 +37,14 @@ TEST(RTraceTest, calcDF)
     options.setOption("ab", 2);
     options.setOption("ad", 7000);
 
-   
-    std::string amb = "./test_outputs/aa.amb";
     
-    rtrace_I(&options, &octname[0], &amb[0], &rays);
+    ColorMatrix result = ColorMatrix(1,1);
+    std::string amb = "./aa.amb";
+    
+    rtrace_I(&options, &octname[0], &amb[0], &rays, &result);
 
     remove(&amb[0]);
-    ASSERT_NEAR(LIGHT(rays.at(0).rcol),100.0,0.1);
+    ASSERT_NEAR(result.redChannel()->getElement(0,0),100.0,0.1);
     
 }
 

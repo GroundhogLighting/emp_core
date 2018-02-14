@@ -34,9 +34,7 @@ Task * workplaneIlluminanceFactory(lua_State * L)
 
   OptionSet otherOptions = OptionSet();
   otherOptions.addOption("workplane", "none");
-  otherOptions.addOption("max_area", 0.25);
-  otherOptions.addOption("max_aspect_ratio", 1.3);
-
+  
   // RTRace options are obtained from the global options
   otherOptions.fillFromLuaTable(L, 1);
   oconvOptions.fillFromLuaTable(L, 1);
@@ -46,7 +44,7 @@ Task * workplaneIlluminanceFactory(lua_State * L)
   Workplane * wp = getWorkplane(L,wpName);
 
 
-  RTraceTask * res = new RTraceTask(model, rtraceOptions, &otherOptions, wp, &oconvOptions);
+  RTraceTask * res = new RTraceTask(model, rtraceOptions, wp, &oconvOptions);
   
 
   return res;

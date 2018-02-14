@@ -15,7 +15,7 @@ newaction {
         
         -- Compile tbb in Release and Debug format. Will create the 
         --tbb_release and tbb_debug directories in ./build
-        os.execute("cd 3rdparty/IntelTBB;make tbb_build_prefix='tbb' tbb")
+        os.execute("cd 3rdparty/IntelTBB; make compiler=clang stdlib=libc++ tbb_build_prefix='tbb' tbb")
 
         -- Create the lib 
         os.mkdir("libs/DEBUG")
@@ -26,7 +26,7 @@ newaction {
             mv = "move"
         end
 
-        -- Remove the current TBB version
+        -- Remove the old TBB version
         os.rmdir("libs/RELEASE/tbb/tbb_debug")
         os.rmdir("libs/RELEASE/tbb/tbb_release")
 
@@ -34,7 +34,7 @@ newaction {
         os.execute(mv.." 3rdparty/IntelTBB/build/tbb_release libs/RELEASE/tbb")
         os.execute(mv.." 3rdparty/IntelTBB/build/tbb_debug libs/DEBUG/tbb") 
     
-        -- Clean old ones
+        -- Clean new ones
         os.rmdir("3rdparty/IntelTBB/build/tbb_release")
         os.rmdir("3rdparty/IntelTBB/build/tbb_debug")
 

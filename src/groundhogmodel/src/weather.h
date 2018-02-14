@@ -37,7 +37,7 @@ public:
 	int day; //!< The day
 	double hour; //!< The hour
 	int diffuse_horizontal; //!< The diffuse horizontal radiation
-	int direct_nomal; //!< The direct normal radiation
+	int direct_normal; //!< The direct normal radiation
 };
 
 //! Represents a whole weather

@@ -34,8 +34,8 @@ private:
 	Segment * segments[3]; //!< The segments
 	double circumradius = -1; //!< The radius of the circle that coes thorugh the three vertices
 	double aspectRatio = -1; //!< The ratio of the Circumradius and the smallest edge
-	Triangle * neighbors[3] = {NULL,NULL,NULL}; //!< Neighboring triangles
-	bool constraints[3] = { NULL,NULL,NULL }; //!< Which edges are constraints
+	Triangle * neighbors[3] = {nullptr,nullptr,nullptr}; //!< Neighboring triangles
+	bool constraints[3] = { false,false,false }; //!< Which edges are constraints
 	size_t index = 0; //!< The index on the Triangulation
 
 public:

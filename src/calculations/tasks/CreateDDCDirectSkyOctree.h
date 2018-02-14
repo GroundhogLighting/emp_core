@@ -21,19 +21,17 @@
 #pragma once
 
 
-class CreateDDCGlobalOctree : public Task {
+class CreateDDCDirectSkyOctree : public Task {
 public:
     GroundhogModel * model; //!< The model to Oconv
     std::string octreeName; //!< The name of the final octree
-    int mf = 1; //!< The reinhart subdivition sheme for the sky
     
-    CreateDDCGlobalOctree(GroundhogModel * theModel, int theMf)
+    CreateDDCDirectSkyOctree(GroundhogModel * theModel)
     {
         
-        std::string name = "Create DDCDirectSkyOctree";
+        std::string name = "DDC Direct Sky Octree";
         setName(&name);
-        model = theModel;
-        mf = theMf;
+        model = theModel;        
         
         // Add the BlackOctree dependency... black geometry, no sky, no lights
         OconvOptions oconvOptions = OconvOptions();
@@ -48,14 +46,14 @@ public:
         
     }
     
-    ~CreateDDCGlobalOctree()
+    ~CreateDDCDirectSkyOctree()
     {
         remove(&octreeName[0]);
     }
     
     bool isEqual(Task * t)
     {
-        return model == static_cast<CreateDDCGlobalOctree *>(t)->model;
+        return model == static_cast<CreateDDCDirectSkyOctree *>(t)->model;
     }
     
     bool solve()
@@ -64,7 +62,7 @@ public:
         octreeName = "DDC_Global_" + octName;
         std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
         
-        octree = POPEN(&command[0], "w");
+        FILE * octree = POPEN(&command[0], "w");
         fprintf(octree, "void glow ground_glow 0 0 4 1 1 1 0\n");
         fprintf(octree, "ground_glow source ground 0 0 4 0 0 1 360\n");
         PCLOSE(octree);

@@ -33,7 +33,7 @@ public:
     CreateDirectSunOctree(GroundhogModel * theModel, int theMf)
     {
         
-        std::string name = "Create CreateDirectSunOctree";
+        std::string name = "Direct Sun Octree";
         setName(&name);
         model = theModel;
         mf = theMf;
@@ -63,7 +63,7 @@ public:
     
     bool solve()
     {
-        std::string octName = *(static_cast<OconvTask *>(getDependencyRef(0))->getName()) + ".oct";
+        std::string octName = (static_cast<OconvTask *>(getDependencyRef(0))->octreeName);
         octreeName = "DIRECT_SUN_" + octName;
         //remove(&octreeName[0]);
         std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
@@ -93,7 +93,7 @@ public:
      */
     bool isMutex(Task * t)
     {
-        return false;
+        return true;
     }
     
     //! Submits the results into a json
