@@ -28,7 +28,7 @@ public:
     std::string octreeName; //!< The name of the final octree
     int mf = 1; //!< The reinhart subdivition sheme
     
-    Create4CMNaiveDirectSkyOctree(GroundhogModel * theModel, int theMf)
+    Create4CMNaiveDirectSkyOctree(const GroundhogModel * theModel, const int theMf)
     {
         
         std::string name = "Create CreateNaiveDirectSkyOctree";
@@ -44,8 +44,9 @@ public:
         oconvOptions.setOption(OCONV_INCLUDE_SKY, false);
         oconvOptions.setOption(OCONV_LIGHTS_ON, false);
         
+        // --> Dependency 0
         OconvTask * oconvTask = new OconvTask(model,&oconvOptions);
-        addDependency(oconvTask);// --> Dependency 0
+        addDependency(oconvTask);
         
     }
     
@@ -61,6 +62,7 @@ public:
     
     bool solve()
     {
+        tbb::mutex::scoped_lock lock(oconvMutex);
         std::string octName = *(static_cast<OconvTask *>(getDependencyRef(0))->getName()) + ".oct";
         octreeName = "NAIVE_DIRECT_SKY_" + octName;
         //remove(&octreeName[0]);

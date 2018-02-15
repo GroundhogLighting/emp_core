@@ -22,6 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "./color_matrix.h"
 
+
+
 /// Do not change this, please... it is required to compile Radiance in C++
 #define FUN_ARGLIST ...
 

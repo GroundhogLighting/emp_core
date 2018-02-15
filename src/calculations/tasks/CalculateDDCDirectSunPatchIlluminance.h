@@ -21,7 +21,7 @@
 
 #pragma once
 #include "../radiance.h"
-#include "CalculateDDCDirectSkyMatrix.h"
+#include "./CalculateDDCDirectSkyMatrix.h"
 
 class CalculateDDCDirectSunPatchIlluminance : public Task {
 public:

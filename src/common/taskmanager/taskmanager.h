@@ -22,6 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "./task.h"
 
+#include "tbb/tbb.h"
+
+extern tbb::mutex oconvMutex;
+
+
 //! The TaskManager is an object that performs the calculation in an efficient way
 
 /*!

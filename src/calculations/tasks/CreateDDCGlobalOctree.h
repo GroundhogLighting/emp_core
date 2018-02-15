@@ -32,6 +32,7 @@ public:
         std::string name = "DDC Global Octree";
         setName(&name);
         model = theModel;        
+        oconvs = true;
         
         // Add the Octree dependency... standard octree
         OconvOptions oconvOptions = OconvOptions();
@@ -53,6 +54,7 @@ public:
     
     bool solve()
     {
+        tbb::mutex::scoped_lock lock(oconvMutex);
         std::string octName = *(static_cast<OconvTask *>(getDependencyRef(0))->getName()) + ".oct";
         octreeName = "DDC_Global_" + octName;
         std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
@@ -76,7 +78,7 @@ public:
      */
     bool isMutex(Task * t)
     {
-        return false;
+        return false;//t->oconvs; // if it runs oconv, then mutex.
     }
     
     //! Submits the results into a json

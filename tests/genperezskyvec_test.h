@@ -24,9 +24,7 @@ void radGenDayMtx(int month, int day, float hour, float direct, float diffuse, f
     // Calc gendaymtx
     std::string command = "gendaymtx -h -m " + std::to_string(skyMF) + " -g " + std::to_string(albedo) + " " + std::to_string(albedo) + " " + std::to_string(albedo) + " -c 1 1 1 -r " + std::to_string(rotation) + sharpSunMode + dMode +  " " + weafilename;
     FILE * results = POPEN(&command[0],"r");
-    
-    std::cout << command << std::endl;
-    
+        
     // Read results
     
     if (results)

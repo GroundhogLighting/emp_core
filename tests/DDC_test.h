@@ -101,6 +101,30 @@ TEST(DDC_TEST, Empty_global_DDC_vs_reference){
 }
 
 
+TEST(DDC_TEST, Simple_global_DDC_vs_reference){
+#include "./RTrace_reference.h"
+    int skyMF = 1;
+    
+    // Build task manager
+    TaskManager tm = TaskManager();
+    
+    // Create DDC Task
+    CalculateDDCGlobalIlluminance * task = new CalculateDDCGlobalIlluminance(&simpleModel, &rays, skyMF, &options);
+    tm.addTask(task);
+    
+    // Solve
+    tm.solve();
+    
+    // Compare to reference Solution
+    for(int i=0; i<48; i++){
+        double value = task->result.redChannel()->getElement(0,i);
+        double reference = simpleReference[i][0];
+        //std::cout << value << " " << reference << std::endl;
+        ASSERT_NEAR(value,reference,reference * 0.05);
+    }
+}
+
+
 TEST(DDC_TEST, Empty_directSunPatch_DDC_vs_reference){
     #include "./RTrace_reference.h"
     int skyMF = 1;
@@ -119,6 +143,30 @@ TEST(DDC_TEST, Empty_directSunPatch_DDC_vs_reference){
     for(int i=0; i<48; i++){
         double value = task->result.redChannel()->getElement(0,i);
         double reference = emptyReference[i][1];
+        //std::cout << value << " " << reference << std::endl;
+        ASSERT_NEAR(value,reference,0.6*reference);
+    }
+}
+
+
+TEST(DDC_TEST, Simple_directSunPatch_DDC_vs_reference){
+#include "./RTrace_reference.h"
+    int skyMF = 1;
+    
+    // Build task manager
+    TaskManager tm = TaskManager();
+    
+    // Create DDC Task
+    CalculateDDCDirectSunPatchIlluminance * task = new CalculateDDCDirectSunPatchIlluminance(&simpleModel, &rays, skyMF, &options);
+    tm.addTask(task);
+    
+    // Solve
+    tm.solve();
+    
+    // Compare to reference Solution
+    for(int i=0; i<48; i++){
+        double value = task->result.redChannel()->getElement(0,i);
+        double reference = simpleReference[i][1];
         //std::cout << value << " " << reference << std::endl;
         ASSERT_NEAR(value,reference,0.6*reference);
     }
@@ -150,6 +198,30 @@ TEST(DDC_TEST, Empty_directSharpSun_DDC_vs_reference){
 }
 
 
+TEST(DDC_TEST, Simple_directSharpSun_DDC_vs_reference){
+#include "./RTrace_reference.h"
+    int sunMF = 6;
+    
+    // Build task manager
+    TaskManager tm = TaskManager();
+    
+    // Create DDC Task
+    CalculateDirectSunIlluminance * task = new CalculateDirectSunIlluminance(&simpleModel, &rays, sunMF, &options);
+    tm.addTask(task);
+    
+    // Solve
+    tm.solve();
+    
+    // Compare to reference Solution
+    for(int i=0; i<48; i++){
+        double value = task->result.redChannel()->getElement(0,i);
+        double reference = simpleReference[i][2];
+        
+        ASSERT_NEAR(value,reference,0.03*reference);
+    }
+}
+
+
 TEST(DDC_TEST,Empty_full_DDC_vs_RTRACE){
     #include "./RTrace_reference.h"
     int skyMF = 1;
@@ -174,3 +246,30 @@ TEST(DDC_TEST,Empty_full_DDC_vs_RTRACE){
     }
     
 }
+
+
+TEST(DDC_TEST,Simple_full_DDC_vs_RTRACE){
+#include "./RTrace_reference.h"
+    int skyMF = 1;
+    int sunMF = 6;
+    
+    // Build task manager
+    TaskManager tm = TaskManager();
+    
+    // Create DDC Task
+    doDDC * task = new doDDC(&simpleModel, &rays, sunMF, skyMF, &options);
+    tm.addTask(task);
+    
+    // Solve
+    tm.solve();
+    
+    // Compare to reference Solution
+    for(int i=0; i<48; i++){
+        double value = task->result.redChannel()->getElement(0,i);
+        double reference = simpleReference[i][3];
+        //std::cout << value /*<< " " << reference*/ << std::endl;
+        ASSERT_NEAR(value,reference,reference*0.055);
+    }
+    
+}
+

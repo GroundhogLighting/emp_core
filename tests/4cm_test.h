@@ -1,5 +1,5 @@
 
-
+/*
 TEST(FourCM, UnitDirectSkyLightSources)
 {
     TaskManager tm = TaskManager();
@@ -12,7 +12,7 @@ TEST(FourCM, UnitDirectSkyLightSources)
     
     std::string octname = task->octreeName;
     
-    /* RAY TRACE */
+    //RAY TRACE
     
     FVECT origin = {0,0,0};
     FVECT dir = {0,0,1};
@@ -47,7 +47,7 @@ TEST(FourCM, DirectSkyMatrix)
     
     std::string octname = task.octreeName;
     
-    /* RAY TRACE */
+    // RAY TRACE
     
     FVECT origin = {0,0,0};
     FVECT dir = {0,0,1};
@@ -89,3 +89,4 @@ TEST(FourCM, DirectSkyMatrix)
         
     }
 }
+*/

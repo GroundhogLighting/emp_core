@@ -19,7 +19,7 @@ TEST(RTraceTest, calcDF)
 
 
     FILE *octree = POPEN(&command[0], "w");
-    fprintf(octree, "!gensky -ang 45 40 -c -B %f -g 0.2\n",100.0/179.0);
+    fprintf(octree, "!gensky -ang 45 40 -c -B %f -g 0.2\n",100.0);
     fprintf(octree, RADIANCE_SKY_COMPLEMENT);
     PCLOSE(octree);
 
@@ -35,7 +35,7 @@ TEST(RTraceTest, calcDF)
     // Create options
     RTraceOptions options = RTraceOptions();
     options.setOption("ab", 2);
-    options.setOption("ad", 7000);
+    options.setOption("ad", 50000);
 
     
     ColorMatrix result = ColorMatrix(1,1);
@@ -44,7 +44,7 @@ TEST(RTraceTest, calcDF)
     rtrace_I(&options, &octname[0], &amb[0], &rays, &result);
 
     remove(&amb[0]);
-    ASSERT_NEAR(result.redChannel()->getElement(0,0),100.0,0.1);
+    ASSERT_NEAR(result.redChannel()->getElement(0,0),100.0,0.5); // 0.5% error.
     
 }
 

@@ -57,7 +57,7 @@ public:
     
     bool solve()
     {
-        
+        tbb::mutex::scoped_lock lock(oconvMutex);
         const double pi = 3.141592654;
         const double desiredElementWidth = 0.183333; // Degrees
         const double dAngle = 0.4 * pi / 180.0;

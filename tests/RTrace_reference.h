@@ -111,6 +111,57 @@ const float emptyReference[48][4] = {
     {0,0,0,0}
 };
 
+// 0. Global DDC, 1. Direct Patch, 2. Direct sharp sun, 3. RTrace value
+const float simpleReference[48][5] = {
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0},
+    {1.781778,0,0,1.781778},
+    {40.25919,2.761479,2.831319,40.32903},
+    {153.8296,50.28972,50.20926,153.74914},
+    {299.0263,167.8832,169.8229,300.966},
+    {354.1573,213.81,0,140.3473},
+    {155.9966,42.53947,0,113.45713},
+    {125.5203,34.27351,0,91.24679},
+    {306.9643,204.7589,0,102.2054},
+    {604.6513,489.4207,534.9597,650.1903},
+    {595.106,460.7691,469.705,604.0419},
+    {509.6289,387.7278,390.3772,512.2783},
+    {394.4555,260.093,267.7437,402.1062},
+    {238.0435,121.8459,130.9517,247.1493},
+    {98.28493,21.62625,20.98299,97.64167},
+    {10.34289,0,0,10.34289},
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0},
+    {1.222316,0,0,1.222316},
+    {39.45731,2.529635,2.62582,39.553495},
+    {152.5968,49.16741,49.26636,152.69575},
+    {297.8191,168.7178,170.9256,300.0269},
+    {353.1079,226.7017,0,126.4062},
+    {201.0061,85.17037,0,115.83573},
+    {131.6168,32.86225,0,98.75455},
+    {307.4785,198.0175,0,109.461},
+    {600.5533,477.5821,524.4575,647.4287},
+    {597.004,476.2529,485.6688,606.4199},
+    {507.9969,384.1958,386.105,509.9061},
+    {394.3977,266.8553,274.4485,401.9909},
+    {238.6112,122.1291,130.9517,247.4338},
+    {100.6708,24.80616,24.16791,100.03255},
+    {10.34988,0,0,10.34988},
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0},
+    {0,0,0,0}
+};
 
 std::vector<RAY> rays = std::vector<RAY>(1);
 
@@ -120,13 +171,42 @@ std::vector<RAY> rays = std::vector<RAY>(1);
 
 // Create options
 RTraceOptions options = RTraceOptions();
-options.setOption("ab",1);
-options.setOption("ad",10000);
+options.setOption("ab",10);
+options.setOption("ad",50000);
 options.setOption("lw",0.000001);
 
 // Create Models
 GroundhogModel simpleModel = GroundhogModel();
 GroundhogModel emptyModel = GroundhogModel();
+
+// Fill simple model
+std::string layerName = "Layer 1";
+simpleModel.addLayer(&layerName);
+Material * material = simpleModel.addDefaultMaterial();
+
+Polygon3D * p = new Polygon3D();
+Loop * outerLoop = p->getOuterLoopRef();
+outerLoop->addVertex(new Point3D(0,0,1));
+outerLoop->addVertex(new Point3D(1,0,1));
+outerLoop->addVertex(new Point3D(1,1,1));
+outerLoop->addVertex(new Point3D(0,1,1));
+std::string faceName = "face";
+Face * face = new Face(&faceName);
+face->setPolygon(p);
+face->setMaterial(material);
+simpleModel.addObjectToLayer(&layerName,face);
+
+p = new Polygon3D();
+outerLoop = p->getOuterLoopRef();
+outerLoop->addVertex(new Point3D(-10,-10,-0.1));
+outerLoop->addVertex(new Point3D( 10,-10,-0.1));
+outerLoop->addVertex(new Point3D( 10, 10,-0.1));
+outerLoop->addVertex(new Point3D(-10, 10,-0.1));
+faceName = "face";
+face = new Face(&faceName);
+face->setPolygon(p);
+face->setMaterial(material);
+simpleModel.addObjectToLayer(&layerName,face);
 
 // Set location: Santiago, Chile
 Location * emptyModelLocation = emptyModel.getLocation();

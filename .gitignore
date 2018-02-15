@@ -40,3 +40,4 @@ debug/*
 
 test_outputs/*
 libs
+premakescripts/obj

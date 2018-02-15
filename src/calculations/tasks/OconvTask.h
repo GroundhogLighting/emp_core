@@ -44,6 +44,8 @@ public:
         std::string name = buildName();
         setName(&name);
         model = theModel;
+        oconvs = true;
+        
     }
     
     ~OconvTask()
@@ -61,6 +63,7 @@ public:
     
     bool solve()
     {
+        tbb::mutex::scoped_lock lock(oconvMutex);
         RadExporter exporter = RadExporter(model);
         octreeName = *getName() + ".oct";
         //remove(&octreeName[0]);

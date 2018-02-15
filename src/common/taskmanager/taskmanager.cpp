@@ -22,13 +22,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 #include "./taskmanager.h"
 #include "common/utilities/io.h"
-#include "tbb/tbb.h"
+
+tbb::mutex oconvMutex;
+
+#ifdef _DEBUG
+// Define mutex for informing progress
+tbb::mutex verboseMutex;
+#endif
 
 TaskManager::TaskManager()
 {
 
 }
-
 
 TaskManager::~TaskManager()
 {
@@ -102,7 +107,7 @@ bool TaskManager::solve(json * results)
 	// Create a vector to store all the nodes
 	std::vector< tbb::flow::continue_node<tbb::flow::continue_msg> > nodes;
 	nodes.reserve(tasks.size());
-
+    
 	// Create the graph
 	tbb::flow::graph g;
 
@@ -115,20 +120,24 @@ bool TaskManager::solve(json * results)
 	for (size_t i = 0; i < tasks.size(); i++)
 	{
 		nodes.push_back(tbb::flow::continue_node<tbb::flow::continue_msg>(g, [=](const tbb::flow::continue_msg &) {
-          try {
+            bool success;
+            try {
 #ifdef _DEBUG
-              std::cout << "Starting -> " << *(tasks[i]->getName()) << std::endl;
+                verboseMutex.lock();
+                std::cout << "    ... Starting Task '" << *(tasks[i]->getName()) << "'" << std::endl;
+                verboseMutex.unlock();
 #endif
-              bool success= tasks[i]->solve();
+                success= tasks[i]->solve();
 #ifdef _DEBUG
-              std::cout << "Ended -> " << *(tasks[i]->getName()) << std::endl;
+                verboseMutex.lock();
+                std::cout << "    ... Ended Task '" << *(tasks[i]->getName()) <<  "'" << std::endl;
+                verboseMutex.unlock();
 #endif
-              return success;
-          }
-          catch (int e) {
-            throw 999;
-          }
-          
+            }catch(std::out_of_range& ex) {
+                std::cout << "Exception: " << ex.what() << std::endl;
+            }
+            
+            return success;
 		}));
 	}
 
@@ -149,9 +158,14 @@ bool TaskManager::solve(json * results)
 		}
 	}
 
-	start.try_put(tbb::flow::continue_msg());
-	g.wait_for_all();
-
+    // Solve!
+    try {
+        start.try_put(tbb::flow::continue_msg());
+        g.wait_for_all();
+    } catch(std::out_of_range& ex) {
+        std::cout << "Exception: " << ex.what() << std::endl;
+    }
+    
     if (results == nullptr)
       return true;
 

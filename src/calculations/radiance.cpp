@@ -286,14 +286,11 @@ bool rtrace_I( RTraceOptions * options, char * octname, std::string amb, std::ve
 
 
 bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
-{
+{    
     std::string command = "oconv - > " + std::string(octname);
   	
     FILE *octree = POPEN(&command[0], "w");
-    
-    // Avoid empty
-    std::cout << octname << std::endl;
-    
+        
     // check sky
     if (options->getOption<bool>(OCONV_INCLUDE_SKY)) {
       std::string sky = options->getOption<std::string>(OCONV_SKY);

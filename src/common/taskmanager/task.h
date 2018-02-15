@@ -25,6 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "common/options/optionset.h"
 
 
+
+
 //! A Task is an instruction or set of instructions that is required to perform a simulation
 
 /*!
@@ -51,7 +53,7 @@ private:
 public:
     bool reportResults = false; //!< True if the TaskManager should report the results or not
     bool generatesResults = false; //!< Indicates whether or not this task is worth reporting results
-	
+    bool oconvs = false; //!< Runs or not oconv ?
 
     //! Virtual destructor
     /*!

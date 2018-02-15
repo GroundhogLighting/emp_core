@@ -22,8 +22,6 @@
 
 
 
-
-
 class CreateDirectSunOctree : public Task {
 public:
     GroundhogModel * model; //!< The model to Oconv
@@ -37,6 +35,7 @@ public:
         setName(&name);
         model = theModel;
         mf = theMf;
+        oconvs = true;
         
         // Add the BlackOctree dependency... black geometry, no sky, no lights
         OconvOptions oconvOptions = OconvOptions();
@@ -63,6 +62,7 @@ public:
     
     bool solve()
     {
+        tbb::mutex::scoped_lock lock(oconvMutex);
         std::string octName = (static_cast<OconvTask *>(getDependencyRef(0))->octreeName);
         octreeName = "DIRECT_SUN_" + octName;
         //remove(&octreeName[0]);
@@ -93,7 +93,7 @@ public:
      */
     bool isMutex(Task * t)
     {
-        return true;
+        return false;
     }
     
     //! Submits the results into a json

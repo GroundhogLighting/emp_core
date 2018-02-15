@@ -110,9 +110,10 @@ public:
         size_t nSensors = rays->size();
         size_t nTimesteps = model->getLocation()->getWeatherSize();
         
-        ColorMatrix * global = &(static_cast<CalculateDDCGlobalIlluminance *>(getDependencyRef(0))->result);
-        ColorMatrix * directSunPatch = &(static_cast<CalculateDDCDirectSunPatchIlluminance *>(getDependencyRef(1))->result);
-        ColorMatrix * directSun = &(static_cast<CalculateDirectSunIlluminance *>(getDependencyRef(2))->result);
+        int k=0;
+        ColorMatrix * global = &(static_cast<CalculateDDCGlobalIlluminance *>(getDependencyRef(k++))->result);
+        ColorMatrix * directSunPatch = &(static_cast<CalculateDDCDirectSunPatchIlluminance *>(getDependencyRef(k++))->result);
+        ColorMatrix * directSun = &(static_cast<CalculateDirectSunIlluminance *>(getDependencyRef(k++))->result);
         
         // Resize to fit
         result.resize(nSensors,nTimesteps);
@@ -135,7 +136,7 @@ public:
         Matrix * blue = result.blueChannel();
         
         for(size_t col=0; col < nTimesteps; col++){
-            for(size_t row=0; row < nSensors; row++){
+            for(size_t row=0; row < nSensors; row++){                
                 double r = globalRed->getElement(row,col) - directSunPatchRed->getElement(row,col) + directSunRed->getElement(row,col);
                 double g = globalGreen->getElement(row,col) - directSunPatchGreen->getElement(row,col) + directSunGreen->getElement(row,col);
                 double b = globalBlue->getElement(row,col) - directSunPatchBlue->getElement(row,col) + directSunBlue->getElement(row,col);
