@@ -175,6 +175,6 @@ public:
 };
 
 
-using TaskFactory = Task* (*)(lua_State *L);
+//using TaskFactory = Task* (*)(lua_State *L);
 
 

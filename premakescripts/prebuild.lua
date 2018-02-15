@@ -22,7 +22,7 @@ file = io.open(rad_rt.."/Version.c",'w')
 file:write("char * VersionID = \""..rad_version.."\";")
 file:close()
 
--- Write Radiance and Glare versions
+-- Write Radiance and Emp versions
 file = io.open("../src/versions.h",'w')
 file:write("#pragma once","\n")
 file:write("#define EMP_VERSION \"Emp "..glare_version.."\"","\n")

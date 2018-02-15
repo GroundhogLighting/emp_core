@@ -20,7 +20,7 @@
 
 #include <typeinfo>
 
-#include "api/common.h" //  for filling optionsets with LUA tables
+//#include "api/common.h" //  for filling optionsets with LUA tables
 #include "./optionset.h"
 #include <fstream>
 
@@ -57,7 +57,7 @@ bool OptionSet::isEqual(OptionSet * other)
   return true;
 }
 
-
+/*
 bool OptionSet::fillFromLuaTable(lua_State * L, int tablePosition)
 {
   for (json::iterator it = data.begin(); it != data.end(); ++it) {
@@ -103,7 +103,7 @@ bool OptionSet::fillFromLuaTable(lua_State * L, int tablePosition)
   }
   return true;
 }
-
+*/
 
 void OptionSet::print(char * filename)
 {

@@ -13,9 +13,8 @@
 TEST(RTraceTest, calcDF)
 {
     // Write an octree
-
-    std::string octname = "./test_outputs/octree.oct";
-    std::string command = "oconv - > " + octname + " 2> " + octname + ".err";
+    std::string octname = "./octree.oct";
+    std::string command = "oconv - > " + octname;
 
 
     FILE *octree = POPEN(&command[0], "w");
@@ -43,6 +42,8 @@ TEST(RTraceTest, calcDF)
     
     rtrace_I(&options, &octname[0], &amb[0], &rays, &result);
 
+    remove(&amb[0]);
+    remove(&octname[0]);
     remove(&amb[0]);
     ASSERT_NEAR(result.redChannel()->getElement(0,0),100.0,0.5); // 0.5% error.
     

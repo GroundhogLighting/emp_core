@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
 	Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -22,7 +22,7 @@
 #include "./vector.h"
 #include "config_constants.h"
 #include "common/utilities/io.h"
-#include "api/common.h"
+//#include "api/common.h"
 
 Vector3D::Vector3D(double new_x, double new_y, double new_z)
 {

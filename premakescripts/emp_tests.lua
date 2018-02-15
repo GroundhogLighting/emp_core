@@ -12,57 +12,39 @@ project "emp_tests"
     files { 
         "../main_test.cpp",
         "../main_test.h",
-        "../src/**",
-        "../tests/*.h",
-        -- third_party_dir.."/Radiance/src/gen/sun.c" -- For generating sky vectors    
+        --"../src/**",
+        "../tests/*.h",        
     }
    
     includedirs{
         "../src/",
         third_party_dir,
-        third_party_dir.."/intelTBB/include",
-        lua_dir,
+        third_party_dir.."/intelTBB/include",        
         google_test_dir.."/include",  
         rad_common,
         rad_rt                   
     }  
 
     links {                
-        "GoogleTest",
-        "Lua",  
-        --"radiance",
-        --"raycalls",
-        "rtrad"
+        "GoogleTest",        
+        "rtrad",
+        "Emp_core"
     }  
 
 
     -- Add the platform specific
     if is_windows then
-        defines { "WIN" }    
-        links {
-            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/*"                                  
-        }
-        includedirs {
-            third_party_dir.."/SketchUp/WIN/headers", 
-        }    
+        defines { "WIN" }               
 
     elseif is_macos then
-        defines { "MACOS" }    
-        links {
-            third_party_dir.."/SketchUp/MACOS/headers/SketchUpAPI.framework",
-        }
-        buildoptions {
-            "-F "..third_party_dir.."/SketchUp/MACOS/headers"            
-        }
+        defines { "MACOS" }            
         runpathdirs { "libs" }
-        linkoptions {
-            "-F "..third_party_dir.."/SketchUp/MACOS/headers", 
+        linkoptions {            
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"
         }    
     elseif is_linux then
         defines { "LINUX", "AVOID_SKP" }    
-        links {
-            --third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/*",            
+        links {            
             third_party_dir.."/intelTBB/lib/intel64/vc14/*",            
         }
 
@@ -83,8 +65,5 @@ project "emp_tests"
     links {
         "tbb_debug"
     }
-    --buildoptions {
-    --    "-Wl,-no_pie"            
-    --}
 
 

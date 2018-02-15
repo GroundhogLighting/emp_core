@@ -6,13 +6,13 @@ premakescripts_dir = "./premakescripts"
 dofile(premakescripts_dir.."/prebuild.lua")
 
 
-workspace "Emp"
+workspace "Emp_core"
     architecture "x86_64"
     configurations { "DEBUG", "RELEASE" } 
-    defines { "EMP" }   
+    defines { "EMP_CORE" }   
 
 filter "configurations:DEBUG"
-    --symbols "On"
+    symbols "On" 
     defines { 
         "_DEBUG", 
         "TBB_DO_ASSERT=1", 
@@ -31,13 +31,13 @@ if is_windows then
     systemversion(os.winSdkVersion() .. ".0")
 end
 
-dofile(premakescripts_dir.."/lua.lua")  
+
 dofile(premakescripts_dir.."/rtrad.lua")
 dofile(premakescripts_dir.."/radiance.lua")
 dofile(premakescripts_dir.."/raycalls.lua")
-dofile(premakescripts_dir.."/emp.lua")
 dofile(premakescripts_dir.."/emp_tests.lua")
 dofile(premakescripts_dir.."/google_test.lua")
+dofile(premakescripts_dir.."/emp_core.lua")
   
 
 package.path = package.path .. ";"..premakescripts_dir.."/?.lua"

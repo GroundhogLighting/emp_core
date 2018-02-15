@@ -1,6 +1,6 @@
 #!/bin/bash
-export TBBROOT="/Users/german/Documents/emp/3rdparty/IntelTBB" #
-tbb_bin="/Users/german/Documents/emp/3rdparty/IntelTBB/build/tbb_release" #
+export TBBROOT="/Users/german/Documents/emp_core/3rdparty/IntelTBB" #
+tbb_bin="/Users/german/Documents/emp_core/3rdparty/IntelTBB/build/tbb_release" #
 if [ -z "$CPATH" ]; then #
     export CPATH="${TBBROOT}/include" #
 else #

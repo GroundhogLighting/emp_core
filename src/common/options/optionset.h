@@ -22,12 +22,7 @@
 #pragma once
 
 
-// Include LUA headers
-extern "C" {
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
-}
+
 
 #include "common/utilities/io.h"
 
@@ -162,7 +157,7 @@ public:
     @param[in] tablePosition The position of the table in the lua stack
     @return success
     */
-    bool fillFromLuaTable(lua_State * L, int tablePosition);
+    //bool fillFromLuaTable(lua_State * L, int tablePosition);
 
     //! Gets the inline version of the options (i.e. for Radiance commands)
     /*!

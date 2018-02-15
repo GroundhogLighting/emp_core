@@ -1,19 +1,12 @@
 [submodule "googletest"]
 	path = googletest
 	url = https://github.com/google/googletest.git
-[submodule "emp-doc"]
-	path = emp-doc
-	url = https://github.com/GroundhogLighting/emp-doc.git
-
 [submodule "3rdparty/IntelTBB"]
 	path = 3rdparty/IntelTBB
 	url = https://github.com/01org/tbb.git
 [submodule "3rdparty/Radiance"]
 	path = 3rdparty/Radiance
 	url = https://github.com/NREL/Radiance.git
-[submodule "3rdparty/Lua"]
-	path = 3rdparty/Lua
-	url = https://github.com/lua/lua.git
 [submodule "3rdparty/nvwa"]
 	path = 3rdparty/nvwa
 	url = https://github.com/adah1972/nvwa.git
