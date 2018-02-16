@@ -33,8 +33,7 @@ This module defines functions that are useful for handling strings
 
 /* @{ */
 
-#define DEFAULT_CHAR '-' //!< The default char to replace all non-ascii characters
-
+#define DEFAULT_CHAR '_' //!< The default char to replace all non-ascii characters
 //! Checks if a word includes a substring
 /*!
 @author German Molina

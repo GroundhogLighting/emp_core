@@ -52,8 +52,7 @@ private:
 
 public:
     bool reportResults = false; //!< True if the TaskManager should report the results or not
-    bool generatesResults = false; //!< Indicates whether or not this task is worth reporting results
-    bool oconvs = false; //!< Runs or not oconv ?
+    bool generatesResults = false; //!< Indicates whether or not this task is worth reporting results    
 
     //! Virtual destructor
     /*!

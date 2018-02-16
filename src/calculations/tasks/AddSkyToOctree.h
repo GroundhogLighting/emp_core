@@ -1,3 +1,4 @@
+
 /*****************************************************************************
  Emp
  
@@ -20,60 +21,61 @@
 
 #pragma once
 
+#include "calculations/radiance.h"
+#include "config_constants.h"
+#include "common/utilities/stringutils.h"
+#include "./OconvTask.h"
 
-
-class CreateDirectSunOctree : public Task {
+class AddSkyToOctree : public Task {
 public:
     GroundhogModel * model; //!< The model to Oconv
     std::string octreeName; //!< The name of the final octree
-    int mf = 1; //!< The reinhart subdivition sheme
+    OconvOptions options;//!< The options passed to the octree
+    std::string sky; //!< The sky to add to the octree
     
-    CreateDirectSunOctree(GroundhogModel * theModel, int theMf)
+    AddSkyToOctree(GroundhogModel * theModel, OconvOptions * theOptions, std::string theSky)
     {
         
-        std::string name = "Direct Sun Octree";
+        model = theModel;        
+        options = *theOptions;
+        sky = theSky;
+        std::string name = "Add sky "+theSky;
         setName(&name);
-        model = theModel;
-        mf = theMf;
         
-        // Add the BlackOctree dependency... black geometry, no sky, no lights
-        OconvOptions oconvOptions = OconvOptions();
-        oconvOptions.setOption(OCONV_INCLUDE_WINDOWS, true);
-        oconvOptions.setOption(OCONV_USE_BLACK_GEOMETRY, true);        
-        oconvOptions.setOption(OCONV_LIGHTS_ON, false);
+        // Dependency 0: Add the oconv task
+        OconvTask * oconvTask = new OconvTask(model,&options);
+        addDependency(oconvTask);
         
-        OconvTask * oconvTask = new OconvTask(model,&oconvOptions);
-        addDependency(oconvTask);// --> Dependency 0
+        // Set octree name
+        fixString(&theSky[0],theSky.size());
+        octreeName = theSky+"_" + oconvTask->octreeName;
         
     }
     
-    ~CreateDirectSunOctree()
+    ~AddSkyToOctree()
     {
         remove(&octreeName[0]);
     }
     
     bool isEqual(Task * t)
     {
-        return model == static_cast<CreateDirectSunOctree *>(t)->model;
+        return (
+                model == static_cast<AddSkyToOctree *>(t)->model &&
+                sky == static_cast<AddSkyToOctree *>(t)->sky
+                );
     }
     
     bool solve()
     {
+        
         tbb::mutex::scoped_lock lock(oconvMutex);
         std::string octName = (static_cast<OconvTask *>(getDependencyRef(0))->octreeName);
-        octreeName = "DIRECT_SUN_" + octName;
-        //remove(&octreeName[0]);
+                
         std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
         
         FILE *octree = POPEN(&command[0], "w");
-        fprintf(octree, "void light solar 0 0 3 1e6 1e6 1e6\n");
-        size_t nbins = nReinhartBins(mf);
-        Vector3D dir = Vector3D(0,0,0);
-        for(size_t bin = 1; bin <= nbins; bin++){
-            dir = reinhartCenterDir(bin,mf);
-            fprintf(octree, "solar source sun 0 0 4 %f %f %f 0.533\n", dir.getX(), dir.getY(), dir.getZ());            
-        }
-        
+        fprintf(octree, "!%s\n",&sky[0]);
+        fprintf(octree, RADIANCE_SKY_COMPLEMENT);
         PCLOSE(octree);
         
         return true;

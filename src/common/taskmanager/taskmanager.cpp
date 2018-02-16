@@ -23,12 +23,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "./taskmanager.h"
 #include "common/utilities/io.h"
 
-tbb::mutex oconvMutex;
 
 #ifdef _DEBUG
 // Define mutex for informing progress
 tbb::mutex verboseMutex;
 #endif
+
+tbb::mutex oconvMutex;
 
 TaskManager::TaskManager()
 {

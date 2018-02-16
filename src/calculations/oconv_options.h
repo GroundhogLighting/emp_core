@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 Emp
 
 Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -25,11 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define OCONV_INCLUDE_WINDOWS "include_windows"
 #define OCONV_USE_BLACK_GEOMETRY "black_geometry"
-#define OCONV_INCLUDE_SKY "include_sky"
-#define OCONV_SKY "sky"
 #define OCONV_LIGHTS_ON "lights_on"
-
-#define OCONV_USE_CURRENT_SKY "current"
 
 
 class OconvOptions : public OptionSet {
@@ -45,8 +41,6 @@ public:
   {
     addOption(OCONV_INCLUDE_WINDOWS, true);
     addOption(OCONV_USE_BLACK_GEOMETRY, false);
-    addOption(OCONV_SKY, "current");
-    addOption(OCONV_INCLUDE_SKY, true);
     addOption(OCONV_LIGHTS_ON, false);
   };
 };

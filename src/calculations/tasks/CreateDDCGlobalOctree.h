@@ -31,12 +31,10 @@ public:
         
         std::string name = "DDC Global Octree";
         setName(&name);
-        model = theModel;        
-        oconvs = true;
+        model = theModel;     
         
         // Add the Octree dependency... standard octree
-        OconvOptions oconvOptions = OconvOptions();
-        oconvOptions.setOption(OCONV_INCLUDE_SKY, false);
+        OconvOptions oconvOptions = OconvOptions();        
         
         OconvTask * oconvTask = new OconvTask(model,&oconvOptions);
         addDependency(oconvTask);// --> Dependency 0

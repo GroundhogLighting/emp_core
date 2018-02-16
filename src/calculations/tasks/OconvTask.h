@@ -21,8 +21,8 @@
 #pragma once
 
 
+
 #include "common/taskmanager/task.h"
-#include "common/utilities/stringutils.h"
 #include "calculations/oconv_options.h"
 #include "calculations/radiance.h"
 #include "writers/rad/radexporter.h"
@@ -45,8 +45,7 @@ public:
         std::string name = buildName();
         setName(&name);
         model = theModel;
-        oconvs = true;
-        
+        octreeName = *getName() + ".oct";
     }
     
     ~OconvTask()
@@ -66,7 +65,6 @@ public:
     {
         tbb::mutex::scoped_lock lock(oconvMutex);
         RadExporter exporter = RadExporter(model);
-        octreeName = *getName() + ".oct";
         
         if (!oconv(octreeName, &options, exporter)) {
             FATAL(errmsg, "Impossible to oconv");
@@ -108,14 +106,9 @@ public:
     {
         std::string ret = "Oconv";
         
-        ret += options.getOption<bool>(std::string(OCONV_INCLUDE_WINDOWS)) ? "1." : "0.";
+        ret += options.getOption<bool>(std::string(OCONV_INCLUDE_WINDOWS)) ? ".1." : "0.";
         ret += options.getOption<bool>(std::string(OCONV_USE_BLACK_GEOMETRY)) ? "1." : "0.";
-        ret += options.getOption<bool>(std::string(OCONV_INCLUDE_SKY)) ? "1." : "0.";
-        ret += options.getOption<bool>(std::string(OCONV_LIGHTS_ON)) ? "1." : "0.";
-        
-        std::string sky = options.getOption<std::string>(std::string(OCONV_SKY));
-        fixString(&sky[0],sky.size());
-        ret += sky;
+        ret += options.getOption<bool>(std::string(OCONV_LIGHTS_ON)) ? "1" : "0";
         
         return ret;
     }

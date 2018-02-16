@@ -22,7 +22,7 @@
 
 #include "../radiance.h"
 #include "../oconv_options.h"
-#include "OconvTask.h"
+#include "./AddSkyToOctree.h"
 
 class RTraceTask : public Task {
     
@@ -34,17 +34,18 @@ public:
     RTraceOptions * rtraceOptions; //!< The options passed to rcontrib
     OconvOptions * oconvOptions; //!< The OconvOptions
     std::string ambientFileName; //!< The name of the ambient file used
+    std::string sky; //!< The sky to add to the octree
     
-    RTraceTask(GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, OconvOptions * theOconvOptions)
+    RTraceTask(GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, OconvOptions * theOconvOptions, std::string theSky)
     {
         model = theModel;
         rtraceOptions = theOptions;
         oconvOptions = theOconvOptions;
         workplane = wp;
+        sky = theSky;
         
         // Dependency 0
-        OconvTask * oconvTask = new OconvTask(model, oconvOptions);
-        std::string octname = *(oconvTask->getName()) + ".oct";
+        AddSkyToOctree * oconvTask = new AddSkyToOctree(model, oconvOptions, sky);
         addDependency(oconvTask);
         
         // Dependency 1
@@ -52,25 +53,26 @@ public:
         addDependency(triangulateWorkplaneTask);
         
         // Set the name
-        std::string name = "Rtrace_"+ octname;
+        std::string name = "Rtrace_"+ oconvTask->octreeName;
         ambientFileName = name + ".amb";
         setName(&name);
     }
     
-    RTraceTask(GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays , OconvOptions * theOconvOptions)
+    RTraceTask(GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays , OconvOptions * theOconvOptions, std::string theSky)
     {
         model = theModel;
         rtraceOptions = theOptions;
         oconvOptions = theOconvOptions;
         rays = theRays;
+        sky = theSky;
         
         // Dependency 0
-        OconvTask * oconvTask = new OconvTask(model, oconvOptions);
-        std::string octname = *(oconvTask->getName()) + ".oct";
+        AddSkyToOctree * oconvTask = new AddSkyToOctree(model, oconvOptions, sky);
         addDependency(oconvTask);
         
         // Set the name
-        std::string name = "Rtrace_"+ octname;
+        std::string name = "Rtrace_"+ oconvTask->octreeName;
+        ambientFileName = name + ".amb";
         setName(&name);
     }
     
@@ -86,16 +88,15 @@ public:
                 rtraceOptions->isEqual(static_cast<RTraceTask *>(t)->rtraceOptions) &&
                 oconvOptions->isEqual(static_cast<RTraceTask *>(t)->oconvOptions) &&
                 workplane == static_cast<RTraceTask *>(t)->workplane &&
-                rays == static_cast<RTraceTask *>(t)->rays
+                rays == static_cast<RTraceTask *>(t)->rays &&
+                sky == static_cast<RTraceTask *>(t)->sky
                 );
     }
     
     bool solve()
     {
         
-        
-        
-        std::string octname = static_cast<OconvTask *>(getDependencyRef(0))->octreeName;
+        std::string octname = static_cast<AddSkyToOctree *>(getDependencyRef(0))->octreeName;
         ambientFileName = octname + ".amb";
         result.resize(rays->size(),1);
         if(workplane != nullptr){
@@ -108,7 +109,10 @@ public:
     
     bool isMutex(Task * t)
     {
-        return oconvOptions->isEqual(static_cast<RTraceTask *>(t)->oconvOptions);        
+        return (
+                oconvOptions->isEqual(static_cast<RTraceTask *>(t)->oconvOptions) &&
+                sky == (static_cast<RTraceTask *>(t)->sky)
+                );
     }
     
     bool submitResults(json * results)

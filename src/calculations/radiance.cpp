@@ -141,7 +141,7 @@ bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool 
 bool rtrace(RTraceOptions * options, char * octname, bool do_irradiance, bool imm_irrad, std::string amb, std::vector<RAY> * rays, ColorMatrix * result)
 {
     // Build the command
-    std::string rgbfile = std::to_string(*octname) +".rgb";
+    std::string rgbfile = std::string(octname) +".rgb";
     
     std::string mode;
     if (imm_irrad) {
@@ -290,18 +290,7 @@ bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
     std::string command = "oconv - > " + std::string(octname);
   	
     FILE *octree = POPEN(&command[0], "w");
-        
-    // check sky
-    if (options->getOption<bool>(OCONV_INCLUDE_SKY)) {
-      std::string sky = options->getOption<std::string>(OCONV_SKY);
-      if (sky == OCONV_USE_CURRENT_SKY) {
-        exporter.writeSky(octree);
-      }
-      else {
-          fprintf(octree, "!%s\n", &sky[0]);
-          fprintf(octree, RADIANCE_SKY_COMPLEMENT);
-      }
-    }
+            
 
     // Add all the materials
     bool blackGeometry = options->getOption<bool>(OCONV_USE_BLACK_GEOMETRY);

@@ -31,15 +31,12 @@ public:
         
         std::string name = "DDC Direct Sky Octree";
         setName(&name);
-        model = theModel;        
-        oconvs = true;
+        model = theModel;    
         
         // Add the BlackOctree dependency... black geometry, no sky, no lights
         OconvOptions oconvOptions = OconvOptions();
         oconvOptions.setOption(OCONV_INCLUDE_WINDOWS, true);
         oconvOptions.setOption(OCONV_USE_BLACK_GEOMETRY, true);
-        oconvOptions.setOption(OCONV_SKY, "current");
-        oconvOptions.setOption(OCONV_INCLUDE_SKY, false);
         oconvOptions.setOption(OCONV_LIGHTS_ON, false);
         
         OconvTask * oconvTask = new OconvTask(model,&oconvOptions);
