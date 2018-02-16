@@ -11,8 +11,7 @@ project "emp_tests"
 
     files { 
         "../main_test.cpp",
-        "../main_test.h",
-        --"../src/**",
+        "../main_test.h",        
         "../tests/*.h",        
     }
    

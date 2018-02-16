@@ -29,7 +29,7 @@ public:
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     ColorMatrix result; //!< The resulting matrix
-    RTraceOptions * options; //!< The options passed to rcontrib
+    RTraceOptions options; //!< The options passed to rcontrib
     
     CalculateDirectSunMatrix(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions)
     {
@@ -39,7 +39,7 @@ public:
         model = theModel;
         mf = theMF;        
         workplane = wp;
-        options = theOptions;
+        options = *theOptions;
         
         // Dependency 0: oconv task
         CreateDirectSunOctree * oconvTask = new CreateDirectSunOctree(model, mf);
@@ -59,7 +59,7 @@ public:
         setName(&name);
         model = theModel;
         mf = theMF;
-        options = theOptions;
+        options = *theOptions;
         
         // Dependency 0: oconv task
         CreateDirectSunOctree * oconvTask = new CreateDirectSunOctree(model, mf);
@@ -92,7 +92,7 @@ public:
         
         
         std::string octname = static_cast<CreateDirectSunOctree *>(getDependencyRef(0))->octreeName;
-        RTraceOptions options = RTraceOptions();
+        
         options.setOption("ab",1);
         options.setOption("dc",1);
         options.setOption("dt",0);

@@ -31,7 +31,7 @@ public:
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     ColorMatrix result; //!< The resulting matrix
-    RTraceOptions * options; //!< The options passed to rcontrib... will be modified
+    RTraceOptions options; //!< The options passed to rcontrib... will be modified
     
     //* Process a Workplane
     /*!
@@ -45,7 +45,7 @@ public:
         model = theModel;
         mf = theMF;
         workplane = wp;
-        options = theOptions;
+        options = *theOptions;
         
         // Dependency 0: oconv task
         CreateDDCGlobalOctree * oconvTask = new CreateDDCGlobalOctree(model);
@@ -71,7 +71,7 @@ public:
         setName(&name);
         model = theModel;
         mf = theMF;
-        options = theOptions;
+        options = *theOptions;
         
         // Dependency 0: oconv task
         CreateDDCDirectSkyOctree * oconvTask = new CreateDDCDirectSkyOctree(model);
@@ -101,7 +101,7 @@ public:
     bool solve()
     {
         std::string octname = static_cast<CreateDDCDirectSkyOctree *>(getDependencyRef(0))->octreeName;
-        options->setOption("ab",1);
+        options.setOption("ab",1);
         
         
         // If there is a workplane, get rays from triangulation
@@ -109,7 +109,7 @@ public:
             rays = &(static_cast<TriangulateWorkplane *>(getDependencyRef(1))->rays);
         }
         result.resize(rays->size(),nReinhartBins(mf));
-        rcontrib(options, &octname[0], false, true, rays, mf, "ground_glow", false, &result);
+        rcontrib(&options, &octname[0], false, true, rays, mf, "ground_glow", false, &result);
         
         return true;
     }

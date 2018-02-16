@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include "./color_matrix.h"
-
+#include "common/utilities/io.h"
 
 ColorMatrix::ColorMatrix()
 {
@@ -84,6 +84,52 @@ void ColorMatrix::resize(size_t nrows, size_t ncols)
     red.resize(nrows,ncols);
     green.resize(nrows,ncols);
     blue.resize(nrows,ncols);
+}
+
+void ColorMatrix::calcIrradiance(Matrix * result)
+{
+    size_t cols = ncols();
+    size_t rows = nrows();
+    
+    // Check size match
+    if(cols != result->ncols() || rows != result->nrows()){
+        WARN(msg,"Inconsistent size of result matrix when calcIrradiance... resizing");
+        result->resize(rows,cols);
+    }
+    
+    double r,g,b;
+    for(size_t col = 0; col < cols; col++){
+        for(size_t row=0;row<rows;row++){
+            r = red.getElement(row,col);
+            g = green.getElement(row,col);
+            b = blue.getElement(row,col);
+            result->setElement(row,col,0.265*r + 0.67*g + 0.065*b);
+        }
+    }
+    
+}
+
+void ColorMatrix::calcIlluminance(Matrix * result)
+{
+    size_t cols = ncols();
+    size_t rows = nrows();
+    
+    // Check size match
+    if(cols != result->ncols() || rows != result->nrows()){
+        WARN(msg,"Inconsistent size of result matrix when calcIrradiance... resizing");
+        result->resize(rows,cols);
+    }
+    
+    double r,g,b;
+    for(size_t col = 0; col < cols; col++){
+        for(size_t row=0;row<rows;row++){
+            r = red.getElement(row,col);
+            g = green.getElement(row,col);
+            b = blue.getElement(row,col);
+            result->setElement(row,col,47.5*r + 119.95*g + 11.60*b);
+        }
+    }
+    
 }
 
 

@@ -141,9 +141,9 @@ TEST(GenPerezSkyVec, DirectOnlySharpSun)
             }
             
             // Less than 1% error
-            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.01*(*referenceRed)[row]->at(0));
-            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.01*(*referenceGreen)[row]->at(0));
-            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.01*(*referenceBlue)[row]->at(0));
+            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.02*(*referenceRed)[row]->at(0));
+            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.02*(*referenceGreen)[row]->at(0));
+            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.02*(*referenceBlue)[row]->at(0));
             
         }
     }
@@ -212,9 +212,9 @@ TEST(GenPerezSkyVec, DirectOnlyWideSun)
             }
             
             // Less than 1% error
-            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.01*(*referenceRed)[row]->at(0));
-            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.01*(*referenceGreen)[row]->at(0));
-            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.01*(*referenceBlue)[row]->at(0));
+            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.02*(*referenceRed)[row]->at(0));
+            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.02*(*referenceGreen)[row]->at(0));
+            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.02*(*referenceBlue)[row]->at(0));
             
         }
     }
@@ -281,9 +281,9 @@ TEST(GenPerezSkyVec, FulllSkyWideSun)
             }
             
             // Less than 1% error
-            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.01*(*referenceRed)[row]->at(0));
-            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.01*(*referenceGreen)[row]->at(0));
-            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.01*(*referenceBlue)[row]->at(0));
+            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.02*(*referenceRed)[row]->at(0));
+            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.02*(*referenceGreen)[row]->at(0));
+            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.02*(*referenceBlue)[row]->at(0));
             
         }
     }
@@ -348,9 +348,9 @@ TEST(GenPerezSkyVec, FullSkySharpSun)
             }
             
             // Less than 1% error
-            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.01*(*referenceRed)[row]->at(0));
-            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.01*(*referenceGreen)[row]->at(0));
-            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.01*(*referenceBlue)[row]->at(0));
+            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.02*(*referenceRed)[row]->at(0));
+            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.02*(*referenceGreen)[row]->at(0));
+            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.02*(*referenceBlue)[row]->at(0));
             
         }
     }

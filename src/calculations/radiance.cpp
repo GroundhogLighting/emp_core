@@ -141,7 +141,7 @@ bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool 
 bool rtrace(RTraceOptions * options, char * octname, bool do_irradiance, bool imm_irrad, std::string amb, std::vector<RAY> * rays, ColorMatrix * result)
 {
     // Build the command
-    std::string rgbfile = octname + std::to_string(rand()) + std::string(".rgb");
+    std::string rgbfile = std::to_string(*octname) +".rgb";
     
     std::string mode;
     if (imm_irrad) {

@@ -60,7 +60,7 @@ public:
     bool solve()
     {
         tbb::mutex::scoped_lock lock(oconvMutex);
-        std::string octName = *(static_cast<OconvTask *>(getDependencyRef(0))->getName()) + ".oct";
+        std::string octName = (static_cast<OconvTask *>(getDependencyRef(0))->octreeName);
         octreeName = "DDC_Global_" + octName;
         std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
         
@@ -83,7 +83,7 @@ public:
      */
     bool isMutex(Task * t)
     {
-        return false;//t->oconvs; // if it runs oconv, then mutex.
+        return false;
     }
     
     //! Submits the results into a json

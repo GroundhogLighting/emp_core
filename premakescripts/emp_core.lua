@@ -1,4 +1,4 @@
-project "Emp_core"   
+project "emp_core"   
     
     kind "StaticLib"
 

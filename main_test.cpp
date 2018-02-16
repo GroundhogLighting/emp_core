@@ -19,6 +19,7 @@
 #include "./tests/4cm_test.h"
 #include "./tests/DDC_test.h"
 #include "./tests/genperezskyvec_test.h"
+#include "./tests/DF_test.h"
 
 #ifdef _DEBUG
 #include <stdlib.h>

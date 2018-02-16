@@ -109,4 +109,18 @@ public:
      */
     void resize(size_t nrows, size_t ncols);
     
+    //! Transforms a ColorMatrix into a Matrix with the irradiance values
+    /*!
+     @author German Molina
+     @param result The matrix to alocate the results
+     */
+    void calcIrradiance(Matrix * result);
+    
+    //! Transforms a ColorMatrix into a Matrix with the illuminance values
+    /*!
+     @author German Molina
+     @param result The matrix to alocate the results
+     */
+    void calcIlluminance(Matrix * result);
+    
 };

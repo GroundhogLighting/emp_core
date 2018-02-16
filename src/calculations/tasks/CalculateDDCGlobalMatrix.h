@@ -30,7 +30,7 @@ public:
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     ColorMatrix result; //!< The resulting matrix
-    RTraceOptions * options; //!< The options passed to RContrib
+    RTraceOptions options; //!< The options passed to RContrib
     
     //* Process a Workplane
     /*!
@@ -43,7 +43,7 @@ public:
         setName(&name);
         model = theModel;
         mf = theMF;
-        options = theOptions;
+        options = *theOptions;
         
         // Dependency 0: oconv task
         CreateDDCGlobalOctree * oconvTask = new CreateDDCGlobalOctree(model);
@@ -69,7 +69,7 @@ public:
         setName(&name);
         model = theModel;
         mf = theMF;
-        options = theOptions;
+        options = *theOptions;
         
         // Dependency 0: oconv task
         CreateDDCGlobalOctree * oconvTask = new CreateDDCGlobalOctree(model);
@@ -105,7 +105,7 @@ public:
             rays = &(static_cast<TriangulateWorkplane *>(getDependencyRef(1))->rays);
         }
         result.resize(rays->size(),nReinhartBins(mf));
-        rcontrib(options, &octname[0], false, true, rays, mf, "ground_glow", false, &result);
+        rcontrib(&options, &octname[0], false, true, rays, mf, "ground_glow", false, &result);
         
         return true;
     }

@@ -1,4 +1,5 @@
 
+
 /*****************************************************************************
  Emp
  
@@ -25,7 +26,7 @@
 #include "./CalculateDDCDirectSunPatchIlluminance.h"
 #include "./CalculateDirectSunIlluminance.h"
 
-class doDDC : public Task {
+class do4CM : public Task {
 public:
     GroundhogModel * model; //!< The model
     int skyMF; //!< The Reinhart subdivition scheme for the sky
@@ -33,9 +34,9 @@ public:
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     RTraceOptions * options; //!< The options passed to rcontrib procsses
-    Matrix result; //!< The resulting matrix
+    ColorMatrix result; //!< The resulting matrix
     
-    doDDC(GroundhogModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions)
+    do4CM(GroundhogModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions)
     {
         
         std::string name = "DDC";
@@ -61,7 +62,7 @@ public:
     }
     
     
-    doDDC(GroundhogModel * theModel,  std::vector<RAY> * theRays, int theSunMF, int theSkyMF, RTraceOptions * theOptions)
+    do4CM(GroundhogModel * theModel,  std::vector<RAY> * theRays, int theSunMF, int theSkyMF, RTraceOptions * theOptions)
     {
         
         std::string name = "DDC";
@@ -119,25 +120,31 @@ public:
         result.resize(nSensors,nTimesteps);
         
         // Calculate
-        Matrix * globalRed =   global->redChannel();
+        Matrix * globalRed = global->redChannel();
         Matrix * globalGreen = global->greenChannel();
-        Matrix * globalBlue =  global->blueChannel();
+        Matrix * globalBlue = global->blueChannel();
         
-        Matrix * directSunPatchRed =   directSunPatch->redChannel();
+        Matrix * directSunPatchRed = directSunPatch->redChannel();
         Matrix * directSunPatchGreen = directSunPatch->greenChannel();
-        Matrix * directSunPatchBlue =  directSunPatch->blueChannel();
+        Matrix * directSunPatchBlue = directSunPatch->blueChannel();
         
-        Matrix * directSunRed =   directSun->redChannel();
+        Matrix * directSunRed = directSun->redChannel();
         Matrix * directSunGreen = directSun->greenChannel();
-        Matrix * directSunBlue =  directSun->blueChannel();
+        Matrix * directSunBlue = directSun->blueChannel();
         
-        double r,g,b;
+        Matrix * red = result.redChannel();
+        Matrix * green = result.greenChannel();
+        Matrix * blue = result.blueChannel();
+        
         for(size_t col=0; col < nTimesteps; col++){
-            for(size_t row=0; row < nSensors; row++){                
-                r = globalRed->  getElement(row,col) - directSunPatchRed->  getElement(row,col) + directSunRed->  getElement(row,col);
-                g = globalGreen->getElement(row,col) - directSunPatchGreen->getElement(row,col) + directSunGreen->getElement(row,col);
-                b = globalBlue-> getElement(row,col) - directSunPatchBlue-> getElement(row,col) + directSunBlue-> getElement(row,col);
-                result.setElement(row,col,47.5*r + 119.95*g + 11.60*b);
+            for(size_t row=0; row < nSensors; row++){
+                double r = globalRed->getElement(row,col) - directSunPatchRed->getElement(row,col) + directSunRed->getElement(row,col);
+                double g = globalGreen->getElement(row,col) - directSunPatchGreen->getElement(row,col) + directSunGreen->getElement(row,col);
+                double b = globalBlue->getElement(row,col) - directSunPatchBlue->getElement(row,col) + directSunBlue->getElement(row,col);
+                
+                red->setElement(row,col,r);
+                green->setElement(row,col,g);
+                blue->setElement(row,col,b);
             }
         }
         

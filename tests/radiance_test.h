@@ -16,7 +16,6 @@ TEST(RTraceTest, calcDF)
     std::string octname = "./octree.oct";
     std::string command = "oconv - > " + octname;
 
-
     FILE *octree = POPEN(&command[0], "w");
     fprintf(octree, "!gensky -ang 45 40 -c -B %f -g 0.2\n",100.0);
     fprintf(octree, RADIANCE_SKY_COMPLEMENT);

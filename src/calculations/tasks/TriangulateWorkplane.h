@@ -21,15 +21,13 @@
 
 #pragma once
 #include "groundhogmodel/groundhogmodel.h"
-#include "groundhogmodel/tasks.h"
-#include "calculations/radiance.h"
 #include "common/taskmanager/task.h"
 #include "tbb/tbb.h"
 #include "common/geometry/triangulation.h"
-
-#define EMP_TRIANGULATION_GRAIN_SIZE 24
+#include "grain_sizes.h"
 
 #include <fstream>
+
 
 
 //! Triangulates a whole workplane
@@ -180,4 +178,3 @@ public:
     
     
 };
-

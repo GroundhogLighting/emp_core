@@ -1,3 +1,4 @@
+
 /*****************************************************************************
  Emp
  
@@ -20,58 +21,60 @@
 
 #pragma once
 
-
-#include "common/taskmanager/task.h"
-#include "common/utilities/stringutils.h"
-#include "calculations/oconv_options.h"
 #include "calculations/radiance.h"
-#include "writers/rad/radexporter.h"
-#include "../reinhart.h"
-#include "./TriangulateWorkplane.h"
+#include "config_constants.h"
 
-class OconvTask : public Task {
-    
+class CreateDaylightFactorOctree : public Task {
 public:
-    
     GroundhogModel * model; //!< The model to Oconv
-    OconvOptions options; //!< The Options passed to Oconv
-    std::string octreeName; //!< The name of the created octree
+    std::string octreeName; //!< The name of the final octree
     
-    
-    
-    OconvTask(GroundhogModel * theModel, OconvOptions * theOptions)
+    CreateDaylightFactorOctree(GroundhogModel * theModel)
     {
-        options = *theOptions;
-        std::string name = buildName();
+        
+        std::string name = "Direct Sun Octree";
         setName(&name);
-        model = theModel;
+        model = theModel;        
         oconvs = true;
+        
+        // Add the BlackOctree dependency... black geometry, no sky, no lights
+        OconvOptions oconvOptions = OconvOptions();
+        oconvOptions.setOption(OCONV_INCLUDE_WINDOWS, true);
+        oconvOptions.setOption(OCONV_USE_BLACK_GEOMETRY, false);
+        oconvOptions.setOption(OCONV_SKY, "current");
+        oconvOptions.setOption(OCONV_INCLUDE_SKY, false);
+        oconvOptions.setOption(OCONV_LIGHTS_ON, false);
+        
+        OconvTask * oconvTask = new OconvTask(model,&oconvOptions);
+        addDependency(oconvTask);// --> Dependency 0
         
     }
     
-    ~OconvTask()
+    ~CreateDaylightFactorOctree()
     {
         remove(&octreeName[0]);
     }
     
     bool isEqual(Task * t)
     {
-        return (
-                model == static_cast<OconvTask *>(t)->model &&
-                options.isEqual(&static_cast<OconvTask *>(t)->options)
-                );
+        return model == static_cast<CreateDirectSunOctree *>(t)->model;
     }
     
     bool solve()
     {
         tbb::mutex::scoped_lock lock(oconvMutex);
-        RadExporter exporter = RadExporter(model);
-        octreeName = *getName() + ".oct";
+        std::string octName = (static_cast<OconvTask *>(getDependencyRef(0))->octreeName);
         
-        if (!oconv(octreeName, &options, exporter)) {
-            FATAL(errmsg, "Impossible to oconv");
-            return false;
-        }
+        octreeName = "DAYLIGHT_FACTOR_" + octName;
+        
+        double albedo = model->getLocation()->getAlbedo();
+        
+        std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
+        
+        FILE *octree = POPEN(&command[0], "w");
+        fprintf(octree, "!gensky -ang 45 40 -c -B %f -g %f\n",100.0,albedo);
+        fprintf(octree, RADIANCE_SKY_COMPLEMENT);
+        PCLOSE(octree);
         
         return true;
     }
@@ -87,7 +90,7 @@ public:
      */
     bool isMutex(Task * t)
     {
-        return true;
+        return false;
     }
     
     //! Submits the results into a json
@@ -102,21 +105,5 @@ public:
     bool submitResults(json * results)
     {
         return true;
-    }
-    
-    std::string buildName()
-    {
-        std::string ret = "Oconv";
-        
-        ret += options.getOption<bool>(std::string(OCONV_INCLUDE_WINDOWS)) ? "1." : "0.";
-        ret += options.getOption<bool>(std::string(OCONV_USE_BLACK_GEOMETRY)) ? "1." : "0.";
-        ret += options.getOption<bool>(std::string(OCONV_INCLUDE_SKY)) ? "1." : "0.";
-        ret += options.getOption<bool>(std::string(OCONV_LIGHTS_ON)) ? "1." : "0.";
-        
-        std::string sky = options.getOption<std::string>(std::string(OCONV_SKY));
-        fixString(&sky[0],sky.size());
-        ret += sky;
-        
-        return ret;
     }
 };

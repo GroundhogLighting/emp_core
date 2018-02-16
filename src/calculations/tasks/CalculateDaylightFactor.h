@@ -1,3 +1,4 @@
+
 /*****************************************************************************
  Emp
  
@@ -23,8 +24,9 @@
 #include "../radiance.h"
 #include "../oconv_options.h"
 #include "OconvTask.h"
+#include "./CreateDaylightFactorOctree.h"
 
-class RTraceTask : public Task {
+class CalculateDaylightFactor : public Task {
     
 public:
     GroundhogModel * model; //!< The model
@@ -32,19 +34,16 @@ public:
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     ColorMatrix result; //!< The resulting matrix
     RTraceOptions * rtraceOptions; //!< The options passed to rcontrib
-    OconvOptions * oconvOptions; //!< The OconvOptions
     std::string ambientFileName; //!< The name of the ambient file used
     
-    RTraceTask(GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, OconvOptions * theOconvOptions)
+    CalculateDaylightFactor(GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp)
     {
         model = theModel;
         rtraceOptions = theOptions;
-        oconvOptions = theOconvOptions;
         workplane = wp;
         
         // Dependency 0
-        OconvTask * oconvTask = new OconvTask(model, oconvOptions);
-        std::string octname = *(oconvTask->getName()) + ".oct";
+        CreateDaylightFactorOctree * oconvTask = new CreateDaylightFactorOctree(model);
         addDependency(oconvTask);
         
         // Dependency 1
@@ -52,29 +51,28 @@ public:
         addDependency(triangulateWorkplaneTask);
         
         // Set the name
-        std::string name = "Rtrace_"+ octname;
+        std::string name = "DaylightFactor";
         ambientFileName = name + ".amb";
         setName(&name);
     }
     
-    RTraceTask(GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays , OconvOptions * theOconvOptions)
+    CalculateDaylightFactor(GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays)
     {
         model = theModel;
         rtraceOptions = theOptions;
-        oconvOptions = theOconvOptions;
         rays = theRays;
         
         // Dependency 0
-        OconvTask * oconvTask = new OconvTask(model, oconvOptions);
-        std::string octname = *(oconvTask->getName()) + ".oct";
+        CreateDaylightFactorOctree * oconvTask = new CreateDaylightFactorOctree(model);
         addDependency(oconvTask);
         
         // Set the name
-        std::string name = "Rtrace_"+ octname;
+        std::string name = "DaylightFactor";
+        ambientFileName = name + ".amb";
         setName(&name);
     }
     
-    ~RTraceTask()
+    ~CalculateDaylightFactor()
     {
         remove(&ambientFileName[0]);
     }
@@ -84,7 +82,6 @@ public:
         
         return (
                 rtraceOptions->isEqual(static_cast<RTraceTask *>(t)->rtraceOptions) &&
-                oconvOptions->isEqual(static_cast<RTraceTask *>(t)->oconvOptions) &&
                 workplane == static_cast<RTraceTask *>(t)->workplane &&
                 rays == static_cast<RTraceTask *>(t)->rays
                 );
@@ -92,23 +89,21 @@ public:
     
     bool solve()
     {
-        
-        
-        
-        std::string octname = static_cast<OconvTask *>(getDependencyRef(0))->octreeName;
-        ambientFileName = octname + ".amb";
+                        
+        std::string octName = (static_cast<CreateDaylightFactorOctree *>(getDependencyRef(0))->octreeName);
+     
         result.resize(rays->size(),1);
         if(workplane != nullptr){
             rays = &(static_cast<TriangulateWorkplane *>(getDependencyRef(1))->rays);
         }
-        rtrace_I(rtraceOptions, &octname[0], ambientFileName, rays, &result);        
+        rtrace_I(rtraceOptions, &octName[0], ambientFileName, rays, &result);
         
         return true;
     }
     
     bool isMutex(Task * t)
     {
-        return oconvOptions->isEqual(static_cast<RTraceTask *>(t)->oconvOptions);        
+        return true; // Mutex with all Daylight Factor calculations
     }
     
     bool submitResults(json * results)
