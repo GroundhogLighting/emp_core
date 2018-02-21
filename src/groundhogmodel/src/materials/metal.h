@@ -6,34 +6,35 @@
 
 using nlohmann::json;
 
-//! Plastic material
+//! Metal material
 /*!
 This material is extracted directly from the Radiance reference... 
 read that document to learn more
 
-The Primitive of the Plastic material es:
+The Primitive of the Metal material es:
 
-void plastic %MAT_NAME% 0 0 5 Red_r Green_r Blue_r Specularity Roughness
+void metal %MAT_NAME% 0 0 5 Red_r Green_r Blue_r Specularity Roughness
 
 */
 
 
-class Plastic : public Material {
+class Metal : public Material {
 
 public:
 	double r = 0.6; //!< The red component
 	double g = 0.6; //!< The green component
 	double b = 0.6; //!< The blue component
-	double specularity = 0; //!< The specularity
-	double roughness = 0; //!< The roughness
+	double specularity = 0.95; //!< The specularity
+	double roughness = 0.05; //!< The roughness
 
 
-	//! Builds a new Plastic material
+
+	//! Builds a new Metal material
 	/*!
 	@author German Molina
-	@param j The JSON object describing the Plastic
+	@param j The JSON object describing the Metal
 	*/
-	Plastic(json * j)
+	Metal(json * j)
     {
         primitiveLength = 11;
         fillFromJSON(j);

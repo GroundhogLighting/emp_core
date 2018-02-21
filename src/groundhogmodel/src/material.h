@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -38,15 +38,16 @@ using nlohmann::json;
 */
 
 class Material {
+
 protected:
-	std::string name; //!< The unique name of the material
-	std::string type; //!< The type of material
-	int color[3] = {153, 153, 153}; //!< Color of the material in the 3D modeling tool
-	double alpha = 1; //!< Transparency of the material in the 3D modeling tool
 	int primitiveLength = -1; //!< Number of expected tokens in primitive
 
-
 public:
+    std::string name; //!< The unique name of the material
+    std::string type; //!< The type of material
+    int color[3] = {153, 153, 153}; //!< Color of the material in the 3D modeling tool
+    double alpha = 1; //!< Transparency of the material in the 3D modeling tool
+    
 	//! Constructor of a new Material
 	/*!
 	@author German Molina
@@ -96,7 +97,7 @@ public:
 	@return success
 	@note This function should be overriden by a function with the same name in each Material derived class
 	*/
-	virtual bool writeInRadianceFormat(FILE * file);
+	virtual bool writeInRadianceFormat(FILE * file) = 0;
 
 	//! Parses a tokenized Groundhog primitive
 	/*!
@@ -108,5 +109,5 @@ public:
 	@return success
 	@note This function should be overriden by a function with the same name in each Material derived class	
 	*/
-	virtual bool parsePrimitive(std::vector <std::string> * tokens);
+	virtual bool parsePrimitive(std::vector <std::string> * tokens) = 0;
 };

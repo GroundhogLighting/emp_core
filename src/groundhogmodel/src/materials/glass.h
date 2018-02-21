@@ -1,7 +1,6 @@
-﻿#pragma once
+#pragma once
 
 #include "../material.h"
-
 #include "json/json.hpp"
 
 using nlohmann::json;
@@ -19,40 +18,24 @@ void glass %MAT_NAME% 0 0 3 Red_t Green_t Blue_t
 
 class Glass : public Material {
 
-private:
+public:
 	double r = 0.86; //!< The red transmissivity
 	double g = 0.86; //!< The green transmissivity
 	double b = 0.86; //!< The blue transmissivity
 	
-public:
+
 
 	//! Builds a new Glass material
 	/*!
 	@author German Molina
 	@param j The JSON object describing the Glass
 	*/
-	Glass(json * j);
-
-	//! Retrieves the 'r' member
-	/*!
-	@author German Molina
-	@return the red reflectance
-	*/
-	double red();
-
-	//! Retrieves the 'g' member
-	/*!
-	@author German Molina
-	@return the green reflectance
-	*/
-	double green();
-
-	//! Retrieves the 'b' member
-	/*!
-	@author German Molina
-	@return the red reflectance
-	*/
-	double blue();
+	Glass(json * j)
+    {
+        primitiveLength = 9;
+        fillFromJSON(j);
+    }
+	
 
 	//! Parses a tokenized Groundhog primitive
 	/*!
@@ -63,7 +46,15 @@ public:
 	@param[in] tokens The primitive tokenized
 	@return success
 	*/
-	bool parsePrimitive(std::vector <std::string> * tokens);
+	bool parsePrimitive(std::vector <std::string> * tokens)
+    {
+        size_t i = 6;
+        r = std::stod((*tokens)[i++]);
+        g = std::stod((*tokens)[i++]);
+        b = std::stod((*tokens)[i++]);
+        
+        return true;
+    }
 
     //! Writes the Glass material in Radiance format
     /*!
@@ -71,5 +62,11 @@ public:
     @param[in] file The file to write to
     @return success
     */
-    bool writeInRadianceFormat(FILE * file);
+    bool writeInRadianceFormat(FILE * file)
+    {
+        fprintf(file, "void %s %s\n0\n0\n", &type[0], &name[0]);
+        fprintf(file, "3 %f %f %f\n", r, g, b);
+        
+        return true;
+    }
 };

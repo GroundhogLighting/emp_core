@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -79,13 +79,3 @@ bool Material::fillFromJSON(json * j)
 	return true;
 }
 
-
-bool Material::writeInRadianceFormat(FILE * file)
-{
-	return true;
-}
-
-bool Material::parsePrimitive(std::vector <std::string> * tokens)
-{
-	return true;
-}

@@ -144,3 +144,39 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
+# Allowed Radiance primitives
+
+
+## Materials
+| Material      | Progress                                       |
+|-------------|---------------------------------------------------|
+| Light      | Generate Visual Studio 2017 project files         |
+| Illum      | Generate Visual Studio 2015 project files         |
+| Glow      | Generate Visual Studio 2013 project files         |
+| Spotlight      | Generate Visual Studio 2012 project files         |
+| Mirror | AAA |
+| Prism1 | AAA |
+| Prism2 | AAA |
+| Mist | AAA |
+| Plastic | AAA | 
+| Metal | AAA |
+| Trans | AAA | 
+| Plastic2 | AAA | 
+| Metal2 | AAA | 
+| Trans2 | AAA | 
+| Ashik2 | AAA |
+| Dielectric | AAA | 
+| Interface | AAA |
+| Glass | Supported | 
+| Plastfunc | AAA |
+| Metalfunc | AAA |
+| Transfunc | AAA | 
+| BRTDfunc | AAA | 
+| Plasdata | AAA |
+| Metdata | AAA | 
+| Transdata | AAA | 
+| BSDF | AAA |
+| Antimatter | AAA | 
