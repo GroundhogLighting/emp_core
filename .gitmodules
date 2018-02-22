@@ -4,6 +4,7 @@
 [submodule "3rdparty/IntelTBB"]
 	path = 3rdparty/IntelTBB
 	url = https://github.com/01org/tbb.git
+	branch = tbb_2018
 [submodule "3rdparty/Radiance"]
 	path = 3rdparty/Radiance
 	url = https://github.com/NREL/Radiance.git
