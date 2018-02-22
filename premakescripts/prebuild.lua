@@ -25,7 +25,7 @@ file:close()
 -- Write Radiance and Emp versions
 file = io.open("../src/versions.h",'w')
 file:write("#pragma once","\n")
-file:write("#define EMP_CORE_VERSION \"Emp "..emp_core_version.."\"","\n")
+file:write("#define EMP_CORE_VERSION \"Emp_core "..emp_core_version.."\"","\n")
 file:write("#define RADIANCE_VERSION \""..rad_version.."\"","\n")
 file:close()
 
