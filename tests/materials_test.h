@@ -3,7 +3,7 @@
 
 
 
-TEST(MaterialTest, Dielectric_FromJSON) {
+TEST(MaterialTest, Dielectric) {
     double r = 0.5;
     double g = 0.6;
     double b = 0.9;
@@ -11,7 +11,7 @@ TEST(MaterialTest, Dielectric_FromJSON) {
     double hartmanConstant = 0.0;
     
     std::string rad = "void dielectric %MAT_NAME% 0 0 5 " + std::to_string(r) + " " + std::to_string(g) + " " + std::to_string(b) + " " + std::to_string(refractionIndex)+" " + std::to_string(hartmanConstant);
-    std::string c = "plastic";
+    std::string c = "dielectric";
     std::string name = "theMaterial";
     
     json j = json();
@@ -21,6 +21,7 @@ TEST(MaterialTest, Dielectric_FromJSON) {
     
     Dielectric mat = Dielectric(&j);
     
+    // Test From JSON
     ASSERT_EQ(mat.name,name);
     ASSERT_EQ(mat.type,c);
     ASSERT_EQ(mat.r,r);
@@ -28,11 +29,42 @@ TEST(MaterialTest, Dielectric_FromJSON) {
     ASSERT_EQ(mat.b,b);
     ASSERT_EQ(mat.refractionIndex,refractionIndex);
     ASSERT_EQ(mat.hartmanConstant,hartmanConstant);
+    
+    // Test write to Radiance.
+    std::string fileName = "material.mat";
+    FOPEN(file, &fileName[0], "w");
+    mat.writeInRadianceFormat(file);
+    fclose(file);
+    
+    std::ifstream in;
+    in.open(fileName);
+    std::string line;
+    
+    std::string newRad = "";
+    while(std::getline(in, line)){
+        newRad += (line+" ");
+    }
+    
+    json newJson = json();
+    newJson["class"]=c;
+    newJson["name"]=name;
+    newJson["rad"]=newRad;
+
+    Dielectric newMat = Dielectric(&newJson);
+    
+    ASSERT_EQ(mat.name,newMat.name);
+    ASSERT_EQ(mat.type,newMat.type);
+    ASSERT_EQ(mat.r,newMat.r);
+    ASSERT_EQ(mat.g,newMat.g);
+    ASSERT_EQ(mat.b,newMat.b);
+    ASSERT_EQ(mat.refractionIndex,newMat.refractionIndex);
+    ASSERT_EQ(mat.hartmanConstant,newMat.hartmanConstant);
+    
 }
 
 
 
-TEST(MaterialTest, Glass_FromJSON) {
+TEST(MaterialTest, Glass) {
     double r = 0.5;
     double g = 0.6;
     double b = 0.9;
@@ -48,16 +80,45 @@ TEST(MaterialTest, Glass_FromJSON) {
     
     Glass mat = Glass(&j);
     
+    // Test From JSON
     ASSERT_EQ(mat.name,name);
     ASSERT_EQ(mat.type,c);
     ASSERT_EQ(mat.r,r);
     ASSERT_EQ(mat.g,g);
     ASSERT_EQ(mat.b,b);
+    
+    // Test write to Radiance.
+    std::string fileName = "material.mat";
+    FOPEN(file, &fileName[0], "w");
+    mat.writeInRadianceFormat(file);
+    fclose(file);
+    
+    std::ifstream in;
+    in.open(fileName);
+    std::string line;
+    
+    std::string newRad = "";
+    while(std::getline(in, line)){
+        newRad += (line+" ");
+    }
+    
+    json newJson = json();
+    newJson["class"]=c;
+    newJson["name"]=name;
+    newJson["rad"]=newRad;
+    
+    Glass newMat = Glass(&newJson);
+    
+    ASSERT_EQ(mat.name,newMat.name);
+    ASSERT_EQ(mat.type,newMat.type);
+    ASSERT_EQ(mat.r,newMat.r);
+    ASSERT_EQ(mat.g,newMat.g);
+    ASSERT_EQ(mat.b,newMat.b);
 }
 
 
 
-TEST(MaterialTest, Glow_FromJSON) {
+TEST(MaterialTest, Glow) {
     double r = 0.5;
     double g = 0.6;
     double b = 0.9;
@@ -74,16 +135,46 @@ TEST(MaterialTest, Glow_FromJSON) {
     
     Glow mat = Glow(&j);
     
+    // Test From JSON
     ASSERT_EQ(mat.name,name);
     ASSERT_EQ(mat.type,c);
     ASSERT_EQ(mat.r,r);
     ASSERT_EQ(mat.g,g);
     ASSERT_EQ(mat.b,b);
     ASSERT_EQ(mat.maxRadius,maxRadius);
+    
+    // Test write to Radiance.
+    std::string fileName = "material.mat";
+    FOPEN(file, &fileName[0], "w");
+    mat.writeInRadianceFormat(file);
+    fclose(file);
+    
+    std::ifstream in;
+    in.open(fileName);
+    std::string line;
+    
+    std::string newRad = "";
+    while(std::getline(in, line)){
+        newRad += (line+" ");
+    }
+    
+    json newJson = json();
+    newJson["class"]=c;
+    newJson["name"]=name;
+    newJson["rad"]=newRad;
+    
+    Glow newMat = Glow(&newJson);
+    
+    ASSERT_EQ(mat.name,newMat.name);
+    ASSERT_EQ(mat.type,newMat.type);
+    ASSERT_EQ(mat.r,newMat.r);
+    ASSERT_EQ(mat.g,newMat.g);
+    ASSERT_EQ(mat.b,newMat.b);
+    ASSERT_EQ(mat.maxRadius,newMat.maxRadius);
 }
 
 
-TEST(MaterialTest, Interface_FromJSON) {
+TEST(MaterialTest, Interface) {
     double r1 = 0.5;
     double g1 = 0.6;
     double b1 = 0.9;
@@ -107,24 +198,56 @@ TEST(MaterialTest, Interface_FromJSON) {
     
     Interface mat = Interface(&j);
     
+    // Test From JSON
     ASSERT_EQ(mat.name,name);
     ASSERT_EQ(mat.type,c);
-    
     ASSERT_EQ(mat.r1,r1);
     ASSERT_EQ(mat.g1,g1);
     ASSERT_EQ(mat.b1,b1);
     ASSERT_EQ(mat.refractionIndex1,refractionIndex1);
-    
     ASSERT_EQ(mat.r2,r2);
     ASSERT_EQ(mat.g2,g2);
     ASSERT_EQ(mat.b2,b2);
     ASSERT_EQ(mat.refractionIndex2,refractionIndex2);
+    
+    // Test write to Radiance.
+    std::string fileName = "material.mat";
+    FOPEN(file, &fileName[0], "w");
+    mat.writeInRadianceFormat(file);
+    fclose(file);
+    
+    std::ifstream in;
+    in.open(fileName);
+    std::string line;
+    
+    std::string newRad = "";
+    while(std::getline(in, line)){
+        newRad += (line+" ");
+    }
+    
+    json newJson = json();
+    newJson["class"]=c;
+    newJson["name"]=name;
+    newJson["rad"]=newRad;
+    
+    Interface newMat = Interface(&newJson);
+    
+    ASSERT_EQ(mat.name,newMat.name);
+    ASSERT_EQ(mat.type,newMat.type);
+    ASSERT_EQ(mat.r1,newMat.r1);
+    ASSERT_EQ(mat.g1,newMat.g1);
+    ASSERT_EQ(mat.b1,newMat.b1);
+    ASSERT_EQ(mat.refractionIndex1,newMat.refractionIndex1);
+    ASSERT_EQ(mat.r2,newMat.r2);
+    ASSERT_EQ(mat.g2,newMat.g2);
+    ASSERT_EQ(mat.b2,newMat.b2);
+    ASSERT_EQ(mat.refractionIndex2,newMat.refractionIndex2);
 }
 
 
 
 
-TEST(MaterialTest, Light_FromJSON) {
+TEST(MaterialTest, Light) {
     double r = 0.5;
     double g = 0.6;
     double b = 0.9;
@@ -140,16 +263,46 @@ TEST(MaterialTest, Light_FromJSON) {
     
     Light mat = Light(&j);
     
+    // Test From JSON
     ASSERT_EQ(mat.name,name);
     ASSERT_EQ(mat.type,c);
     ASSERT_EQ(mat.r,r);
     ASSERT_EQ(mat.g,g);
     ASSERT_EQ(mat.b,b);
+    
+    // Test write to Radiance.
+    std::string fileName = "material.mat";
+    FOPEN(file, &fileName[0], "w");
+    mat.writeInRadianceFormat(file);
+    fclose(file);
+    
+    std::ifstream in;
+    in.open(fileName);
+    std::string line;
+    
+    std::string newRad = "";
+    while(std::getline(in, line)){
+        newRad += (line+" ");
+    }
+    
+    json newJson = json();
+    newJson["class"]=c;
+    newJson["name"]=name;
+    newJson["rad"]=newRad;
+    
+    Light newMat = Light(&newJson);
+    
+    ASSERT_EQ(mat.name,newMat.name);
+    ASSERT_EQ(mat.type,newMat.type);
+    ASSERT_EQ(mat.r,newMat.r);
+    ASSERT_EQ(mat.g,newMat.g);
+    ASSERT_EQ(mat.b,newMat.b);
+    
 }
 
 
 
-TEST(MaterialTest, Metal_FromJSON) {
+TEST(MaterialTest, Metal) {
     double r = 0.5;
     double g = 0.6;
     double b = 0.9;
@@ -167,6 +320,7 @@ TEST(MaterialTest, Metal_FromJSON) {
     
     Metal mat = Metal(&j);
     
+    // Test From JSON
     ASSERT_EQ(mat.name,name);
     ASSERT_EQ(mat.type,c);
     ASSERT_EQ(mat.r,r);
@@ -174,10 +328,40 @@ TEST(MaterialTest, Metal_FromJSON) {
     ASSERT_EQ(mat.b,b);
     ASSERT_EQ(mat.specularity,spec);
     ASSERT_EQ(mat.roughness,rough);
+    
+    // Test write to Radiance.
+    std::string fileName = "material.mat";
+    FOPEN(file, &fileName[0], "w");
+    mat.writeInRadianceFormat(file);
+    fclose(file);
+    
+    std::ifstream in;
+    in.open(fileName);
+    std::string line;
+    
+    std::string newRad = "";
+    while(std::getline(in, line)){
+        newRad += (line+" ");
+    }
+    
+    json newJson = json();
+    newJson["class"]=c;
+    newJson["name"]=name;
+    newJson["rad"]=newRad;
+    
+    Metal newMat = Metal(&newJson);
+    
+    ASSERT_EQ(mat.name,newMat.name);
+    ASSERT_EQ(mat.type,newMat.type);
+    ASSERT_EQ(mat.r,newMat.r);
+    ASSERT_EQ(mat.g,newMat.g);
+    ASSERT_EQ(mat.b,newMat.b);
+    ASSERT_EQ(mat.specularity,newMat.specularity);
+    ASSERT_EQ(mat.roughness,newMat.roughness);
 }
 
 
-TEST(MaterialTest, Plastic_FromJSON) {
+TEST(MaterialTest, Plastic) {
     double r = 0.5;
     double g = 0.6;
     double b = 0.9;
@@ -195,6 +379,7 @@ TEST(MaterialTest, Plastic_FromJSON) {
     
     Metal mat = Metal(&j);
     
+    // Test From JSON
     ASSERT_EQ(mat.name,name);
     ASSERT_EQ(mat.type,c);
     ASSERT_EQ(mat.r,r);
@@ -202,10 +387,40 @@ TEST(MaterialTest, Plastic_FromJSON) {
     ASSERT_EQ(mat.b,b);
     ASSERT_EQ(mat.specularity,spec);
     ASSERT_EQ(mat.roughness,rough);
+    
+    // Test write to Radiance.
+    std::string fileName = "material.mat";
+    FOPEN(file, &fileName[0], "w");
+    mat.writeInRadianceFormat(file);
+    fclose(file);
+    
+    std::ifstream in;
+    in.open(fileName);
+    std::string line;
+    
+    std::string newRad = "";
+    while(std::getline(in, line)){
+        newRad += (line+" ");
+    }
+    
+    json newJson = json();
+    newJson["class"]=c;
+    newJson["name"]=name;
+    newJson["rad"]=newRad;
+    
+    Plastic newMat = Plastic(&newJson);
+    
+    ASSERT_EQ(mat.name,newMat.name);
+    ASSERT_EQ(mat.type,newMat.type);
+    ASSERT_EQ(mat.r,newMat.r);
+    ASSERT_EQ(mat.g,newMat.g);
+    ASSERT_EQ(mat.b,newMat.b);
+    ASSERT_EQ(mat.specularity,newMat.specularity);
+    ASSERT_EQ(mat.roughness,newMat.roughness);
 }
 
 
-TEST(MaterialTest, Spotlight_FromJSON) {
+TEST(MaterialTest, Spotlight) {
     double r = 0.5;
     double g = 0.6;
     double b = 0.9;
@@ -225,6 +440,7 @@ TEST(MaterialTest, Spotlight_FromJSON) {
     
     Spotlight mat = Spotlight(&j);
     
+    // Test From JSON
     ASSERT_EQ(mat.name,name);
     ASSERT_EQ(mat.type,c);
     ASSERT_EQ(mat.r,r);
@@ -235,10 +451,42 @@ TEST(MaterialTest, Spotlight_FromJSON) {
     ASSERT_EQ(mat.ydir,ydir);
     ASSERT_EQ(mat.zdir,zdir);
     
+    // Test write to Radiance.
+    std::string fileName = "material.mat";
+    FOPEN(file, &fileName[0], "w");
+    mat.writeInRadianceFormat(file);
+    fclose(file);
+    
+    std::ifstream in;
+    in.open(fileName);
+    std::string line;
+    
+    std::string newRad = "";
+    while(std::getline(in, line)){
+        newRad += (line+" ");
+    }
+    
+    json newJson = json();
+    newJson["class"]=c;
+    newJson["name"]=name;
+    newJson["rad"]=newRad;
+    
+    Spotlight newMat = Spotlight(&newJson);
+    
+    ASSERT_EQ(mat.name,newMat.name);
+    ASSERT_EQ(mat.type,newMat.type);
+    ASSERT_EQ(mat.r,newMat.r);
+    ASSERT_EQ(mat.g,newMat.g);
+    ASSERT_EQ(mat.b,newMat.b);
+    ASSERT_EQ(mat.angle,newMat.angle);
+    ASSERT_EQ(mat.xdir,newMat.xdir);
+    ASSERT_EQ(mat.ydir,newMat.ydir);
+    ASSERT_EQ(mat.zdir,newMat.zdir);
+    
 }
 
 
-TEST(MaterialTest, Trans_FromJSON) {
+TEST(MaterialTest, Trans) {
     double r = 0.5;
     double g = 0.6;
     double b = 0.9;
@@ -258,6 +506,7 @@ TEST(MaterialTest, Trans_FromJSON) {
     
     Trans mat = Trans(&j);
     
+    // Test From JSON
     ASSERT_EQ(mat.name,name);
     ASSERT_EQ(mat.type,c);
     ASSERT_EQ(mat.r,r);
@@ -268,6 +517,40 @@ TEST(MaterialTest, Trans_FromJSON) {
     ASSERT_EQ(mat.transmissivity,transmissivity);
     ASSERT_EQ(mat.tspec,tspec);
     
+    // Test write to Radiance.
+    std::string fileName = "material.mat";
+    FOPEN(file, &fileName[0], "w");
+    mat.writeInRadianceFormat(file);
+    fclose(file);
+    
+    std::ifstream in;
+    in.open(fileName);
+    std::string line;
+    
+    std::string newRad = "";
+    while(std::getline(in, line)){
+        newRad += (line+" ");
+    }
+    
+    json newJson = json();
+    newJson["class"]=c;
+    newJson["name"]=name;
+    newJson["rad"]=newRad;
+    
+    Trans newMat = Trans(&newJson);
+    
+    ASSERT_EQ(mat.name,newMat.name);
+    ASSERT_EQ(mat.type,newMat.type);
+    ASSERT_EQ(mat.r,newMat.r);
+    ASSERT_EQ(mat.g,newMat.g);
+    ASSERT_EQ(mat.b,newMat.b);
+    ASSERT_EQ(mat.specularity,newMat.specularity);
+    ASSERT_EQ(mat.roughness,newMat.roughness);
+    ASSERT_EQ(mat.transmissivity,newMat.transmissivity);
+    ASSERT_EQ(mat.tspec,newMat.tspec);
+    
 }
+
+
 
 

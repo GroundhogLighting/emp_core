@@ -128,11 +128,16 @@ void tokenize(std::string * s,std::vector<std::string> * v)
 	size_t found = s->find(" ", start);
 	while (found != std::string::npos) {
 		v->push_back(s->substr(start, found-start));
-		start = found;
+		start = found+1;
 		found = s->find(" ", start+1);
 	}
-	v->push_back(s->substr(start));
-
+    
+    
+    if(s->substr(start) != ""){
+        v->push_back(s->substr(start));
+    }
+    
+                
 }
 
 bool is_number(const std::string& s)
