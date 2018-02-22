@@ -22,7 +22,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include <string>
-//#include "Radiance/src/common/object.h"
 #include "common/geometry/transform.h"
 
 #include "./material.h"
@@ -120,10 +119,9 @@ public:
 	@param[in] file The file to write the object to
     @param[in] material The name of the material to assign
     @param[in] transform The transformation to apply to the object
-	@return success
-	@note This function should be overriden by a function with the same name in each Material derived class
+	@return success	
 	*/
-    virtual bool writeInRadianceFormat(FILE * file, const char * material, Transform * transform);
+    virtual bool writeInRadianceFormat(FILE * file, const char * material, Transform * transform) = 0;
 	
     
 };

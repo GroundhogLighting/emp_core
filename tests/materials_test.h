@@ -60,6 +60,10 @@ TEST(MaterialTest, Dielectric) {
     ASSERT_EQ(mat.refractionIndex,newMat.refractionIndex);
     ASSERT_EQ(mat.hartmanConstant,newMat.hartmanConstant);
     
+    // Add to model
+    GroundhogModel model = GroundhogModel();
+    ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
+    
 }
 
 
@@ -114,6 +118,10 @@ TEST(MaterialTest, Glass) {
     ASSERT_EQ(mat.r,newMat.r);
     ASSERT_EQ(mat.g,newMat.g);
     ASSERT_EQ(mat.b,newMat.b);
+    
+    // Add to model
+    GroundhogModel model = GroundhogModel();
+    ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
 }
 
 
@@ -171,6 +179,10 @@ TEST(MaterialTest, Glow) {
     ASSERT_EQ(mat.g,newMat.g);
     ASSERT_EQ(mat.b,newMat.b);
     ASSERT_EQ(mat.maxRadius,newMat.maxRadius);
+    
+    // Add to model
+    GroundhogModel model = GroundhogModel();
+    ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
 }
 
 
@@ -242,6 +254,10 @@ TEST(MaterialTest, Interface) {
     ASSERT_EQ(mat.g2,newMat.g2);
     ASSERT_EQ(mat.b2,newMat.b2);
     ASSERT_EQ(mat.refractionIndex2,newMat.refractionIndex2);
+    
+    // Add to model
+    GroundhogModel model = GroundhogModel();
+    ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
 }
 
 
@@ -297,6 +313,10 @@ TEST(MaterialTest, Light) {
     ASSERT_EQ(mat.r,newMat.r);
     ASSERT_EQ(mat.g,newMat.g);
     ASSERT_EQ(mat.b,newMat.b);
+    
+    // Add to model
+    GroundhogModel model = GroundhogModel();
+    ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
 }
 
@@ -358,6 +378,10 @@ TEST(MaterialTest, Metal) {
     ASSERT_EQ(mat.b,newMat.b);
     ASSERT_EQ(mat.specularity,newMat.specularity);
     ASSERT_EQ(mat.roughness,newMat.roughness);
+    
+    // Add to model
+    GroundhogModel model = GroundhogModel();
+    ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
 }
 
 
@@ -417,6 +441,10 @@ TEST(MaterialTest, Plastic) {
     ASSERT_EQ(mat.b,newMat.b);
     ASSERT_EQ(mat.specularity,newMat.specularity);
     ASSERT_EQ(mat.roughness,newMat.roughness);
+    
+    // Add to model
+    GroundhogModel model = GroundhogModel();
+    ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
 }
 
 
@@ -483,6 +511,10 @@ TEST(MaterialTest, Spotlight) {
     ASSERT_EQ(mat.ydir,newMat.ydir);
     ASSERT_EQ(mat.zdir,newMat.zdir);
     
+    // Add to model
+    GroundhogModel model = GroundhogModel();
+    ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
+    
 }
 
 
@@ -548,6 +580,10 @@ TEST(MaterialTest, Trans) {
     ASSERT_EQ(mat.roughness,newMat.roughness);
     ASSERT_EQ(mat.transmissivity,newMat.transmissivity);
     ASSERT_EQ(mat.tspec,newMat.tspec);
+    
+    // Add to model
+    GroundhogModel model = GroundhogModel();
+    ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
 }
 

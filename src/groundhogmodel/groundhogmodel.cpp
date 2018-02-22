@@ -233,17 +233,44 @@ Material * GroundhogModel::addMaterial(json * j)
 	}
     std::string cl = (*j)["class"];
     
-	if (cl == "plastic") {
+    
+    if (cl == "dielectric") {
+        Dielectric * g = new Dielectric(j);
+        materials.push_back(g);
+        return g;
+    } else if (cl == "glass") {
+        Glass * g = new Glass(j);
+        materials.push_back(g);
+        return g;
+    } else if (cl == "glow") {
+        Glow * g = new Glow(j);
+        materials.push_back(g);
+        return g;
+    } else if (cl == "interface") {
+        Interface * g = new Interface(j);
+        materials.push_back(g);
+        return g;
+    } else if (cl == "light") {
+        Light * g = new Light(j);
+        materials.push_back(g);
+        return g;
+    } else if (cl == "metal") {
+        Metal * g = new Metal(j);
+        materials.push_back(g);
+        return g;
+    } else if (cl == "plastic") {
 		Plastic * p = new Plastic(j);
 		materials.push_back(p);
 		return p;
-	}
-	else if (cl == "glass") {
-		Glass * g = new Glass(j);
-		materials.push_back(g);
-		return g;
-	}
-	else {
+    } else if (cl == "spotlight") {
+        Spotlight * g = new Spotlight(j);
+        materials.push_back(g);
+        return g;
+    } else if (cl == "trans") {
+        Trans * g = new Trans(j);
+        materials.push_back(g);
+        return g;
+    } else {
         
         std::string e = "Unsupported material class "+ cl;
         FATAL(errorMessage,e);

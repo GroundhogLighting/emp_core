@@ -567,7 +567,7 @@ bool RadExporter::writeSceneFile(const char * dir, OptionSet * options)
 
 	// Write Header
 	file << "###############" << "\n";
-	file << "## Scene exported using " << EMP_VERSION << "\n";
+	file << "## Scene exported using " << EMP_CORE_VERSION << "\n";
 	file << "###############" << "\n";
 
 	file << "\n" << "\n" << "\n";
@@ -606,7 +606,7 @@ bool RadExporter::writeRifFile(const char * dir, OptionSet * options)
     
     
     file << "###############" << std::endl;
-    file << "## RIF exported using Emp v" << EMP_VERSION << std::endl;
+    file << "## RIF exported using Emp v" << EMP_CORE_VERSION << std::endl;
     file << "###############" << std::endl << std::endl << std::endl ;
     
     

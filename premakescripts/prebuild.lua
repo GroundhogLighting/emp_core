@@ -12,9 +12,9 @@ version_file = io.open(rad_rt.."/VERSION","r")
 rad_version = version_file:read()
 version_file:close()
 
--- Load Glare version
+-- Load Emp_core version
 version_file = io.open("../src/VERSION","r")
-glare_version = version_file:read()
+emp_core_version = version_file:read()
 version_file:close()
 
 -- Write Radiance version for itself
@@ -25,7 +25,7 @@ file:close()
 -- Write Radiance and Emp versions
 file = io.open("../src/versions.h",'w')
 file:write("#pragma once","\n")
-file:write("#define EMP_VERSION \"Emp "..glare_version.."\"","\n")
+file:write("#define EMP_CORE_VERSION \"Emp "..emp_core_version.."\"","\n")
 file:write("#define RADIANCE_VERSION \""..rad_version.."\"","\n")
 file:close()
 

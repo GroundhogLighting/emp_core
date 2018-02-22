@@ -70,7 +70,3 @@ void Otype::setMaterial(Material * mat)
 }
 
 
-bool Otype::writeInRadianceFormat(FILE * file, const char * material, Transform * transform)
-{
-	return true;
-}

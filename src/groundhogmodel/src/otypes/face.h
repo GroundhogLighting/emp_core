@@ -21,6 +21,9 @@
 
 #pragma once
 
+#include "common/utilities/io.h"
+#include "config_constants.h"
+
 #include <string>
 #include "./face.h"
 #include "../material.h"
@@ -47,7 +50,11 @@ public:
 	@author German Molina
 	@param[in] faceName The name of the face
 	*/
-	Face(std::string * faceName);
+	Face(std::string * faceName)
+	{
+		setName( faceName ); 
+		polygon = new Polygon3D();
+	}
 
 	//! Destroys the Face
 	/*!
@@ -55,7 +62,10 @@ public:
 
 	@author German Molina
 	*/
-	~Face();
+	~Face()
+	{
+		delete polygon;	
+	}
 
 	
 
@@ -66,28 +76,41 @@ public:
 	@author German Molina
 	@param[in] newPolygon
 	*/
-	void setPolygon(Polygon3D * newPolygon);
+	void setPolygon(Polygon3D * newPolygon)
+	{
+		delete polygon;
+		polygon = newPolygon;
+	}
 
 	//! Checks if the Face has inner Loop (or holes)
 	/*!
 	@author German Molina
 	@return has inner Loop ?
 	*/
-	bool hasInnerLoops();
+	bool hasInnerLoops()
+	{
+		return polygon->hasInnerLoops();
+	}
 
 	//! Checks if the Face has too many inner Loop (or holes)
 	/*!
 	@author German Molina
 	@return has too many inner Loop ?
 	*/
-	bool hasTooManyInnerLoops();
+	bool hasTooManyInnerLoops()
+	{
+		return polygon->countInnerLoops() > EMP_TOO_MANY_LOOPS;
+	}
 
 	//! Retrieves the reference to the Outer Loop of the Face
 	/*!
 	@author German Molina
 	@return The reference to the Outer Loop
 	*/
-	Loop * getOuterLoopRef();
+	Loop * getOuterLoopRef()
+	{
+		return polygon->getOuterLoopRef();
+	}
 
 	//! Retrieves the reference to a closed Loop of the Face Polygon3D
 	/*!
@@ -96,7 +119,10 @@ public:
 	@see Polygon3D::getClosedLoop()
 	@note Should delete the closed Loop after its use
 	*/
-	Loop * getClosedLoop();
+	Loop * getClosedLoop()
+	{
+		return polygon->getClosedLoop();
+	}
 
     //! Writes a face in Radiance format
     /*!
@@ -106,6 +132,58 @@ public:
     @param[in] transform The optional Transform object
     @return success
     */
-    bool writeInRadianceFormat(FILE * file, const char * material, Transform * transform);
+    bool writeInRadianceFormat(FILE * file, const char * material, Transform * transform)
+	{
+				// get the name of the face
+		std::string * faceName = getName();
+		
+		if (hasTooManyInnerLoops()) {
+			WARN(warnMessage,"Ignoring face '" + *faceName + "' because it has TOO MANY inner loops.");
+			// writeTriangulatedFace(file,face);
+			return true;
+		}
+
+
+		// define the loop that will be written
+		Loop * finalLoop = NULL;
+		bool needToDelete = false;
+		if (hasInnerLoops()) {
+			finalLoop = getClosedLoop();
+			needToDelete = true;
+		}
+		else {
+			finalLoop = getOuterLoopRef();
+		}
+
+		fprintf(file, "%s polygon %s\n0\n0\n", material, &(faceName->at(0)));
+		
+		fprintf(file,"%zd\n",3 * finalLoop->realSize());
+
+		// Print the loop
+		size_t numVertices = finalLoop->size();
+
+		for (int i = 0; i < numVertices; i++) {
+			Point3D * point = finalLoop->getVertexRef(i);
+
+			if (point == NULL)
+			continue;
+
+			fprintf(file, "\t");
+			if (transform == NULL) {
+			fprintf(file, "%f %f %f\n", point->getX(), point->getY(), point->getZ());      
+			}
+			else {
+			Point3D p = point->transform(transform);
+			fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+			}
+		}
+
+
+		if (needToDelete) {
+			delete finalLoop;
+		}
+
+		return true;
+	}
 
 };

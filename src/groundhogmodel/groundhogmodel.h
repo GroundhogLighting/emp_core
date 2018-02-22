@@ -34,7 +34,7 @@
 #include "./src/photosensor.h"
 #include "./src/rtraceoptions.h"
 
-
+// Add materials
 #include "./src/materials/dielectric.h"
 #include "./src/materials/glass.h"
 #include "./src/materials/glow.h"
@@ -44,6 +44,7 @@
 #include "./src/materials/plastic.h"
 #include "./src/materials/spotlight.h"
 #include "./src/materials/trans.h"
+
 
 #include "json/json.hpp"
 using nlohmann::json;
