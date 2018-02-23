@@ -25,6 +25,7 @@
 #include "tbb/tbb.h"
 #include "common/geometry/triangulation.h"
 #include "grain_sizes.h"
+#include "calculations/radiance.h"
 
 #include <fstream>
 

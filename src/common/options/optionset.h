@@ -40,13 +40,10 @@ options and their default values.
 
 The actual options are contained within a JSON object called data
 
-@todo Allow String options
 */
 
 class OptionSet {
-private:
-	//std::vector<std::string> names = std::vector<std::string>(); //!< The names of the options registered
-	//std::vector<double> values = std::vector<double>(); //!< The values of the options in the same order as the names
+private:	
     json data = json({});
 
 public:
@@ -164,5 +161,9 @@ public:
     @author German Molina
     */
     std::string getInlineVersion();
+    
+    json::iterator begin();
+    
+    json::iterator end();
 
 };
