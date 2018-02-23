@@ -19,7 +19,8 @@
 *****************************************************************************/
 
 
-#pragma once
+#ifndef MATERIAL_H
+#define MATERIAL_H
 
 #include <string>
 #include "json/json.hpp"
@@ -111,3 +112,4 @@ public:
 	*/
 	virtual bool parsePrimitive(std::vector <std::string> * tokens) = 0;
 };
+#endif
