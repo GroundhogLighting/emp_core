@@ -21,7 +21,7 @@
 
 
 #pragma once
-#include "common/options/optionset.h"
+#include "../../common/options/optionset.h"
 //#include "Radiance/src/rt/ray.h"
 
 class RTraceOptions : public OptionSet {

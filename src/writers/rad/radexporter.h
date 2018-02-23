@@ -20,9 +20,9 @@
 
 
 #pragma once
-#include "groundhogmodel/groundhogmodel.h"
+#include "../../groundhogmodel/groundhogmodel.h"
 
-#include "common/geometry/transform.h"
+#include "../../common/geometry/transform.h"
 
 //! The main object for exporting a GroundhogModel in Radiance format.
 /*!

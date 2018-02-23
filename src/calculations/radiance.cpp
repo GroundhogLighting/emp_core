@@ -23,10 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 
 #include "./radiance.h"
-
-#include "config_constants.h"
-#include "common/utilities/stringutils.h"
-#include "os_definitions.h"
+#include "../config_constants.h"
+#include "../common/utilities/stringutils.h"
+#include "../os_definitions.h"
 #include "./gendaymtx.h"
 
 

@@ -21,15 +21,15 @@
 
 #pragma once
 
-#include "common/utilities/io.h"
-#include "config_constants.h"
+#include "../../../common/utilities/io.h"
+#include "../../../config_constants.h"
 
 #include <string>
 #include "./face.h"
 #include "../material.h"
 #include "../otype.h"
 
-#include "common/geometry/polygon.h"
+#include "../../../common/geometry/polygon.h"
 
 //! The integration of a Polygon3D and a Material
 

@@ -20,7 +20,7 @@
 
 
 #include "./location.h"
-#include "common/utilities/io.h"
+#include "../../common/utilities/io.h"
 
 Location::Location() {
 	city = "not specified";

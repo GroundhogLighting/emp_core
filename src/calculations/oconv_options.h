@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "common/options/optionset.h"
+#include "../common/options/optionset.h"
 
 #define OCONV_INCLUDE_WINDOWS "include_windows"
 #define OCONV_USE_BLACK_GEOMETRY "black_geometry"

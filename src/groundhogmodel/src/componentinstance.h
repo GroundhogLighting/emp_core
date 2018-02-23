@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -23,7 +23,7 @@
 
 #include "./componentinstance.h"
 #include "./componentdefinition.h"
-#include "common/geometry/transform.h"
+#include "../../common/geometry/transform.h"
 
 
 class ComponentDefinition;

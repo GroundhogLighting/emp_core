@@ -21,6 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "./color_matrix.h"
+#include "./oconv_options.h"
+#include "../groundhogmodel/src/rtraceoptions.h"
+#include "../config_constants.h"
+#include "../common/geometry/triangulation.h"
+#include "../writers/rad/radexporter.h"
 
 
 
@@ -57,13 +62,6 @@ typedef struct ray {
     
 }  RAY;
 }
-
-#include "tbb/tbb.h"
-#include "./oconv_options.h"
-#include "groundhogmodel/src/rtraceoptions.h"
-#include "config_constants.h"
-#include "common/geometry/triangulation.h"
-#include "writers/rad/radexporter.h"
 
 //! This function emulates the use of Radiance's RCONTRIB program
 /*!

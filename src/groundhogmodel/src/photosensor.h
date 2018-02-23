@@ -23,8 +23,8 @@
 
 #include <string>
 
-#include "common/geometry/point3d.h"
-#include "common/geometry/vector.h"
+#include "../../common/geometry/point3d.h"
+#include "../../common/geometry/vector.h"
 
 //!  For calculating lighting metrics in a specific point
 /*!

@@ -8,24 +8,18 @@ project "emp_core"
 
     targetdir(libs_dir.."/%{cfg.buildcfg}")
 
-    files { 
-        --"../main_test.cpp",
-        --"../main_test.h",
-        "../src/**",
-        --"../tests/*.h",        
+    files {                 
+        "../src/**",        
     }
    
-    includedirs{
-        "../src/",
+    includedirs{        
         third_party_dir,
-        third_party_dir.."/intelTBB/include",        
-        google_test_dir.."/include",  
+        third_party_dir.."/intelTBB/include",                
         rad_common,
         rad_rt                   
     }  
 
-    links {                
-        "GoogleTest",        
+    links {                            
         "rtrad"
     }  
 
@@ -58,7 +52,8 @@ project "emp_core"
         third_party_dir.."/nvwa/nvwa/debug_new.cpp", 
     }
     includedirs{
-        third_party_dir.."/nvwa/nvwa",     
+        third_party_dir.."/nvwa/nvwa",   
+        google_test_dir.."/include",    
     }
     links {
         "tbb_debug"

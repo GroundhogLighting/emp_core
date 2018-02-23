@@ -22,7 +22,7 @@
 
 
 #include "./triangulation.h"
-#include "common/utilities/io.h"
+#include "../utilities/io.h"
 #include "config_constants.h"
 
 #define MPE_POLY2TRI_IMPLEMENTATION

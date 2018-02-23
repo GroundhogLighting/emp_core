@@ -27,7 +27,7 @@ newaction {
         end
 
         -- Remove the old TBB version
-        os.rmdir("libs/RELEASE/tbb/tbb_debug")
+        os.rmdir("libs/DEBUG/tbb/tbb_debug")
         os.rmdir("libs/RELEASE/tbb/tbb_release")
 
         -- Move results to Lib

@@ -20,7 +20,7 @@
 
 
 #include "./componentinstance.h"
-#include "common/utilities/io.h"
+#include "../../common/utilities/io.h"
 
 
 ComponentInstance::ComponentInstance(ComponentDefinition * definitionRef) {

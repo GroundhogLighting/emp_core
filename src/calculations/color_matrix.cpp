@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include "./color_matrix.h"
-#include "common/utilities/io.h"
+#include "../common/utilities/io.h"
 
 ColorMatrix::ColorMatrix()
 {

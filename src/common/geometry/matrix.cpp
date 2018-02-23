@@ -21,7 +21,7 @@
 #include "./matrix.h"
 #include <iostream>
 #include <stdexcept>
-#include "common/utilities/io.h"
+#include "../utilities/io.h"
 
 #define NROWS data.size()
 #define NCOLS data[0].size()

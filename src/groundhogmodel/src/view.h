@@ -23,8 +23,8 @@
 
 #include <string>
 
-#include "common/geometry/point3d.h"
-#include "common/geometry/vector.h"
+#include "../../common/geometry/point3d.h"
+#include "../../common/geometry/vector.h"
 
 #define PERSPECTIVE_VIEW 0
 #define PARALLEL_VIEW 1
