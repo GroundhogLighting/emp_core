@@ -28,8 +28,9 @@ Otype::Otype()
 
 Otype::~Otype()
 {
-
+    
 }
+
 
 std::string * Otype::getName()
 {

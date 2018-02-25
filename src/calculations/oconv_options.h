@@ -19,7 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
 
 
-#pragma once
+#ifndef OCONV_OPTIONS_H
+#define OCONV_OPTIONS_H
 
 #include "../common/options/optionset.h"
 
@@ -44,3 +45,6 @@ public:
     addOption(OCONV_LIGHTS_ON, false);
   };
 };
+
+extern OconvOptions oconvoptions;
+#endif

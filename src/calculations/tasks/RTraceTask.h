@@ -122,3 +122,5 @@ public:
     
 };
 
+extern RTraceTask rTraceTask;
+

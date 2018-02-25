@@ -41,7 +41,7 @@ This module defines functions that are useful for handling strings
 @param[in] substring the substring to be found in the word
 @return the word contains the substring
 */
-bool stringInclude(std::string word, std::string substring);
+extern bool stringInclude(std::string word, std::string substring);
 
 //! Checks if a word includes a substring
 /*!
@@ -50,7 +50,7 @@ bool stringInclude(std::string word, std::string substring);
 @param[in] substring the substring to be found in the word
 @return the word contains the substring
 */
-bool stringInclude(const char * word, std::string substring);
+extern bool stringInclude(const char * word, std::string substring);
 
 //! Checks if a word includes a substring
 /*!
@@ -59,7 +59,7 @@ bool stringInclude(const char * word, std::string substring);
 @param[in] substring the substring to be found in the word
 @return the word contains the substring
 */
-bool stringInclude(const char * word, const char * substring);
+extern bool stringInclude(const char * word, const char * substring);
 
 
 //! Checks if a word includes any of the given substring
@@ -70,7 +70,7 @@ bool stringInclude(const char * word, const char * substring);
 @param[in] nItems the number of items in the array
 @return the word contains one of the substrings
 */
-bool stringIncludeAny(std::string word, const char ** substringArray, int nItems);
+extern bool stringIncludeAny(std::string word, const char ** substringArray, int nItems);
 
 
 //! Checks if a word includes any of the given substring
@@ -81,7 +81,7 @@ bool stringIncludeAny(std::string word, const char ** substringArray, int nItems
 @param[in] nItems the number of items in the array
 @return the word contains one of the substrings
 */
-bool stringIncludeAny(const char * word, const char ** substringArray, int nItems);
+extern bool stringIncludeAny(const char * word, const char ** substringArray, int nItems);
 
 
 //! Clones a UTF-8 string into an ASCII one. 
@@ -92,7 +92,7 @@ bool stringIncludeAny(const char * word, const char ** substringArray, int nItem
 @param[out] output The string to put the ASCII string
 @param[out] outputLength the length of the final output string
 */
-void utf8toASCII(char * input, size_t inputLength, char * output, size_t * outputLength);
+extern void utf8toASCII(char * input, size_t inputLength, char * output, size_t * outputLength);
 
 //! Some strings would be ilegal in Radiance format. This function fixes that
 /*!
@@ -104,7 +104,7 @@ and Small letters as they were, and replaces everything else by the DEFAULT_CHAR
 @param[in] stringLength the length of the string
 @note this transforms the string, does not create a new one.
 */
-void fixString(char * s, size_t stringLength);
+extern void fixString(char * s, size_t stringLength);
 
 //! Transforms a size_t into a string
 /*!
@@ -112,7 +112,7 @@ void fixString(char * s, size_t stringLength);
 @param[in] sz size_t param
 @return the string
 */
-std::string size_tToString(size_t sz);
+extern std::string size_tToString(size_t sz);
 
 //! Splits a string into a vector of strings, divided by a blank space
 /*!
@@ -120,7 +120,7 @@ std::string size_tToString(size_t sz);
 @param[in] s The string to splot
 @param[out] v The vector to populate
 */
-void tokenize(std::string * s, std::vector<std::string> * v);
+extern void tokenize(std::string * s, std::vector<std::string> * v);
 
 //! Checks if s string is a number
 /*
@@ -128,6 +128,6 @@ void tokenize(std::string * s, std::vector<std::string> * v);
 @param[in] s The string
 @return is number?
 */
-bool is_number(const std::string& s);
+extern bool is_number(const std::string& s);
 
 /* @} */

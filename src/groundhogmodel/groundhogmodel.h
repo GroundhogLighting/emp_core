@@ -19,8 +19,8 @@
 *****************************************************************************/
 
 
-#pragma once
-
+#ifndef GROUNDHOG_MODEL_H
+#define GROUNDHOG_MODEL_H
 
 #include <vector>
 
@@ -373,3 +373,7 @@ public:
     Material * hasMaterial(std::string * matName);
 
 };
+
+extern GroundhogModel GHModel;
+
+#endif

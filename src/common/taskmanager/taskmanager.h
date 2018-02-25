@@ -18,12 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
-#pragma once
+#ifndef TASK_MANAGER_H
+#define TASK_MANAGER_H
 
 #include "./task.h"
 #include "tbb/tbb.h"
-
-extern tbb::mutex oconvMutex;
 
 //! The TaskManager is an object that performs the calculation in an efficient way
 
@@ -146,3 +145,7 @@ public:
     size_t findTask(Task * t);
 
 };
+
+extern TaskManager tManager;
+
+#endif

@@ -19,7 +19,8 @@
 *****************************************************************************/
 
 
-#pragma once
+#ifndef OPTIONSET_H
+#define OPTIONSET_H
 
 
 
@@ -28,6 +29,7 @@
 
 #include <vector>
 #include <string>
+
 #include "json/json.hpp"
 
 using json = nlohmann::json;
@@ -167,3 +169,5 @@ public:
     json::iterator end();
 
 };
+
+#endif

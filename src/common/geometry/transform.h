@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -18,7 +18,9 @@
 
 *****************************************************************************/
 
-#pragma once
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
+
 #include "./matrix4x4.h"
 
 class Transform {
@@ -90,3 +92,4 @@ public:
   void preMultiply(Transform * t);
 
 };
+#endif

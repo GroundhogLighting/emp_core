@@ -1,4 +1,3 @@
-
 /*****************************************************************************
  Emp
  
@@ -18,69 +17,50 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
  *****************************************************************************/
-
 #pragma once
 
-#include "../../os_definitions.h"
-#include "calculations/radiance.h"
-#include "../../config_constants.h"
-#include "../../common/utilities/stringutils.h"
-#include "./OconvTask.h"
-#include "../../common/taskmanager/mutexes.h"
-
-class AddSkyToOctree : public Task {
+class WriteRadianceRifFile : public Task {
 public:
-    GroundhogModel * model; //!< The model to Oconv
-    std::string octreeName; //!< The name of the final octree
-    OconvOptions options;//!< The options passed to the octree
-    std::string sky; //!< The sky to add to the octree
+    std::string filename; //!< The name of the file to write
+    GroundhogModel * model; //!< The model to export
+    OptionSet options;
     
-    AddSkyToOctree(GroundhogModel * theModel, OconvOptions * theOptions, std::string theSky)
+    //! Constructor
+    /*!
+     @author German Molina
+     @param[in] theFilename The file name
+     @param[in] theModel The GroundhogModel object
+     */
+    WriteRadianceRifFile(std::string theFilename, GroundhogModel * theModel, OptionSet * theOptions)
     {
-        
-        model = theModel;        
+        filename = theFilename;
+        model = theModel;
         options = *theOptions;
-        sky = theSky;
-        std::string name = "Add sky "+theSky;
-        setName(&name);
-        
-        // Dependency 0: Add the oconv task
-        OconvTask * oconvTask = new OconvTask(model,&options);
-        addDependency(oconvTask);
-        
-        // Set octree name
-        fixString(&theSky[0],theSky.size());
-        octreeName = theSky+"_" + oconvTask->octreeName;
-        
     }
     
-    ~AddSkyToOctree()
-    {
-        remove(&octreeName[0]);
-    }
-    
+    //! Compares two of these tasks
+    /*!
+     @author German Molina
+     @param[in] t The other ExportRadianceDir object
+     @return are equal?
+     */
     bool isEqual(Task * t)
     {
         return (
-                model == static_cast<AddSkyToOctree *>(t)->model &&
-                sky == static_cast<AddSkyToOctree *>(t)->sky
+                model == static_cast<WriteRadianceRifFile *>(t)->model &&
+                filename == static_cast<WriteRadianceRifFile *>(t)->filename
                 );
     }
     
+    //! Solves this task
+    /*!
+     @author German Molina
+     @return success
+     */
     bool solve()
     {
-        
-        tbb::mutex::scoped_lock lock(oconvMutex);
-        std::string octName = (static_cast<OconvTask *>(getDependencyRef(0))->octreeName);
-                
-        std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
-        
-        FILE *octree = POPEN(&command[0], "w");
-        fprintf(octree, "!%s\n",&sky[0]);
-        fprintf(octree, RADIANCE_SKY_COMPLEMENT);
-        PCLOSE(octree);
-        
-        return true;
+        RadExporter r = RadExporter(model);
+        return r.writeRifFile(filename.c_str(), &options);
     }
     
     //! Is mutex
@@ -110,6 +90,8 @@ public:
     {
         return true;
     }
+    
+    
 };
 
-extern AddSkyToOctree addSkyToOctree;
+extern WriteRadianceRifFile writeRadianceRifFile;

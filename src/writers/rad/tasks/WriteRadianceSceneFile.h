@@ -17,55 +17,51 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
  *****************************************************************************/
-
 #pragma once
 
-#include "./OconvTask.h"
-#include "../../common/taskmanager/mutexes.h"
-
-class CreateDDCGlobalOctree : public Task {
+class WriteRadianceSceneFile : public Task {
 public:
-    GroundhogModel * model; //!< The model to Oconv
-    std::string octreeName; //!< The name of the final octree    
+    std::string filename; //!< The name of the file to write
+    GroundhogModel * model; //!< The model to export
+    OptionSet options;
     
-    CreateDDCGlobalOctree(GroundhogModel * theModel)
+    //! Constructor
+    /*!
+    @author German Molina
+     @param[in] theFilename The file name
+     @param[in] theModel The GroundhogModel object
+    */
+    WriteRadianceSceneFile(std::string theFilename, GroundhogModel * theModel, OptionSet * theOptions)
     {
-        
-        std::string name = "DDC Global Octree";
-        setName(&name);
-        model = theModel;     
-        
-        // Add the Octree dependency... standard octree
-        OconvOptions oconvOptions = OconvOptions();        
-        
-        OconvTask * oconvTask = new OconvTask(model,&oconvOptions);
-        addDependency(oconvTask);// --> Dependency 0
+        filename = theFilename;
+        model = theModel;
+        options = *theOptions;
     }
     
-    ~CreateDDCGlobalOctree()
-    {
-        remove(&octreeName[0]);
-    }
-    
-    bool isEqual(Task * t)
-    {
-        return model == static_cast<CreateDDCGlobalOctree *>(t)->model;
-    }
-    
-    bool solve()
-    {
-        tbb::mutex::scoped_lock lock(oconvMutex);
-        std::string octName = (static_cast<OconvTask *>(getDependencyRef(0))->octreeName);
-        octreeName = "DDC_Global_" + octName;
-        std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
-        
-        FILE * octree = POPEN(&command[0], "w");
-        fprintf(octree, "void glow ground_glow 0 0 4 1 1 1 0\n");
-        fprintf(octree, "ground_glow source ground 0 0 4 0 0 1 360\n");
-        PCLOSE(octree);
-        
-        return true;
-    }
+    //! Compares two of these tasks
+    /*!
+     @author German Molina
+     @param[in] t The other ExportRadianceDir object
+     @return are equal?
+     */
+     bool isEqual(Task * t)
+     {
+         return (
+             model == static_cast<WriteRadianceSceneFile *>(t)->model &&
+             filename == static_cast<WriteRadianceSceneFile *>(t)->filename
+         );
+     }
+     
+     //! Solves this task
+     /*!
+     @author German Molina
+     @return success
+     */
+     bool solve()
+     {
+         RadExporter r = RadExporter(model);
+         return r.writeSceneFile(filename.c_str(), &options);
+     }
     
     //! Is mutex
     /*!
@@ -94,7 +90,10 @@ public:
     {
         return true;
     }
+     
+    
 };
 
-extern CreateDDCGlobalOctree createDDCGlobalOctree;
+extern WriteRadianceSceneFile writeRadianceSceneFile;
+
 

@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "./OconvTask.h"
+#include "../../common/taskmanager/mutexes.h"
 
 class CreateDDCDirectSkyOctree : public Task {
 public:
@@ -98,4 +100,5 @@ public:
     }
 };
 
+extern CreateDDCDirectSkyOctree createDDCDirectSkyOctree;
 

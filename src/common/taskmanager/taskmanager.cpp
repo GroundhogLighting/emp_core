@@ -22,14 +22,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <fstream>
 #include "./taskmanager.h"
 #include "../utilities/io.h"
-
+#include "tbb/tbb.h"
 
 #ifdef _DEBUG
 // Define mutex for informing progress
 tbb::mutex verboseMutex;
 #endif
-
-tbb::mutex oconvMutex;
 
 TaskManager::TaskManager()
 {

@@ -172,3 +172,5 @@ public:
         return true;
     }
 };
+
+extern doDDC doTheDDC;

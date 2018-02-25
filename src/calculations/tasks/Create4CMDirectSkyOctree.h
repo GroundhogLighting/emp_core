@@ -134,3 +134,5 @@ public:
         return true;
     }
 };
+
+extern Create4CMDirectSkyOctree create4CMDirectSkyOctree;

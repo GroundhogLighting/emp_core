@@ -59,7 +59,7 @@ public:
 	/*!
 	@author German Molina
 	*/
-	~Material();
+	virtual ~Material();
 
 	//! Retrieves the name of the Material
 	/*!
@@ -112,4 +112,8 @@ public:
 	*/
 	virtual bool parsePrimitive(std::vector <std::string> * tokens) = 0;
 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> df24da9e9a05c76154a146028d7b248dba0b363a
 #endif

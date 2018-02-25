@@ -81,9 +81,9 @@ public:
     {
         
         return (
-                rtraceOptions->isEqual(static_cast<RTraceTask *>(t)->rtraceOptions) &&
-                workplane == static_cast<RTraceTask *>(t)->workplane &&
-                rays == static_cast<RTraceTask *>(t)->rays
+                rtraceOptions->isEqual(static_cast<CalculateDaylightFactor *>(t)->rtraceOptions) &&
+                workplane == static_cast<CalculateDaylightFactor *>(t)->workplane &&
+                rays == static_cast<CalculateDaylightFactor *>(t)->rays
                 );
     }
     
@@ -112,4 +112,6 @@ public:
     }
     
 };
+
+extern CalculateDaylightFactor calcDF;
 

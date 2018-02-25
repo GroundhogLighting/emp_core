@@ -23,7 +23,7 @@
 
 #include "./triangulation.h"
 #include "../utilities/io.h"
-#include "config_constants.h"
+#include "../../config_constants.h"
 
 #define MPE_POLY2TRI_IMPLEMENTATION
 #include "fast-poly2tri/MPE_fastpoly2tri.h"

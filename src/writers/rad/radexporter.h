@@ -18,8 +18,9 @@
 
 *****************************************************************************/
 
+#ifndef RAD_EXPORTER_H
+#define RAD_EXPORTER_H
 
-#pragma once
 #include "../../groundhogmodel/groundhogmodel.h"
 
 #include "../../common/geometry/transform.h"
@@ -218,3 +219,6 @@ public:
 	*/
     bool writeWeather(const char * dir, const std::string filename);
 };
+
+extern RadExporter radexporter;
+#endif

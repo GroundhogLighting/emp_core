@@ -20,7 +20,8 @@
 
 #pragma once
 
-
+#include "../oconv_options.h"
+#include "../../common/taskmanager/mutexes.h"
 
 class Create4CMNaiveDirectSkyOctree : public Task {
 public:
@@ -28,7 +29,7 @@ public:
     std::string octreeName; //!< The name of the final octree
     int mf = 1; //!< The reinhart subdivition sheme
     
-    Create4CMNaiveDirectSkyOctree(const GroundhogModel * theModel, const int theMf)
+    Create4CMNaiveDirectSkyOctree(GroundhogModel * theModel, const int theMf)
     {
         
         std::string name = "Create CreateNaiveDirectSkyOctree";
@@ -39,9 +40,7 @@ public:
         // Add the BlackOctree dependency... black geometry, no sky, no lights
         OconvOptions oconvOptions = OconvOptions();
         oconvOptions.setOption(OCONV_INCLUDE_WINDOWS, true);
-        oconvOptions.setOption(OCONV_USE_BLACK_GEOMETRY, true);
-        oconvOptions.setOption(OCONV_SKY, "current");
-        oconvOptions.setOption(OCONV_INCLUDE_SKY, false);
+        oconvOptions.setOption(OCONV_USE_BLACK_GEOMETRY, true);        
         oconvOptions.setOption(OCONV_LIGHTS_ON, false);
         
         // --> Dependency 0
@@ -110,3 +109,5 @@ public:
         return true;
     }
 };
+
+extern Create4CMNaiveDirectSkyOctree create4CMNaiveDirectSkyOctree;

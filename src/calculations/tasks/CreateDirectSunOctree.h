@@ -20,7 +20,7 @@
 
 #pragma once
 
-
+#include "../../common/taskmanager/mutexes.h"
 
 class CreateDirectSunOctree : public Task {
 public:
@@ -107,3 +107,5 @@ public:
         return true;
     }
 };
+
+extern CreateDirectSunOctree createDirectSunOctree;

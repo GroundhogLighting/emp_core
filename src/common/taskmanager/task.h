@@ -18,7 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
-#pragma once
+#ifndef TASK_H
+#define TASK_H
 
 #include <vector>
 #include <string>
@@ -173,7 +174,7 @@ public:
     
 };
 
+#endif
 
-//using TaskFactory = Task* (*)(lua_State *L);
 
 

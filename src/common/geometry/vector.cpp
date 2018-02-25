@@ -20,7 +20,7 @@
 
 #include <cmath>
 #include "./vector.h"
-#include "config_constants.h"
+#include "../../config_constants.h"
 #include "../utilities/io.h"
 //#include "api/common.h"
 

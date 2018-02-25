@@ -48,7 +48,7 @@ public:
         options = *theOptions;
         
         // Dependency 0: oconv task
-        CreateDDCGlobalOctree * oconvTask = new CreateDDCGlobalOctree(model);
+        CreateDDCDirectSkyOctree * oconvTask = new CreateDDCDirectSkyOctree(model);
         addDependency(oconvTask);
         
         // Dependecy 1: Triangulate workplane
@@ -142,3 +142,5 @@ public:
         return true;
     }
 };
+
+extern CalculateDDCDirectSkyMatrix calcDDCDirectSkyMatrix;
