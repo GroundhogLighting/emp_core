@@ -138,3 +138,5 @@ public:
         return true;
     }
 };
+
+extern CalculateDDCGlobalMatrix calcDDCGlobalMatrix;

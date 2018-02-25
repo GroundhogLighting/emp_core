@@ -52,7 +52,7 @@ Should be used when something weird or worth informing has happened
 @author German Molina
 @param[in] message the message
 */
-void warn(const char * message);
+extern void warn(const char * message);
 
 #define WARN(var,x) std::string var=x; warn(&var[0])
 
@@ -67,7 +67,7 @@ Should be used when something fatal happens. Usually, something will go wrong.
 @param[in] ln The line number where this function was called
 @param[in] file The file name where this function was called
 */
-void fatal(const char * message, int ln, const char * file);
+extern void fatal(const char * message, int ln, const char * file);
 #define FATAL(var,x) std::string var=std::string(x); fatal(&var[0],__LINE__,__FILE__)
 
 //! Informs something
@@ -80,7 +80,7 @@ Should be used for informing progress and things that are certainly not errors.
 @param[in] message the message
 @param[in] verbose Should we inform?
 */
-void inform(const char * message, bool verbose);
+extern void inform(const char * message, bool verbose);
 
 #define INFORM(var,x,y) std::string var=x; inform(&var[0],y)
 
@@ -90,6 +90,6 @@ void inform(const char * message, bool verbose);
 @param[in] type The type of surface (e.g. window or other)
 @param[in] name The name of the object
 */
-void warnNoMaterial(const char * type , char * name);
+extern void warnNoMaterial(const char * type , char * name);
 
 /* @} */

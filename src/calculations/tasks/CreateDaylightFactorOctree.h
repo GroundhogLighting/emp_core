@@ -21,8 +21,10 @@
 
 #pragma once
 
-#include "calculations/radiance.h"
-#include "config_constants.h"
+#include "./CreateDirectSunOctree.h"
+#include "../radiance.h"
+#include "../../config_constants.h"
+#include "../../common/taskmanager/mutexes.h"
 
 class CreateDaylightFactorOctree : public Task {
 public:
@@ -104,3 +106,5 @@ public:
         return true;
     }
 };
+
+extern CreateDaylightFactorOctree createDaylightFactorOctree;

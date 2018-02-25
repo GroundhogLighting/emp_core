@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include "./TriangulateWorkplane.h"
+#include "./Create4CMDirectSkyOctree.h"
 
 class Calculate4CMDirectSkyMatrix : public Task {
 public:
@@ -44,12 +46,8 @@ public:
         // Dependency 0: oconv task
         Create4CMDirectSkyOctree * oconvTask = new Create4CMDirectSkyOctree(model);
         addDependency(oconvTask);
-        
-        // Dependecy 1: Triangulate workplane
-        double maxArea = 0.25; //otherOptions.getOption<double>("max_area");
-        double maxAspectRatio = 1.3; //otherOptions.getOption<double>("max_aspect_ratio");
-        
-        TriangulateWorkplane * triangulateWorkplaneTask = new TriangulateWorkplane(wp, maxArea, maxAspectRatio);
+                
+        TriangulateWorkplane * triangulateWorkplaneTask = new TriangulateWorkplane(wp);
         addDependency(triangulateWorkplaneTask);
         
         workplane = wp;
@@ -140,3 +138,5 @@ public:
         return true;
     }
 };
+
+extern Calculate4CMDirectSkyMatrix calc4CMDirect;

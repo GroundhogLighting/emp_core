@@ -38,7 +38,7 @@
 
 #include "./file.h"
 #include "./io.h"
-#include "os_definitions.h"
+#include "../../os_definitions.h"
 
 bool createdir(std::string dirname) 
 {

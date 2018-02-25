@@ -155,3 +155,5 @@ public:
     }
     
 };
+
+extern CalculateDDCDirectSunPatchIlluminance calcDDCDirectSunPatchIlluminance;

@@ -19,7 +19,8 @@
 *****************************************************************************/
 
 
-#pragma once
+#ifndef MATERIAL_H
+#define MATERIAL_H
 
 #include <string>
 #include "json/json.hpp"
@@ -58,7 +59,7 @@ public:
 	/*!
 	@author German Molina
 	*/
-	~Material();
+	virtual ~Material();
 
 	//! Retrieves the name of the Material
 	/*!
@@ -111,3 +112,5 @@ public:
 	*/
 	virtual bool parsePrimitive(std::vector <std::string> * tokens) = 0;
 };
+
+#endif

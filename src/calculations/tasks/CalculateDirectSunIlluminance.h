@@ -157,3 +157,5 @@ public:
     }
     
 };
+
+extern CalculateDirectSunIlluminance calcDirectSunIlluminance;

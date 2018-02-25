@@ -19,8 +19,9 @@
 *****************************************************************************/
 
 
+#ifndef RTRACE_OPTIONS_H
+#define RTRACE_OPTIONS_H
 
-#pragma once
 #include "../../common/options/optionset.h"
 //#include "Radiance/src/rt/ray.h"
 
@@ -44,3 +45,6 @@ public:
      */
     
 };
+
+extern RTraceOptions rtraceoptions;
+#endif

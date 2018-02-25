@@ -158,3 +158,5 @@ public:
     }
     
 };
+
+extern CalculateDDCGlobalIlluminance calcDDCGlobalIlluminance;

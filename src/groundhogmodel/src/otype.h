@@ -54,7 +54,7 @@ public:
 	/*!
 	@author German Molina
 	*/
-	~Otype();
+	virtual ~Otype();
 
 	//! Retrieves the name of the Otype
 	/*!

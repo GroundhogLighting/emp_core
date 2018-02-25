@@ -43,7 +43,7 @@ and return TRUE.
 @param[in] dirname the name of the directory to create
 @return success
 */
-bool createdir(std::string dirname);
+extern bool createdir(std::string dirname);
 
 //! Checks if a file exists
 /*!
@@ -51,7 +51,7 @@ bool createdir(std::string dirname);
 @param[in] filename the name of the file to check
 @return exists
 */
-bool fexists(std::string filename);
+extern bool fexists(std::string filename);
 
 //! Checks if a directory exists
 /*!
@@ -59,7 +59,7 @@ bool fexists(std::string filename);
 @param[in] dirname the name of the directory to check
 @return exists
 */
-bool dexist(std::string dirname);
+extern bool dexist(std::string dirname);
 
 //! Checks if a directory is, in fact, a directory
 /*!
@@ -67,7 +67,7 @@ bool dexist(std::string dirname);
 @param[in] dirname the name of the directory to check
 @return it is a directory
 */
-bool isDir(std::string dirname);
+extern bool isDir(std::string dirname);
 
 
 

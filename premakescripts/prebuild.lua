@@ -8,6 +8,7 @@
 dofile(premakescripts_dir.."/config.lua")
 
 -- Load Radiance version
+--print(rad_rt)
 version_file = io.open(rad_rt.."/VERSION","r")
 rad_version = version_file:read()
 version_file:close()

@@ -30,6 +30,7 @@ Material::Material()
 
 Material::~Material()
 {
+    
 }
 
 std::string * Material::getName()

@@ -20,12 +20,12 @@
  *****************************************************************************/
 
 #pragma once
-#include "groundhogmodel/groundhogmodel.h"
-#include "common/taskmanager/task.h"
+#include "../../groundhogmodel/groundhogmodel.h"
+#include "../../common/taskmanager/task.h"
 #include "tbb/tbb.h"
-#include "common/geometry/triangulation.h"
-#include "grain_sizes.h"
-#include "calculations/radiance.h"
+#include "../../common/geometry/triangulation.h"
+#include "../../grain_sizes.h"
+#include "../radiance.h"
 
 #include <fstream>
 
@@ -179,3 +179,5 @@ public:
     
     
 };
+
+extern TriangulateWorkplane triangulateWorkplane;

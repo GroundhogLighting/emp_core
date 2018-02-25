@@ -91,15 +91,15 @@ public:
     
     bool isEqual(Task * t)
     {
-        bool sameModel = (model == static_cast<doDDC *>(t)->model);
-        bool sameMF = (sunMF == static_cast<doDDC *>(t)->sunMF && (skyMF == static_cast<doDDC *>(t)->skyMF));
+        bool sameModel = (model == static_cast<do4CM *>(t)->model);
+        bool sameMF = (sunMF == static_cast<do4CM *>(t)->sunMF && (skyMF == static_cast<do4CM *>(t)->skyMF));
         
         
         if(workplane != nullptr){
-            return (sameModel && sameMF && workplane == static_cast<doDDC *>(t)->workplane);
+            return (sameModel && sameMF && workplane == static_cast<do4CM *>(t)->workplane);
         }
         if(rays != nullptr){
-            return (sameModel && sameMF && rays == static_cast<doDDC *>(t)->rays);
+            return (sameModel && sameMF && rays == static_cast<do4CM *>(t)->rays);
         }
         
         FATAL(e,"doDDC with null Workplane and Rays");
@@ -179,3 +179,5 @@ public:
         return true;
     }
 };
+
+extern do4CM doThe4CM;

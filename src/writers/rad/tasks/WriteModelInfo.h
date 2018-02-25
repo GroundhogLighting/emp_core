@@ -1,3 +1,4 @@
+
 /*****************************************************************************
  Emp
  
@@ -17,62 +18,49 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
  *****************************************************************************/
-
 #pragma once
 
-
-
-#include "../../common/taskmanager/task.h"
-#include "../oconv_options.h"
-#include "../radiance.h"
-#include "../../writers/rad/radexporter.h"
-#include "../reinhart.h"
-#include "./TriangulateWorkplane.h"
-#include "../../common/taskmanager/mutexes.h"
-
-class OconvTask : public Task {
-    
+class WriteModelInfo : public Task {
 public:
+    std::string filename; //!< The name of the file to write
+    GroundhogModel * model; //!< The model to export
     
-    GroundhogModel * model; //!< The model to Oconv
-    OconvOptions options; //!< The Options passed to Oconv
-    std::string octreeName; //!< The name of the created octree
-    
-    
-    
-    OconvTask(GroundhogModel * theModel, OconvOptions * theOptions)
+    //! Constructor
+    /*!
+     @author German Molina
+     @param[in] theFilename The file name
+     @param[in] theModel The GroundhogModel object
+     */
+    WriteModelInfo(std::string theFilename, GroundhogModel * theModel)
     {
-        options = *theOptions;
-        std::string name = buildName();
-        setName(&name);
+        filename = theFilename;
         model = theModel;
-        octreeName = *getName() + ".oct";
     }
     
-    ~OconvTask()
-    {
-        remove(&octreeName[0]);
-    }
-    
+    //! Compares two of these tasks
+    /*!
+     @author German Molina
+     @param[in] t The other ExportRadianceDir object
+     @return are equal?
+     */
     bool isEqual(Task * t)
     {
         return (
-                model == static_cast<OconvTask *>(t)->model &&
-                options.isEqual(&static_cast<OconvTask *>(t)->options)
+                model == static_cast<WriteModelInfo *>(t)->model &&
+                filename == static_cast<WriteModelInfo *>(t)->filename
                 );
     }
     
+    //! Solves this task
+    /*!
+     @author German Molina
+     @return success
+     */
     bool solve()
     {
-        tbb::mutex::scoped_lock lock(oconvMutex);
-        RadExporter exporter = RadExporter(model);
+        RadExporter r = RadExporter(model);
         
-        if (!oconv(octreeName, &options, exporter)) {
-            FATAL(errmsg, "Impossible to oconv");
-            return false;
-        }
-        
-        return true;
+        return r.writeModelInfo(filename.c_str());
     }
     
     //! Is mutex
@@ -86,7 +74,7 @@ public:
      */
     bool isMutex(Task * t)
     {
-        return true;
+        return false;
     }
     
     //! Submits the results into a json
@@ -103,16 +91,7 @@ public:
         return true;
     }
     
-    std::string buildName()
-    {
-        std::string ret = "Oconv";
-        
-        ret += options.getOption<bool>(std::string(OCONV_INCLUDE_WINDOWS)) ? ".1." : "0.";
-        ret += options.getOption<bool>(std::string(OCONV_USE_BLACK_GEOMETRY)) ? "1." : "0.";
-        ret += options.getOption<bool>(std::string(OCONV_LIGHTS_ON)) ? "1" : "0";
-        
-        return ret;
-    }
+    
 };
 
-extern OconvTask oconvTask;
+extern WriteModelInfo writeModelInfo;
