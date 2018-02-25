@@ -18,8 +18,8 @@
 
 *****************************************************************************/
 
-#pragma once
-
+#ifndef VECTOR_3D_H
+#define VECTOR_3D_H
 
 //! A 3D vector representation
 
@@ -175,3 +175,7 @@ public:
 	*/
 	void print();
 };
+
+extern Vector3D vector3D;
+
+#endif

@@ -89,4 +89,6 @@ public:
 
 };
 
+extern Matrix4x4 matrix4x4;
+
 #endif

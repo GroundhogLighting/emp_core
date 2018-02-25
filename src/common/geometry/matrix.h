@@ -18,9 +18,10 @@
 
 *****************************************************************************/
 
-#pragma once
+#ifndef MATRIX_H
+#define MATRIX_H
 
-#include "vector"
+#include <vector>
 
 //! A matrix of double numbers
 
@@ -123,3 +124,7 @@ public:
      */
     double getElement(size_t nrow, size_t ncol);
 };
+
+extern Matrix matrix;
+
+#endif

@@ -92,4 +92,7 @@ public:
   void preMultiply(Transform * t);
 
 };
+
+extern Transform transform;
+
 #endif

@@ -18,10 +18,12 @@
 
 *****************************************************************************/
 
-#pragma once
+#ifndef LOOP_H
+#define LOOP_H
 
 #include <vector>
 #include "./point3d.h"
+#include "./vector.h"
 
 //! Sequence of Point3D
 
@@ -129,3 +131,7 @@ public:
 	*/
 	Loop * transform(Vector3D i, Vector3D j, Vector3D k);
 };
+
+extern Loop loop;
+
+#endif

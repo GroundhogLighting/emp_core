@@ -20,6 +20,7 @@
  *****************************************************************************/
 
 #pragma once
+#include "../../common/geometry/triangle.h"
 #include "../../groundhogmodel/groundhogmodel.h"
 #include "../../common/taskmanager/task.h"
 #include "tbb/tbb.h"

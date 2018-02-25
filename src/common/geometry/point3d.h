@@ -18,7 +18,9 @@
 
 *****************************************************************************/
 
-#pragma once
+#ifndef POINT_3D_H
+#define POINT_3D_H
+
 #include "./vector.h"
 #include "./transform.h"
 
@@ -170,3 +172,7 @@ public:
 
 
 };
+
+extern Point3D point3D;
+
+#endif

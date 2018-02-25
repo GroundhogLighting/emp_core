@@ -18,7 +18,8 @@
 
 *****************************************************************************/
 
-#pragma once
+#ifndef POLYGON_3D_H
+#define POLYGON_3D_H
 
 #include <vector>
 
@@ -209,3 +210,7 @@ public:
 	bool getInverseAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * auxj, Vector3D * auxk);
 
 };
+
+extern Polygon3D polygon3D;
+
+#endif
