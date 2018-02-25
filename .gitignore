@@ -41,3 +41,5 @@ debug/*
 test_outputs/*
 libs
 premakescripts/obj
+
+./3rdparty/Radiance/src/rt/Version.c
