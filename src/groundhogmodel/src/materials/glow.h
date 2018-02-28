@@ -35,6 +35,18 @@ public:
     {
         primitiveLength = 10;
         fillFromJSON(j);
+        setType("glow");
+    }
+
+    //! Builds a new Glow material
+    /*!
+     @author German Molina
+     @param name The name for the Material
+     */
+    Glow(std::string * name)
+    {
+        setName(name);
+        setType("glow");
     }
     
     

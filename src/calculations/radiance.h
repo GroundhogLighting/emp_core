@@ -18,13 +18,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
-#pragma once
+#ifndef EMP_RADIANCE_H
+#define EMP_RADIANCE_H
+
 
 #include "./color_matrix.h"
 #include "./oconv_options.h"
 #include "../groundhogmodel/src/rtraceoptions.h"
-#include "../config_constants.h"
-#include "../common/geometry/triangulation.h"
 #include "../writers/rad/radexporter.h"
 
 
@@ -33,35 +33,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define FUN_ARGLIST ...
 
 
-#define RAD(v) (0.265*v[0]+0.67*v[1]+0.065*v[2])
-#define LIGHT(v) (47.435*v[0]+119.93*v[1]+11.635*v[2])
+//#define RAD(v) (0.265*v[0]+0.67*v[1]+0.065*v[2])
+//#define LIGHT(v) (47.435*v[0]+119.93*v[1]+11.635*v[2])
 
 
 /* EMULATE RADIANCE'S RAY AND OTHERS... A SHORT VERSION OF THEM */
 extern "C" {
-#define  RED        0
-#define  GRN        1
-#define  BLU        2
+    #define  RED        0
+    #define  GRN        1
+    #define  BLU        2
 
-#define  colval(col,pri)    ((col)[pri])
-#define  VCOPY(v1,v2)    ((v1)[0]=(v2)[0],(v1)[1]=(v2)[1],(v1)[2]=(v2)[2])
+    #define  colval(col,pri)    ((col)[pri])
+    #define  VCOPY(v1,v2)    ((v1)[0]=(v2)[0],(v1)[1]=(v2)[1],(v1)[2]=(v2)[2])
 
-typedef float COLORV;
-typedef COLORV  COLOR[3];    /* red, green, blue (or X,Y,Z) */
+    typedef float COLORV;
+    typedef COLORV  COLOR[3];    /* red, green, blue (or X,Y,Z) */
 
-#define RREAL double
-typedef RREAL  FVECT[3];
+    #define RREAL double
+    typedef RREAL  FVECT[3];
 
-/* Arrange so double's come first for optimal alignment */
-/* Pointers and long's come second for 64-bit mode */
-/* Int's next (unknown length), then floats, followed by short's & char's */
-typedef struct ray {
-    COLOR    rcol;        /* returned radiance value */
-    FVECT    rorg;        /* origin of ray */
-    FVECT    rdir;        /* normalized direction of ray */
-    
-}  RAY;
+    /* Arrange so double's come first for optimal alignment */
+    /* Pointers and long's come second for 64-bit mode */
+    /* Int's next (unknown length), then floats, followed by short's & char's */
+    typedef struct ray {
+        COLOR    rcol;        /* returned radiance value */
+        FVECT    rorg;        /* origin of ray */
+        FVECT    rdir;        /* normalized direction of ray */
+        
+    }  RAY;
 }
+
+
 
 //! This function emulates the use of Radiance's RCONTRIB program
 /*!
@@ -146,3 +148,5 @@ bool oconv(std::string octreeName, OconvOptions * options, RadExporter exporter)
  @param[out] skyVec The resulting sky vector
  */
 bool genPerezSkyVector(int month, int day, float hour, float direct, float diffuse, float albedo, float latitude, float longitude, float standardMeridian, int skyMF, bool sunOnly, bool sharpSun, float rotation, ColorMatrix * skyVec);
+
+#endif

@@ -1,20 +1,33 @@
-#ifndef INCLUDE_EMP_CORE_H
-#define INCLUDE_EMP_CORE_H
+#ifndef INCLUDE_EMP_CORE_API_H
+#define INCLUDE_EMP_CORE_API_H
 
-#include "../src/groundhogmodel/groundhogmodel.h"
-#include "../src/calculations/oconv_options.h"
-#include "../src/writers/rad/radexporter.h"
-#include "../src/common/taskmanager/taskmanager.h"
+
+
+
 #include "../src/config_constants.h"
 #include "../src/common/taskmanager/mutexes.h"
 
 
+
 // Extern classes
+
+#include "../src/groundhogmodel/groundhogmodel.h"
 class GroundhogModel;
+
+#include "../src/common/taskmanager/taskmanager.h"
 class TaskManager;
+
+//#include "../src/groundhogmodel/src/rtraceoptions.h"
 class RTraceOptions;
+
+#include "../src/calculations/oconv_options.h"
 class OconvOptions;
+
+#include "../src/writers/rad/radexporter.h"
 class RadExporter;
+
+#include "../src/readers/SKPreader.h"
+class SKPreader;
 
 // Calculation Tasks
 #include "../src/calculations/tasks/AddSkyToOctree.h"

@@ -17,6 +17,7 @@ using nlohmann::json;
  
  */
 
+#include "../../../common/geometry/vector.h"
 
 class Spotlight : public Material {
     
@@ -25,9 +26,7 @@ public:
     double g = 0.6; //!< The green radiance
     double b = 0.6; //!< The blue radiance
     double angle = 0; //!< The full cone angle (in degrees)
-    double xdir = 0; //!< The X component of the orientation
-    double ydir = 0; //!< The Y component of the orientation
-    double zdir = 0; //!< The Z component of the orientation
+    Vector3D direction = Vector3D(0,0,1); //!< The direction where the light points
     
     
     //! Builds a new Spotlight material
@@ -39,6 +38,18 @@ public:
     {
         primitiveLength = 13;
         fillFromJSON(j);
+        setType("spotlight");
+    }
+
+    //! Builds a new Light material
+    /*!
+     @author German Molina
+     @param name The name for the Material
+     */
+    Spotlight(std::string * name)
+    {
+        setName(name);
+        setType("spotlight");
     }
     
     //! Prints the Material in Radiance format
@@ -50,7 +61,7 @@ public:
     bool writeInRadianceFormat(FILE * file)
     {
         fprintf(file, "void %s %s\n0\n0\n", &type[0], &name[0]);
-        fprintf(file, "7 %f %f %f %f %f %f %f\n", r, g, b, angle, xdir, ydir, zdir);
+        fprintf(file, "7 %f %f %f %f %f %f %f\n", r, g, b, angle, direction.getX(), direction.getY(), direction.getZ());
         
         return true;
     }
@@ -71,9 +82,10 @@ public:
         g = std::stod((*tokens)[i++]);
         b = std::stod((*tokens)[i++]);
         angle = std::stod((*tokens)[i++]);
-        xdir = std::stod((*tokens)[i++]);
-        ydir = std::stod((*tokens)[i++]);
-        zdir = std::stod((*tokens)[i++]);
+        double x = std::stod((*tokens)[i++]);
+        double y = std::stod((*tokens)[i++]);
+        double z = std::stod((*tokens)[i++]);
+        direction = Vector3D(x,y,z);
         return true;
     }
     

@@ -19,10 +19,10 @@
 *****************************************************************************/
 
 #include <cmath>
-#include "./vector.h"
 #include "../../config_constants.h"
 #include "../utilities/io.h"
-//#include "api/common.h"
+#include "./transform.h"
+#include "./vector.h"
 
 Vector3D::Vector3D(double new_x, double new_y, double new_z)
 {
@@ -192,4 +192,16 @@ void Vector3D::print()
 	std::cerr << x << ",";
 	std::cerr << y << ",";
 	std::cerr << z << ")" << std::endl;
+}
+
+
+Vector3D Vector3D::transform(Transform * t)
+{
+    
+    Matrix4x4 * m = t->getMatrix();
+    double xv = x*m->getElement(0, 0) + y*m->getElement(0,1) + z*m->getElement(0,2) + m->getElement(0,3);
+    double yv = x*m->getElement(1, 0) + y*m->getElement(1, 1) + z*m->getElement(1, 2) + m->getElement(1, 3);
+    double zv = x*m->getElement(2, 0) + y*m->getElement(2, 1) + z*m->getElement(2, 2) + m->getElement(2, 3);
+    
+    return Vector3D(xv, yv, zv);
 }

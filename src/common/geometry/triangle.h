@@ -211,3 +211,5 @@ public:
     */
     bool isEqual(Triangle * t);
 };
+
+extern Triangle triangle;

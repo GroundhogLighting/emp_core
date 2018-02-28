@@ -24,7 +24,7 @@
 
 #include "../../common/taskmanager/task.h"
 #include "../oconv_options.h"
-#include "../radiance.h"
+
 #include "../../writers/rad/radexporter.h"
 #include "../reinhart.h"
 #include "./TriangulateWorkplane.h"

@@ -40,6 +40,18 @@ public:
     {
         primitiveLength = 13;
         fillFromJSON(j);
+        setType("trans");
+    }
+
+    //! Builds a new Light material
+    /*!
+     @author German Molina
+     @param name The name for the Material
+     */
+    Trans(std::string * name)
+    {
+        setName(name);
+        setType("trans");
     }
     
     //! Prints the Material in Radiance format

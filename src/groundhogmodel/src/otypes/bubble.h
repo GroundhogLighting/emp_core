@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "../../../common/geometry/point3d.h"
 
 //! Bubble object
 /*!
@@ -30,10 +31,22 @@
  */
 class Bubble : public Otype {
 public:
-    double x; //!< The x component of the center of the bubble
-    double y; //!< The y component of the center of the bubble
-    double z; //!< The z component of the center of the bubble
-    double radius; //!< The radius of the sphere
+    Point3D center = Point3D(0,0,0); //!< The center of the bubble
+    double radius = 1; //!< The radius of the sphere
+    
+    //! Creates a Bubble object
+    /*!
+     Assigns the name of the face and sets an empty Polygon3D
+     
+     @author German Molina
+     @param[in] faceName The name of the face
+     */
+    Bubble(std::string * objectName)
+    {
+        setName( objectName );
+        setType("bubble");
+    }
+    
     
     //! Writes the object in Radiance format
     /*!
@@ -45,7 +58,22 @@ public:
      */
     bool writeInRadianceFormat(FILE * file, const char * material, Transform * transform)
     {
+        // get the name of the face
+        std::string * objectName = getName();
+        std::string * type = getType();
+        fprintf(file, "%s %s %s\n0\n0\n4\n", material, type->c_str(), objectName->c_str());
         
+        // Print arguments
+        
+        if (transform == nullptr) {
+            fprintf(file, "%f %f %f %f\n", center.getX(), center.getY(), center.getZ(),radius);
+        }
+        else {
+            Point3D p = center.transform(transform);
+            fprintf(file, "%f %f %f %f\n", p.getX(), p.getY(), p.getZ(), radius);
+        }
+        
+        return true;
     }
 
 };

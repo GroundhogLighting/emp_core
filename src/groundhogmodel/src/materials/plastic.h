@@ -37,7 +37,19 @@ public:
     {
         primitiveLength = 11;
         fillFromJSON(j);
-    }	
+        setType("plastic");
+    }		
+
+    //! Builds a new Light material
+    /*!
+     @author German Molina
+     @param name The name for the Material
+     */
+    Plastic(std::string * name)
+    {
+        setName(name);
+        setType("plastic");
+    }
 
 	//! Prints the Material in Radiance format
 	/*!

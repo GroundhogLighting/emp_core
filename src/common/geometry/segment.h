@@ -76,3 +76,5 @@ public:
 	Point3D midpoint();
 
 };
+
+extern Segment segment;

@@ -23,6 +23,7 @@
 #include "./TriangulateWorkplane.h"
 #include "./Create4CMDirectSkyOctree.h"
 
+
 class Calculate4CMDirectSkyMatrix : public Task {
 public:
     GroundhogModel * model; //!< The model

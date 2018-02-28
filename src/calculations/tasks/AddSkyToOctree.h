@@ -22,7 +22,7 @@
 #pragma once
 
 #include "../../os_definitions.h"
-#include "calculations/radiance.h"
+//#include "../radiance.h"
 #include "../../config_constants.h"
 #include "../../common/utilities/stringutils.h"
 #include "./OconvTask.h"

@@ -68,12 +68,27 @@ public:
 	*/
 	std::string * getName();
 
+	//! Sets the name of the Material
+	/*!
+	@author German Molina
+	@param The name
+	@return The name of the material
+	*/
+	void setName(std::string * name);
+
 	//! Retrieves the type of the Material
 	/*!
 	@author German Molina
 	@return The type of the material
 	*/
 	std::string * getType();
+
+	//! Sets the type of the Material
+	/*!
+	@author German Molina
+	@return The type of the material
+	*/
+	void setType(std::string type);
 
 	//! Compares a name with another string
 	/*!

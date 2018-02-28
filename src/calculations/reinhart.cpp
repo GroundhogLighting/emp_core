@@ -51,13 +51,13 @@ size_t nReinhartBins(int MF)
 size_t mfFromNBins(const int nbins)
 {
     size_t mf = 1;
-    size_t currentNBins = nReinhartBins(mf);
+    size_t currentNBins = nReinhartBins((int)mf);
     
     while( nbins >= currentNBins ){
         if(nbins == currentNBins)
             return mf;
         
-        currentNBins = nReinhartBins(++mf);
+        currentNBins = nReinhartBins((int)(++mf));
         
     }
     return -1;

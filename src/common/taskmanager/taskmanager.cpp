@@ -102,7 +102,12 @@ size_t TaskManager::countTasks()
 bool TaskManager::solve(json * results)
 {
 
-
+    if(tasks.size() == 0){
+#ifndef AVOID_EMP_CORE_WARNINGS
+        WARN(v,"No task to solve in TaskManager");
+#endif
+        return true;
+    }
 	// Create a vector to store all the nodes
 	std::vector< tbb::flow::continue_node<tbb::flow::continue_msg> > nodes;
 	nodes.reserve(tasks.size());

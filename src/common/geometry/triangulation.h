@@ -18,7 +18,8 @@
 
 *****************************************************************************/
 
-#pragma once
+#ifndef TRIANGULATION_H
+#define TRIANGULATION_H
 
 #include <vector>
 
@@ -26,7 +27,7 @@
 #include "./polygon.h"
 #include "./triangle.h"
 
-#define MAX_ASPECT_RATIO 1
+#define MAX_ASPECT_RATIO 1.3
 
 // Represents a Triangulation.
 /*!
@@ -36,6 +37,7 @@ subdivided in little Triangle objects.
 A core part of this class is the fast-poly3tri library (https://github.com/MetricPanda/fast-poly2tri)
 which is licensed MIT.
 */
+
 
 class Triangulation {
 
@@ -288,3 +290,7 @@ public:
   void purge();
 
 };
+
+extern Triangulation triangulation;
+
+#endif

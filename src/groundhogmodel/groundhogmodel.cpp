@@ -121,20 +121,66 @@ ComponentDefinition *  GroundhogModel::getComponentDefinitionByName(std::string 
 		  return definitions[i];
 	  }
 	}
+#ifndef AVOID_EMP_CORE_WARNINGS
 	FATAL(errorMessage,"Component Definition " + *definitionName + " could not be found");
-	return NULL;
+#endif
+    return nullptr;
 }
 
 Layer *  GroundhogModel::getLayerByName(std::string * layerName)
 {
-	for (size_t i = 0; i < layers.size(); i++) {
-      std::string * name = layers[i]->getName();
+    size_t nLayers = layers.size();
+    std::string * name;
+    
+	for (size_t i = 0; i < nLayers; i++) {
+      name = layers[i]->getName();
 	  if (*layerName == *name) {
 		  return layers[i];
 	  }
 	}
+#ifndef AVOID_EMP_CORE_WARNINGS
 	FATAL(errorMessage,"Layer " + *layerName + " could not be found");
-	return NULL;
+#endif
+	return nullptr;
+}
+
+Otype *  GroundhogModel::getOtypeByName(std::string * objectName)
+{
+    size_t nLayers = layers.size();
+    std:: string * name;
+    Otype * object;
+    
+    // First, check layers
+    for (size_t i = 0; i < nLayers; i++) {
+        size_t nObjects = layers[i]->getObjectsRef()->size();
+        for(size_t j = 0; j < nObjects; j++){
+            object = layers[i]->getObjectRef(j);
+            name = object->getName();
+            if (*objectName == *name) {
+                return object;
+            }
+        }
+        
+    }
+    
+    // Second, check in component definitions
+    size_t nDefinitions = definitions.size();
+    for (size_t i = 0; i < nDefinitions; i++) {
+        size_t nObjects = definitions[i]->getObjectsRef()->size();
+        for(size_t j = 0; j < nObjects; j++){
+            object = definitions[i]->getObjectRef(j);
+            name = object->getName();
+            if (*objectName == *name) {
+                return object;
+            }
+        }
+        
+    }
+    // If not found, 
+#ifndef AVOID_EMP_CORE_WARNINGS
+    FATAL(errorMessage,"Object " + *objectName + " could not be found");
+#endif
+    return nullptr;
 }
 
 void GroundhogModel::addView(View * view)
@@ -145,6 +191,21 @@ void GroundhogModel::addView(View * view)
 View * GroundhogModel::getViewRef(size_t i)
 {
 	return views[i];
+}
+
+View * GroundhogModel::getViewByName(std::string * viewName)
+{
+    size_t nViews = views.size();
+    for (size_t i = 0; i < nViews; i++) {
+            std::string * name = views[i]->getName();
+            if (*viewName == *name) {
+                return views[i];
+            }
+        }
+    #ifndef AVOID_EMP_CORE_WARNINGS
+        FATAL(errorMessage,"View " + *viewName + " could not be found");
+    #endif
+        return nullptr;
 }
 
 size_t GroundhogModel::getNumViews()
@@ -214,12 +275,16 @@ Workplane * GroundhogModel::getWorkplaneRef(size_t i)
 	return workplanes[i];
 }
 
-Workplane * GroundhogModel::getWorkplaneByName(std::string wp)
+Workplane * GroundhogModel::getWorkplaneByName(std::string * wp)
 {
 	for (size_t i = 0; i < workplanes.size(); i++) {
-		if (*(workplanes[i]->getName()) == wp)
+        std::string * name = workplanes[i]->getName();
+		if (*name == *wp)
 			return workplanes[i];
-	}	
+	}
+#ifndef AVOID_EMP_CORE_WARNINGS
+    FATAL(errorMessage,"Workplane " + *wp + " could not be found");
+#endif
 	return NULL;
 }
 
@@ -278,6 +343,11 @@ Material * GroundhogModel::addMaterial(json * j)
 	}
 }
 
+void GroundhogModel::addMaterial(Material * m)
+{
+    materials.push_back(m);
+}
+
 
 Material * GroundhogModel::addDefaultMaterial()
 {
@@ -313,6 +383,20 @@ size_t GroundhogModel::getNumMaterials()
 Material * GroundhogModel::getMaterialRef(size_t i)
 {
 	return materials[i];
+}
+
+Material *  GroundhogModel::getMaterialByName(std::string * materialName)
+{
+    for (size_t i = 0; i < materials.size(); i++) {
+        std::string * name = materials[i]->getName();
+        if (*materialName == *name) {
+            return materials[i];
+        }
+    }
+#ifndef AVOID_EMP_CORE_WARNINGS
+    FATAL(errorMessage,"Material " + *materialName + " could not be found");
+#endif
+    return nullptr;
 }
 
 void GroundhogModel::addPhotosensor(Photosensor * p)

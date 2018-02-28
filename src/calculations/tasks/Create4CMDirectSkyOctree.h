@@ -19,6 +19,8 @@
  *****************************************************************************/
 
 #pragma once
+#include "./OconvTask.h"
+#include "../../os_definitions.h"
 
 class Create4CMDirectSkyOctree : public Task {
 public:

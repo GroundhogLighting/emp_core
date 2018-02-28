@@ -44,7 +44,7 @@ Loop::Loop(Loop * loop)
 Loop::~Loop() 
 {
 
-	for (unsigned i = 0; i < vertices.size(); i++) {
+	for (size_t i = 0; i < vertices.size(); i++) {
 		delete vertices[i];
 	}
 
