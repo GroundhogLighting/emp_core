@@ -1,56 +1,92 @@
-# Emp: a scriptable lighting calculation engine
+# Emp_core: an embeddable lighting calculation engine
 
-After years of development, [Groundhog](http://www.groundhoglighting.com) has 
-become stable and intuitive enough to be used by industry, students and 
+Emp_core is a  [Radiance](https://www.radiance-online.org/)-based lighting calculation engine that
+is meant to be embedded in other tools. The difference between using Emp_core and
+plain Radiance is that it provides:
+
+* Efficient out-of-the-box multicore processing across programs (i.e. call several RTRACE or RCONTRIB
+threads at the same time)
+* Out of the box script optimization, eliminating redundant tasks (i.e. do not create two
+octrees for calculating the Daylight Factor and the Annual Illuminance... one is enough...
+but please reuse the ambient files when possible)
+* Read and write several file formats (i.e. allow me to draw my models in some modern
+3D modelling tool)
+* Simple automation of those tasks required on a daily basis, so I can work faster
+and avoid errors (i.e. I do not want to write a script every time I want to perform a
+Climate Based Daylight Simulation)
+* Cross platform consistency (i.e. should I write `rcalc -e "$1 = $1+$2"` or
+`rcalc -e '$1 = $1+$2'` ?)
+* Workplane interpretation as geometry, not a grid of points (i.e. if I want to know
+the Spatial Daylight Autonomy of a workplane, I can probably describe a polygon that
+encolses it... but I do not want to write every point where the illuminance is measured)
+* Post-processing capabilities (i.e. my workplane contains 4,528 sensors... I do not want
+to know, nor write down, the illuminance of each of them on each of the 8,760 hours
+of the year. Just return the CBD metric I asked for)
+* Do not create 3,125 files, please (i.e. there are several files I am not interested in, which
+are just intermediate results... please delete them afterwards)
+
+In summary, Emp_core can be seen as a C++ library that can read 3D models in several
+formats, that calls several Radiance programs in an efficient way, and knows how to
+post-process the information accoring to the users/client needs.
+
+## A bit of history
+
+*FULL DISCLAIMER: I am the developer of [Groundhog](http://www.groundhoglighting.com)*
+
+After years of development, [Groundhog](http://www.groundhoglighting.com) has
+become stable and intuitive enough to be used by industry, students and
 academics. However, the more intuitive and stable a tool is, the bigger
-the projects it is used for. Indeed, what was once a tool used only for solving 
+the projects it is used for. Indeed, what was once a tool used only for solving
 models with small rooms and few windows has become an excelent tool for
-teaching to students who use it for much larger models with really complex
-requirements.
+teaching students, who use it for much larger models with really complex
+requirements (or so I have seen in my students exams).
 
-Solving larger models force a tool to be much more time efficient because no 
-one wants to wait 35 minutes for the results to come back. Even though the 
-[Radiance](http://www.radiance-online.org) processes are as fast as they can
-(which is something this project will not focus on), an important fraction 
+Solving larger models force a tool to be much more time efficient (because no
+one wants to wait 35 minutes for the results to come back). Even though
+[Radiance](http://www.radiance-online.org) programs do their jobs as fast as they can
+(and improving them is something this project is not yet focused in), an important fraction
 of the time required to process a model was spent in reading and parsing files,
-analizing numerical data and other processes that could clearly be optimized.
+analizing numerical data, and performing, in series, several tasks that could be
+easily paralellized. In other words, there was a lot of space for optimization.
 
-This project intends to become the calculation engine behind [Groundhog](http://www.groundhoglighting.com)
-and a tool for helping researchers, students and practitioners make their
-work in a more efficient way.
+Even if this project was initially meant to become the calculation engine behind
+[Groundhog](http://www.groundhoglighting.com), it took me very little time to realize that
+it had to be divided into [Emp_core](https://github.com/GroundhogLighting/emp_core); and
+several other wrappers meant to provide different users with the capabilities of Emp_core.
+An example of a Wrapper is [Emp](https://github.com/GroundhogLighting/emp), a [Lua](https://www.lua.org/)
+based implementation of Emp_core that tries to be as close to Radiance as it is possible
+to it.
+
 
 ## Origin of the name
 
 Emp is not an acronym, but the short version of 'Empedocles'; who, according to Wikipedia:
 
->> ... is credited with the first comprehensive theory of light and vision. He put forward the idea that we see objects because light streams out of our eyes and touches them. 
+>> ... is credited with the first comprehensive theory of light and vision. He put forward the idea that we see objects because light streams out of our eyes and touches them.
 
 Despite being wrong, this theory will sound highly familiar to anyone who has read about [Backward Ray-tracing](https://en.wikipedia.org/wiki/Ray_tracing_(graphics)) algorithms.
 
 ## Relevant features
 
-- **Cross-platform:** Emp is designed to work on Linux, macOS and Windows... although 
-it has only been developed and tested on Windows so far.
-- **Radiance-based:** Thanks to [Radiance](http://www.radiance-online.org), Emp is
+- **Cross-platform:** Emp is designed to work on Linux, macOS and Windows... although
+it has been tested only on one macOS and one Windows PC.
+- **Radiance-based:** Thanks to [Radiance](http://www.radiance-online.org), Emp_core is
 built upon years of experience, research and testing.
-- **Capable of reading CAD formats:** Emp was designed in order to work directly from
+- **Capable of reading CAD formats:** Emp_core was designed in order to work directly from
 different CAD files. SKB format is the only one supported for now.
-- **Scriptable:** Thanks to [Lua](https://www.lua.org/), Emp can be scripted and thus 
-used for research and practice in a very efficient way. This also helps non-experts
-programmers help develop new features and functions in the shape of scripts.
-- **Do not repeat processes:** Based on Groundhog's simulation manager, Emp
-was provided with a Task-manager, which is able to understand several broad tasks (i.e. 
-calculate Daylight Autonomy and Useful Daylight Illuminance) and eliminate redundant 
+- **Embeddable:** Written in C++, Emp_core can be embedded in several other tools.
+- **Do not repeat processes:** Based on Groundhog's simulation manager, Emp_core
+was provided with a Task-manager, which is able to understand several broad tasks (i.e.
+calculate Daylight Autonomy and Useful Daylight Illuminance) and eliminate redundant
 tasks (i.e. perform an annual simulation).
 - **Parallel computing:** Thanks to [Intel Threading Building Blocks](https://github.com/01org/tbb),
-Emp's Task Manager can schedule tasks and use parallel computing to leverage 
+Emp's Task Manager can schedule tasks and use parallel computing to leverage
 all the power in your machine and reduce calculation time.
-- **Embeddable:** Emp was designed to be shipped with Groundhog and/or other tools.
 
 ## Important notice
 
-So far, the SKP models that are read by Emp are meant to be created with Groundhog.
-This is because a Groundhog model is a simple SKP model with metadata added to it, 
+So far, the SKP models that are read by Emp_core are meant to be created with Groundhog.
+This is because a Groundhog model is a simple SKP model with metadata added to it,
 enabling Emp to understand what surface is 'real' and what surface is, for examaple,
 a workplane.
 
@@ -59,7 +95,7 @@ a workplane.
 
 - README.md : This file
 - premake5.lua : The [premake](https://premake.github.io/) script for building the project
-- make.lua : Some scripts used only for pre-release tasks, such as documenting and others. 
+- make.lua : Some scripts used only for pre-release tasks, such as documenting and others.
 It is used sort of like a make file
 - main.h / main.cpp : The main header and source file
 - main_test.h / main_test.cpp : The main and header files for running tests
@@ -74,18 +110,18 @@ performing common tasks
 - premakescripts : lua scripts called before premake is called.
 - guides : Directory with developer guidelines and specifications. They get documented in
 the developer-doc
-- googletest : Fork to [Google Tests](https://github.com/google/googletest), used for 
+- googletest : Fork to [Google Tests](https://github.com/google/googletest), used for
 compiling and running tests.
-- Emp-doc : The user documentation (i.e. API reference, standard script reference, tutorials, etc.). 
+- Emp-doc : The user documentation (i.e. API reference, standard script reference, tutorials, etc.).
 It is synced with the (Gitbook doc)[https://www.gitbook.com/book/groundhoglighting/Emp-doc/welcome]
 - developer-doc : The developer documentation generated with Doxygen
 - 3rdparty : Directory with external dependencies
 
 ## Building
 
-Emp is intended to be cross-platform, thus we are using an automatic building tool. As Lua is the 
+Emp is intended to be cross-platform, thus we are using an automatic building tool. As Lua is the
 languange chosen to accompany C++ within Emp, it was natural to use premake5 (which is based on Lua)
-as such tool. However, Emp uses [Intel's Threading Building Blocks]()https://github.com/01org/tbb 
+as such tool. However, Emp uses [Intel's Threading Building Blocks]()https://github.com/01org/tbb
 (TBB) for allowing cross-platform parallel computing. Unfortunately, Intel TBB should be built using
 make. So, for building you should:
 
@@ -99,9 +135,9 @@ Emp is built using the simplest premake command... as mentioned in [Premake's do
 > The simplest Premake command is:
 >
 >    premake5 [action]
-> 
+>
 > Premake defines the following list of actions out of the box; projects may also add their own custom actions.
-> 
+>
 > | Action      | Description                                       |
 > |-------------|---------------------------------------------------|
 > | vs2017      | Generate Visual Studio 2017 project files         |
@@ -114,15 +150,15 @@ Emp is built using the simplest premake command... as mentioned in [Premake's do
 > | gmake       | Generate GNU Makefiles (including [Cygwin][1] and [MinGW][2]) |
 > | xcode4      | XCode projects (built-in [extension](https://github.com/premake/premake-core/tree/master/modules/xcode)) |
 > | codelite    | CodeLite projects (built-in [extension](https://github.com/premake/premake-core/tree/master/modules/codelite)) |
-> 
+>
 > To generate Visual Studio 2017 project files, use the command:
-> 
+>
 >     premake5 vs2017
-> 
+>
 > You can see a complete list of the actions and other options supported by a project with the command:
-> 
+>
 >     premake5 --help
-> 
+>
 
 ### Edit and compile
 
@@ -145,38 +181,3 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
-# Allowed Radiance primitives
-
-
-## Materials
-| Material      | Progress                                       |
-|-------------|---------------------------------------------------|
-| Light      | Generate Visual Studio 2017 project files         |
-| Illum      | Generate Visual Studio 2015 project files         |
-| Glow      | Generate Visual Studio 2013 project files         |
-| Spotlight      | Generate Visual Studio 2012 project files         |
-| Mirror | AAA |
-| Prism1 | AAA |
-| Prism2 | AAA |
-| Mist | AAA |
-| Plastic | AAA | 
-| Metal | AAA |
-| Trans | AAA | 
-| Plastic2 | AAA | 
-| Metal2 | AAA | 
-| Trans2 | AAA | 
-| Ashik2 | AAA |
-| Dielectric | AAA | 
-| Interface | AAA |
-| Glass | Supported | 
-| Plastfunc | AAA |
-| Metalfunc | AAA |
-| Transfunc | AAA | 
-| BRTDfunc | AAA | 
-| Plasdata | AAA |
-| Metdata | AAA | 
-| Transdata | AAA | 
-| BSDF | AAA |
-| Antimatter | AAA | 
