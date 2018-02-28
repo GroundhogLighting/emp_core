@@ -140,13 +140,13 @@ bool RadExporter::writeComponentDefinitions(const char * dir)
 
 	for (size_t i = 0; i < numDefinitions; i++) {
 		ComponentDefinition * definition = model->getComponentDefinitionRef(i);
-		size_t numObjects = definition->getNumObjects();
+        size_t numObjects = definition->getObjectsRef()->size();
 		std::string * componentName = definition->getName();
 
 		// create the file
-    std::string fileName = baseDir + "/" + *componentName + ".rad";
+        std::string fileName = baseDir + "/" + *componentName + ".rad";
     
-    FOPEN(file,&fileName[0], "w");
+        FOPEN(file,&fileName[0], "w");
 
 		// get instances within the model
 		std::vector < ComponentInstance * > * instances = definition->getComponentInstancesRef();
@@ -340,7 +340,7 @@ void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instan
   std::string * componentName = definition->getName();
 
   // Count objects
-  size_t numObjects = definition->getNumObjects();
+  size_t numObjects = definition->getObjectsRef()->size();
   
   // get instances within the model
   std::vector < ComponentInstance * > * instances = definition->getComponentInstancesRef();

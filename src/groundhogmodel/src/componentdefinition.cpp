@@ -19,12 +19,12 @@
 *****************************************************************************/
 
 
-#include "./componentdefinition.h"
+//#include "./componentdefinition.h"
 
-#include "../../common/utilities/io.h"
-
-#include <string>
-
+//#include "../../common/utilities/io.h"
+//#include "./layer.h"
+//#include <string>
+/*
 ComponentDefinition::ComponentDefinition(std::string * componentName) 
 {
 	name = *componentName;
@@ -80,3 +80,4 @@ std::vector <ComponentInstance * > * ComponentDefinition::getComponentInstancesR
 {
 	return &instances;
 }
+ */

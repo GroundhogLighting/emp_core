@@ -25,7 +25,8 @@
 #include <vector>
 
 #include "./src/windowgroup.h"
-#include "./src/layer.h"
+//#include "./src/layer.h"
+#include "./src/componentinstance.h"
 #include "./src/workplane.h"
 #include "./src/componentdefinition.h"
 #include "./src/view.h"

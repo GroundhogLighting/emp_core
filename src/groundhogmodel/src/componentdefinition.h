@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -20,28 +20,27 @@
 
 
 #pragma once
+class Layer;
+#include "./layer.h"
 
-#include "./componentinstance.h"
-#include "./otype.h"
+//#include <vector>
 
-#include <vector>
-
-class ComponentInstance;
+//class ComponentInstance;
 
 //! Groups of Face (or other geometry) meant to be placed several times in a GroudhogModel
 
 /*!
 They are referenced within other ComponentInstance or Layers by mean of ComponentInstance
 */
-class ComponentDefinition {
+class ComponentDefinition : public Layer {
 
-private:
-	std::string name; //!< The name of the ComponentDefinition
-	std::vector <Otype *> objects; //!< All the Face within the ComponentDefinition
+//private:
+	//-- std::string name; //!< The name of the ComponentDefinition
+	//-- std::vector <Otype *> objects; //!< All the Face within the ComponentDefinition
 	//Workplanes // **
 	//Sensors // **
 	//std::vector <Material *> materials;	
-	std::vector <ComponentInstance *> instances; //!< All the ComponentInstance within the ComponentDefinition
+	//-- std::vector <ComponentInstance *> instances; //!< All the ComponentInstance within the ComponentDefinition
 	//WindowGroups
 	//Observers // **	
 
@@ -56,34 +55,37 @@ public:
 	@param[in] componentName The name of the ComponentDefinition
     @todo allow windows, sensors and workplanes to be within ComponentDefinitions
 	*/
-	ComponentDefinition(std::string * componentName);
-
+    ComponentDefinition(std::string * componentName) : Layer(componentName)
+    {
+        
+    }
+    
 	//! Destroys a ComponentDefinition object
 	/*!
 	@author German Molina
 	*/
-	~ComponentDefinition();
+	//-- ~ComponentDefinition();
 
 	//! Add an Otype to the ComponentDefinition
 	/*!
 	@author German Molina
 	@param[in] face The Face to add
 	*/
-	void addObject(Otype * o);
+	//-- void addObject(Otype * o);
 
 	//! Counts the number of Otype in the ComponentDefinition
 	/*!
 	@author German Molina
 	@return The number of faces in the ComponentDefinition
 	*/
-	size_t getNumObjects();
+	//-- size_t getNumObjects();
 
 	//! Retrieves the name of the ComponentDefinition
 	/*!
 	@author German Molina
 	@return The name of the ComponentDefinition
 	*/
-	std::string * getName();
+	//-- std::string * getName();
 	
 	//! Retrieves an Otype reference of the ComponentDefinition
 	/*!
@@ -91,7 +93,7 @@ public:
 	@param[in] i The index of the Face to retrieve
 	@return The reference to the Face
 	*/
-	Otype * getObjectRef(size_t i);
+	//-- Otype * getObjectRef(size_t i);
 
 	//! Retrieves a ComponentInstance reference of the ComponentDefinition
 	/*!
@@ -99,19 +101,20 @@ public:
 	@param[in] i The index of the ComponentInstance to retrieve
 	@return The reference to the ComponentInstance
 	*/
-	ComponentInstance * getComponentInstanceRef(size_t i);
+	//-- ComponentInstance * getComponentInstanceRef(size_t i);
 
 	//! Retrieves the reference to the Otype vector
 	/*!
 	@author German Molina
 	@return The reference to the Face vector
 	*/
-	std::vector <Otype * > * getObjectsRef();
+	//-- std::vector <Otype * > * getObjectsRef();
 
 	//! Retrieves the reference to the ComponentInstance vector
 	/*!
 	@author German Molina
 	@return The reference to the ComponentInstance vector
 	*/
-	std::vector <ComponentInstance * > * getComponentInstancesRef();
+	//-- std::vector <ComponentInstance * > * getComponentInstancesRef();
+    
 };

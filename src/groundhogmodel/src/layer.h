@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
 	Emp
 
     Copyright (C) 2017  German Molina (germolinal@gmail.com)
@@ -25,7 +25,9 @@
 #include <vector>
 
 #include "./otype.h"
-#include "./componentinstance.h"
+//#include "./componentinstance.h"
+
+class ComponentInstance;
 
 //! A Layer is the main group of geometry in a GroundhogModel. 
 
@@ -37,8 +39,8 @@ class Layer{
 
 private:
 	std::string name; //!< Name of the Layer
-	std::vector <Otype * > objects; //!< The faces in the Layer
-	std::vector <ComponentInstance * > instances; //!< The ComponentInstance in the Layer
+	std::vector<Otype * > objects = std::vector <Otype * >(); //!< The faces in the Layer
+	std::vector<ComponentInstance * > instances = std::vector <ComponentInstance * >(); //!< The ComponentInstance in the Layer
 
 public:
 
@@ -118,3 +120,5 @@ public:
 	*/
 	bool isEmpty();
 };
+
+extern Layer layer;

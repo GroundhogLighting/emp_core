@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include "./componentinstance.h"
 #include "./componentdefinition.h"
 #include "../../common/geometry/transform.h"
 

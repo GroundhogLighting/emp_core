@@ -28,6 +28,8 @@
 #include "../groundhogmodel/src/otype.h"
 #include "../common/geometry/polygon.h"
 #include "../groundhogmodel/src/photosensor.h"
+#include "../groundhogmodel/src/componentinstance.h"
+
 
 #include <SketchUpAPI/initialize.h>
 #include <SketchUpAPI/model/model.h>
@@ -716,6 +718,7 @@ bool SKPreader::loadComponentDefinition(SUComponentDefinitionRef definition)
 
   // Create the definition
   ComponentDefinition * componentDefinition = new ComponentDefinition(&definitionName);
+    
 
   // add it to the model
   model->addComponentDefinition(componentDefinition);  
