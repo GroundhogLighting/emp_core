@@ -26,22 +26,27 @@
 #include "../../common/geometry/point3d.h"
 #include "../../common/geometry/vector.h"
 
-#define PERSPECTIVE_VIEW 0
-#define PARALLEL_VIEW 1
+#define PERSPECTIVE_VIEW 0 // -vtv
+#define PARALLEL_VIEW 1 // -vtl
+#define CYLINDRICAL_VIEW 2 // -vtc
+#define HEMISPHERICAL_VIEW 3 // -vth
+#define ANGULAR_VIEW 4 // -vta
+#define STEREOGRAPHIC_VIEW 5 // -vts
 
 //! Represents a view point, view direction, field of view and type of view.
 
 class View {
-private:
+
+public:
 	std::string name; //!< The name of the view
 	Point3D viewPoint = Point3D(0,0,0); //!< The view point position
 	Vector3D viewDirection = Vector3D(0,0,1); //!< The view direction vector
 	Vector3D viewUp = Vector3D(0,0,1); //!< The view up vector
-	double viewHorizontal; //!< The field of view in the horizontal direction
-	double viewVertical; //!< The field of view in the vertical direction
-	int viewType; //!<  The view type according to defined macros
-
-public:
+	double viewHorizontal = 45; //!< The field of view in the horizontal direction
+	double viewVertical = 45; //!< The field of view in the vertical direction
+	int viewType = PERSPECTIVE_VIEW; //!<  The view type according to defined macros
+	double foreClippingDistance = 0; //!< view fore clipping plane
+	double aftClippingDistance = 0; //!< view fore clipping plane
 
 	//! Creates a new View object
 	/*!

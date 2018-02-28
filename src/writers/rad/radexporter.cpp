@@ -144,9 +144,9 @@ bool RadExporter::writeComponentDefinitions(const char * dir)
 		std::string * componentName = definition->getName();
 
 		// create the file
-        std::string fileName = baseDir + "/" + *componentName + ".rad";
-        
-        FOPEN(file,&fileName[0], "w");
+    std::string fileName = baseDir + "/" + *componentName + ".rad";
+    
+    FOPEN(file,&fileName[0], "w");
 
 		// get instances within the model
 		std::vector < ComponentInstance * > * instances = definition->getComponentInstancesRef();
@@ -172,11 +172,11 @@ bool RadExporter::writeComponentDefinitions(const char * dir)
           Otype * object = definition->getObjectRef(j);
           // Select Material
           Material * mat = object->getMaterial();
-          if (mat == NULL) {
+          if (mat == nullptr) {
 
           }
           std::string * material = object->getMaterial()->getName();
-          definition->getObjectRef(j)->writeInRadianceFormat(file,&(material->at(0)), NULL);
+          definition->getObjectRef(j)->writeInRadianceFormat(file,&(material->at(0)), nullptr);
 		}// end of iterating faces
 
 		// Close the file
@@ -227,14 +227,14 @@ bool RadExporter::writeLayers(const char * dir)
 		for (size_t j = 0; j < numObjs; j++) {
           Otype * object = layer->getObjectRef(j);
           Material * mat = object->getMaterial();
-          if (mat == NULL) {
+          if (mat == nullptr) {
             std::string * name = object->getName();   
             std::string * type = object->getType();
             warnNoMaterial(&(type->at(0)), &(name->at(0)));
             continue;
           }
           std::string * material = object ->getMaterial() ->getName();
-          object->writeInRadianceFormat(file,&(material->at(0)), NULL);          
+          object->writeInRadianceFormat(file,&(material->at(0)), nullptr);          
 		}
 		
 		// Close the file
@@ -261,21 +261,19 @@ bool RadExporter::writeLayers(FILE * file, const char * newMaterial)
     // write instances
 
     // Create a transformation
-    Transform * transform = new Transform();
+    Transform transform = Transform();
 
     std::vector < ComponentInstance * > * instances = layer->getComponentInstancesRef();
     size_t numInstances = instances->size();
     for (size_t j = 0; j < numInstances; j++) {
-      writeComponentInstance(file, layer->getComponentInstanceRef(j),transform,newMaterial);
-    }
-
-    // delete this transform
-    delete transform;
+      writeComponentInstance(file, layer->getComponentInstanceRef(j),&transform,newMaterial);
+    }    
 
     fprintf(file, "\n\n");
 
     std::vector < Otype * > * objects = layer->getObjectsRef();
     size_t numObjs = objects->size();
+
     // write all faces
     for (size_t j = 0; j < numObjs; j++) {
 
@@ -285,19 +283,19 @@ bool RadExporter::writeLayers(FILE * file, const char * newMaterial)
       // Select Material
       const char * material;
 
-      if (newMaterial == NULL) {
+      if (newMaterial == nullptr) {
         // get the material
         Material * mat = object->getMaterial();
-        if (mat == NULL) {
+        if (mat == nullptr) {
           std::string * oName = object->getName();
-          WARN(wMsg,"Face " + *oName + " has no Material... it has been ignored");
+          WARN(wMsg,"Object " + *oName + " has no Material... it has been ignored");
           continue;
         }
         material = &(mat->getName()->at(0));
       } else {
         material = newMaterial;
       }
-      object->writeInRadianceFormat(file, material, NULL);
+      object->writeInRadianceFormat(file, material, nullptr);
     }
 
   }
@@ -309,8 +307,8 @@ bool RadExporter::writeLayers(FILE * file, const char * newMaterial)
 void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instance) 
 {	
 	ComponentDefinition * definition = instance->getDefinitionRef();
-	if (definition == NULL) {
-		WARN(wMsg,"Trying to export an instance with NULL definition... instance ignored.");
+	if (definition == nullptr) {
+		WARN(wMsg,"Trying to export an instance with nullptr definition... instance ignored.");
 		return;
 	}
 
@@ -333,23 +331,24 @@ void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instan
 {
   
   ComponentDefinition * definition = instance->getDefinitionRef();
-  if (definition == NULL) {
-    warn("Trying to export an instance with NULL definition... instance ignored.");
+  if (definition == nullptr) {
+    warn("Trying to export an instance with nullptr definition... instance ignored.");
     return;
   }
 
-  // Write the definition
-  size_t numObjects = definition->getNumObjects();
+  // Get the definition Name
   std::string * componentName = definition->getName();
-  
 
+  // Count objects
+  size_t numObjects = definition->getNumObjects();
+  
   // get instances within the model
   std::vector < ComponentInstance * > * instances = definition->getComponentInstancesRef();
   size_t numInstances = instances->size();
 
   // export faces
   if (numObjects < 1 && numInstances < 1) {
-    WARN(wMsg,"Empty component '" + *componentName + "'");
+    WARN(wMsg,"Empty ComponentDefinition '" + *componentName + "'");
     return;
   }
 
@@ -374,10 +373,10 @@ void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instan
     // Select Material
     const char * material;
 
-    if (newMaterial == NULL) {
+    if (newMaterial == nullptr) {
       // get the material
       Material * mat = object->getMaterial();
-      if (mat == NULL) {
+      if (mat == nullptr) {
         std::string * oName = object->getName();
         WARN(wMsg,"Face " + *oName + " has no Material... it has been ignored");
         continue;
@@ -430,12 +429,12 @@ bool RadExporter::writeWindows(const char * dir) {
             Material * mat = window->getMaterial();
 
             std::string * material = mat->getName();
-            if (mat == NULL) {
+            if (mat == nullptr) {
               WARN(wMsg,"Window " + *material + " has not material... it will be ignored");
               continue;
             }
 
-            window->writeInRadianceFormat(file,&(material->at(0)), NULL);
+            window->writeInRadianceFormat(file,&(material->at(0)), nullptr);
 		}
 
         fclose(file);
@@ -465,12 +464,12 @@ bool RadExporter::writeWindows(FILE * file) {
 
       Material * mat = window->getMaterial();
       std::string * material = mat->getName();
-      if (mat == NULL) {
+      if (mat == nullptr) {
         WARN(wMsg,"Window " + *material + " has not material... it will be ignored");
         continue;
       }
 
-      window->writeInRadianceFormat(file,&(material->at(0)), NULL);
+      window->writeInRadianceFormat(file,&(material->at(0)), nullptr);
     }
     
   }
@@ -606,7 +605,7 @@ bool RadExporter::writeRifFile(const char * dir, OptionSet * options)
     
     
     file << "###############" << std::endl;
-    file << "## RIF exported using Emp v" << EMP_CORE_VERSION << std::endl;
+    file << "## RIF exported using " << EMP_CORE_VERSION << std::endl;
     file << "###############" << std::endl << std::endl << std::endl ;
     
     

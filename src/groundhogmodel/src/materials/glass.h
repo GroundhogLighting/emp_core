@@ -34,8 +34,19 @@ public:
     {
         primitiveLength = 9;
         fillFromJSON(j);
+        setType("glass");
     }
 	
+    //! Builds a new Glass material
+    /*!
+     @author German Molina
+     @param name The name for the Material
+     */
+    Glass(std::string * name)
+    {
+        setName(name);
+        setType("glass");
+    }
 
 	//! Parses a tokenized Groundhog primitive
 	/*!

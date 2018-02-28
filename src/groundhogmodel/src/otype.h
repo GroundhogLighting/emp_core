@@ -38,8 +38,7 @@ The name Otype was copied from Radiance, since the name "Object" was too generic
 class Otype {
 private:
 	std::string name; //!< The unique name of the object
-	std::string type; //!< The type of object
-	int type_id; //!< The type ID as defined by Radiance
+	std::string type; //!< The type of object	
 	Material * material = NULL; //!< The material of the Face
 	
 
@@ -77,6 +76,13 @@ public:
 	@return The type of the Otype
 	*/
 	std::string * getType();
+
+    //! Sets the type of the Otype
+    /*!
+     @author German Molina
+     @return The type of the Otype
+     */
+    void setType(std::string type);
 
 	//! Compares a name with another string
 	/*!

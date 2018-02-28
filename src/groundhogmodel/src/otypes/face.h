@@ -38,10 +38,9 @@ A Face represents physical objects of the model.
 */
 
 class Face : public Otype {
-private:
-	Polygon3D * polygon; //!< The polygon that represents the geometry of the face
 
 public:
+	Polygon3D * polygon = new Polygon3D(); //!< The polygon that represents the geometry of the face
 
 	//! Creates a Face object
 	/*!
@@ -52,8 +51,8 @@ public:
 	*/
 	Face(std::string * faceName)
 	{
-		setName( faceName ); 
-		polygon = new Polygon3D();
+		setName( faceName );        
+        setType("polygon"); // This is the real name in Radiance		
 	}
 
 	//! Destroys the Face
@@ -135,10 +134,11 @@ public:
     bool writeInRadianceFormat(FILE * file, const char * material, Transform * transform)
 	{
 				// get the name of the face
-		std::string * faceName = getName();
-		
+		std::string * objectName = getName();
+        std::string * objectType = getType();
+        
 		if (hasTooManyInnerLoops()) {
-			WARN(warnMessage,"Ignoring face '" + *faceName + "' because it has TOO MANY inner loops.");
+			WARN(warnMessage,"Ignoring face '" + *objectName + "' because it has TOO MANY inner loops.");
 			// writeTriangulatedFace(file,face);
 			return true;
 		}
@@ -155,7 +155,7 @@ public:
 			finalLoop = getOuterLoopRef();
 		}
 
-		fprintf(file, "%s polygon %s\n0\n0\n", material, &(faceName->at(0)));
+		fprintf(file, "%s %s %s\n0\n0\n",material,objectType->c_str(), objectName->c_str());
 		
 		fprintf(file,"%zd\n",3 * finalLoop->realSize());
 

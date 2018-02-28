@@ -25,7 +25,7 @@ public:
     double g = 0.6; //!< The green component
     double b = 0.6; //!< The blue component
     double refractionIndex = 1.52; //!< The refraction index
-    double hartmanConstant = 0; //!< The hartman constant. Usuallt zero
+    double hartmannConstant = 0; //!< The hartman constant. Usuallt zero
     
     
     //! Builds a new Dielectric material
@@ -37,6 +37,18 @@ public:
     {
         primitiveLength = 11;
         fillFromJSON(j);
+        setType("dielectric");
+    }
+
+    //! Builds a new Dielectric material
+    /*!
+     @author German Molina
+     @param name The name for the Material
+     */
+    Dielectric(std::string * name)
+    {
+        setName(name);
+        setType("dielectric");
     }
     
     //! Prints the Material in Radiance format
@@ -48,7 +60,7 @@ public:
     bool writeInRadianceFormat(FILE * file)
     {
         fprintf(file, "void %s %s\n0\n0\n", &type[0], &name[0]);
-        fprintf(file, "5 %f %f %f %f %f\n", r, g, b, refractionIndex, hartmanConstant);
+        fprintf(file, "5 %f %f %f %f %f\n", r, g, b, refractionIndex, hartmannConstant);
         
         return true;
     }
@@ -69,7 +81,7 @@ public:
         g = std::stod((*tokens)[i++]);
         b = std::stod((*tokens)[i++]);
         refractionIndex = std::stod((*tokens)[i++]);
-        hartmanConstant = std::stod((*tokens)[i++]);
+        hartmannConstant = std::stod((*tokens)[i++]);
         return true;
     }
     

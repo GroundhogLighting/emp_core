@@ -53,6 +53,11 @@ bool Otype::compareName(std::string * otherName)
 	return (name == *otherName);
 }
 
+void Otype::setType(std::string theType)
+{
+    type = theType;
+}
+
 
 bool Otype::writeRadianceDefinition(std::string * dir)
 {

@@ -70,9 +70,9 @@ public:
 	//! Adds an Otype to the Layer
 	/*!
 	@author German Molina
-	@param[in] face The Face to add to the Layer
+	@param[in] object The Otype to add to the Layer
 	*/
-	void addObject(Otype * face);
+	void addObject(Otype * object);
 
 	//! Retrieves the reference to the ComponentInstance vector
 	/*!

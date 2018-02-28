@@ -45,6 +45,16 @@
 #include "./src/materials/spotlight.h"
 #include "./src/materials/trans.h"
 
+// Add Otypes
+#include "./src/otypes/bubble.h"
+#include "./src/otypes/cone.h"
+#include "./src/otypes/cup.h"
+#include "./src/otypes/cylinder.h"
+#include "./src/otypes/face.h"
+#include "./src/otypes/ring.h"
+#include "./src/otypes/source.h"
+#include "./src/otypes/sphere.h"
+#include "./src/otypes/tube.h"
 
 #include "json/json.hpp"
 using nlohmann::json;
@@ -180,7 +190,7 @@ public:
 
 	@author German Molina
 	@param[in] layerName The name of the definition
-	@return the reference to the Layer
+     @return the reference to the Layer; nullptr if not found
 	*/
 	Layer *  getLayerByName(std::string * layerName);
 
@@ -198,6 +208,15 @@ public:
 	@return the View pointer
 	*/
 	View * getViewRef(size_t i);
+
+	//! Retrieves the reference to a View in the model
+	/*!
+	@author German Molina
+	@param[in] name The name of the View we are looking for
+	@return the View pointer
+	*/
+	View * getViewByName(std::string * name);
+
 
 	//! Counts the number of view in the model
 	/*!
@@ -283,7 +302,7 @@ public:
 	@param[in] wp The name of the workplane
 	@return The found workplane or NULL (if not found)
 	*/
-	Workplane * getWorkplaneByName(std::string wp);
+	Workplane * getWorkplaneByName(std::string * wp);
 
 	//! Adds a Material to the Groundhogmodel
 	/*!
@@ -292,6 +311,14 @@ public:
 	@return The pointer to the new Material
 	*/
 	Material * addMaterial(json * j);
+
+	//! Adds a Material to the Groundhogmodel
+	/*!
+	@author German Molina
+	@param[in] m A pointer to a Material
+	@return The pointer to the new Material
+	*/
+	void addMaterial(Material * m);
 
 	//! Add the default material
 	/*!
@@ -322,6 +349,17 @@ public:
 	*/
 	Material * getMaterialRef(size_t i);
 
+    //! Retrieves a Layer from the model by name
+    /*!
+     Will return NULL if not found
+     
+     @author German Molina
+     @param[in] materialName The name of the definition
+     @return the reference to the Layer; nullptr if not found
+     */
+    Material *  getMaterialByName(std::string * materialName);
+
+    
 	//! Adds a Photosensor to the GroundhogModel
 	/*!
 	@author German Molina
@@ -371,6 +409,17 @@ public:
     @return NULL if does not exist, the material if it exist
     */
     Material * hasMaterial(std::string * matName);
+    
+    //! Retrieves an Otype object from the model by name
+    /*!
+     Will return NULL if not found
+     
+     @author German Molina
+     @param[in] objectName The name of the definition
+     @return the reference to the Layer; nullptr if not found
+     */
+    Otype *  getOtypeByName(std::string * objectName);
+
 
 };
 

@@ -1,5 +1,5 @@
-#ifndef INCLUDE_EMP_CORE_H
-#define INCLUDE_EMP_CORE_H
+#ifndef INCLUDE_EMP_CORE_API_H
+#define INCLUDE_EMP_CORE_API_H
 
 
 
@@ -26,109 +26,72 @@ class OconvOptions;
 #include "../src/writers/rad/radexporter.h"
 class RadExporter;
 
-// GEOMETRY
-//#include "../src/common/geometry/matrix.h"
-//class Matrix;
-
-//#include "../src/calculations/color_matrix.h"
-//class ColorMatrix;
-/*
-// Math class
-#include "../src/common/geometry/loop.h"
-class Loop;
-
-
-
-#include "../src/common/geometry/matrix4x4.h"
-class Matrix4x4;
-
-#include "../src/common/geometry/point3d.h"
-class Point3D;
-
-#include "../src/common/geometry/polygon.h"
-class Polygon3D;
-
-#include "../src/common/geometry/segment.h"
-class Segment;
-
-#include "../src/common/geometry/transform.h"
-class Transform;
-
-#include "../src/common/geometry/triangle.h"
-class Triangle;
-
-#include "../src/common/geometry/triangulation.h"
-class Triangulation;
-
-#include "../src/common/geometry/vector.h"
-class Vector3D;
-*/
-
-
+#include "../src/readers/SKPreader.h"
+class SKPreader;
 
 // Calculation Tasks
-//#include "../src/calculations/tasks/AddSkyToOctree.h"
-//class AddSkyToOctree;
+#include "../src/calculations/tasks/AddSkyToOctree.h"
+class AddSkyToOctree;
 
-//#include "../src/calculations/tasks/Calculate4CMDirectSkyMatrix.h"
-//class Calculate4CMDirectSkyMatrix;
+#include "../src/calculations/tasks/Calculate4CMDirectSkyMatrix.h"
+class Calculate4CMDirectSkyMatrix;
 
-//#include "../src/calculations/tasks/Calculate4CMNaiveDirectSkyMatrix.h"
-//class Calculate4CMNaiveDirectSkyMatrix;
+#include "../src/calculations/tasks/Calculate4CMNaiveDirectSkyMatrix.h"
+class Calculate4CMNaiveDirectSkyMatrix;
 
-//#include "../src/calculations/tasks/CalculateDDCDirectSkyMatrix.h"
-//class CalculateDDCDirectSkyMatrix;
+#include "../src/calculations/tasks/CalculateDDCDirectSkyMatrix.h"
+class CalculateDDCDirectSkyMatrix;
 
-//#include "../src/calculations/tasks/CalculateDDCDirectSunPatchIlluminance.h"
-//class CalculateDDCDirectSunPatchIlluminance;
+#include "../src/calculations/tasks/CalculateDDCDirectSunPatchIlluminance.h"
+class CalculateDDCDirectSunPatchIlluminance;
 
-//#include "../src/calculations/tasks/CalculateDDCGlobalIlluminance.h"
-//class CalculateDDCGlobalIlluminance;
+#include "../src/calculations/tasks/CalculateDDCGlobalIlluminance.h"
+class CalculateDDCGlobalIlluminance;
 
-//#include "../src/calculations/tasks/CalculateDDCGlobalMatrix.h"
-//class CalculateDDCGlobalMatrix;
+#include "../src/calculations/tasks/CalculateDDCGlobalMatrix.h"
+class CalculateDDCGlobalMatrix;
 
-//#include "../src/calculations/tasks/CalculateDaylightFactor.h"
-//class CalculateDaylightFactor;
+#include "../src/calculations/tasks/CalculateDaylightFactor.h"
+class CalculateDaylightFactor;
 
-//#include "../src/calculations/tasks/CalculateDirectSunIlluminance.h"
-//class CalculateDirectSunIlluminance;
+#include "../src/calculations/tasks/CalculateDirectSunIlluminance.h"
+class CalculateDirectSunIlluminance;
 
-//#include "../src/calculations/tasks/CalculateDirectSunMatrix.h"
-//class CalculateDirectSunMatrix;
+#include "../src/calculations/tasks/CalculateDirectSunMatrix.h"
+class CalculateDirectSunMatrix;
 
-//#include "../src/calculations/tasks/Create4CMDirectSkyOctree.h"
-//class Create4CMDirectSkyOctree;
+#include "../src/calculations/tasks/Create4CMDirectSkyOctree.h"
+class Create4CMDirectSkyOctree;
 
-//#include "../src/calculations/tasks/Create4CMNaiveDirectSkyOctree.h"
-//class Create4CMNaiveDirectSkyOctree;
+#include "../src/calculations/tasks/Create4CMNaiveDirectSkyOctree.h"
+class Create4CMNaiveDirectSkyOctree;
 
-//#include "../src/calculations/tasks/CreateDDCDirectSkyOctree.h"
-//class CreateDDCDirectSkyOctree;
+#include "../src/calculations/tasks/CreateDDCDirectSkyOctree.h"
+class CreateDDCDirectSkyOctree;
 
-//#include "../src/calculations/tasks/CreateDDCGlobalOctree.h"
-//class CreateDDCGlobalOctree;
+#include "../src/calculations/tasks/CreateDDCGlobalOctree.h"
+class CreateDDCGlobalOctree;
 
-//#include "../src/calculations/tasks/CreateDaylightFactorOctree.h"
-//class CreateDaylightFactorOctree;
+#include "../src/calculations/tasks/CreateDaylightFactorOctree.h"
+class CreateDaylightFactorOctree;
 
-//#include "../src/calculations/tasks/CreateDirectSunOctree.h"
-//class CreateDirectSunOctree;
+#include "../src/calculations/tasks/CreateDirectSunOctree.h"
+class CreateDirectSunOctree;
 
-//#include "../src/calculations/tasks/OconvTask.h"
-//class OconvTask;
+#include "../src/calculations/tasks/OconvTask.h"
+class OconvTask;
 
-//#include "../src/calculations/tasks/RTraceTask.h"
-//class RTraceTask;
+#include "../src/calculations/tasks/RTraceTask.h"
+class RTraceTask;
 
-//#include "../src/calculations/tasks/TriangulateWorkplane.h"
-//class TriangulateWorkplane;
+#include "../src/calculations/tasks/TriangulateWorkplane.h"
+class TriangulateWorkplane;
 
-//#include "../src/calculations/tasks/do4CM.h"
-//class do4CM;
+#include "../src/calculations/tasks/do4CM.h"
+class do4CM;
 
-//#include "../src/calculations/tasks/doDDC.h"
-//class doDDC;
+#include "../src/calculations/tasks/doDDC.h"
+class doDDC;
 
 // RadExporter Tasks
 #include "../src/writers/rad/tasks/WriteComponentDefinitions.h"

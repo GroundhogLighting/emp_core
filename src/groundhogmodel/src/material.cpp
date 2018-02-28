@@ -38,9 +38,19 @@ std::string * Material::getName()
 	return &name;
 }
 
+void Material::setName(std::string * aName)
+{
+	name = *aName;
+}
+
 std::string * Material::getType()
 {
 	return &type;
+}
+
+void Material::setType(std::string theType)
+{
+	type = theType;
 }
 
 bool Material::compareName(std::string * otherName)

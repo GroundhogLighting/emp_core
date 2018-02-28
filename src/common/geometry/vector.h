@@ -21,6 +21,8 @@
 #ifndef VECTOR_3D_H
 #define VECTOR_3D_H
 
+#include "./transform.h"
+
 //! A 3D vector representation
 
 
@@ -174,6 +176,14 @@ public:
 	@author German Molina
 	*/
 	void print();
+    
+    //! Transforms a Vector based on a Transform object
+    /*!
+     @author German Molina
+     @param[in] t The transformation to apply
+     @return the transformed Vector3D object
+     */
+    Vector3D transform(Transform * t);
 };
 
 extern Vector3D vector3D;
