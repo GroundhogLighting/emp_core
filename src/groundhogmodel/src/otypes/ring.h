@@ -53,36 +53,6 @@ public:
     }
     
     
-    //! Writes the object in Radiance format
-    /*!
-     @author German Molina
-     @param[in] file The file to write the face to
-     @param[in] material The name of the Material to assign the face
-     @param[in] transform The optional Transform object
-     @return success
-     */
-    bool writeInRadianceFormat(FILE * file, const char * material, Transform * transform)
-    {
-        // get the name of the face
-        std::string * objectName = getName();
-        std::string * type = getType();
-        fprintf(file, "%s %s %s\n0\n0\n8\n", material, type->c_str(), objectName->c_str());
-        
-        // Print arguments
-        
-        if (transform == nullptr) {
-            fprintf(file, "%f %f %f %f %f %f %f %f\n", center.getX(), center.getY(), center.getZ(), direction.getX(), direction.getY(), direction.getZ(), r0, r1);
-        }
-        else {
-            Point3D centerP = center.transform(transform);
-            Vector3D directionP = direction.transform(transform);
-            fprintf(file, "%f %f %f %f %f %f %f %f\n", centerP.getX(), centerP.getY(), centerP.getZ(), directionP.getX(), directionP.getY(), directionP.getZ(), r0, r1);
-        }
-        
-        
-        return true;
-    }
-    
 };
 
 

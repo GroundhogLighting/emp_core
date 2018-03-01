@@ -108,18 +108,6 @@ public:
     void setMaterial(Material * mat);
 
     
-	//! Writes an Otype in Radiance format
-	/*!
-
-    Receives an optional transform object (may be NULL) that will modify the OType
-
-	@author German Molina
-	@param[in] file The file to write the object to
-    @param[in] material The name of the material to assign
-    @param[in] transform The transformation to apply to the object
-	@return success	
-	*/
-    virtual bool writeInRadianceFormat(FILE * file, const char * material, Transform * transform) = 0;
 	
     
 };

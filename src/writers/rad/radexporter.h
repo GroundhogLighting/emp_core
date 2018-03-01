@@ -141,9 +141,10 @@ public:
     @param[in] file The file to write this in
     @param[in] instance The ComponentInstance to write
     @param[in] transform A transformation to apply to the instance geometry
+    @param[in] scale The scale to apply to the instance
     @param[in] A material name that overrides the actual materials of the geometry (i.e. xform -m 'newMaterial' option)
     */
-    void writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * transform, const char * newMaterial);
+    void writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * transform, double scale, const char * newMaterial);
 
 
 	//! Writes all the window groups in Radiance format
@@ -253,6 +254,16 @@ public:
      @return success
      */
     bool writeOtype(Otype * object, FILE * file);
+    
+    //! Writes an Object in Radiance Format, potentially changing the material
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @param material An optional material name that will override the one assigned to the object
+     @return success
+     */
+    bool writeOtype(Otype * object, FILE * file, const char * material);
 };
 
 extern RadExporter radexporter;

@@ -46,34 +46,6 @@ public:
         setName( objectName );
         setType("bubble");
     }
-    
-    
-    //! Writes the object in Radiance format
-    /*!
-     @author German Molina
-     @param[in] file The file to write the face to
-     @param[in] material The name of the Material to assign the face
-     @param[in] transform The optional Transform object
-     @return success
-     */
-    bool writeInRadianceFormat(FILE * file, const char * material, Transform * transform)
-    {
-        // get the name of the face
-        std::string * objectName = getName();
-        std::string * type = getType();
-        fprintf(file, "%s %s %s\n0\n0\n4\n", material, type->c_str(), objectName->c_str());
         
-        // Print arguments
-        
-        if (transform == nullptr) {
-            fprintf(file, "%f %f %f %f\n", center.getX(), center.getY(), center.getZ(),radius);
-        }
-        else {
-            Point3D p = center.transform(transform);
-            fprintf(file, "%f %f %f %f\n", p.getX(), p.getY(), p.getZ(), radius);
-        }
-        
-        return true;
-    }
 
 };
