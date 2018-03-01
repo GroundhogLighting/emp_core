@@ -1,8 +1,9 @@
-﻿/* vector3d_test.h */
+/* vector3d_test.h */
 
 #include <cmath>
 
-#include "../src/common/geometry/triangulation.h"
+#include "../include/emp_core.h"
+//#include "../src/common/geometry/triangulation.h"
 
 
 TEST(TriangulateTest, isConvex)

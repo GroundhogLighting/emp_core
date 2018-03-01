@@ -1,8 +1,9 @@
-﻿/* triangle_test.h */
+/* triangle_test.h */
 
 #include <cmath>
 
-#include "../src/common/geometry/triangle.h"
+#include "../include/emp_core.h"
+//#include "../src/common/geometry/triangle.h"
 
 TEST(TriangleTest, getArea)
 {

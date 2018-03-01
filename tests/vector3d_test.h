@@ -2,8 +2,9 @@
 
 #include <cmath>
 
-#include "../src/config_constants.h"
-#include "../src/common/geometry/vector.h"
+#include "../include/emp_core.h"
+//#include "../src/config_constants.h"
+//#include "../src/common/geometry/vector.h"
 
 
 TEST(Vector3DTest, ConstructorByComponents)

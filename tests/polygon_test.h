@@ -1,5 +1,7 @@
 /* polygon_test.h */
-#include "../src/common/geometry/polygon.h"
+
+#include "../include/emp_core.h"
+//#include "../src/common/geometry/polygon.h"
 
 
 TEST(PolygonTest, emptyOnConstructor)

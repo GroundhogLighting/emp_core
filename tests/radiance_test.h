@@ -2,13 +2,14 @@
 #include <stdio.h>
 #include <fstream>
 
-#include "calculations/radiance.h"
-#include "os_definitions.h"
-#include "groundhogmodel/groundhogmodel.h"
+#include "../include/emp_core.h"
+//#include "calculations/radiance.h"
+//#include "os_definitions.h"
+//#include "groundhogmodel/groundhogmodel.h"
 
-#include "calculations/tasks/OconvTask.h"
-#include "calculations/tasks/RTraceTask.h"
-#include "calculations/tasks/Create4CMDirectSkyOctree.h"
+//#include "calculations/tasks/OconvTask.h"
+//#include "calculations/tasks/RTraceTask.h"
+//#include "calculations/tasks/Create4CMDirectSkyOctree.h"
 
 TEST(RTraceTest, calcDF)
 {

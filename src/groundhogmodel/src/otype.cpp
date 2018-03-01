@@ -59,12 +59,6 @@ void Otype::setType(std::string theType)
 }
 
 
-bool Otype::writeRadianceDefinition(std::string * dir)
-{
-	return true;
-}
-
-
 Material * Otype::getMaterial()
 {
 	return material;

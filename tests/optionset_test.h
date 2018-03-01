@@ -1,6 +1,7 @@
-﻿/*  os_test.h */
+/*  os_test.h */
 
-#include "common/options/optionset.h"
+#include "../include/emp_core.h"
+//#include "common/options/optionset.h"
 
 
 TEST(OptionSetTests, io_options)

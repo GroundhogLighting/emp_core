@@ -1,6 +1,7 @@
 // simulationManager_test.h
 
-#include "common/taskmanager/taskmanager.h"
+#include "../include/emp_core.h"
+//#include "common/taskmanager/taskmanager.h"
 
 
 

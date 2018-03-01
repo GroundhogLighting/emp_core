@@ -1,4 +1,5 @@
-#include "groundhogmodel/groundhogmodel.h"
+#include "../include/emp_core.h"
+//#include "groundhogmodel/groundhogmodel.h"
 
 
 
@@ -8,9 +9,9 @@ TEST(MaterialTest, Dielectric) {
     double g = 0.6;
     double b = 0.9;
     double refractionIndex = 1.5;
-    double hartmanConstant = 0.0;
+    double hartmannConstant = 0.0;
     
-    std::string rad = "void dielectric %MAT_NAME% 0 0 5 " + std::to_string(r) + " " + std::to_string(g) + " " + std::to_string(b) + " " + std::to_string(refractionIndex)+" " + std::to_string(hartmanConstant);
+    std::string rad = "void dielectric %MAT_NAME% 0 0 5 " + std::to_string(r) + " " + std::to_string(g) + " " + std::to_string(b) + " " + std::to_string(refractionIndex)+" " + std::to_string(hartmannConstant);
     std::string c = "dielectric";
     std::string name = "theMaterial";
     
@@ -28,7 +29,7 @@ TEST(MaterialTest, Dielectric) {
     ASSERT_EQ(mat.g,g);
     ASSERT_EQ(mat.b,b);
     ASSERT_EQ(mat.refractionIndex,refractionIndex);
-    ASSERT_EQ(mat.hartmanConstant,hartmanConstant);
+    ASSERT_EQ(mat.hartmannConstant,hartmannConstant);
     
     // Test write to Radiance.
     std::string fileName = "material.mat";
@@ -58,12 +59,13 @@ TEST(MaterialTest, Dielectric) {
     ASSERT_EQ(mat.g,newMat.g);
     ASSERT_EQ(mat.b,newMat.b);
     ASSERT_EQ(mat.refractionIndex,newMat.refractionIndex);
-    ASSERT_EQ(mat.hartmanConstant,newMat.hartmanConstant);
+    ASSERT_EQ(mat.hartmannConstant,newMat.hartmannConstant);
     
     // Add to model
     GroundhogModel model = GroundhogModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
+    remove(fileName.c_str());
 }
 
 
@@ -122,6 +124,8 @@ TEST(MaterialTest, Glass) {
     // Add to model
     GroundhogModel model = GroundhogModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
+    
+    remove(fileName.c_str());
 }
 
 
@@ -183,6 +187,8 @@ TEST(MaterialTest, Glow) {
     // Add to model
     GroundhogModel model = GroundhogModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
+    
+    remove(fileName.c_str());
 }
 
 
@@ -258,6 +264,8 @@ TEST(MaterialTest, Interface) {
     // Add to model
     GroundhogModel model = GroundhogModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
+    
+    remove(fileName.c_str());
 }
 
 
@@ -317,6 +325,8 @@ TEST(MaterialTest, Light) {
     // Add to model
     GroundhogModel model = GroundhogModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
+    
+    remove(fileName.c_str());
     
 }
 
@@ -382,6 +392,8 @@ TEST(MaterialTest, Metal) {
     // Add to model
     GroundhogModel model = GroundhogModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
+    
+    remove(fileName.c_str());
 }
 
 
@@ -401,7 +413,7 @@ TEST(MaterialTest, Plastic) {
     j["name"]=name;
     j["rad"]=rad;
     
-    Metal mat = Metal(&j);
+    Plastic mat = Plastic(&j);
     
     // Test From JSON
     ASSERT_EQ(mat.name,name);
@@ -445,6 +457,8 @@ TEST(MaterialTest, Plastic) {
     // Add to model
     GroundhogModel model = GroundhogModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
+    
+    remove(fileName.c_str());
 }
 
 
@@ -475,9 +489,9 @@ TEST(MaterialTest, Spotlight) {
     ASSERT_EQ(mat.g,g);
     ASSERT_EQ(mat.b,b);
     ASSERT_EQ(mat.angle,angle);
-    ASSERT_EQ(mat.xdir,xdir);
-    ASSERT_EQ(mat.ydir,ydir);
-    ASSERT_EQ(mat.zdir,zdir);
+    ASSERT_EQ(mat.direction.getX(),xdir);
+    ASSERT_EQ(mat.direction.getY(),ydir);
+    ASSERT_EQ(mat.direction.getZ(),zdir);
     
     // Test write to Radiance.
     std::string fileName = "material.mat";
@@ -507,14 +521,15 @@ TEST(MaterialTest, Spotlight) {
     ASSERT_EQ(mat.g,newMat.g);
     ASSERT_EQ(mat.b,newMat.b);
     ASSERT_EQ(mat.angle,newMat.angle);
-    ASSERT_EQ(mat.xdir,newMat.xdir);
-    ASSERT_EQ(mat.ydir,newMat.ydir);
-    ASSERT_EQ(mat.zdir,newMat.zdir);
+    ASSERT_EQ(mat.direction.getX(),newMat.direction.getX());
+    ASSERT_EQ(mat.direction.getY(),newMat.direction.getY());
+    ASSERT_EQ(mat.direction.getZ(),newMat.direction.getZ());
     
     // Add to model
     GroundhogModel model = GroundhogModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
+    remove(fileName.c_str());
 }
 
 
@@ -584,6 +599,8 @@ TEST(MaterialTest, Trans) {
     // Add to model
     GroundhogModel model = GroundhogModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
+    
+    remove(fileName.c_str());
     
 }
 

@@ -25,9 +25,8 @@ project "emp_tests"
     }  
 
     links {                
-        "GoogleTest",        
-        "rtrad",
-        "Emp_core"
+        "GoogleTest",                
+        "emp_core"
     }  
 
 
@@ -37,10 +36,18 @@ project "emp_tests"
 
     elseif is_macos then
         defines { "MACOS" }            
-        runpathdirs { "libs" }
+        --runpathdirs { "libs" }
         linkoptions {            
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"
         }    
+        buildoptions {
+            "-F "..third_party_dir.."/SketchUp/MACOS/headers",
+            --"-F/Users/german/Documents/emp_core/3rdparty/SketchUp/MACOS/headers/",
+            "-v"            
+        }
+        links {
+            third_party_dir.."/SketchUp/MACOS/headers/SketchUpAPI.framework",            
+        }
     elseif is_linux then
         defines { "LINUX", "AVOID_SKP" }    
         links {            

@@ -1,5 +1,7 @@
 /* loop_test.h */
-#include "../src/common/geometry/loop.h"
+
+#include "../include/emp_core.h"
+//#include "../src/common/geometry/loop.h"
 #include <math.h>
 
 TEST(LoopTests, emptyVectorOnConstructor)

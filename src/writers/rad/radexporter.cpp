@@ -198,10 +198,13 @@ bool RadExporter::writeLayers(const char * dir)
     std::string baseDir = std::string(dir);
 	createdir(baseDir);
 	
+    // Iterate all the layers
 	for (size_t i = 0; i < numLayers; i++) {
+        
 		// get the layer
 		Layer * layer = model->getLayerRef(i);	
 		std::string * layerName = layer->getName();
+        
 		if (layer->isEmpty()) {
 			WARN(wMsg,"Skipping layer '" + *layerName + "' when writing, because it is empty.");
 			continue;
@@ -209,10 +212,9 @@ bool RadExporter::writeLayers(const char * dir)
 
         std::string flnm = baseDir + "/" + *layerName + ".rad";
         
-        //FILE * file = fopen(&flnm[0], "w");
         FOPEN(file, &flnm[0], "w");
 
-		// write instances
+		/* WRITE COMPONENT INSTANCES */
 		std::vector < ComponentInstance * > * instances = layer->getComponentInstancesRef();
 		size_t numInstances = instances->size();
 		for (size_t j = 0; j < numInstances; j++) {
@@ -221,88 +223,76 @@ bool RadExporter::writeLayers(const char * dir)
 
         fprintf(file, "\n\n");		
 	
+        /* WRITE OBJECTS */
+        
+        // Get the objects
 		std::vector < Otype * > * objects = layer->getObjectsRef();
+        
+        // Count the objects
 		size_t numObjs= objects->size();
-		// write all faces
-		for (size_t j = 0; j < numObjs; j++) {
-          Otype * object = layer->getObjectRef(j);
-          Material * mat = object->getMaterial();
-          if (mat == nullptr) {
-            std::string * name = object->getName();   
-            std::string * type = object->getType();
-            warnNoMaterial(&(type->at(0)), &(name->at(0)));
-            continue;
-          }
-          std::string * material = object ->getMaterial() ->getName();
-          object->writeInRadianceFormat(file,&(material->at(0)), nullptr);          
-		}
-		
+        
+        // Iterate
+        for (size_t j = 0; j < numObjs; j++) {
+            // Get object
+            writeOtype(objects->at(j), file);
+        }
+        
 		// Close the file
         fclose(file);
-		//file.close();
+		
 	}
 	return true;
 }
 
 
-bool RadExporter::writeLayers(FILE * file, const char * newMaterial)
+bool RadExporter::writeLayersInOneFile(FILE * file, const char * newMaterial)
 {
 
-  size_t numLayers = model->getNumLayers();
-  
-  for (size_t i = 0; i < numLayers; i++) {
-    // get the layer
-    Layer * layer = model->getLayerRef(i);
-    if (layer->isEmpty()) {      
-      continue;
-    }
+    size_t numLayers = model->getNumLayers();
+
+    for (size_t i = 0; i < numLayers; i++) {
         
-    
-    // write instances
+        // get the layer
+        Layer * layer = model->getLayerRef(i);
+        
+        /* WRITE COMPONENT INSTANCES */
+        
+        // Create an Identity transformation
+        Transform transform = Transform();
 
-    // Create a transformation
-    Transform transform = Transform();
-
-    std::vector < ComponentInstance * > * instances = layer->getComponentInstancesRef();
-    size_t numInstances = instances->size();
-    for (size_t j = 0; j < numInstances; j++) {
-      writeComponentInstance(file, layer->getComponentInstanceRef(j),&transform,newMaterial);
-    }    
-
-    fprintf(file, "\n\n");
-
-    std::vector < Otype * > * objects = layer->getObjectsRef();
-    size_t numObjs = objects->size();
-
-    // write all faces
-    for (size_t j = 0; j < numObjs; j++) {
-
-      // Get object
-      Otype * object = layer->getObjectRef(j);
-
-      // Select Material
-      const char * material;
-
-      if (newMaterial == nullptr) {
-        // get the material
-        Material * mat = object->getMaterial();
-        if (mat == nullptr) {
-          std::string * oName = object->getName();
-          WARN(wMsg,"Object " + *oName + " has no Material... it has been ignored");
-          continue;
+        // Get the instances
+        std::vector < ComponentInstance * > * instances = layer->getComponentInstancesRef();
+        
+        // Iterate the instances
+        size_t numInstances = instances->size();
+        for (size_t j = 0; j < numInstances; j++) {
+            writeComponentInstance(file, layer->getComponentInstanceRef(j), &transform, newMaterial);
         }
-        material = &(mat->getName()->at(0));
-      } else {
-        material = newMaterial;
-      }
-      object->writeInRadianceFormat(file, material, nullptr);
-    }
 
-  }
-  return true;
+        fprintf(file, "\n\n");
+
+        /* WRITE THE OBJECTS */
+        
+        // Get the objects
+        std::vector < Otype * > * objects = layer->getObjectsRef();
+        
+        // Count the objects
+        size_t numObjs = objects->size();
+
+        // Iterate
+        for (size_t j = 0; j < numObjs; j++) {
+            // Get object
+            writeOtype(objects->at(j), file, newMaterial, &transform, 1);
+        }
+
+    }
+    return true;
 }
 
-
+bool RadExporter::writeLayersInOneFile(FILE * file)
+{
+    return writeLayersInOneFile(file, nullptr);
+}
 
 void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instance) 
 {	
@@ -508,6 +498,7 @@ bool RadExporter::writeMaterials(const char * dir, const std::string flnm)
 
 		mainFile << "!xform ./" << dir << "/" << *name << ".mat" << "\n";
 	}
+    mainFile.close();
 	return true;
 }
 
@@ -757,6 +748,56 @@ bool RadExporter::writeWeather(const char * dir, const std::string filename)
 	}
 
 	file.close();
-
-	return true;
+    
+    return true;
 }
+
+bool RadExporter::writeOtype(Otype * object, FILE * file, const char * material, Transform * transform, double scale)
+{
+    // Check type of object
+    std::string * type = object->getType();
+    
+    // Verify the material
+    if(material == nullptr){
+        Material * m = object->getMaterial();
+        if(m == nullptr){
+            std::string * oName = object->getName();
+            WARN(wMsg,"Object '" + *oName + "' has no Material... it has been ignored");
+            return false;
+        }
+        material = m->getName()->c_str();
+    }
+    
+    std::string line0, line1, line2, line3;
+    sprintf(&line0[0], "%s %s %s\n", material, type->c_str(), object->getName()->c_str());
+    
+    // Write down
+    if(strcmp(type->c_str(),"bubble") == 0){
+        line1 = line2 = "0";
+        
+        Point3D center = static_cast<Bubble *>(object)->center;
+        double radius = static_cast<Bubble *>(object)->radius;
+        
+        if (transform == nullptr) {
+            sprintf(&line3[0], "%f %f %f %f\n", center.getX(), center.getY(), center.getZ(),radius*scale);
+        }
+        else {
+            Point3D p = center.transform(transform);
+            sprintf(&line3[0], "%f %f %f %f\n", p.getX(), p.getY(), p.getZ(), radius);
+        }
+        
+    } else {
+        std::string * oName = object->getName();
+        std::string errMsg = "Unkown Otype '"+*type+"' in object called '"+*oName+"' when trying to write it in Radiance format... ignoring it";
+        WARN(e,errMsg.c_str());
+        return false;
+    }
+    
+    return true;
+}
+
+bool RadExporter::writeOtype(Otype * object, FILE * file)
+{
+    return writeOtype(object, file, nullptr, nullptr, 1);
+}
+

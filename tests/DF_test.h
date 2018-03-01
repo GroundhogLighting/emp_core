@@ -1,5 +1,6 @@
 
-#include "calculations/tasks/CalculateDaylightFactor.h"
+#include "../include/emp_core.h"
+//#include "calculations/tasks/CalculateDaylightFactor.h"
 
 TEST(DaylightFactorTest, calculate)
 {

@@ -107,8 +107,22 @@ public:
     @param[in] file The file
     @param[in] newMaterial The name of the material
     */
-    bool writeLayers(FILE * file, const char * newMaterial);
+    bool writeLayersInOneFile(FILE * file, const char * newMaterial);
 
+    //! Writes all the layers in a single file
+    /*!
+     
+     All the geometry in the Layers will be written in a single
+     file.
+     
+     @author German Molina
+     @return success
+     @param[in] file The file
+     @param[in] newMaterial The name of the material
+     */
+    bool writeLayersInOneFile(FILE * file);
+
+    
 	//! Writes an XFORM call to a ComponentInstance in Radiance format
 	/*!
 	@author German Molina
@@ -218,6 +232,27 @@ public:
 	@return sucess
 	*/
     bool writeWeather(const char * dir, const std::string filename);
+    
+    //! Writes an Object in Radiance Format, potentially applying a transformation, scale and changing material
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @param material An optional material name that will override the one assigned to the object
+     @param transform An optional transformation to apply to the object before writing it
+     @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
+     @return success
+     */
+    bool writeOtype(Otype * object, FILE * file, const char * material, Transform * transform, double scale);
+    
+    //! Writes an Object in Radiande Format
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @return success
+     */
+    bool writeOtype(Otype * object, FILE * file);
 };
 
 extern RadExporter radexporter;

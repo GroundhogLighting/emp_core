@@ -16,4 +16,3 @@ is_windows = (os.target()=="windows")
 is_linux = (os.target()=="linux")
 is_macos = (os.target()=="macosx")
 
-

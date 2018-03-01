@@ -9,7 +9,8 @@ project "emp_core"
     targetdir(libs_dir.."/%{cfg.buildcfg}")
 
     files {                 
-        "../src/**",        
+        "../src/**.cpp",
+        "../src/**.h",        
     }
    
     includedirs{        
@@ -30,10 +31,16 @@ project "emp_core"
 
     elseif is_macos then
         defines { "MACOS" }            
-        runpathdirs { "libs" }
+        --runpathdirs { "libs" }
         linkoptions {            
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"
         }    
+        buildoptions {
+            "-F "..third_party_dir.."/SketchUp/MACOS/headers",            
+        }
+        links {
+            third_party_dir.."/SketchUp/MACOS/headers/SketchUpAPI.framework",
+        }
     elseif is_linux then
         defines { "LINUX", "AVOID_SKP" }    
         links {            

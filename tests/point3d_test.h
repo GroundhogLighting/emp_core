@@ -1,8 +1,9 @@
-﻿/* point3d_test.h */
+/* point3d_test.h */
 
 #include <cmath>
 
-#include "../src/common/geometry/point3d.h"
+#include "../include/emp_core.h"
+//#include "../src/common/geometry/point3d.h"
 
 
 TEST(Point3DTest, ConstructorByComponents) 

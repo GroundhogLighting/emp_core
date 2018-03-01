@@ -1,4 +1,5 @@
-#include "common/geometry/matrix.h"
+#include "../include/emp_core.h"
+//#include "common/geometry/matrix.h"
 
 
 TEST(Matrix_TEST, BasicConstructor) {

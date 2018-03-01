@@ -18,7 +18,7 @@
 
 *****************************************************************************/
 
-
+#include "./componentinstance.h"
 #include "./layer.h"
 #include "../../common/utilities/io.h"
 

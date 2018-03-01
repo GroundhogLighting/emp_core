@@ -1,7 +1,7 @@
 
 
-#include "calculations/tasks/doDDC.h"
-
+//#include "calculations/tasks/doDDC.h"
+#include "../include/emp_core.h"
 
 TEST(DDC_TEST,Empty_CalculateDDCGlobalMatrix){
     #include "./RTrace_reference.h"

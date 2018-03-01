@@ -1,5 +1,6 @@
 
-#include "groundhogmodel/groundhogmodel.h"
+#include "../include/emp_core.h"
+//#include "groundhogmodel/groundhogmodel.h"
 
 const double latitude = -33.38;
 const double longitude = 70.78;

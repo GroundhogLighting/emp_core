@@ -311,10 +311,10 @@ bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
 
     // Add the geometry
     if (blackGeometry) {
-      exporter.writeLayers(octree, "black");
+      exporter.writeLayersInOneFile(octree, "black");
     }
     else {
-      exporter.writeLayers(octree, NULL);
+      exporter.writeLayersInOneFile(octree, NULL);
     }
     
 	PCLOSE(octree);

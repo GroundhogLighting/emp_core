@@ -92,14 +92,6 @@ public:
 	*/
 	bool compareName(std::string * otherName);
 	
-	//! Writes a Material in Radiance format
-	/*!
-	@author German Molina
-	@param[in] dir The directory where the material should be written
-	@return success
-	@note This function should be overriden by a function with the same name in each Material derived class
-	*/
-	virtual bool writeRadianceDefinition(std::string * dir);
 
 	//! Retrieves the Material assigned to the Otype
 	/*!

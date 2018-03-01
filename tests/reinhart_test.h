@@ -1,6 +1,7 @@
 
-#include "../src/common/geometry/segment.h"
-#include "calculations/reinhart.h"
+#include "../include/emp_core.h"
+//#include "../src/common/geometry/segment.h"
+//#include "calculations/reinhart.h"
 
 #define PI 3.14159265359
 #define RADIANS(x) (x*PI/180.0)

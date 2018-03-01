@@ -1,6 +1,7 @@
 
-#include "calculations/radiance.h"
-#include "calculations/reinhart.h"
+#include "../include/emp_core.h"
+//#include "calculations/radiance.h"
+//#include "calculations/reinhart.h"
 
 
 void radGenDayMtx(int month, int day, float hour, float direct, float diffuse, float albedo, float latitude, float longitude, float standardMeridian, int skyMF, bool sunOnly, bool sharpSun, float rotation, ColorMatrix * skyVec)
