@@ -33,6 +33,9 @@ public:
      */
     WriteLayers(std::string theDir, GroundhogModel * theModel)
     {
+        std::string name = "Write layers content";
+        setName(&name);
+        
         directory = theDir;
         model = theModel;
     }

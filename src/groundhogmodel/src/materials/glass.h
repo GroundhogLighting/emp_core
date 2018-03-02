@@ -67,17 +67,5 @@ public:
         return true;
     }
 
-    //! Writes the Glass material in Radiance format
-    /*!
-    @author German Molina
-    @param[in] file The file to write to
-    @return success
-    */
-    bool writeInRadianceFormat(FILE * file)
-    {
-        fprintf(file, "void %s %s\n0\n0\n", &type[0], &name[0]);
-        fprintf(file, "3 %f %f %f\n", r, g, b);
-        
-        return true;
-    }
+    
 };

@@ -141,6 +141,7 @@ bool RadExporter::writeComponentDefinitions(const char * dir)
 	for (size_t i = 0; i < numDefinitions; i++) {
 		ComponentDefinition * definition = model->getComponentDefinitionRef(i);
         size_t numObjects = definition->getObjectsRef()->size();
+        
 		std::string * componentName = definition->getName();
 
 		// create the file
@@ -454,8 +455,10 @@ bool RadExporter::writeMaterials(const char * dir, const std::string flnm)
 	createdir(baseDir);
 
 	std::ofstream mainFile;
-	mainFile.open(baseDir + "/" + flnm);
+	mainFile.open("./" +baseDir + "/" + flnm);
 
+    const char * materialsSubdir = strchr(&baseDir[0],'/');
+    
 	for (size_t i = 0; i < numMaterials; i++) {
 
 		Material * mat = model->getMaterialRef(i);
@@ -467,10 +470,11 @@ bool RadExporter::writeMaterials(const char * dir, const std::string flnm)
         //FILE * file = fopen(&filename[0],"w");
         FOPEN(file, &filename[0], "w");
 
-        mat->writeInRadianceFormat(file);
+        writeMaterial(mat,file);
+        
         fclose(file);
 
-		mainFile << "!xform ./" << dir << "/" << *name << ".mat" << "\n";
+		mainFile << "!xform ." << materialsSubdir << "/" << *name << ".mat" << "\n";
 	}
     mainFile.close();
 	return true;
@@ -481,8 +485,8 @@ bool RadExporter::writeMaterials(FILE * file)
   size_t numMaterials = model->getNumMaterials(); 
  
   for (size_t i = 0; i < numMaterials; i++) {
-    Material * mat = model->getMaterialRef(i);    
-    mat->writeInRadianceFormat(file);
+      Material * mat = model->getMaterialRef(i);
+      writeMaterial(mat,file);
   }
   return true;
 }
@@ -726,6 +730,263 @@ bool RadExporter::writeWeather(const char * dir, const std::string filename)
     return true;
 }
 
+bool RadExporter::writeBubble(Bubble * object, FILE * file, const char * material, Transform * transform, double scale)
+{
+    std::string * oName = object->getName();
+    
+    fprintf(file, "%s %s %s\n", material, "bubble", oName->c_str());
+    fprintf(file, "0\n");
+    fprintf(file, "0\n");
+    
+    Point3D center = object->center;
+    double radius = object->radius;
+    
+    if (transform == nullptr) {
+        fprintf(file, "4 %f %f %f %f\n", center.getX(), center.getY(), center.getZ(),radius*scale);
+    }
+    else {
+        Point3D p = center.transform(transform);
+        fprintf(file, "4 %f %f %f %f\n", p.getX(), p.getY(), p.getZ(), radius);
+    }
+    
+    return true;
+}
+
+bool RadExporter::writeCone(Cone * object, FILE * file, const char * material, Transform * transform, double scale)
+{
+    std::string * oName = object->getName();
+    
+    fprintf(file, "%s %s %s\n", material, "cone", oName->c_str());
+    fprintf(file, "0\n");
+    fprintf(file, "0\n");
+    
+    // Print arguments
+    Point3D p0 = object->p0;
+    Point3D p1 = object->p1;
+    double r0 = object->r0;
+    double r1 = object->r1;
+    
+    if (transform == nullptr) {
+        fprintf(file, "8 %f %f %f %f %f %f %f %f\n", p0.getX(), p0.getY(), p0.getZ(), p1.getX(), p1.getY(), p1.getZ(), r0, r1);
+    }
+    else {
+        Point3D tp0 = Point3D(scale*p0.getX(),scale*p0.getY(),scale*p0.getZ()).transform(transform);
+        Point3D tp1 = Point3D(scale*p1.getX(),scale*p1.getY(),scale*p1.getZ()).transform(transform);
+        fprintf(file, "8 %f %f %f %f %f %f %f %f\n", tp0.getX(), tp0.getY(), tp0.getZ(), tp1.getX(), tp1.getY(), tp1.getZ(), r0*scale, r1*scale);
+    }
+}
+
+bool RadExporter::writeCup(Cup * object, FILE * file, const char * material, Transform * transform, double scale)
+{
+    std::string * oName = object->getName();
+    
+    fprintf(file, "%s %s %s\n", material, "cup", oName->c_str());
+    fprintf(file, "0\n");
+    fprintf(file, "0\n");
+    
+    // Print arguments
+    Point3D p0 = object->p0;
+    Point3D p1 = object->p1;
+    double r0 = object->r0;
+    double r1 = object->r1;
+    
+    if (transform == nullptr) {
+        fprintf(file, "8 %f %f %f %f %f %f %f %f\n", p0.getX(), p0.getY(), p0.getZ(), p1.getX(), p1.getY(), p1.getZ(), r0, r1);
+    }
+    else {
+        Point3D tp0 = Point3D(scale*p0.getX(),scale*p0.getY(),scale*p0.getZ()).transform(transform);
+        Point3D tp1 = Point3D(scale*p1.getX(),scale*p1.getY(),scale*p1.getZ()).transform(transform);
+        fprintf(file, "8 %f %f %f %f %f %f %f %f\n", tp0.getX(), tp0.getY(), tp0.getZ(), tp1.getX(), tp1.getY(), tp1.getZ(), r0*scale, r1*scale);
+    }
+    
+    return true;
+}
+
+bool RadExporter::writeCylinder(Cylinder * object, FILE * file, const char * material, Transform * transform, double scale)
+{
+    std::string * oName = object->getName();
+    
+    fprintf(file, "%s %s %s\n", material, "cylinder", oName->c_str());
+    fprintf(file, "0\n");
+    fprintf(file, "0\n");
+    
+    // Print arguments
+    Point3D p0 = object->p0;
+    Point3D p1 = object->p1;
+    double radius = object->radius;
+    
+    
+    if (transform == nullptr) {
+        fprintf(file, "7 %f %f %f %f %f %f %f\n", p0.getX(), p0.getY(), p0.getZ(), p1.getX(), p1.getY(), p1.getZ(), radius);
+    }
+    else {
+        Point3D tp0 = Point3D(scale*p0.getX(),scale*p0.getY(),scale*p0.getZ()).transform(transform);
+        Point3D tp1 = Point3D(scale*p1.getX(),scale*p1.getY(),scale*p1.getZ()).transform(transform);
+        fprintf(file, "7 %f %f %f %f %f %f %f\n", tp0.getX(), tp0.getY(), tp0.getZ(), tp1.getX(), tp1.getY(), tp1.getZ(), radius*scale);
+    }
+    
+    return true;
+    
+}
+
+bool RadExporter::writeFace(Face * face, FILE * file, const char * material, Transform * transform, double scale)
+{
+    std::string * oName = face->getName();
+    
+    fprintf(file, "%s %s %s\n", material, "polygon", oName->c_str());
+    fprintf(file, "0\n");
+    fprintf(file, "0\n");
+    
+    
+    if (face->hasTooManyInnerLoops()) {
+        WARN(warnMessage,"Ignoring face '" + *oName + "' because it has TOO MANY inner loops.");
+        // writeTriangulatedFace(file,face);
+        return true;
+    }
+    
+    // define the loop that will be written
+    Loop * finalLoop = NULL;
+    bool needToDelete = false;
+    if (face->hasInnerLoops()) {
+        finalLoop = face->getClosedLoop();
+        needToDelete = true;
+    }
+    else {
+        finalLoop = face->getOuterLoopRef();
+    }
+    
+    // Print number of 3 x vertices
+    fprintf(file,"%zd\n",3 * finalLoop->realSize());
+    
+    // Print the loop
+    size_t numVertices = finalLoop->size();
+    
+    for (int i = 0; i < numVertices; i++) {
+        Point3D * point = finalLoop->getVertexRef(i);
+        
+        if (point == NULL)
+            continue;
+        
+        fprintf(file, "\t");
+        if (transform == nullptr) {
+            fprintf(file, "%f %f %f\n", point->getX(), point->getY(), point->getZ());
+        }
+        else {
+            Point3D p = Point3D(scale*point->getX(), scale*point->getY(), scale*point->getZ());
+            p = p.transform(transform);
+            fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
+        }
+    }
+    
+    
+    if (needToDelete) {
+        delete finalLoop;
+    }
+    
+    
+    return true;
+}
+
+bool RadExporter::writeRing(Ring * object, FILE * file, const char * material, Transform * transform, double scale)
+{
+    std::string * oName = object->getName();
+    
+    fprintf(file, "%s %s %s\n", material, "ring", oName->c_str());
+    fprintf(file, "0\n");
+    fprintf(file, "0\n");
+    
+    // Print arguments
+    Point3D center = object->center;
+    Vector3D direction = object->direction;
+    double r0 = object->r0;
+    double r1 = object->r1;
+    
+    if (transform == nullptr) {
+        fprintf(file, "8 %f %f %f %f %f %f %f %f\n", center.getX(), center.getY(), center.getZ(), direction.getX(), direction.getY(), direction.getZ(), r0, r1);
+    }
+    else {
+        Point3D tp0 = Point3D(scale*center.getX(),scale*center.getY(),scale*center.getZ()).transform(transform);
+        Vector3D tp1 = direction.transform(transform);
+        fprintf(file, "8 %f %f %f %f %f %f %f %f\n", tp0.getX(), tp0.getY(), tp0.getZ(), tp1.getX(), tp1.getY(), tp1.getZ(), r0*scale, r1*scale);
+    }
+    
+    return true;
+}
+
+
+bool RadExporter::writeSource(Source * object, FILE * file, const char * material, Transform * transform, double scale)
+{
+    std::string * oName = object->getName();
+    
+    
+    fprintf(file, "%s %s %s\n", material, "source", oName->c_str());
+    fprintf(file, "0\n");
+    fprintf(file, "0\n");
+    
+    // Print arguments
+    Vector3D direction = object->direction;
+    double angle = object->angle;
+    
+    if (transform == nullptr) {
+        fprintf(file, "4 %f %f %f %f\n", direction.getX(), direction.getY(), direction.getZ(), angle);
+    }
+    else {
+        Vector3D tp1 = direction.transform(transform);
+        fprintf(file, "4 %f %f %f %f\n", tp1.getX(), tp1.getY(), tp1.getZ(), angle*scale);
+    }
+    return true;
+}
+
+bool RadExporter::writeSphere(Sphere * object, FILE * file, const char * material, Transform * transform, double scale)
+{
+    std::string * oName = object->getName();
+    
+    fprintf(file, "%s %s %s\n", material, "sphere", oName->c_str());
+    fprintf(file, "0\n");
+    fprintf(file, "0\n");
+    
+    Point3D center = object->center;
+    double radius = object->radius;
+    
+    if (transform == nullptr) {
+        fprintf(file, "4 %f %f %f %f\n", center.getX(), center.getY(), center.getZ(),radius*scale);
+    }
+    else {
+        Point3D p = center.transform(transform);
+        fprintf(file, "4 %f %f %f %f\n", p.getX(), p.getY(), p.getZ(), radius);
+    }
+    
+    
+    return true;
+}
+    
+
+bool RadExporter::writeTube(Tube * object, FILE * file, const char * material, Transform * transform, double scale)
+{
+    std::string * oName = object->getName();
+ 
+    fprintf(file, "%s %s %s\n", material, "tube", oName->c_str());
+    fprintf(file, "0\n");
+    fprintf(file, "0\n");
+    
+    // Print arguments
+    Point3D p0 = object->p0;
+    Point3D p1 = object->p1;
+    double radius = object->radius;
+    
+    
+    if (transform == nullptr) {
+        fprintf(file, "7 %f %f %f %f %f %f %f\n", p0.getX(), p0.getY(), p0.getZ(), p1.getX(), p1.getY(), p1.getZ(), radius);
+    }
+    else {
+        Point3D tp0 = Point3D(scale*p0.getX(),scale*p0.getY(),scale*p0.getZ()).transform(transform);
+        Point3D tp1 = Point3D(scale*p1.getX(),scale*p1.getY(),scale*p1.getZ()).transform(transform);
+        fprintf(file, "7 %f %f %f %f %f %f %f\n", tp0.getX(), tp0.getY(), tp0.getZ(), tp1.getX(), tp1.getY(), tp1.getZ(), radius*scale);
+    }
+    
+    return true;
+}
+
 bool RadExporter::writeOtype(Otype * object, FILE * file, const char * material, Transform * transform, double scale)
 {
     // Check type of object
@@ -742,228 +1003,49 @@ bool RadExporter::writeOtype(Otype * object, FILE * file, const char * material,
         material = m->getName()->c_str();
     }
     
-    
-    
     // Write down
     if(strcmp(type->c_str(),"bubble") == 0){
-        /* WRITE A BUBBLE */
-        fprintf(file, "%s %s %s\n", material, type->c_str(), oName->c_str());
-        fprintf(file, "0\n");
-        fprintf(file, "0\n");
         
-        Point3D center = static_cast<Bubble *>(object)->center;
-        double radius = static_cast<Bubble *>(object)->radius;
-        
-        if (transform == nullptr) {
-            fprintf(file, "4 %f %f %f %f\n", center.getX(), center.getY(), center.getZ(),radius*scale);
-        }
-        else {
-            Point3D p = center.transform(transform);
-            fprintf(file, "4 %f %f %f %f\n", p.getX(), p.getY(), p.getZ(), radius);
-        }
+        writeBubble(static_cast<Bubble *>(object), file, material, transform, scale);
         
     } else if(strcmp(type->c_str(),"cone") == 0){
-        /* WRITE A CONE */
-        fprintf(file, "%s %s %s\n", material, type->c_str(), oName->c_str());
-        fprintf(file, "0\n");
-        fprintf(file, "0\n");
         
-        // Print arguments
-        Point3D p0 = static_cast<Cone *>(object)->p0;
-        Point3D p1 = static_cast<Cone *>(object)->p1;
-        double r0 = static_cast<Cone *>(object)->r0;
-        double r1 = static_cast<Cone *>(object)->r1;
-        
-        if (transform == nullptr) {
-            fprintf(file, "8 %f %f %f %f %f %f %f %f\n", p0.getX(), p0.getY(), p0.getZ(), p1.getX(), p1.getY(), p1.getZ(), r0, r1);
-        }
-        else {
-            Point3D tp0 = Point3D(scale*p0.getX(),scale*p0.getY(),scale*p0.getZ()).transform(transform);
-            Point3D tp1 = Point3D(scale*p1.getX(),scale*p1.getY(),scale*p1.getZ()).transform(transform);
-            fprintf(file, "8 %f %f %f %f %f %f %f %f\n", tp0.getX(), tp0.getY(), tp0.getZ(), tp1.getX(), tp1.getY(), tp1.getZ(), r0*scale, r1*scale);
-        }
+        writeCone(static_cast<Cone *>(object), file, material, transform, scale);
         
     } else if(strcmp(type->c_str(),"cup") == 0){
-        /* WRITE A CUP */
-        fprintf(file, "%s %s %s\n", material, type->c_str(), oName->c_str());
-        fprintf(file, "0\n");
-        fprintf(file, "0\n");
         
-        // Print arguments
-        Point3D p0 = static_cast<Cup *>(object)->p0;
-        Point3D p1 = static_cast<Cup *>(object)->p1;
-        double r0 = static_cast<Cup *>(object)->r0;
-        double r1 = static_cast<Cup *>(object)->r1;
-        
-        if (transform == nullptr) {
-            fprintf(file, "8 %f %f %f %f %f %f %f %f\n", p0.getX(), p0.getY(), p0.getZ(), p1.getX(), p1.getY(), p1.getZ(), r0, r1);
-        }
-        else {
-            Point3D tp0 = Point3D(scale*p0.getX(),scale*p0.getY(),scale*p0.getZ()).transform(transform);
-            Point3D tp1 = Point3D(scale*p1.getX(),scale*p1.getY(),scale*p1.getZ()).transform(transform);
-            fprintf(file, "8 %f %f %f %f %f %f %f %f\n", tp0.getX(), tp0.getY(), tp0.getZ(), tp1.getX(), tp1.getY(), tp1.getZ(), r0*scale, r1*scale);
-        }
+        writeCup(static_cast<Cup *>(object), file, material, transform, scale);
         
     } else if(strcmp(type->c_str(),"cylinder") == 0){
-        /* WRITE A CYLINDER */
-        fprintf(file, "%s %s %s\n", material, type->c_str(), oName->c_str());
-        fprintf(file, "0\n");
-        fprintf(file, "0\n");
         
-        // Print arguments
-        Point3D p0 = static_cast<Cylinder *>(object)->p0;
-        Point3D p1 = static_cast<Cylinder *>(object)->p1;
-        double radius = static_cast<Cylinder *>(object)->radius;
-        
-        
-        if (transform == nullptr) {
-            fprintf(file, "7 %f %f %f %f %f %f %f\n", p0.getX(), p0.getY(), p0.getZ(), p1.getX(), p1.getY(), p1.getZ(), radius);
-        }
-        else {
-            Point3D tp0 = Point3D(scale*p0.getX(),scale*p0.getY(),scale*p0.getZ()).transform(transform);
-            Point3D tp1 = Point3D(scale*p1.getX(),scale*p1.getY(),scale*p1.getZ()).transform(transform);
-            fprintf(file, "7 %f %f %f %f %f %f %f\n", tp0.getX(), tp0.getY(), tp0.getZ(), tp1.getX(), tp1.getY(), tp1.getZ(), radius*scale);
-        }
+        writeCylinder(static_cast<Cylinder *>(object), file, material, transform, scale);
         
     } else if(strcmp(type->c_str(),"polygon") == 0){
-        /* WRITE A FACE */
-        fprintf(file, "%s %s %s\n", material, type->c_str(), oName->c_str());
-        fprintf(file, "0\n");
-        fprintf(file, "0\n");
         
-        
-        Face * face = static_cast<Face *>(object);
-        
-        if (face->hasTooManyInnerLoops()) {
-            WARN(warnMessage,"Ignoring face '" + *oName + "' because it has TOO MANY inner loops.");
-            // writeTriangulatedFace(file,face);
-            return true;
-        }
-        
-        // define the loop that will be written
-        Loop * finalLoop = NULL;
-        bool needToDelete = false;
-        if (face->hasInnerLoops()) {
-            finalLoop = face->getClosedLoop();
-            needToDelete = true;
-        }
-        else {
-            finalLoop = face->getOuterLoopRef();
-        }
-        
-        // Print number of 3 x vertices
-        fprintf(file,"%zd\n",3 * finalLoop->realSize());
-        
-        // Print the loop
-        size_t numVertices = finalLoop->size();
-        
-        for (int i = 0; i < numVertices; i++) {
-            Point3D * point = finalLoop->getVertexRef(i);
-            
-            if (point == NULL)
-                continue;
-            
-            fprintf(file, "\t");
-            if (transform == nullptr) {
-                fprintf(file, "%f %f %f\n", point->getX(), point->getY(), point->getZ());
-            }
-            else {
-                Point3D p = Point3D(scale*point->getX(), scale*point->getY(), scale*point->getZ());
-                p = p.transform(transform);
-                fprintf(file, "%f %f %f\n", p.getX(), p.getY(), p.getZ());
-            }
-        }
-        
-        
-        if (needToDelete) {
-            delete finalLoop;
-        }
-        
-        
-        
+        writeFace(static_cast<Face *>(object), file, material, transform, scale);
         
     } else if(strcmp(type->c_str(),"ring") == 0){
-        /* WRITE A RING */
-        fprintf(file, "%s %s %s\n", material, type->c_str(), oName->c_str());
-        fprintf(file, "0\n");
-        fprintf(file, "0\n");
         
-        // Print arguments
-        Point3D center = static_cast<Ring *>(object)->center;
-        Vector3D direction = static_cast<Ring *>(object)->direction;
-        double r0 = static_cast<Ring *>(object)->r0;
-        double r1 = static_cast<Ring *>(object)->r1;
-        
-        if (transform == nullptr) {
-            fprintf(file, "8 %f %f %f %f %f %f %f %f\n", center.getX(), center.getY(), center.getZ(), direction.getX(), direction.getY(), direction.getZ(), r0, r1);
-        }
-        else {
-            Point3D tp0 = Point3D(scale*center.getX(),scale*center.getY(),scale*center.getZ()).transform(transform);
-            Vector3D tp1 = direction.transform(transform);
-            fprintf(file, "8 %f %f %f %f %f %f %f %f\n", tp0.getX(), tp0.getY(), tp0.getZ(), tp1.getX(), tp1.getY(), tp1.getZ(), r0*scale, r1*scale);
-        }
+        writeRing(static_cast<Ring *>(object), file, material, transform, scale);
         
     } else if(strcmp(type->c_str(),"source") == 0){
-        /* WRITE A SOURCE */
-        fprintf(file, "%s %s %s\n", material, type->c_str(), oName->c_str());
-        fprintf(file, "0\n");
-        fprintf(file, "0\n");
         
-        // Print arguments
-        Vector3D direction = static_cast<Source *>(object)->direction;
-        double angle = static_cast<Source *>(object)->angle;
-        
-        if (transform == nullptr) {
-            fprintf(file, "4 %f %f %f %f\n", direction.getX(), direction.getY(), direction.getZ(), angle);
-        }
-        else {
-            Vector3D tp1 = direction.transform(transform);
-            fprintf(file, "4 %f %f %f %f\n", tp1.getX(), tp1.getY(), tp1.getZ(), angle*scale);
-        }
+        writeSource(static_cast<Source *>(object), file, material, transform, scale);
         
     } else if(strcmp(type->c_str(),"sphere") == 0){
-        /* WRITE A SPHERE */
-        fprintf(file, "%s %s %s\n", material, type->c_str(), oName->c_str());
-        fprintf(file, "0\n");
-        fprintf(file, "0\n");
         
-        Point3D center = static_cast<Sphere *>(object)->center;
-        double radius = static_cast<Sphere *>(object)->radius;
-        
-        if (transform == nullptr) {
-            fprintf(file, "4 %f %f %f %f\n", center.getX(), center.getY(), center.getZ(),radius*scale);
-        }
-        else {
-            Point3D p = center.transform(transform);
-            fprintf(file, "4 %f %f %f %f\n", p.getX(), p.getY(), p.getZ(), radius);
-        }
+        writeSphere(static_cast<Sphere *>(object), file, material, transform, scale);
         
     } else if(strcmp(type->c_str(),"tube") == 0){
-        /* WRITE A TUBE */
-        fprintf(file, "%s %s %s\n", material, type->c_str(), oName->c_str());
-        fprintf(file, "0\n");
-        fprintf(file, "0\n");
         
-        // Print arguments
-        Point3D p0 = static_cast<Cylinder *>(object)->p0;
-        Point3D p1 = static_cast<Cylinder *>(object)->p1;
-        double radius = static_cast<Cylinder *>(object)->radius;
-        
-        
-        if (transform == nullptr) {
-            fprintf(file, "7 %f %f %f %f %f %f %f\n", p0.getX(), p0.getY(), p0.getZ(), p1.getX(), p1.getY(), p1.getZ(), radius);
-        }
-        else {
-            Point3D tp0 = Point3D(scale*p0.getX(),scale*p0.getY(),scale*p0.getZ()).transform(transform);
-            Point3D tp1 = Point3D(scale*p1.getX(),scale*p1.getY(),scale*p1.getZ()).transform(transform);
-            fprintf(file, "7 %f %f %f %f %f %f %f\n", tp0.getX(), tp0.getY(), tp0.getZ(), tp1.getX(), tp1.getY(), tp1.getZ(), radius*scale);
-        }
+        writeTube(static_cast<Tube *>(object), file, material, transform, scale);
         
     } else {
         std::string errMsg = "Unkown Otype '"+*type+"' in object called '"+*oName+"' when trying to write it in Radiance format... ignoring it";
         WARN(e,errMsg.c_str());
         return false;
     }
+    fprintf(file,"\n");
     
     return true;
 }
@@ -977,3 +1059,78 @@ bool RadExporter::writeOtype(Otype * object, FILE * file, const char * material)
 {
     return writeOtype(object, file, material, nullptr, 1);
 }
+
+
+bool RadExporter::writeMaterial(Material * material, FILE * file)
+{
+    // Check type of material
+    std::string * type = material->getType();
+    std::string * name = material->getName();
+    
+    // Write down
+    if(strcmp(type->c_str(),"dielectric") == 0){
+        
+        Dielectric * m = static_cast<Dielectric *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        fprintf(file, "5 %f %f %f %f %f\n", m->r, m->g, m->b, m->refractionIndex, m->hartmannConstant);
+        
+    } else if(strcmp(type->c_str(),"glass") == 0){
+        
+        Glass * m = static_cast<Glass *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        fprintf(file, "3 %f %f %f\n", m->r, m->g, m->b);
+        
+    } else if(strcmp(type->c_str(),"glow") == 0){
+        
+        Glow * m = static_cast<Glow *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        fprintf(file, "4 %f %f %f %f\n", m->r, m->g, m->b, m->maxRadius);
+        
+    } else if(strcmp(type->c_str(),"interface") == 0){
+        
+        Interface * m = static_cast<Interface *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        fprintf(file, "8 %f %f %f %f %f %f %f %f\n", m->r1, m->g1, m->b1, m->refractionIndex1,
+                m->r2, m->g2, m->b2, m->refractionIndex2);
+        
+    } else if(strcmp(type->c_str(),"light") == 0){
+        
+        Light * m = static_cast<Light *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        fprintf(file, "3 %f %f %f\n", m->r, m->g, m->b);
+        
+    } else if(strcmp(type->c_str(),"metal") == 0){
+        
+        Metal * m = static_cast<Metal *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        fprintf(file, "5 %f %f %f %f %f\n", m->r, m->g, m->b, m->specularity, m->roughness);
+        
+    } else if(strcmp(type->c_str(),"plastic") == 0){
+        
+        Plastic * m = static_cast<Plastic *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        fprintf(file, "5 %f %f %f %f %f\n", m->r, m->g, m->b, m->specularity, m->roughness);
+        
+    } else if(strcmp(type->c_str(),"spotlight") == 0){
+        
+        Spotlight * m = static_cast<Spotlight *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        fprintf(file, "7 %f %f %f %f %f %f %f\n", m->r, m->g, m->b, m->angle, m->direction.getX(), m->direction.getY(), m->direction.getZ());
+        
+    } else if(strcmp(type->c_str(),"trans") == 0){
+        
+        Trans * m = static_cast<Trans *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        fprintf(file, "7 %f %f %f %f %f %f %f\n", m->r, m->g, m->b, m->specularity, m->roughness, m->transmissivity, m->tspec);
+        
+    } else {
+        std::string errMsg = "Unkown Material '"+*type+"' in material called '"+*name+"' when trying to write it in Radiance format... ignoring it";
+        WARN(e,errMsg.c_str());
+        return false;
+    }
+    
+    fprintf(file,"\n");
+    
+    return true;
+}
+

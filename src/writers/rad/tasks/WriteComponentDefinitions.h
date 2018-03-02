@@ -32,6 +32,8 @@ public:
      */
     WriteComponentDefinitions(std::string theDir, GroundhogModel * theModel)
     {
+        std::string name = "Write component definitions";
+        setName(&name);
         directory = theDir;
         model = theModel;
     }

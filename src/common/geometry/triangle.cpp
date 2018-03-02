@@ -27,6 +27,9 @@
 
 Triangle::Triangle(Point3D * a, Point3D * b, Point3D * c)
 {
+    if(a == nullptr || b == nullptr || c == nullptr){
+        WARN(a, "Trying to create a Triangle with at least one NULL vertex");
+    }
 	vertices[0] = a;
 	vertices[1] = b;
 	vertices[2] = c;
@@ -37,10 +40,27 @@ Triangle::Triangle(Point3D * a, Point3D * b, Point3D * c)
 
 }
 
+Triangle::Triangle(Triangle * t)
+{
+    if(t == nullptr){
+        WARN(a, "Trying to clone a NULL triangle");
+    }
+    vertices[0] = t->getVertex(0);
+    vertices[1] = t->getVertex(1);
+    vertices[2] = t->getVertex(2);
+    
+    segments[0] = new Segment(vertices[0], vertices[1]);
+    segments[1] = new Segment(vertices[1], vertices[2]);
+    segments[2] = new Segment(vertices[2], vertices[0]);
+    
+}
+
 Triangle::~Triangle()
 {
-	for (int i = 0; i < 3; i++) {      	
-      delete segments[i];
+	for (int i = 0; i < 3; i++) {
+        
+        delete segments[i];
+        
 	}
 }
 

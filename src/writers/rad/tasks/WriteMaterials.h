@@ -33,6 +33,9 @@ public:
      */
     WriteMaterials(std::string theDir, std::string theFilename, GroundhogModel * theModel)
     {
+        std::string name = "Write materials";
+        setName(&name);
+        
         directory = theDir;
         filename = theFilename;
         model = theModel;

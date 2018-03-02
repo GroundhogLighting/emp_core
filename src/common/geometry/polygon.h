@@ -147,6 +147,21 @@ public:
 	*/
 	void setNormal(Vector3D normal);
 
+    //! Sets the normal by calculating the cross product between two segments
+    /*!
+     @author German Molina
+     @todo This may not work when working with non convex polygons
+     */
+    void setNormal();
+    
+	//! Sets the normal by calculating the cross product between two segments
+	/*!
+	@author German Molina
+     @param i The pivot
+	@todo This may not work when working with non convex polygons
+	*/
+	void setNormal(size_t i);
+
 	//! Retrieves the normal
 	/*!
 	@author German Molina

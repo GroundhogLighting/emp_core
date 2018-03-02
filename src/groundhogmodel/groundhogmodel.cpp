@@ -73,20 +73,6 @@ bool GroundhogModel::addObjectToLayer(std::string * layerName, Otype * o)
 }
 
 
-bool GroundhogModel::addComponentInstanceToLayer(std::string * layerName, ComponentInstance * instance)
-{
-	for (unsigned layerCount = 0; layerCount < layers.size(); layerCount++) {
-		if (layers[layerCount]->compareName(layerName)) {
-			layers[layerCount]->getComponentInstancesRef()->push_back(instance);
-			return true;
-		}
-	}
-	FATAL(errorMessage,"Layer " + *layerName + " could not be found");
-	return false;
-}
-
-
-
 size_t GroundhogModel::getNumLayers()
 {
 	return layers.size();
@@ -107,9 +93,11 @@ ComponentDefinition * GroundhogModel::getComponentDefinitionRef(size_t i)
 	return definitions[i];
 }
 
-void GroundhogModel::addComponentDefinition(ComponentDefinition * componentDefinition)
-{
-	definitions.push_back(componentDefinition);
+
+void GroundhogModel::addComponentDefinition(std::string * name)
+{	
+	ComponentDefinition * c = new ComponentDefinition(name);
+	definitions.push_back( c );
 }
 
 

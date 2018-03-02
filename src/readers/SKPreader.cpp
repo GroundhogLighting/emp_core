@@ -716,12 +716,9 @@ bool SKPreader::loadComponentDefinition(SUComponentDefinitionRef definition)
 	  return false;
   };
 
-  // Create the definition
-  ComponentDefinition * componentDefinition = new ComponentDefinition(&definitionName);
     
-
-  // add it to the model
-  model->addComponentDefinition(componentDefinition);  
+  // add a component definition to the model
+  model->addComponentDefinition(&definitionName);
 
   return true;
 }

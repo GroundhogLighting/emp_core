@@ -47,6 +47,13 @@ public:
 	@param[in] c First vertex
 	*/
 	Triangle(Point3D * a, Point3D * b, Point3D * c);
+    
+    //! Clone constructor
+    /*!
+     @author German Molina
+     @param[in] t The triangle to copy
+     */
+    Triangle(Triangle * t);
 
 	//! Destroys a Triangle object
 	/*!

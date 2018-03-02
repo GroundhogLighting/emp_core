@@ -123,18 +123,6 @@ public:
 	*/
 	bool addObjectToLayer(std::string * layerName, Otype * o);
 
-	//! Adds a ComponentInstance to a certain layer
-	/*!
-	Will return false (and inform a fatal error) if the layer
-	was not found.
-
-	@author German Molina
-	@param[in] layerName The name of the layer
-	@param[in] instance The ComponentInstance to add
-	@return success
-	*/
-	bool addComponentInstanceToLayer(std::string * layerName, ComponentInstance * instance);
-
 	
 	//! Counts the Layer in the model
 	/*!	
@@ -170,10 +158,10 @@ public:
 	//! Adds a new ComponentDefinition to the model
 	/*!
 	@author German Molina
-	@param[in] componentDefinition The reference to the ComponentDefinition to add
+	@param[in] name The name of the new component definition
 	@todo Check if a ComponentDefinition with the same name already exists
 	*/
-	void addComponentDefinition(ComponentDefinition * componentDefinition);
+	void addComponentDefinition(std::string * name);
 
 	//! Retrieves a ComponentDefinition from the model by name
 	/*!

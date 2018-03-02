@@ -203,6 +203,17 @@ void TaskManager::print(char * filename)
   for (size_t i = 0; i < tasks.size(); i++) {
 	  Task * task = tasks[i];
       size_t nDep = task->countDependencies();
+      if(nDep == 0){
+          std::string ln = "\"" + *(task->getName()) + "\"";
+          if (filename == nullptr) {
+              std::cout << ln << ";\n";
+          }
+          else {
+              file << ln << ";\n";
+          }
+          continue;
+      }
+      
       for (size_t j = 0; j < nDep; j++) {                   
         std::string ln = "\"" + *(task->getDependencyRef(j)->getName()) + "\" -> \"" + *(task->getName())+ "\"";
         if (filename == nullptr) {
@@ -222,7 +233,7 @@ void TaskManager::print(char * filename)
 	
   
   if (filename != NULL) {
-    file.close();
+      file.close();
   }
 
 }

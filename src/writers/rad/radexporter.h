@@ -264,6 +264,123 @@ public:
      @return success
      */
     bool writeOtype(Otype * object, FILE * file, const char * material);
+
+    //! Writes an Bubble in Radiance Format, potentially applying a transformation, scale and changing material
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @param material An optional material name that will override the one assigned to the object
+     @param transform An optional transformation to apply to the object before writing it
+     @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
+     @return success
+     */
+    bool writeBubble(Bubble * object, FILE * file, const char * material, Transform * transform, double scale);
+
+    //! Writes an Cone in Radiance Format, potentially applying a transformation, scale and changing material
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @param material An optional material name that will override the one assigned to the object
+     @param transform An optional transformation to apply to the object before writing it
+     @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
+     @return success
+     */
+    bool writeCone(Cone * object, FILE * file, const char * material, Transform * transform, double scale);
+
+    //! Writes an Cup in Radiance Format, potentially applying a transformation, scale and changing material
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @param material An optional material name that will override the one assigned to the object
+     @param transform An optional transformation to apply to the object before writing it
+     @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
+     @return success
+     */
+    bool writeCup(Cup * object, FILE * file, const char * material, Transform * transform, double scale);
+
+    //! Writes an Cylinder in Radiance Format, potentially applying a transformation, scale and changing material
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @param material An optional material name that will override the one assigned to the object
+     @param transform An optional transformation to apply to the object before writing it
+     @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
+     @return success
+     */
+    bool writeCylinder(Cylinder * object, FILE * file, const char * material, Transform * transform, double scale);
+
+    //! Writes an Face in Radiance Format, potentially applying a transformation, scale and changing material
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @param material An optional material name that will override the one assigned to the object
+     @param transform An optional transformation to apply to the object before writing it
+     @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
+     @return success
+     */
+    bool writeFace(Face * object, FILE * file, const char * material, Transform * transform, double scale);
+
+    //! Writes an Ring in Radiance Format, potentially applying a transformation, scale and changing material
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @param material An optional material name that will override the one assigned to the object
+     @param transform An optional transformation to apply to the object before writing it
+     @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
+     @return success
+     */
+    bool writeRing(Ring * object, FILE * file, const char * material, Transform * transform, double scale);
+
+    //! Writes an Source in Radiance Format, potentially applying a transformation, scale and changing material
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @param material An optional material name that will override the one assigned to the object
+     @param transform An optional transformation to apply to the object before writing it
+     @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
+     @return success
+     */
+    bool writeSource(Source * object, FILE * file, const char * material, Transform * transform, double scale);
+
+    //! Writes an Sphere in Radiance Format, potentially applying a transformation, scale and changing material
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @param material An optional material name that will override the one assigned to the object
+     @param transform An optional transformation to apply to the object before writing it
+     @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
+     @return success
+     */
+    bool writeSphere(Sphere * object, FILE * file, const char * material, Transform * transform, double scale);
+
+    //! Writes an Tube in Radiance Format, potentially applying a transformation, scale and changing material
+    /*!
+     @author German Molina
+     @param object The Object to write in Radiance format
+     @param file The file to write the object in
+     @param material An optional material name that will override the one assigned to the object
+     @param transform An optional transformation to apply to the object before writing it
+     @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
+     @return success
+     */
+    bool writeTube(Tube * object, FILE * file, const char * material, Transform * transform, double scale);
+
+    //! Writes a material in a File, in Radiance format
+    /*!
+    @author German Molina
+    @param material The material to write
+    @param file The file to write the material to
+    @return success
+    */
+    bool writeMaterial(Material * material, FILE * file);
 };
 
 extern RadExporter radexporter;

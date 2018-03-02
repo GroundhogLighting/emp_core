@@ -101,7 +101,7 @@ public:
         for (size_t i = 0; i < nRays; i++) {
             
             // Get the Triangle and ray
-            Triangle * triangle = &(dependency->triangles.at(i));
+            Triangle * triangle = (dependency->triangles.at(i));
             RAY * ray = &(dependency->rays.at(i));
             
             if (triangle == NULL)

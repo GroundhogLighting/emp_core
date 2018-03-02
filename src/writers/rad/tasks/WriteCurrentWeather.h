@@ -33,6 +33,9 @@ public:
      */
     WriteCurrentWeather(std::string theDir, std::string theFilename, GroundhogModel * theModel)
     {
+        std::string name = "Write current weather";
+        setName(&name);
+        
         directory = theDir;
         filename = theFilename;
         model = theModel;

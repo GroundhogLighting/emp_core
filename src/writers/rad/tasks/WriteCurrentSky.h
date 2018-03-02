@@ -33,6 +33,10 @@ public:
      */
     WriteCurrentSky(std::string theDir, std::string theFilename, GroundhogModel * theModel)
     {
+        
+        std::string name = "Write current sky";
+        setName(&name);
+        
         directory = theDir;
         model = theModel;
         filename = theFilename;

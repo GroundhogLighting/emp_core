@@ -80,17 +80,4 @@ public:
         return true;
     }
     
-    //! Writes the Interface material in Radiance format
-    /*!
-     @author German Molina
-     @param[in] file The file to write to
-     @return success
-     */
-    bool writeInRadianceFormat(FILE * file)
-    {
-        fprintf(file, "void %s %s\n0\n0\n", &type[0], &name[0]);
-        fprintf(file, "8 %f %f %f %f %f %f %f %f\n", r1, g1, b1, refractionIndex1, r2, g2, b2, refractionIndex2);
-        
-        return true;
-    }
 };

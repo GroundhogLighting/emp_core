@@ -46,6 +46,11 @@ void Layer::addObject(Otype * o)
 	objects.push_back(o);
 }
 
+void Layer::addComponentInstance(ComponentInstance * instance)
+{
+    instances.push_back(instance);
+}
+
 std::vector <ComponentInstance * > * Layer::getComponentInstancesRef() 
 {
 	return &instances;

@@ -33,6 +33,9 @@ public:
      */
     WritePhotosensors(std::string theDir, GroundhogModel * theModel)
     {
+        std::string name = "Write photosensors";
+        setName(&name);
+        
         directory = theDir;
         model = theModel;
     }

@@ -40,8 +40,8 @@ class TriangulateWorkplane : public Task {
 public:
     
     Workplane * workplane; //!< The workplane to triangulate
-    std::vector <RAY> rays; //!< The generated rays
-    std::vector <Triangle> triangles; //!< The generated triangles
+    std::vector <RAY> rays = std::vector <RAY>(); //!< The generated rays
+    std::vector <Triangle *> triangles =  std::vector <Triangle *> (); //!< The generated triangles
     
     //! Constructor
     /*!
@@ -65,6 +65,15 @@ public:
         
     }
     
+    //! Delete and clean
+    /*!
+     @author German Molina
+     */
+    ~TriangulateWorkplane()
+    {
+        for(auto triangle : triangles)
+            delete triangle;
+    }
     
     //! Compares two of these tasks
     /*!
@@ -100,15 +109,15 @@ public:
         double maxAspectRatio = workplane->getMaxAspectRatio();
         
         // Triangulate in parallel
-        tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols, EMP_TRIANGULATION_GRAIN_SIZE),
-                          [=](const tbb::blocked_range<size_t>& r) {
-                              for (size_t i = r.begin(); i != r.end(); ++i) {
-                                  
+        //tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols, EMP_TRIANGULATION_GRAIN_SIZE),
+          //                [=](const tbb::blocked_range<size_t>& r) {
+            //                  for (size_t i = r.begin(); i != r.end(); ++i) {
+                            for (size_t i = 0; i < nPols; i++) {
                                   triangulations.at(i)->mesh(maxArea,maxAspectRatio);
                                   triangulations.at(i)->purge();
-                              }
-                          }
-        );
+                            }
+                         // }
+        //);
         
         // Fill the results... in series
         size_t rayCount = 0;
@@ -127,7 +136,8 @@ public:
                 Triangle * triangle = t->getTriangleRef(j);
                 
                 // Add the Triangle
-                triangles.push_back(*triangle);
+                //triangles.push_back(*triangle);
+                triangles.push_back(new Triangle(triangle));
                 
                 // Add the center to the ray
                 Point3D o = triangle->getCenter();

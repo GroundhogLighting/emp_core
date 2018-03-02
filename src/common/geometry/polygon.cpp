@@ -202,6 +202,38 @@ void Polygon3D::setNormal(Vector3D newNormal)
 	normal = newNormal;
 }
 
+void Polygon3D::setNormal()
+{
+    setNormal(0);
+}
+void Polygon3D::setNormal(size_t a)
+{
+	Loop * loop = getOuterLoopRef();
+    loop->clean();
+    size_t nVertices = loop->size();
+    
+    Point3D p0 = *(loop->getVertexRef(a%nVertices));
+    Point3D p1 = *(loop->getVertexRef((a+1)%nVertices));
+    Point3D p2 = *(loop->getVertexRef((a+2)%nVertices));
+
+	Vector3D v1 = p1 - p0;
+    Vector3D v2 = p2 - p1;
+    
+    Vector3D n = v1%v2;
+    if(n.getSquaredLength() < EMP_TINY){
+        if(a == nVertices){
+            WARN(v,"Probable error when calculating the normal of a workplane");
+            return;
+        }
+        // Try again
+        setNormal(a+1);
+    }else{
+        n.normalize();
+        normal = n;
+    }
+    
+}
+
 Vector3D Polygon3D::getNormal()
 {
 	return normal;

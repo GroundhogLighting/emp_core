@@ -105,16 +105,7 @@ public:
 	@return success
 	*/
 	bool fillFromJSON(json * j);
-
-	//! Writes a Material in Radiance format
-	/*!
-	@author German Molina
-	@param[in] file The file where the material should be written
-	@return success
-	@note This function should be overriden by a function with the same name in each Material derived class
-	*/
-	virtual bool writeInRadianceFormat(FILE * file) = 0;
-
+	
 	//! Parses a tokenized Groundhog primitive
 	/*!
 	A Groundhog primitive may be a Radiance primitive or an extension

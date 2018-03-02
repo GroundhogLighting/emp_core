@@ -33,6 +33,9 @@ public:
     */
     WriteRadianceSceneFile(std::string theFilename, GroundhogModel * theModel, OptionSet * theOptions)
     {
+        std::string name = "Write Scene file";
+        setName(&name);
+        
         filename = theFilename;
         model = theModel;
         options = *theOptions;

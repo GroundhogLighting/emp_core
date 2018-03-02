@@ -52,19 +52,6 @@ public:
         setType("metal");
     }
 
-	//! Prints the Material in Radiance format
-	/*!
-	@author German Molina
-	@param[in] file The file to write to
-	@return success
-	*/
-	bool writeInRadianceFormat(FILE * file)
-    {
-        fprintf(file, "void %s %s\n0\n0\n", &type[0], &name[0]);
-        fprintf(file, "5 %f %f %f %f %f\n", r, g, b, specularity, roughness);
-        
-        return true;
-    }
 
 	//! Parses a tokenized Groundhog primitive
 	/*!

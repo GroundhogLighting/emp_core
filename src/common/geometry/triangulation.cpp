@@ -771,20 +771,20 @@ size_t Triangulation::realSize()
 
 void Triangulation::purge()
 {
-  size_t realN = realSize();
-  std::vector<Triangle *> realTriangles = std::vector<Triangle *>(realN);
-  size_t count = 0;
-  for (auto triangle : triangles) {
-    // Skip if nullptr
-    if (triangle == nullptr)
-      continue;
+    size_t realN = realSize();
+    std::vector<Triangle *> realTriangles = std::vector<Triangle *>(realN);
+    size_t count = 0;
+    for (auto triangle : triangles) {
+        // Skip if nullptr
+        if (triangle == nullptr)
+            continue;
 
-    realTriangles[count] = triangle;
+        realTriangles[count++] = triangle;
 
-    count++;
-  }
-  // Update
-  nTriangles = realN;
-  triangles.resize(realN);
-  triangles = std::vector<Triangle *>(realTriangles);
+    }
+    // Update
+    nTriangles = realN;
+    triangles.resize(realN);
+    triangles = std::vector<Triangle *>(realTriangles);
+    
 }

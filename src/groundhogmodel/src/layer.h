@@ -76,6 +76,13 @@ public:
 	*/
 	void addObject(Otype * object);
 
+	//! Adds an ComponentInstance to the Layer
+	/*!
+	@author German Molina
+	@param[in] instance The ComponentInstance to add to the Layer
+	*/
+	void addComponentInstance(ComponentInstance * instance);
+
 	//! Retrieves the reference to the ComponentInstance vector
 	/*!
 	@author German Molina

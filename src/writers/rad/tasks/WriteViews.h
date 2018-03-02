@@ -32,6 +32,9 @@ public:
      */
     WriteViews(std::string theDir, GroundhogModel * theModel)
     {
+        std::string name = "Write views";
+        setName(&name);
+        
         directory = theDir;
         model = theModel;
     }
