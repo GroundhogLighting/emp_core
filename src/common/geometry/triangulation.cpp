@@ -596,6 +596,9 @@ bool Triangulation::doCDT() {
 	// Create a 2D version of this polygon
 	Polygon3D * polygon2D = polygon->get2DPolygon();
 
+    // Add exterior loop
+    Loop * outerLoop = polygon2D->getOuterLoopRef();
+    
 	// Prepare data for restoring 3D
 	Vector3D i = Vector3D(0, 0, 0);
 	Vector3D j = Vector3D(0, 0, 0);
@@ -610,17 +613,19 @@ bool Triangulation::doCDT() {
 	// The maximum number of points you expect to need
 	// This value is used by the library to calculate
 	// working memory required
-    uint32_t MaxPointCount;
     if (polygon2D->getOuterLoopRef()->size() == 3 || ! polygon2D->hasInnerLoops() ) {
-      MaxPointCount = 3;
+        // It was a triangle alrady
+        Point3D * a = outerLoop->getVertexRef(0);
+        Point3D * b = outerLoop->getVertexRef(1);
+        Point3D * c = outerLoop->getVertexRef(2);
+        addTriangle(new Triangle(a, b, c));
+        return true;
     }
-    else {
-      MaxPointCount = EMP_MAX_POINTS_IN_WORKPLANE;
-    } 
+    
 
 	// Request how much memory (in bytes) you should
 	// allocate for the library
-	size_t MemoryRequired = MPE_PolyMemoryRequired(MaxPointCount);
+	size_t MemoryRequired = MPE_PolyMemoryRequired(EMP_MAX_POINTS_IN_WORKPLANE);
 
 	// Allocate a void* memory block of size MemoryRequired
 	// IMPORTANT: The memory must be zero initialized
@@ -629,11 +634,8 @@ bool Triangulation::doCDT() {
 	// Initialize the poly context by passing the memory pointer,
 	// and max number of points from before
 	MPEPolyContext PolyContext;
-	if (MPE_PolyInitContext(&PolyContext, Memory, MaxPointCount))
+	if (MPE_PolyInitContext(&PolyContext, Memory, EMP_MAX_POINTS_IN_WORKPLANE))
 	{
-
-		// Add exterior loop
-		Loop * outerLoop = polygon2D->getOuterLoopRef();
 
 		// This value is lost in translation... so store it here
 		double z = outerLoop->getVertexRef(0)->getZ();
@@ -713,12 +715,6 @@ bool Triangulation::doCDT() {
                 }
                 addTriangle(t);
             }
-        }else {
-            // It was a triangle alrady
-            Point3D * a = outerLoop->getVertexRef(0);
-            Point3D * b = outerLoop->getVertexRef(1);
-            Point3D * c = outerLoop->getVertexRef(2);
-            addTriangle(new Triangle(a, b, c));
         }
 		
 	}
