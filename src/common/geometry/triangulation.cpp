@@ -80,7 +80,7 @@ bool Triangulation::addPointToTriangle(size_t index, Point3D * point, int code)
 	}
 
 	if (code < 3) { // Point is a vertex 
-					// do nothing... the point has already been added.
+        std::cout << "Point being added in an existent vertex... ignored" << std::endl;			// do nothing... the point has already been added.
 		return true;
 	}
 	else if (code < 6) { // Point in an edge			
@@ -98,7 +98,7 @@ bool Triangulation::addPoint(Point3D * point, bool warn)
 	int code;
 	for (size_t i = 0; i < triangles.size(); i++) {
 		// skip triangle if it has been deleted
-		if (triangles[i] == NULL)
+		if (triangles[i] == nullptr)
 			continue;
 		
 		if (triangles[i]->testPoint( point, &code))
@@ -243,6 +243,10 @@ double Triangulation::getBestAspectRatio(Triangle * t, int i)
 	if (neighbor == NULL)
 		return -1;
 	
+    if(neighbor->isEqual(t)){
+           FATAL(e,"Triangle is its own neighbor!");
+    }
+    
 	// get vertices
 	Point3D * a = t->getVertex(i % 3);
 	Point3D * b = t->getVertex((i + 1) % 3);
@@ -250,7 +254,9 @@ double Triangulation::getBestAspectRatio(Triangle * t, int i)
 	
 	// Get the oposite side
 	Point3D * oposite = getOpositeVertex(t, i);
-
+    if(oposite == nullptr){
+        FATAL(e,"null oposite vertex");
+    }
 	if (!isConvex(a, oposite, b, c)) {
 		return -1;
 	}
@@ -492,8 +498,11 @@ Point3D * Triangulation::getOpositeVertex(Triangle * t, int nei) {
 	// find the vertex that is in neighbor but not in triangle.
 	for (int i = 0; i < 3; i++) { // count in neighbor		
 		bool found = false;
+        Point3D * nVertex = neighbor->getVertex(i);
+        Point3D * tVertex;
 		for (int j = 0; j < 3; j++) { // count in this
-			if (neighbor->getVertex(i)->isEqual(t->getVertex(j))) {
+            tVertex =t->getVertex(j);
+			if (nVertex->isEqual(tVertex)) {
 				found = true;
 				break;
 			}
@@ -501,7 +510,8 @@ Point3D * Triangulation::getOpositeVertex(Triangle * t, int nei) {
 		if (!found)
 			return neighbor->getVertex(i);
 	}
-	return NULL;
+    
+	return nullptr;
 }
 
 
@@ -530,7 +540,7 @@ void Triangulation::clean()
 void Triangulation::refine(double maxArea, double maxAspectRatio)
 {	
 	for (size_t i = 0; i < nTriangles; i++) {
-		if (triangles[i] == NULL)
+		if (triangles[i] == nullptr)
 			continue;
 
 		double area = triangles[i]->getArea();
@@ -538,17 +548,18 @@ void Triangulation::refine(double maxArea, double maxAspectRatio)
 		if (area < 9e-3)
 			continue;
 
-		// find the longest edge
-		Segment * s = triangles[i]->getSegment(0);
-		int longestSegmentIndex= 0;
-		for (int j = 1; j < 3; j++) {
-			if (s->getLength() < triangles[i]->getSegment(j)->getLength()) {
-				longestSegmentIndex = j;
-				s = triangles[i]->getSegment(j);
-			}
-		}
-
+		
 		if (triangles[i]->getAspectRatio() > maxAspectRatio) {
+            // find the longest edge
+            Segment * s = triangles[i]->getSegment(0);
+            int longestSegmentIndex= 0;
+            for (int j = 1; j < 3; j++) {
+                if (s->getLength() < triangles[i]->getSegment(j)->getLength()) {
+                    longestSegmentIndex = j;
+                    s = triangles[i]->getSegment(j);
+                }
+            }
+
 			// add midpoint
 			double dX = s->start->getX() + s->end->getX(); 
 			double dY = s->start->getY() + s->end->getY(); 
@@ -626,7 +637,8 @@ bool Triangulation::doCDT() {
 
 		// This value is lost in translation... so store it here
 		double z = outerLoop->getVertexRef(0)->getZ();
-
+        
+        size_t nExtPoints = 0;
 		for (size_t i = 0; i < outerLoop->size(); i++)
 		{
 			Point3D * p = outerLoop->getVertexRef(i);
@@ -639,14 +651,17 @@ bool Triangulation::doCDT() {
 			MPEPolyPoint* Point = MPE_PolyPushPoint(&PolyContext);
 			Point->X = p->getX();
 			Point->Y = p->getY();
+            nExtPoints++;
 		}
 
 
 		// Add the polyline for the edge. This will consume all points added so far.
 		MPE_PolyAddEdge(&PolyContext);
 
-		// add holes to the shape 
-		for (size_t i = 0; i < polygon2D->countInnerLoops(); i++)
+		// add holes to the shape
+        size_t nPoints = 0;
+        size_t nInnerLoops = polygon2D->countInnerLoops();
+		for (size_t i = 0; i < nInnerLoops; i++)
 		{
 			Loop * innerLoop = polygon2D->getInnerLoopRef(i);
 			MPEPolyPoint* Hole = MPE_PolyPushPointArray(&PolyContext, static_cast<u32>(innerLoop->size()));
@@ -660,42 +675,52 @@ bool Triangulation::doCDT() {
 
 				Hole[j].X = p->getX();
 				Hole[j].Y = p->getY();
+                nPoints++;
 			}
 
 			MPE_PolyAddHole(&PolyContext);
 		}
 
-		// Triangulate the shape
-		MPE_PolyTriangulate(&PolyContext);
-
-		// The resulting triangles can be used like so
-		for (uxx TriangleIndex = 0; TriangleIndex < PolyContext.TriangleCount; ++TriangleIndex)
-		{
-			MPEPolyTriangle* polytriangle = PolyContext.Triangles[TriangleIndex];
-			MPEPolyPoint* PointA = polytriangle->Points[0];
-			MPEPolyPoint* PointB = polytriangle->Points[1];
-			MPEPolyPoint* PointC = polytriangle->Points[2];
-
-			// add a Triangle, transformed back into 3D			
-			Point3D a2d = Point3D(PointA->X, PointA->Y, z);
-			Point3D b2d = Point3D(PointB->X, PointB->Y, z);
-			Point3D c2d = Point3D(PointC->X, PointC->Y, z);
-			Point3D * a = new Point3D(a2d.transform(i, j, k));
-			Point3D * b = new Point3D(b2d.transform(i, j, k));
-			Point3D * c = new Point3D(c2d.transform(i, j, k));
-			Triangle * t = new Triangle(a, b, c);
-
-			// Set constraints.... this was reversed engineered; so I am not sure 
-			// it will work ALL the time.
-			for (size_t i = 0; i < 3; i++) {
-				MPEPolyTriangle * polyneighbor = polytriangle->Neighbors[(i + 2) % 3];
-				// If there is no neighbor
-
-				if (polyneighbor != nullptr && (polyneighbor->Flags) < 256)
-					t->setConstraint(static_cast<u32>(i));
-			}
-			addTriangle(t);
-		}
+		// Triangulate the shape, only if it is not a triangle already
+        if(nExtPoints > 3 && nInnerLoops > 0){
+            MPE_PolyTriangulate(&PolyContext);
+            
+            // The resulting triangles can be used like so
+            for (uxx TriangleIndex = 0; TriangleIndex < PolyContext.TriangleCount; ++TriangleIndex)
+            {
+                MPEPolyTriangle* polytriangle = PolyContext.Triangles[TriangleIndex];
+                MPEPolyPoint* PointA = polytriangle->Points[0];
+                MPEPolyPoint* PointB = polytriangle->Points[1];
+                MPEPolyPoint* PointC = polytriangle->Points[2];
+                
+                // add a Triangle, transformed back into 3D
+                Point3D a2d = Point3D(PointA->X, PointA->Y, z);
+                Point3D b2d = Point3D(PointB->X, PointB->Y, z);
+                Point3D c2d = Point3D(PointC->X, PointC->Y, z);
+                Point3D * a = new Point3D(a2d.transform(i, j, k));
+                Point3D * b = new Point3D(b2d.transform(i, j, k));
+                Point3D * c = new Point3D(c2d.transform(i, j, k));
+                Triangle * t = new Triangle(a, b, c);
+                
+                // Set constraints.... this was reversed engineered; so I am not sure
+                // it will work ALL the time.
+                for (size_t i = 0; i < 3; i++) {
+                    MPEPolyTriangle * polyneighbor = polytriangle->Neighbors[(i + 2) % 3];
+                    // If there is no neighbor
+                    
+                    if (polyneighbor != nullptr && (polyneighbor->Flags) < 256)
+                        t->setConstraint(static_cast<u32>(i));
+                }
+                addTriangle(t);
+            }
+        }else {
+            // It was a triangle alrady
+            Point3D * a = outerLoop->getVertexRef(0);
+            Point3D * b = outerLoop->getVertexRef(1);
+            Point3D * c = outerLoop->getVertexRef(2);
+            addTriangle(new Triangle(a, b, c));
+        }
+		
 	}
 
 	// delete this.

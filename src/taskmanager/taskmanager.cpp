@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <fstream>
 #include "./taskmanager.h"
-#include "../utilities/io.h"
+#include "../common/utilities/io.h"
 #include "tbb/tbb.h"
 
 #ifdef _DEBUG
@@ -128,13 +128,13 @@ bool TaskManager::solve(json * results)
             try {
 #ifdef _DEBUG
                 verboseMutex.lock();
-                std::cout << "    ... Starting Task '" << *(tasks[i]->getName()) << "'" << std::endl;
+                std::cerr << "    ... Starting Task '" << *(tasks[i]->getName()) << "'" << std::endl;
                 verboseMutex.unlock();
 #endif
                 success= tasks[i]->solve();
 #ifdef _DEBUG
                 verboseMutex.lock();
-                std::cout << "    ... Ended Task '" << *(tasks[i]->getName()) <<  "'" << std::endl;
+                std::cerr << "    ... Ended Task '" << *(tasks[i]->getName()) <<  "'" << std::endl;
                 verboseMutex.unlock();
 #endif
             }catch(std::out_of_range& ex) {

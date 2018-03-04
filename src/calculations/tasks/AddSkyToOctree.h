@@ -26,7 +26,7 @@
 #include "../../config_constants.h"
 #include "../../common/utilities/stringutils.h"
 #include "./OconvTask.h"
-#include "../../common/taskmanager/mutexes.h"
+#include "../../taskmanager/mutexes.h"
 
 class AddSkyToOctree : public Task {
 public:

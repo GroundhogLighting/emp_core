@@ -136,8 +136,6 @@ void tokenize(std::string * s,std::vector<std::string> * v)
     if(s->substr(start) != ""){
         v->push_back(s->substr(start));
     }
-    
-                
 }
 
 bool is_number(const std::string& s)

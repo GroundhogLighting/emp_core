@@ -119,9 +119,13 @@ Point3D Point3D::transform(Vector3D i, Vector3D j, Vector3D k)
 		std::cerr << "   k: ";
 		k.print();
 
-		std::cerr << "   i*j: " << std::abs(i*j) << std::endl;
-		std::cerr << "   j*k: " << std::abs(j*k) << std::endl;
-		std::cerr << "   i*k: " << std::abs(i*k) << std::endl;
+        std::cerr << "|i| : " << i.getLength() <<std::endl;
+        std::cerr << "|j| : " << j.getLength() <<std::endl;
+        std::cerr << "|k| : " << k.getLength() <<std::endl;
+        
+		std::cerr << "   i*j : " << std::abs(i*j) << std::endl;
+		std::cerr << "   j*k : " << std::abs(j*k) << std::endl;
+		std::cerr << "   i*k : " << std::abs(i*k) << std::endl;
 	}
 #endif
   

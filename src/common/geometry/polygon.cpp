@@ -285,9 +285,16 @@ Polygon3D * Polygon3D::get2DPolygon()
 	// Add inner loops
 	for (size_t p = 0; p < countInnerLoops(); p++) {
 		Loop * il = ret->addInnerLoop();
-		
-		for (size_t q = 0; q < getInnerLoopRef(p)->size(); q++) {
-			il->addVertex(new Point3D(getInnerLoopRef(p)->getVertexRef(q)->transform(i, j, k)));
+        Loop * originalIL = getInnerLoopRef(p);
+        
+		for (size_t q = 0; q < originalIL->size(); q++) {
+            
+            Point3D * originalPoint = originalIL->getVertexRef(q);
+            
+            if(originalPoint == nullptr)
+                continue;
+            
+			il->addVertex(new Point3D(originalPoint->transform(i, j, k)));
 		}
 	}
 
@@ -388,20 +395,20 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 	}
 	else {
 		// All other workplanes
-        if (std::abs(nx) > EMP_TINY) {
+        //if (std::abs(nz) > EMP_TINY) {
           //i = Vector3D(-ny/nx,1,0);
           //i.normalize();
           
-			i = Vector3D(1, 0, -nz / nx);
+			i = Vector3D(1, 0, -nx / nz);
 			i.normalize();
           
 			j = k%i;
-		}
-        else if (std::abs(ny) > EMP_TINY) {
+		//}
+        /*else if (std::abs(nz) > EMP_TINY) {
           //j = Vector3D(1, -nx / ny, 0);
           //j.normalize();
           
-            j = Vector3D(0, 1, -nz / ny);
+            j = Vector3D(0, 1, -ny / nz);
 			j.normalize();
           
 			i = j%k;
@@ -413,7 +420,7 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 			FATAL(errorMessage,"Not considered situation when calculating auxiliar axes of polygon");
 			normal.print();
 			return false;
-		}
+		}*/
 	}
 	
 	// set values

@@ -21,7 +21,7 @@
 #pragma once
 
 #include "../oconv_options.h"
-#include "../../common/taskmanager/mutexes.h"
+#include "../../taskmanager/mutexes.h"
 
 class Create4CMNaiveDirectSkyOctree : public Task {
 public:

@@ -5,7 +5,7 @@
 
 
 #include "../src/config_constants.h"
-#include "../src/common/taskmanager/mutexes.h"
+#include "../src/taskmanager/mutexes.h"
 
 
 
@@ -14,7 +14,7 @@
 #include "../src/groundhogmodel/groundhogmodel.h"
 class GroundhogModel;
 
-#include "../src/common/taskmanager/taskmanager.h"
+#include "../src/taskmanager/taskmanager.h"
 class TaskManager;
 
 //#include "../src/groundhogmodel/src/rtraceoptions.h"

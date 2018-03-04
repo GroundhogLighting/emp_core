@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include "../../common/taskmanager/mutexes.h"
+#include "../../taskmanager/mutexes.h"
+#include "../../os_definitions.h"
 
 class CreateDirectSunOctree : public Task {
 public:

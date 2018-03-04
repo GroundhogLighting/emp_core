@@ -22,13 +22,13 @@
 
 
 
-#include "../../common/taskmanager/task.h"
+#include "../../taskmanager/task.h"
 #include "../oconv_options.h"
 
 #include "../../writers/rad/radexporter.h"
 #include "../reinhart.h"
 #include "./TriangulateWorkplane.h"
-#include "../../common/taskmanager/mutexes.h"
+#include "../../taskmanager/mutexes.h"
 
 class OconvTask : public Task {
     

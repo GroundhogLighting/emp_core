@@ -24,7 +24,7 @@
 #include "./CreateDirectSunOctree.h"
 #include "../radiance.h"
 #include "../../config_constants.h"
-#include "../../common/taskmanager/mutexes.h"
+#include "../../taskmanager/mutexes.h"
 
 class CreateDaylightFactorOctree : public Task {
 public:

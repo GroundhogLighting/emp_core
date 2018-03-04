@@ -21,7 +21,7 @@
 #pragma once
 
 #include "./OconvTask.h"
-#include "../../common/taskmanager/mutexes.h"
+#include "../../taskmanager/mutexes.h"
 
 class CreateDDCDirectSkyOctree : public Task {
 public:

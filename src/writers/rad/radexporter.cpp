@@ -261,7 +261,7 @@ bool RadExporter::writeLayersInOneFile(FILE * file, const char * newMaterial)
         // Iterate the instances
         size_t numInstances = instances->size();
         for (size_t j = 0; j < numInstances; j++) {
-            writeComponentInstance(file, layer->getComponentInstanceRef(j), &transform, 1, newMaterial);
+            writeComponentInstance(file, layer->getComponentInstanceRef(j), &transform, scale, newMaterial);
         }
 
         fprintf(file, "\n\n");
@@ -774,6 +774,8 @@ bool RadExporter::writeCone(Cone * object, FILE * file, const char * material, T
         Point3D tp1 = Point3D(scale*p1.getX(),scale*p1.getY(),scale*p1.getZ()).transform(transform);
         fprintf(file, "8 %f %f %f %f %f %f %f %f\n", tp0.getX(), tp0.getY(), tp0.getZ(), tp1.getX(), tp1.getY(), tp1.getZ(), r0*scale, r1*scale);
     }
+    
+    return true;
 }
 
 bool RadExporter::writeCup(Cup * object, FILE * file, const char * material, Transform * transform, double scale)

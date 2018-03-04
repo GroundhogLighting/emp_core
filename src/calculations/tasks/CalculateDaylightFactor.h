@@ -38,6 +38,8 @@ public:
     
     CalculateDaylightFactor(GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp)
     {
+        generatesResults = true;
+        
         model = theModel;
         rtraceOptions = theOptions;
         workplane = wp;
@@ -91,11 +93,16 @@ public:
     {
                         
         std::string octName = (static_cast<CreateDaylightFactorOctree *>(getDependencyRef(0))->octreeName);
-     
-        result.resize(rays->size(),1);
-        if(workplane != nullptr){
-            rays = &(static_cast<TriangulateWorkplane *>(getDependencyRef(1))->rays);
+        
+        
+        if(workplane != NULL){
+            TriangulateWorkplane * dep = static_cast<TriangulateWorkplane *>(getDependencyRef(1));
+            rays = &(dep->rays);
         }
+        
+        size_t nrays = rays->size();
+        result.resize(nrays,1);
+        
         rtrace_I(rtraceOptions, &octName[0], ambientFileName, rays, &result);
         
         return true;
@@ -108,6 +115,20 @@ public:
     
     bool submitResults(json * results)
     {
+        size_t nrows = result.nrows();
+        size_t ncols = result.ncols();
+        Matrix df = Matrix(nrows,ncols);
+        result.calcIrradiance(&df);
+        
+        std::string name = *getName();
+        
+        (*results)[name] = json::array();
+        for(size_t row = 0; row < nrows; row++){
+            //r[row] = df.getElement(row,0);
+            (*results)[name].push_back(df.getElement(row,0));
+        }
+        
+        
         return true;
     }
     

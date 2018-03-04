@@ -27,8 +27,6 @@ class WriteWorkplane : public Task {
     
 public:
     Workplane * workplane; //!< The workplane to export
-    double maxAspectRatio = 1.3; //!< The maximum aspect ratio allowed for this exportation
-    double maxArea = 0.25; //!< The maximum area of the pixels (triangles) in the triangulation
     std::string exportName; //!< The name of the file to export
     
     
@@ -40,7 +38,7 @@ public:
      @param[in] maxAspectRatio the maximum aspect ratio allowed in the triangulation
      @param[in] name The name of the file to write
      */
-    WriteWorkplane(Workplane * workplane, double maxArea, double maxAspectRatio, std::string name)
+    WriteWorkplane(Workplane * workplane, std::string name)
     {
         std::string n = "Export workplane " + *(workplane->getName());
         setName(&n);
@@ -61,11 +59,7 @@ public:
      */
     bool isEqual(Task * t)
     {
-        return (
-                workplane == static_cast<WriteWorkplane *>(t)->workplane &&
-                maxAspectRatio == static_cast<WriteWorkplane *>(t)->maxAspectRatio &&
-                maxArea == static_cast<WriteWorkplane *>(t)->maxArea
-                );
+        return (workplane == static_cast<WriteWorkplane *>(t)->workplane);
     }
     
     //! Solves this task

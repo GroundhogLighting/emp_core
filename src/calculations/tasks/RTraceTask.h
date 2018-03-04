@@ -98,10 +98,10 @@ public:
         
         std::string octname = static_cast<AddSkyToOctree *>(getDependencyRef(0))->octreeName;
         ambientFileName = octname + ".amb";
-        result.resize(rays->size(),1);
         if(workplane != nullptr){
             rays = &(static_cast<TriangulateWorkplane *>(getDependencyRef(1))->rays);
         }
+        result.resize(rays->size(),1);
         rtrace_I(rtraceOptions, &octname[0], ambientFileName, rays, &result);        
         
         return true;

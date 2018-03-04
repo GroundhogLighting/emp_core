@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 #include <string>
-#include "../options/optionset.h"
+#include "../common/options/optionset.h"
 
 
 

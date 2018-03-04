@@ -22,7 +22,7 @@
 #pragma once
 #include "../../common/geometry/triangle.h"
 #include "../../groundhogmodel/groundhogmodel.h"
-#include "../../common/taskmanager/task.h"
+#include "../../taskmanager/task.h"
 #include "tbb/tbb.h"
 #include "../../common/geometry/triangulation.h"
 #include "../../grain_sizes.h"
@@ -115,6 +115,10 @@ public:
                             for (size_t i = 0; i < nPols; i++) {
                                   triangulations.at(i)->mesh(maxArea,maxAspectRatio);
                                   triangulations.at(i)->purge();
+                                
+                                if(i == 383){
+                                    std::cerr << "QQQQQ << " << i << std::endl;
+                                }
                             }
                          // }
         //);
@@ -185,6 +189,29 @@ public:
      */
     bool submitResults(json * results)
     {
+        std::string wp = *(workplane->getName());
+        size_t nrows = triangles.size();
+        std::string name = *(workplane->getName());
+        
+        (*results)[wp] = json::array();
+        Triangle * t;
+        Point3D a = Point3D(0,0,0);
+        Point3D b = Point3D(0,0,0);
+        Point3D c = Point3D(0,0,0);
+        
+        for(size_t row = 0; row < nrows; row++){
+            
+            t = triangles.at(row);
+            a = t->getVertex(0);
+            b = t->getVertex(1);
+            c = t->getVertex(2);
+            (*results)[name].push_back({
+                {a.getX(), a.getY() ,a.getZ() },
+                {b.getX(), b.getY() ,b.getZ() },
+                {c.getX(), c.getY() ,c.getZ() },
+            });
+        }
+        
         return true;
     }
     
