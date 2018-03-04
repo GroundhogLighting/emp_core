@@ -569,10 +569,28 @@ void Triangulation::refine(double maxArea, double maxAspectRatio)
 		} 
 		else if (area > maxArea) { 
 			// if it is a skinny triangle, try to add the circumcenter
-			Point3D c = triangles[i]->getCircumCenter();
+			Point3D * cCenter = new Point3D(triangles[i]->getCircumCenter());
 			// Since the circumcenter may be in another triangle, we need 
 			// to search for it.
-			addPoint(new Point3D(c.getX(), c.getY(), c.getZ()),false);		
+            if(!addPoint(cCenter,false)){
+                // What should I do if the circumcenter is out of the polygon?
+                delete cCenter;
+                
+                //... for now, lets try adding the average of the triangle
+                Point3D * a = triangles[i]->getVertex(0);
+                Point3D * b = triangles[i]->getVertex(1);
+                Point3D * c = triangles[i]->getVertex(2);
+                
+                double x = a->getX()+b->getX()+c->getX();
+                double y = a->getY()+b->getY()+c->getY();
+                double z = a->getZ()+b->getZ()+c->getZ();
+                
+                // This one we KNOW will be inside itself, actually
+                Point3D * gCenter = new Point3D(x/3, y/3, z/3);
+                //addPoint(gCenter,false);
+                splitTriangle(i, gCenter);
+                
+            }
 			restoreDelaunay();			
 		}
 	}
@@ -613,8 +631,17 @@ bool Triangulation::doCDT() {
 	// The maximum number of points you expect to need
 	// This value is used by the library to calculate
 	// working memory required
-    if (polygon2D->getOuterLoopRef()->size() == 3 || ! polygon2D->hasInnerLoops() ) {
+    if (polygon2D->getOuterLoopRef()->realSize() == 3 && ! polygon2D->hasInnerLoops() ) {
         // It was a triangle alrady
+        int vCount = 0;
+        int addedVecs = 0;
+        std::vector<Point3D *> vecs =std::vector<Point3D *>(3);
+        while(addedVecs < 3){
+            Point3D * v =outerLoop->getVertexRef(vCount++);
+            
+            if(v != nullptr)
+                vecs[addedVecs++] = v;
+        }
         Point3D * a = outerLoop->getVertexRef(0);
         Point3D * b = outerLoop->getVertexRef(1);
         Point3D * c = outerLoop->getVertexRef(2);
@@ -640,7 +667,6 @@ bool Triangulation::doCDT() {
 		// This value is lost in translation... so store it here
 		double z = outerLoop->getVertexRef(0)->getZ();
         
-        size_t nExtPoints = 0;
 		for (size_t i = 0; i < outerLoop->size(); i++)
 		{
 			Point3D * p = outerLoop->getVertexRef(i);
@@ -653,7 +679,6 @@ bool Triangulation::doCDT() {
 			MPEPolyPoint* Point = MPE_PolyPushPoint(&PolyContext);
 			Point->X = p->getX();
 			Point->Y = p->getY();
-            nExtPoints++;
 		}
 
 
@@ -661,7 +686,6 @@ bool Triangulation::doCDT() {
 		MPE_PolyAddEdge(&PolyContext);
 
 		// add holes to the shape
-        size_t nPoints = 0;
         size_t nInnerLoops = polygon2D->countInnerLoops();
 		for (size_t i = 0; i < nInnerLoops; i++)
 		{
@@ -677,47 +701,45 @@ bool Triangulation::doCDT() {
 
 				Hole[j].X = p->getX();
 				Hole[j].Y = p->getY();
-                nPoints++;
 			}
 
 			MPE_PolyAddHole(&PolyContext);
 		}
 
-		// Triangulate the shape, only if it is not a triangle already
-        if(nExtPoints > 3 && nInnerLoops > 0){
-            MPE_PolyTriangulate(&PolyContext);
-            
-            // The resulting triangles can be used like so
-            for (uxx TriangleIndex = 0; TriangleIndex < PolyContext.TriangleCount; ++TriangleIndex)
-            {
-                MPEPolyTriangle* polytriangle = PolyContext.Triangles[TriangleIndex];
-                MPEPolyPoint* PointA = polytriangle->Points[0];
-                MPEPolyPoint* PointB = polytriangle->Points[1];
-                MPEPolyPoint* PointC = polytriangle->Points[2];
-                
-                // add a Triangle, transformed back into 3D
-                Point3D a2d = Point3D(PointA->X, PointA->Y, z);
-                Point3D b2d = Point3D(PointB->X, PointB->Y, z);
-                Point3D c2d = Point3D(PointC->X, PointC->Y, z);
-                Point3D * a = new Point3D(a2d.transform(i, j, k));
-                Point3D * b = new Point3D(b2d.transform(i, j, k));
-                Point3D * c = new Point3D(c2d.transform(i, j, k));
-                Triangle * t = new Triangle(a, b, c);
-                
-                // Set constraints.... this was reversed engineered; so I am not sure
-                // it will work ALL the time.
-                for (size_t i = 0; i < 3; i++) {
-                    MPEPolyTriangle * polyneighbor = polytriangle->Neighbors[(i + 2) % 3];
-                    // If there is no neighbor
-                    
-                    if (polyneighbor != nullptr && (polyneighbor->Flags) < 256)
-                        t->setConstraint(static_cast<u32>(i));
-                }
-                addTriangle(t);
-            }
-        }
 		
-	}
+        MPE_PolyTriangulate(&PolyContext);
+        
+        // The resulting triangles can be used like so
+        for (uxx TriangleIndex = 0; TriangleIndex < PolyContext.TriangleCount; ++TriangleIndex)
+        {
+            MPEPolyTriangle* polytriangle = PolyContext.Triangles[TriangleIndex];
+            MPEPolyPoint* PointA = polytriangle->Points[0];
+            MPEPolyPoint* PointB = polytriangle->Points[1];
+            MPEPolyPoint* PointC = polytriangle->Points[2];
+            
+            // add a Triangle, transformed back into 3D
+            Point3D a2d = Point3D(PointA->X, PointA->Y, z);
+            Point3D b2d = Point3D(PointB->X, PointB->Y, z);
+            Point3D c2d = Point3D(PointC->X, PointC->Y, z);
+            Point3D * a = new Point3D(a2d.transform(i, j, k));
+            Point3D * b = new Point3D(b2d.transform(i, j, k));
+            Point3D * c = new Point3D(c2d.transform(i, j, k));
+            Triangle * t = new Triangle(a, b, c);
+            
+            // Set constraints.... this was reversed engineered; so I am not sure
+            // it will work ALL the time.
+            for (size_t i = 0; i < 3; i++) {
+                MPEPolyTriangle * polyneighbor = polytriangle->Neighbors[(i + 2) % 3];
+                // If there is no neighbor
+                
+                if (polyneighbor != nullptr && (polyneighbor->Flags) < 256)
+                    t->setConstraint(static_cast<u32>(i));
+            }
+            addTriangle(t);
+        }
+    }
+		
+	
 
 	// delete this.
 	delete polygon2D;

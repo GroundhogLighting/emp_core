@@ -116,9 +116,7 @@ public:
                                   triangulations.at(i)->mesh(maxArea,maxAspectRatio);
                                   triangulations.at(i)->purge();
                                 
-                                if(i == 383){
-                                    std::cerr << "QQQQQ << " << i << std::endl;
-                                }
+                                
                             }
                          // }
         //);

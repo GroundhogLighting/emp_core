@@ -385,7 +385,7 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 	Vector3D j = i;
 
 	double nx = k.getX();
-	double ny = k.getY();
+	//double ny = k.getY();
 	double nz = k.getZ();	
 	
     if (std::abs(nz) < EMP_TINY) {
