@@ -1403,6 +1403,14 @@ void MPE_FillLeftConcaveEdgeEvent(MPEPolyContext* PolyContext, MPEPolyEdge* Edge
     // Next above or below Edge?
     if (MPE_PolyOrient2D(Edge->Q, Node->Prev->Point, Edge->P) == MPEPolyOrientation_CW)
     {
+        if(Node->Point == NULL ||
+           Node->Prev == NULL ||
+           Node->Prev->Point == NULL ||
+           Node->Prev->Prev == NULL ||
+           Node->Prev->Prev->Point == NULL){
+            /// TESTING
+            WARN(e, "ASDASD");
+        }
       // Below
       if (MPE_PolyOrient2D(Node->Point, Node->Prev->Point, Node->Prev->Prev->Point) == MPEPolyOrientation_CW)
       {
@@ -2048,6 +2056,7 @@ void MPE_PolyTriangulate(MPEPolyContext* PolyContext)
           }
         }
       }
+        
 
       //NOTE: New front triangle
       {
@@ -2122,6 +2131,13 @@ void MPE_PolyTriangulate(MPEPolyContext* PolyContext)
 
         if (!MPE_IsEdgeSideOfTriangle(NewNode->Triangle, Edge->P, Edge->Q))
         {
+            if(NewNode->Point == NULL ||
+               NewNode->Prev == NULL ||
+               NewNode->Prev->Point == NULL ||
+               NewNode->Prev->Prev == NULL ||
+               NewNode->Prev->Prev->Point == NULL){
+                WARN(e, "ASDASD");
+            }
           // For now we will do all needed filling
           // TODO: integrate with flip process might give some better performance
           //       but for now this avoid the issue with cases that needs both flips and

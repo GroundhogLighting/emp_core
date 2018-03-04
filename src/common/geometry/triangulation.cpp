@@ -599,11 +599,28 @@ void Triangulation::refine(double maxArea, double maxAspectRatio)
 
 bool Triangulation::mesh(double maxArea, double maxAspectRatio)
 {	
-
-	// Create a constrained delaunay triangulation
-  if (!doCDT())
-    return false;
-
+    Loop * outerLoop = polygon->getOuterLoopRef();
+	// Is it really needed to do a CDT?
+    if (outerLoop->realSize() == 3 && ! polygon->hasInnerLoops() ) {
+        // It was a triangle alrady
+        int vCount = 0;
+        int addedVecs = 0;
+        std::vector<Point3D *> vecs =std::vector<Point3D *>(3);
+        while(addedVecs < 3){
+            Point3D * v =outerLoop->getVertexRef(vCount++);
+            
+            if(v != nullptr)
+                vecs[addedVecs++] = v;
+        }
+        Point3D * a = outerLoop->getVertexRef(0);
+        Point3D * b = outerLoop->getVertexRef(1);
+        Point3D * c = outerLoop->getVertexRef(2);
+        addTriangle(new Triangle(a, b, c));
+    }else{
+        if (!doCDT())
+            return false;
+    }
+  
   refine(maxArea, maxAspectRatio);
   return true;
 }
@@ -627,29 +644,6 @@ bool Triangulation::doCDT() {
 		return false;
 	}
     
-
-	// The maximum number of points you expect to need
-	// This value is used by the library to calculate
-	// working memory required
-    if (polygon2D->getOuterLoopRef()->realSize() == 3 && ! polygon2D->hasInnerLoops() ) {
-        // It was a triangle alrady
-        int vCount = 0;
-        int addedVecs = 0;
-        std::vector<Point3D *> vecs =std::vector<Point3D *>(3);
-        while(addedVecs < 3){
-            Point3D * v =outerLoop->getVertexRef(vCount++);
-            
-            if(v != nullptr)
-                vecs[addedVecs++] = v;
-        }
-        Point3D * a = outerLoop->getVertexRef(0);
-        Point3D * b = outerLoop->getVertexRef(1);
-        Point3D * c = outerLoop->getVertexRef(2);
-        addTriangle(new Triangle(a, b, c));
-        return true;
-    }
-    
-
 	// Request how much memory (in bytes) you should
 	// allocate for the library
 	size_t MemoryRequired = MPE_PolyMemoryRequired(EMP_MAX_POINTS_IN_WORKPLANE);
