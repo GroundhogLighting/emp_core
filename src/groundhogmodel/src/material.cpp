@@ -33,6 +33,18 @@ Material::~Material()
     
 }
 
+double Material::getFromJSON(const char * key, json * j)
+{
+    if(j->find(key) != j->end()){
+        return j->at(key).get<double>();
+    }else{
+        std::string err = "JSON has not key '"+std::string(key)+"' when creating material";
+        FATAL(e,err);
+        return -1;
+    }
+    return -1;
+}
+
 std::string * Material::getName()
 {
 	return &name;
@@ -58,35 +70,4 @@ bool Material::compareName(std::string * otherName)
 	return (name == *otherName);
 }
 
-bool Material::fillFromJSON(json * j)
-{
-	try {
-		name = j->at("name").get<std::string>();
-		type = j->at("class").get<std::string>();
-
-		// Get the RAD tokens
-		std::vector<std::string> tokens = std::vector<std::string>();
-		std::string rad = (*j)["rad"];
-		tokenize(&rad, &tokens);
-
-		// check if correct number of tokens
-		if (tokens.size() != primitiveLength) {
-          FATAL(errorMessage,"Incorrect primitive when parsing -- " + type);
-		  return false;
-		}
-
-		// Parse primitive tokens
-		if (!parsePrimitive(&tokens)) {
-			FATAL(errorMessage,"Error while parsing primitive");
-			return false;
-		}
-	}
-	catch (const std::exception & ex){
-		FATAL(errorMessage,"Error when converting JSON into Material");
-        FATAL(errorMessage2,ex.what());
-        return false;
-	}
-
-	return true;
-}
 

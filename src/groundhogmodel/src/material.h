@@ -40,14 +40,10 @@ using nlohmann::json;
 
 class Material {
 
-protected:
-	int primitiveLength = -1; //!< Number of expected tokens in primitive
 
 public:
     std::string name; //!< The unique name of the material
-    std::string type; //!< The type of material
-    int color[3] = {153, 153, 153}; //!< Color of the material in the 3D modeling tool
-    double alpha = 1; //!< Transparency of the material in the 3D modeling tool
+    std::string type; //!< The type of material        
     
 	//! Constructor of a new Material
 	/*!
@@ -67,6 +63,13 @@ public:
 	@return The name of the material
 	*/
 	std::string * getName();
+    
+    //! Retrieves a value from a JSON, if it exists
+    /*!
+     @author German Molina
+     @return the value... throws otherwise
+    */
+    double getFromJSON(const char * key, json * j);
 
 	//! Sets the name of the Material
 	/*!
@@ -97,14 +100,6 @@ public:
 	@return is equal
 	*/
 	bool compareName(std::string * otherName);
-
-	//! Retrieves data from a JSON and fills the Material info
-	/*!
-	@author German Molina
-	@param[in] j The JSON that represents the Material
-	@return success
-	*/
-	bool fillFromJSON(json * j);
 	
 	//! Parses a tokenized Groundhog primitive
 	/*!

@@ -362,6 +362,15 @@ bool SKPreader::loadModelInfo()
 	std::string country;
 	getStringFromShadowInfo(shadowInfo, "Country", &country);
 	loc->setCountry(country);
+    
+    // Albedo
+    SUTypedValueRef albedo = SU_INVALID;
+    if (!getValueFromModelGHDictionary(SKP_ALBEDO, &albedo))
+        return true; // return if no albedo or error.
+    
+    double value;
+    CHECK_SU(SUTypedValueGetDouble(albedo, &value));
+    loc->setAlbedo(value);
 
 	// set time
 	int64_t epoch;
@@ -694,33 +703,33 @@ bool SKPreader::bulkFacesIntoVector(std::vector <Otype * > * dest, SUEntitiesRef
 
 bool SKPreader::loadComponentDefinition(SUComponentDefinitionRef definition)
 {
-  // Check if it has label
-  std::string label;
-  if (getSUEntityLabel(SUComponentDefinitionToEntity(definition), &label)) {
+    // Check if it has label
+    int label = getSUEntityLabel(SUComponentDefinitionToEntity(definition));
+  
 
     if (label == SKP_SOLVED_WORKPLANE)
-      return true;
+        return true;
 
     if (label == SKP_PHOTOSENSOR) {
-      if (!addPhotosensorsToModel(definition)) {
-        FATAL(errorMessage, "Error when trying to add Photosensos to the model");
-        return false;
-      }
+        if (!addPhotosensorsToModel(definition)) {
+            FATAL(errorMessage, "Error when trying to add Photosensos to the model");
+            return false;
+        }
     }
-  }
 
-  //get the name
-  std::string definitionName;
-  if (!getSUComponentDefinitionName(definition, &definitionName)) {
-	  warn("Impossible to get name of component");
-	  return false;
-  };
+
+    //get the name
+    std::string definitionName;
+    if (!getSUComponentDefinitionName(definition, &definitionName)) {
+        warn("Impossible to get name of component");
+        return false;
+    };
 
     
-  // add a component definition to the model
-  model->addComponentDefinition(&definitionName);
+    // add a component definition to the model
+    model->addComponentDefinition(&definitionName);
 
-  return true;
+    return true;
 }
 
 bool SKPreader::loadComponentDefinitions()
@@ -874,30 +883,30 @@ bool SKPreader::loadInstance(SUComponentInstanceRef instance)
 {
   
   
-  // ignore instances with certain labels
-  std::string label;
-  if (getSUEntityLabel(SUComponentInstanceToEntity(instance), &label)) {
+    // ignore instances with certain labels
+    int label = getSUEntityLabel(SUComponentInstanceToEntity(instance));
+  
     if (label == SKP_PHOTOSENSOR)
-      return true;
+        return true;
 
     if (label == SKP_SOLVED_WORKPLANE)
-      return true;
-  }
-
-  // get name of layer
-  SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instance);
-  std::string layerName;
-  if (!getSUDrawingElementLayerName(drawingElement, &layerName))
-    return false;
-
-  Layer * layerRef = model->getLayerByName(&layerName);
-  if (layerRef == NULL) {
-    return false;
-  }  
-
-  addComponentInstanceToVector(layerRef->getComponentInstancesRef(), instance);
+        return true;
   
-  return true;
+
+    // get name of layer
+    SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instance);
+    std::string layerName;
+    if (!getSUDrawingElementLayerName(drawingElement, &layerName))
+         return false;
+
+    Layer * layerRef = model->getLayerByName(&layerName);
+    if (layerRef == NULL) {
+         return false;
+    }
+
+    addComponentInstanceToVector(layerRef->getComponentInstancesRef(), instance);
+
+    return true;
 }
 
 
@@ -967,21 +976,19 @@ bool SKPreader::loadLayersContent()
 		for (size_t i = 0; i < faceCount; i++) {
 
 			// CHECK LABEL OF FACE
-			std::string faceLabel;
-			bool hasLabel = getSUFaceLabel(faces[i], &faceLabel);
+			int faceLabel = getSUFaceLabel(faces[i]);
 		
-			if ( hasLabel ) {
-
+			if ( faceLabel >= 0 ) {
 				if (faceLabel == SKP_WORKPLANE) {
-				// if it is workplane
+                    // if it is workplane
 					addWorkplaneToModel(faces[i]);
 				}
 				else if (faceLabel == SKP_ILLUM) {
-				// if it is illum
+                    // if it is illum
 
 				}
 				else if (faceLabel == SKP_WINDOW) {
-				// if it is window
+                    // if it is window
 					addWindowToModel(faces[i]);
 				}
 				continue;
@@ -1329,22 +1336,24 @@ bool SKPreader::fillComponentInstanceLocation(ComponentInstance * instance, SUCo
 }
 
 
-bool SKPreader::getSUFaceLabel(SUFaceRef face, std::string * name)
+int SKPreader::getSUFaceLabel(SUFaceRef face)
 {
-	return getSUEntityLabel(SUFaceToEntity(face), name);
+	return getSUEntityLabel(SUFaceToEntity(face));
 }
 
 
-bool SKPreader::getSUEntityLabel(SUEntityRef entity, std::string * name)
+int SKPreader::getSUEntityLabel(SUEntityRef entity)
 {
 	SUTypedValueRef suValue = SU_INVALID;
 	if (!getValueFromEntityGHDictionary(entity, SKP_LABEL, &suValue))
-		return false;
+		return -1;
 
-	if (!getFromSUTypedValue(suValue, name,true))
-		return false;
-
-	return true;
+    int label;
+    if(SUTypedValueGetInt32(suValue, &label) != SU_ERROR_NO_DATA){
+        return label;
+    }else{
+        return -1;
+    }
 }
 
 bool SKPreader::addWorkplaneToModel(SUFaceRef suFace) {
@@ -1575,23 +1584,24 @@ Material * SKPreader::addMaterialToModel(SUMaterialRef material)
       return NULL;
 
     Material * m = model->hasMaterial(&name);
+    
     if (m != NULL)
       return m;
 
 	// Check if it is a Radiance Material
-	std::string label;
+	int label = getSUEntityLabel(entityMat);
     
-	if (getSUEntityLabel(entityMat, &label)) {
+	if (label >= 0) {
 
 		// it is a Radiance material
 		if(label != SKP_MATERIAL){
-			FATAL(errorMessage,"Material with weird label " + label);
+            FATAL(errorMessage,"Material with unknown label code " + std::to_string(label));
 			return NULL;
 		}		
 		
 		// get the value
 		std::string value;
-		if (!getGHValueFromEntity(entityMat, &value,false)) {
+		if (!getGHValueFromEntity(entityMat, &value, false)) {
 			return NULL;
 		}
 		
@@ -1600,7 +1610,7 @@ Material * SKPreader::addMaterialToModel(SUMaterialRef material)
 
 	}
 	else {
-		guessMaterial(material, &j);
+		guessMaterial(material, &j);        
 	}
 
 	// Add the material and return
@@ -1638,7 +1648,7 @@ bool SKPreader::guessMaterial(SUMaterialRef material, json * j)
 		"SUMaterialGetOpacity", __LINE__
 	)) return false;
 
-	(*j)["alpha"] = alpha;
+	//(*j)["alpha"] = alpha;
 
 	// set type
 	(*j)["class"] = (alpha < 1 ? "glass" : "plastic");
@@ -1650,14 +1660,16 @@ bool SKPreader::guessMaterial(SUMaterialRef material, json * j)
 		"SUMaterialGetColor", __LINE__
 	)) return false;
 
-	(*j)["color"] = {color.red, color.green, color.blue};
-
-	if (alpha < 1) {
-		(*j)["rad"] = "void glass %MATERIAL_NAME% 0 0 3 " + std::to_string(alpha*color.red / 255.0) + " " + std::to_string(alpha*color.green / 255.0) + " " + std::to_string(alpha*color.blue / 255.0) ;
-	}
-	else {
-		(*j)["rad"] = "void plastic %MATERIAL_NAME% 0 0 5 " + std::to_string(color.red / 255.0) + " " + std::to_string(color.green / 255.0) + " " + std::to_string(color.blue / 255.0) + " 0 0";
-	}
+		
+    (*j)["color"] = {
+        {"r", alpha*color.red / 255.0},{"g", alpha*color.green / 255.0},{"b", alpha*color.blue / 255.0}
+    };
+	
+    if(alpha == 1){
+        (*j)["specularity"] = 0;
+        (*j)["roughness"] = 0;
+    }
+    
 	return true;
 }
 
@@ -1668,11 +1680,11 @@ bool SKPreader::getFaceMaterial(SUFaceRef face, SUMaterialRef * mat)
 	SUResult frontRes = SUFaceGetFrontMaterial(face, &frontMat);
 	if (frontRes == SU_ERROR_NONE) { // it has front material
 		// Check if it has physical information 
-		std::string label;
-		if (getSUEntityLabel(SUMaterialToEntity(frontMat), &label)) {
+		int label = getSUEntityLabel(SUMaterialToEntity(frontMat));
+		if (label >= 0) {
 			// if it has, do not bother and return.
 			if (label != SKP_MATERIAL) {
-				FATAL(errorMessage,"Weird material label "+label);
+                FATAL(errorMessage,"Weird material label code" + std::to_string(label));
 				return false;
 			}
 
@@ -1686,10 +1698,10 @@ bool SKPreader::getFaceMaterial(SUFaceRef face, SUMaterialRef * mat)
 	SUResult backRes = SUFaceGetBackMaterial(face, &backMat);
 	if (backRes == SU_ERROR_NONE) { // it has back material
 		// Check if it has physical information 
-		std::string label;
-		if (getSUEntityLabel(SUMaterialToEntity(backMat), &label)) {
+        int label = getSUEntityLabel(SUMaterialToEntity(backMat));
+		if (label >= 0) {
 			if (label != SKP_MATERIAL) {
-				FATAL(errorMessage,"Weird material label " + label);
+                FATAL(errorMessage,"Weird material label code " + std::to_string(label));
 				return false;
 			}
 			*mat = backMat;

@@ -20,9 +20,9 @@ using nlohmann::json;
 class Glow : public Material {
     
 public:
-    double r = 0.86; //!< The red radiance value
-    double g = 0.86; //!< The green radiance value
-    double b = 0.86; //!< The blue radiance value
+    double r = 1; //!< The red radiance value
+    double g = 1; //!< The green radiance value
+    double b = 1; //!< The blue radiance value
     double maxRadius = 0; //!< maximum radius for shadow testing
     
     
@@ -33,9 +33,16 @@ public:
      */
     Glow(json * j)
     {
-        primitiveLength = 10;
-        fillFromJSON(j);
         setType("glow");
+        std::string name = j->at("name").get<std::string>();
+        setName(&name);
+        
+        json color = j->at("color").get<json>();
+        r = getFromJSON("r",&color);
+        g = getFromJSON("g",&color);
+        b = getFromJSON("b",&color);
+        
+        maxRadius = getFromJSON("max_radius",j);
     }
 
     //! Builds a new Glow material

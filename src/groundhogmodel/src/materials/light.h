@@ -33,9 +33,15 @@ public:
      */
     Light(json * j)
     {
-        primitiveLength = 9;
-        fillFromJSON(j);
         setType("light");
+        std::string name = j->at("name").get<std::string>();
+        setName(&name);
+        
+        json color = j->at("color").get<json>();
+        r = getFromJSON("r",&color);
+        g = getFromJSON("g",&color);
+        b = getFromJSON("b",&color);
+                
     }
 
     //! Builds a new Light material

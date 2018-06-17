@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../material.h"
-
 #include "json/json.hpp"
 
 using nlohmann::json;
@@ -36,9 +35,19 @@ public:
      */
     Spotlight(json * j)
     {
-        primitiveLength = 13;
-        fillFromJSON(j);
         setType("spotlight");
+        std::string name = j->at("name").get<std::string>();
+        setName(&name);
+        
+        json color = j->at("color").get<json>();
+        r = getFromJSON("r",&color);
+        g = getFromJSON("g",&color);
+        b = getFromJSON("b",&color);
+        
+        angle = getFromJSON("angle",j);
+        
+        FATAL(e,"Spotlight material is poorly supported!");
+        
     }
 
     //! Builds a new Light material

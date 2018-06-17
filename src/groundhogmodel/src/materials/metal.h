@@ -36,9 +36,17 @@ public:
 	*/
 	Metal(json * j)
     {
-        primitiveLength = 11;
-        fillFromJSON(j);
         setType("metal");
+        std::string name = j->at("name").get<std::string>();
+        setName(&name);
+        
+        json color = j->at("color").get<json>();
+        r = getFromJSON("r",&color);
+        g = getFromJSON("g",&color);
+        b = getFromJSON("b",&color);
+        
+        specularity = getFromJSON("specularity",j);
+        roughness = getFromJSON("roughness",j);
     }	
 
     //! Builds a new Light material

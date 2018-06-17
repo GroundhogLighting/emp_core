@@ -42,3 +42,4 @@ dofile(premakescripts_dir.."/emp_core.lua")
 
 package.path = package.path .. ";"..premakescripts_dir.."/?.lua"
 require("tbb")
+

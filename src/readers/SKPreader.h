@@ -40,18 +40,24 @@
 using nlohmann::json;
 
 #define SKP_GROUNDHOG_DICTIONARY "Groundhog"
-#define SKP_LABEL "Label"
-#define SKP_WINDOW "window"
-#define SKP_WORKPLANE "workplane"
-#define SKP_ILLUM "illum"
-#define SKP_NAME "Name"
-#define SKP_VALUE "Value"
-#define SKP_WINGROUP "Win_Group"
-#define SKP_MATERIAL "rad_material"
-#define SKP_VALUE "Value"
-#define SKP_PHOTOSENSOR "illuminance_sensor"
-#define SKP_SOLVED_WORKPLANE "solved_workplane"
-#define SKP_WEATHER "Weather"
+#define SKP_GROUNDHOG_VERSION "version"
+#define SKP_WORKPLANES_KEY "workplanes"
+#define SKP_LABEL "label"
+#define SKP_NAME "name"
+#define SKP_WEATHER "weather"
+#define SKP_VALUE "value"
+#define SKP_ALBEDO "albedo"
+#define SKP_WINGROUP "win_group"
+
+#define SKP_WORKPLANE 0
+#define SKP_WINDOW 1
+#define SKP_ILLUM 2
+#define SKP_MATERIAL 3
+#define SKP_SOLVED_WORKPLANE 4
+#define SKP_RESULT_PIXEL 5
+#define SKP_LUMINAIRE 6
+#define SKP_PHOTOSENSOR 7
+
 
 #define TO_M(x) x*0.0254
 #define TO_M2(x) x*0.00064516
@@ -374,9 +380,9 @@ public:
 	@author German Molina
 	@param[in] face The SUFaceRef to retrieve the label from
 	@param[out] name The object to put the name into
-	@return false if the face does not have a label, true otherwise
+	@return the label
 	*/
-	bool getSUFaceLabel(SUFaceRef face, std::string * name);
+	int getSUFaceLabel(SUFaceRef face);
 
 	//! Retrieves the label of a SUEntityRef
 	/*!
@@ -384,11 +390,9 @@ public:
 
 	@author German Molina
 	@param[in] entity The SUEntityRef to retrieve the label from
-	@param[out] label The object to put the name into
-	@return false if the entity does not have a label, true otherwise
-	@todo Change all labels to numbers.
+	@return int The label
 	*/
-	bool getSUEntityLabel(SUEntityRef entity, std::string * label);
+	int getSUEntityLabel(SUEntityRef entity);
 
 	//! Adds a workplane face to a model.
 	/*!
@@ -452,6 +456,7 @@ public:
 	@return success
 	*/
 	bool getFromSUTypedValue(SUTypedValueRef suValue, std::string * value, bool fix);
+        
 
 	//! Adds a Material to the Groundhogmodel
 	/*!

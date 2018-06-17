@@ -38,9 +38,22 @@ public:
      */
     Interface(json * j)
     {
-        primitiveLength = 14;
-        fillFromJSON(j);
         setType("interface");
+        std::string name = j->at("name").get<std::string>();
+        setName(&name);
+        
+        json color1 = j->at("color1").get<json>();
+        r1 = getFromJSON("r",&color1);
+        g1 = getFromJSON("g",&color1);
+        b1 = getFromJSON("b",&color1);
+        
+        json color2 = j->at("color2").get<json>();
+        r1 = getFromJSON("r",&color2);
+        g1 = getFromJSON("g",&color2);
+        b1 = getFromJSON("b",&color2);
+        
+        refractionIndex1 = getFromJSON("refraction1",j);
+        refractionIndex2 = getFromJSON("refraction2",j);
     }
 
     //! Builds a new Glow material

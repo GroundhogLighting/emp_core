@@ -332,7 +332,7 @@ Material * GroundhogModel::addMaterial(json * j)
 }
 
 void GroundhogModel::addMaterial(Material * m)
-{
+{    
     materials.push_back(m);
 }
 
@@ -340,11 +340,12 @@ void GroundhogModel::addMaterial(Material * m)
 Material * GroundhogModel::addDefaultMaterial()
 {
   json j = {
-    { "name" , "Default-Material" },
-    { "color" ,{ 153,153,153 } },
-    { "rad" , "void plastic %MAT_NAME% 0 0 5 0.6 0.6 0.6 0 0" },
-    { "alpha" , 1 },
-    { "class" , "plastic" }
+      { "name" , "Default-Material" },
+      { "class" , "plastic" },
+      { "color",{
+          {"r",0.6},{"g",0.6},{"b",0.6}
+      }},
+      { "specularity", 0},{"roughness",0}
   };
   return addMaterial(&j);
 }
@@ -353,11 +354,11 @@ Material * GroundhogModel::addDefaultMaterial()
 Material * GroundhogModel::addDefaultGlass()
 { 
   json j = {
-    { "name" , "Default-Glass" },
-    { "color" ,{ 0,0,1 } },
-    { "rad" , "void glass %MAT_NAME% 0 0 3 0.86 0.86 0.86" },
-    { "alpha" , 0.4 },
-    { "class" , "glass" }
+      { "name" , "Default-Glass" },
+      { "class" , "glass" },
+      { "color",{
+          {"r",0.86},{"g",0.86},{"b",0.86}
+      }},
   };
   return addMaterial(&j);
 }
