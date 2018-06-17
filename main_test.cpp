@@ -21,11 +21,8 @@
 #include "./tests/genperezskyvec_test.h"
 #include "./tests/materials_test.h"
 #include "./tests/DF_test.h"
+#include "./tests/skp_reader_test.h"
 
-#ifdef _DEBUG
-#include <stdlib.h>
-#include "debug_new.h"
-#endif
 
 
 int main(int argc, char* argv[]){	

@@ -8,6 +8,3 @@
 [submodule "3rdparty/Radiance"]
 	path = 3rdparty/Radiance
 	url = https://github.com/NREL/Radiance.git
-[submodule "3rdparty/nvwa"]
-	path = 3rdparty/nvwa
-	url = https://github.com/adah1972/nvwa.git

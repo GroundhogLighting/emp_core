@@ -63,10 +63,10 @@ project "emp_tests"
 
     filter "configurations:Debug"
     files {
-        third_party_dir.."/nvwa/nvwa/debug_new.cpp", 
+        
     }
     includedirs{
-        third_party_dir.."/nvwa/nvwa",     
+        
     }
     links {
         "tbb_debug"

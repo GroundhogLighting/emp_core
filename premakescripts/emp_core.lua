@@ -56,10 +56,10 @@ project "emp_core"
 
     filter "configurations:Debug"
     files {
-        third_party_dir.."/nvwa/nvwa/debug_new.cpp", 
+        
     }
     includedirs{
-        third_party_dir.."/nvwa/nvwa",   
+        
         google_test_dir.."/include",    
     }
     links {
