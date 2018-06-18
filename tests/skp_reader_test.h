@@ -1,11 +1,12 @@
 /* skp_reader_test.h */
 
-#include <cmath>
+#include "./skp_tests/basic.h"
+#include "./skp_tests/faces.h"
+#include "./skp_tests/illums.h"
+#include "./skp_tests/location.h"
+#include "./skp_tests/materials.h"
+#include "./skp_tests/tasks.h"
+#include "./skp_tests/windows.h"
+#include "./skp_tests/workplanes.h"
 
-#include "../include/emp_core.h"
 
-
-TEST(SKPRead, empty)
-{
-    
-}

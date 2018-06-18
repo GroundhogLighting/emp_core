@@ -242,9 +242,30 @@ void GroundhogModel::addWindowToGroup(std::string * windowGroupName, Face * face
 	windowGroups.push_back(wg);
 }
 
+void GroundhogModel::addIllumToGroup(std::string * illumGroupName, Polygon3D * polygon)
+{
+    for (size_t i = 0; i < illumGroups.size(); i++) {
+        if (illumGroups[i]->compareName(illumGroupName)) {
+            illumGroups[i]->addPolygon(polygon);
+            return;
+        }
+    }
+    
+    // Workplane not found... lets create one.
+    IllumGroup * ig = new IllumGroup(*illumGroupName);
+    ig->addPolygon(polygon);
+    illumGroups.push_back(ig);
+}
+
+
 size_t GroundhogModel::getNumWindowGroups() 
 {
 	return windowGroups.size();
+}
+
+size_t GroundhogModel::getNumIllumGroups()
+{
+    return illumGroups.size();
 }
 
 size_t GroundhogModel::getNumWorkplanes() 
@@ -257,6 +278,12 @@ WindowGroup * GroundhogModel::getWindowGroupRef(size_t i)
 {
 	return windowGroups[i];
 }
+
+IllumGroup * GroundhogModel::getIllumGroupRef(size_t i)
+{
+    return illumGroups[i];
+}
+
 
 Workplane * GroundhogModel::getWorkplaneRef(size_t i) 
 {

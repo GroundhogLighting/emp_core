@@ -23,43 +23,39 @@
 
 #include <vector>
 
-#include "./otypes/face.h"
+#include "../../common/geometry/polygon.h"
 
-//! Represents groups of windows, that may contain one or more objects
+//! Represents groups of illums, that may contain one or more objects
 /*!
-Sometimes the user wants to group Windows, which is useful for some simulation
-methods.
-
-In any case, every window in the model is put in a Window Group... some of them
-will be made of 1 window (i.e. ungrouped windows) and some of several.
+ Illums work as proxies for light sources, helping some rendering processes
 */
 
-class WindowGroup {
+class IllumGroup {
 private:
 	std::string name; //!< The name of the group
-	std::vector <Face *> windows; //!< Contains the faces in the window group
+	std::vector <Polygon3D *> polygons; //!< Contains the faces in the window group
 
 public:
 
-	//! Creates a new WindowGroup
+	//! Creates a new IllumGroup
 	/*!
 	@author German Molina
 	@param[in] name The name of the window group
 	*/
-	WindowGroup(std::string name);
+	IllumGroup(std::string name);
 
-	//! Destroys a WindowGroup
+	//! Destroys a IllumGroup
 	/*!
 	@author German Molina
 	*/
-	~WindowGroup();
+	~IllumGroup();
 
-	//! Adds a Face to the window group
+	//! Adds a Polygon to the illum group
 	/*!
 	@author German Molina
-	@param[in] face The face to add
+	@param[in] polygon The Polygon to add
 	*/
-	void addFace(Face * face);
+	void addPolygon(Polygon3D * polygon);
 
 	//! Retrieves the name
 	/*!
@@ -82,11 +78,11 @@ public:
 	*/
 	size_t size();
 
-	//! Retrieves the reference to a certain Face in windows
+	//! Retrieves the reference to a certain polygon in the group
 	/*!
 	@author German Molina
-	@param[in] i The index of the Face to retrieve
+	@param[in] i The index of the Polygon to retrieve
 	@return The reference
 	*/
-	Face * getWindowRef(size_t i);
+	Polygon3D * getPolygonRef(size_t i);
 };

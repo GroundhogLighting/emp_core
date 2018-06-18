@@ -46,7 +46,7 @@ bool WindowGroup::compareName(std::string * otherName) {
 	return name == *otherName;
 }
 
-size_t WindowGroup::getNumWindows() {
+size_t WindowGroup::size() {
 	return windows.size();
 }
 

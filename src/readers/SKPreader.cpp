@@ -56,7 +56,7 @@
 #include <iostream>
 #include <fstream>
 
-#define CHECK_SU(x) checkSUResult(x,"x",__LINE__)
+#define ASSERT_SU_RESULT(x) if(!checkSUResult(x,"x",__LINE__)){ throw "Error when calling SKP API"; }
 
 SKPreader::SKPreader(GroundhogModel * ghmodel, bool newVerbose)
 {
@@ -68,14 +68,7 @@ SKPreader::SKPreader(GroundhogModel * ghmodel, bool newVerbose)
 
 	groundhogDictionaryName = SU_INVALID;
 
-    CHECK_SU(SUStringCreateFromUTF8(&groundhogDictionaryName, SKP_GROUNDHOG_DICTIONARY));
-    /*
-	checkSUResult(
-		SUStringCreateFromUTF8(&groundhogDictionaryName, SKP_GROUNDHOG_DICTIONARY),
-		"SUStringCreateFromUTF8",
-		__LINE__
-	);
-    */
+    ASSERT_SU_RESULT(SUStringCreateFromUTF8(&groundhogDictionaryName, SKP_GROUNDHOG_DICTIONARY));
 
 	model = ghmodel;
 	verbose = newVerbose;
@@ -86,14 +79,7 @@ SKPreader::~SKPreader()
 	
 	
 	//release dictionary
-  CHECK_SU(SUStringRelease(&groundhogDictionaryName));
-  /*
-	checkSUResult(
-		SUStringRelease(&groundhogDictionaryName),
-		"SUStringRelease",
-		__LINE__
-	);
-  */
+    ASSERT_SU_RESULT(SUStringRelease(&groundhogDictionaryName));
 	
 	// Must release the model or there will be memory leaks
 	SUModelRelease(&suModel);
@@ -167,53 +153,41 @@ bool SKPreader::checkSUResult(SUResult res, std::string functionName, int ln)
 		error = "Unrecognized error....";
 	}
 
-    FATAL(errorMessage,"function '" + functionName + "' returned '" + error);
+    std::string errorMessage = "function '" + functionName + "' returned '" + error + "  -- FILE: " + __FILE__ + " -- LINE: " + std::to_string(ln) ;
+    std::cout << errorMessage << std::endl;
 	return false;
 }
 
 
 bool SKPreader::parseSKPModel(std::string inputFile)
-{		
+{
 	//Load model
-	if (!checkSUResult(
-		SUModelCreateFromFile(&suModel, inputFile.c_str()),
-		"SUModelCreateFromFile",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUModelCreateFromFile(&suModel, inputFile.c_str()));
 
 	// Load layers	
-	if(!loadLayers())
-		return false;
+    loadLayers();
 
 	// load components and groups
-	if (!loadComponentDefinitions())
-		return false;
+    loadComponentDefinitions();
+		
+    loadGroupDefinitions();
 
-    if (!loadGroupDefinitions())
-      return false;
+    fillComponentDefinitions();
 
-    if (!fillComponentDefinitions())
-      return false;
-
-    if (!fillGroupDefinitions())
-      return false;
+    fillGroupDefinitions();
 
 	// Fill layers and load related surfaces, discrimitating between
 	// workplanes, windows, etc.
-	if (!loadLayersContent())
-		return false;
+    loadLayersContent();
 
 	// Load views
-	if (!loadViews())
-		return false;
+	loadViews();
 
 	// Load model info (location, date, etc).
-	if (!loadModelInfo())
-		return false;
+    loadModelInfo();
 	
 	// Load weather
-	if (!loadWeather())
-		return false;
+    loadWeather();
 	
 	return true;
 };
@@ -222,35 +196,20 @@ bool SKPreader::parseSKPModel(std::string inputFile)
 bool SKPreader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, std::string * value)
 {
 	SUTypedValueRef suValue = SU_INVALID;
-	if (!checkSUResult(
-		SUTypedValueCreate(&suValue),
-		"SUTypedValueCreate",
-		__LINE__
-	)) return false;
+    
+    // Create value
+    ASSERT_SU_RESULT(SUTypedValueCreate(&suValue));
 
-	if (!checkSUResult(
-		SUShadowInfoGetValue(shadowInfo, key, &suValue),
-		"SUShadowInfoGetValue",
-		__LINE__
-	)) return false;
+    // Get value
+    ASSERT_SU_RESULT(SUShadowInfoGetValue(shadowInfo, key, &suValue));
 
 	SUStringRef suString = SU_INVALID;
 
-	if (!checkSUResult(
-		SUStringCreate(&suString),
-		"SUStringCreate",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUStringCreate(&suString));
 
-	if (!checkSUResult(
-		SUTypedValueGetString(suValue, &suString),
-		"SUTypedValueGetString", 
-		__LINE__
-	)) return false;
-
+    ASSERT_SU_RESULT(SUTypedValueGetString(suValue, &suString));
 	
-	if (!SUStringtoString(suString, value,true))
-		return false;
+    SUStringtoString(suString, value,true);
 	
 	return true;
 }
@@ -258,29 +217,11 @@ bool SKPreader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, const char *
 bool SKPreader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, double * value)
 {
 	SUTypedValueRef suValue= SU_INVALID;
-	if (!checkSUResult(
-		SUTypedValueCreate(&suValue),
-		"SUTypedValueCreate",
-		__LINE__
-	)) return false;
-
-	if (!checkSUResult(
-		SUShadowInfoGetValue(shadowInfo, key, &suValue),
-		"SUShadowInfoGetValue",
-		__LINE__
-	)) return false;
-
-	if (!checkSUResult(
-		SUTypedValueGetDouble(suValue, value),
-		"SUTypedValueGetDouble",
-		__LINE__
-	)) return false;
-
-	if (!checkSUResult(
-		SUTypedValueRelease(&suValue),
-		"SUTypedValueGetDouble", 
-		__LINE__
-	)) return false;
+    
+    ASSERT_SU_RESULT(SUTypedValueCreate(&suValue));
+    ASSERT_SU_RESULT(SUShadowInfoGetValue(shadowInfo, key, &suValue));
+    ASSERT_SU_RESULT(SUTypedValueGetDouble(suValue, value));
+    ASSERT_SU_RESULT(SUTypedValueRelease(&suValue));
 
 	return true;
 }
@@ -289,29 +230,11 @@ bool SKPreader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo, const char *
 bool SKPreader::getTimeFromShadowInfo(SUShadowInfoRef shadowInfo, int64_t * value)
 {
 	SUTypedValueRef suValue = SU_INVALID;
-	if (!checkSUResult(
-		SUTypedValueCreate(&suValue),
-		"SUTypedValueCreate",
-		__LINE__
-	)) return false;
-
-	if (!checkSUResult(
-		SUShadowInfoGetValue(shadowInfo, "ShadowTime", &suValue),
-		"SUShadowInfoGetValue",
-		__LINE__
-	)) return false;
-
-	if (!checkSUResult(
-		SUTypedValueGetTime(suValue, value),
-		"SUTypedValueGetTime",
-		__LINE__
-	)) return false;
-
-	if (!checkSUResult(
-		SUTypedValueRelease(&suValue),
-		"SUTypedValueGetDouble",
-		__LINE__
-	)) return false;
+	
+    ASSERT_SU_RESULT(SUTypedValueCreate(&suValue));
+    ASSERT_SU_RESULT(SUShadowInfoGetValue(shadowInfo, "ShadowTime", &suValue));
+    ASSERT_SU_RESULT(SUTypedValueGetTime(suValue, value));
+    ASSERT_SU_RESULT(SUTypedValueRelease(&suValue));
 
 	return true;
 }
@@ -320,20 +243,12 @@ bool SKPreader::loadModelInfo()
 {
 	// load north correction
 	double northC;
-	if (!checkSUResult(
-		SUModelGetNorthCorrection(suModel, &northC),
-		"SUModelGetNorthCorrection",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUModelGetNorthCorrection(suModel, &northC));
 	model->setNorthCorrection(northC);
 
 	// load date, longitude and latitude.
 	SUShadowInfoRef shadowInfo;
-	if (!checkSUResult(
-		SUModelGetShadowInfo(suModel, &shadowInfo),
-		"SUModelGetShadowInfo",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUModelGetShadowInfo(suModel, &shadowInfo));
 
 	// Get the location
 	Location * loc = model->getLocation();
@@ -369,7 +284,7 @@ bool SKPreader::loadModelInfo()
         return true; // return if no albedo or error.
     
     double value;
-    CHECK_SU(SUTypedValueGetDouble(albedo, &value));
+    ASSERT_SU_RESULT(SUTypedValueGetDouble(albedo, &value));
     loc->setAlbedo(value);
 
 	// set time
@@ -395,48 +310,30 @@ bool SKPreader::SUCameraToView(std::string * viewName, SUCameraRef camera, View 
 	SUPoint3D position;
 	SUPoint3D target; //this is useless
 	SUVector3D up;
-	if (!checkSUResult(
-		SUCameraGetOrientation(camera, &position, &target, &up),
-		"SUCameraGetOrientation",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUCameraGetOrientation(camera, &position, &target, &up));
+    
 	view->setViewPoint(new Point3D(TO_M(position.x), TO_M(position.y), TO_M(position.z)));
 	view->setViewUp(Vector3D(up.x, up.y, up.z));
 
 	// get and set the view direction
 	SUVector3D direction;
-	if (!checkSUResult(
-		SUCameraGetDirection(camera, &direction),
-		"SUCameraGetDirection",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUCameraGetDirection(camera, &direction));
+    
 	view->setViewDirection(Vector3D(direction.x, direction.y, direction.z));
 
 	// get and set type
 	bool perspective;
-	if (!checkSUResult(
-		SUCameraGetPerspective(camera, &perspective),
-		"SUCameraGetPerspective",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUCameraGetPerspective(camera, &perspective));
 
 	int type = perspective ? PERSPECTIVE_VIEW : PARALLEL_VIEW;
 	view->setViewType(type);
 
 	double viewHeight;
 	if (type == PERSPECTIVE_VIEW) {
-		if (!checkSUResult(
-			SUCameraGetPerspectiveFrustumFOV(camera, &viewHeight),
-			"SUCameraGetPerspectiveFrustumFOV",
-			__LINE__
-		)) return false;
+        ASSERT_SU_RESULT(SUCameraGetPerspectiveFrustumFOV(camera, &viewHeight));
 	}
 	else { // PARALLEL
-		if (!checkSUResult(
-			SUCameraGetOrthographicFrustumHeight(camera, &viewHeight),
-			"SUCameraGetOrthographicFrustumHeight",
-			__LINE__
-		)) return false;
+        ASSERT_SU_RESULT(SUCameraGetOrthographicFrustumHeight(camera, &viewHeight));
 	}
 	view->setViewVertical(viewHeight);
 
@@ -476,36 +373,19 @@ bool SKPreader::SUViewToView(SUSceneRef suView, View * view)
 	// get the name of the view
 	
 	SUStringRef suViewName = SU_INVALID;
-	if (!checkSUResult(
-		SUStringCreate(&suViewName),
-		"SUStringCreate",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUStringCreate(&suViewName));
 	
-	if (!checkSUResult(
-		SUSceneGetName(suView, &suViewName),
-		"SUSceneGetName", 
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUSceneGetName(suView, &suViewName));
 	
 	std::string viewName;
 
-	if (!SUStringtoString(suViewName,&viewName,true))
-		return false;
-
+    SUStringtoString(suViewName,&viewName,true);
 
 	// Get the camera
 	SUCameraRef camera = SU_INVALID;
-	if (!checkSUResult(
-		SUSceneGetCamera(suView,&camera),
-		"SUSceneGetCamera",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUSceneGetCamera(suView,&camera));
 
-	if (!SUCameraToView(&viewName, camera, view)) {
-		SUCameraRelease(&camera);
-		return false;
-	}
+    SUCameraToView(&viewName, camera, view);
 		
 	return true;
 }
@@ -516,11 +396,7 @@ bool SKPreader::loadViews()
 	// get the current view
 	SUCameraRef activeCamera;
 
-	if (!checkSUResult(
-		SUModelGetCamera(suModel, &activeCamera),
-		"SUModelGetActiveScene",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUModelGetCamera(suModel, &activeCamera));
 
 	View * activeView = new View();
     std::string viewName = "view";
@@ -530,22 +406,14 @@ bool SKPreader::loadViews()
 	// load stored views
 	size_t countScenes;
 
-	if (!checkSUResult(
-		SUModelGetNumScenes(suModel, &countScenes),
-		"SUModelGetNumScenes",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUModelGetNumScenes(suModel, &countScenes));
 	
 	if (countScenes == 0) {
 		return true;
 	}
 	std::vector<SUSceneRef> views(countScenes);
 
-	if (!checkSUResult(
-		SUModelGetScenes(suModel, countScenes, &views[0],&countScenes),
-		"SUModelGetScenes",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUModelGetScenes(suModel, countScenes, &views[0],&countScenes));
 
 	for (size_t i = 0; i < countScenes; i++) {
 		View * storedView = new View();
@@ -561,43 +429,25 @@ bool SKPreader::loadLayers()
 
 	// count layers
 	size_t countLayers = 0;
-	if(!checkSUResult(
-		SUModelGetNumLayers(suModel, &countLayers),
-		"SUModelGetNumLayers",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUModelGetNumLayers(suModel, &countLayers));
 
 	//get those layers
 	std::vector<SULayerRef> layers(countLayers);
-	if(!checkSUResult(
-		SUModelGetLayers(suModel, countLayers, &layers[0], &countLayers),
-		"SUModelGetLayers",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUModelGetLayers(suModel, countLayers, &layers[0], &countLayers));
 
 	// inform layer status
-	INFORM(i,"Counted layers: " + size_tToString(countLayers), verbose);
+	INFORM(auxString,"Counted layers: " + size_tToString(countLayers), verbose);
 
 	// create and load the layers
-	for (unsigned int i = 0; i < layers.size(); i++) {		
+	for (size_t i = 0; i < layers.size(); i++) {
 		SUStringRef suLayerName = SU_INVALID;		
-		if(!checkSUResult(
-			SUStringCreate(&suLayerName),
-			"SUStringCreate",
-			__LINE__
-		)) return false;
+        ASSERT_SU_RESULT(SUStringCreate(&suLayerName));
 
-
-		if (!checkSUResult(
-			SULayerGetName(layers[i],&suLayerName),
-			"SUStringRelease",
-			__LINE__
-		)) return false;
+        ASSERT_SU_RESULT(SULayerGetName(layers[i],&suLayerName));
 
 		std::string layerName;
 
-		if (!SUStringtoString(suLayerName,&layerName,true))
-			return false;
+        SUStringtoString(suLayerName,&layerName,true);
 		
 		model->addLayer(&layerName);
 		INFORM(informMessage,"Layer " + layerName + " added",verbose);
@@ -611,21 +461,12 @@ bool SKPreader::getSUComponentDefinitionName(SUComponentDefinitionRef definition
 	//define a SUString
 	SUStringRef suComponentName = SU_INVALID;
 
-	if (!checkSUResult(
-		SUStringCreate(&suComponentName),
-		"SUStringCreate",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUStringCreate(&suComponentName));
 
-	if (!checkSUResult(
-		SUComponentDefinitionGetName(definition, &suComponentName),
-		"SUComponentInstanceGetName",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUComponentDefinitionGetName(definition, &suComponentName));
 
 	std::string componentName;
-	if (!SUStringtoString(suComponentName,&componentName,true))
-		return false;
+    SUStringtoString(suComponentName,&componentName,true);
 
 	*name = componentName;
 	return true;
@@ -637,28 +478,22 @@ bool SKPreader::addComponentInstanceToVector(std::vector <ComponentInstance * > 
 
 	// get definition
 	SUComponentDefinitionRef definition;
-	if (!checkSUResult(
-		SUComponentInstanceGetDefinition(suComponentInstance, &definition),
-		"SUComponentInstanceGetDefinition",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUComponentInstanceGetDefinition(suComponentInstance, &definition));
 
 	std::string definitionName;
 	getSUComponentDefinitionName(definition, &definitionName);
 
 	// get the definition
 	ComponentDefinition * definitionRef = model->getComponentDefinitionByName(&definitionName);
-	if (definitionRef == NULL) {
+	if (definitionRef == nullptr)
 		FATAL(errorMessage,"Impossible to find " + definitionName + " when adding an instance... ignoring instance");
-		return false;
-	}
+		
 
 	//create the instance
 	ComponentInstance * instance = new ComponentInstance(definitionRef);
 
 	//Fill the position
-	if(!fillComponentInstanceLocation(instance, suComponentInstance))
-		return false;
+    fillComponentInstanceLocation(instance, suComponentInstance);
 
 	//add and return
 	dest->push_back(instance);
@@ -671,29 +506,21 @@ bool SKPreader::bulkFacesIntoVector(std::vector <Otype * > * dest, SUEntitiesRef
 
 	// count faces in these entities
 	size_t numFaces = 0;
-	if (!checkSUResult(
-		SUEntitiesGetNumFaces(entities, &numFaces),
-		"SUEntitiesGetNumFaces",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUEntitiesGetNumFaces(entities, &numFaces));
 
 	if (numFaces == 0)
 		return true;
 
 	// get the faces
 	std::vector<SUFaceRef> faces(numFaces);
-	if (!checkSUResult(
-		SUEntitiesGetFaces(entities, numFaces, &faces[0], &numFaces),
-		"SUEntitiesGetFaces",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUEntitiesGetFaces(entities, numFaces, &faces[0], &numFaces));
 
 	// import faces
 	for (size_t i = 0; i < numFaces; i++) {	
 		Face * f = SUFaceToFace(faces[i]);
 
-		if (f == NULL)
-			return false;
+		if (f == nullptr)
+            throw "Trying to process a NULL face";
 
 		dest->push_back(f);
 	}
@@ -711,19 +538,13 @@ bool SKPreader::loadComponentDefinition(SUComponentDefinitionRef definition)
         return true;
 
     if (label == SKP_PHOTOSENSOR) {
-        if (!addPhotosensorsToModel(definition)) {
-            FATAL(errorMessage, "Error when trying to add Photosensos to the model");
-            return false;
-        }
+        addPhotosensorsToModel(definition);
     }
 
 
     //get the name
     std::string definitionName;
-    if (!getSUComponentDefinitionName(definition, &definitionName)) {
-        warn("Impossible to get name of component");
-        return false;
-    };
+    getSUComponentDefinitionName(definition, &definitionName);
 
     
     // add a component definition to the model
@@ -734,34 +555,26 @@ bool SKPreader::loadComponentDefinition(SUComponentDefinitionRef definition)
 
 bool SKPreader::loadComponentDefinitions()
 {
-  // count the component definitions
-  size_t countDefinitions = 0;
-  if (!checkSUResult(
-    SUModelGetNumComponentDefinitions(suModel, &countDefinitions),
-    "SUModelGetNumComponentDefinitions",
-    __LINE__
-  )) return false;
+    // count the component definitions
+    size_t countDefinitions = 0;
+    ASSERT_SU_RESULT(SUModelGetNumComponentDefinitions(suModel, &countDefinitions));
 
-  // return if none
-  if (countDefinitions == 0) {
-    inform("No component definitions in model", verbose);
-    return true; // success
-  }
-  INFORM(i, std::to_string(countDefinitions) + " component definitions in model", verbose);
+    // return if none
+    if (countDefinitions == 0) {
+        inform("No component definitions in model", verbose);
+        return true; // success
+    }
+    INFORM(i, std::to_string(countDefinitions) + " component definitions in model", verbose);
 
-  // get the component definitions
-  std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
-  if (!checkSUResult(
-    SUModelGetComponentDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions),
-    "SUModelGetComponentDefinitions",
-    __LINE__
-  )) return false;
+    // get the component definitions
+    std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
+    ASSERT_SU_RESULT(SUModelGetComponentDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions));
 
-  // Now, load One by One
-  for (size_t i = 0; i < countDefinitions; i++) {
-    loadComponentDefinition(definitions[i]);
-  }
-  return true;
+    // Now, load One by One
+    for (size_t i = 0; i < countDefinitions; i++) {
+        loadComponentDefinition(definitions[i]);
+    }
+    return true;
 }
 
 
@@ -770,11 +583,7 @@ bool SKPreader::fillComponentDefinitions()
 {
 	// count the component definitions
 	size_t countDefinitions = 0;
-	if (!checkSUResult(
-		SUModelGetNumComponentDefinitions(suModel, &countDefinitions),
-		"SUModelGetNumComponentDefinitions",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUModelGetNumComponentDefinitions(suModel, &countDefinitions));
 
 	// return if none
 	if (countDefinitions == 0) {
@@ -784,31 +593,20 @@ bool SKPreader::fillComponentDefinitions()
 
 	// get the component definitions
 	std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
-	if (!checkSUResult(
-		SUModelGetComponentDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions),
-		"SUModelGetComponentDefinitions", 
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUModelGetComponentDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions));
 
 	// Now, load One by One
 	for (size_t i = 0; i < countDefinitions; i++) {
       
-      //get the name
-      std::string definitionName;
-      if (!getSUComponentDefinitionName(definitions[i], &definitionName)) {
-        warn("Impossible to get name of component");
-        return false;
-      };
+        //get the name
+        std::string definitionName;
+        getSUComponentDefinitionName(definitions[i], &definitionName);
 
-      ComponentDefinition * ghDefinition = model->getComponentDefinitionByName(&definitionName);
+        ComponentDefinition * ghDefinition = model->getComponentDefinitionByName(&definitionName);
 
-      // get entities
-      SUEntitiesRef entities;
-      if (!checkSUResult(
-      SUComponentDefinitionGetEntities(definitions[i], &entities),
-      "SUComponentDefinitionGetEntities",
-      __LINE__
-      )) return false;
+        // get entities
+        SUEntitiesRef entities;
+        ASSERT_SU_RESULT(SUComponentDefinitionGetEntities(definitions[i], &entities));
 
 
       // Load faces
@@ -826,56 +624,41 @@ bool SKPreader::fillComponentDefinitions()
 
 bool SKPreader::fillGroupDefinitions()
 {
-  // count the component definitions
-  size_t countDefinitions = 0;
-  if (!checkSUResult(
-    SUModelGetNumGroupDefinitions(suModel, &countDefinitions),
-    "SUModelGetNumComponentDefinitions",
-    __LINE__
-  )) return false;
+    // count the component definitions
+    size_t countDefinitions = 0;
+    ASSERT_SU_RESULT(SUModelGetNumGroupDefinitions(suModel, &countDefinitions));
 
-  // return if none
-  if (countDefinitions == 0) {
-    inform("No component definitions in model", verbose);
-    return true; // success
-  }
+    // return if none
+    if (countDefinitions == 0) {
+        inform("No component definitions in model", verbose);
+        return true; // success
+    }
 
-  // get the component definitions
-  std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
-  if (!checkSUResult(
-    SUModelGetGroupDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions),
-    "SUModelGetComponentDefinitions",
-    __LINE__
-  )) return false;
+    // get the component definitions
+    std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
+    ASSERT_SU_RESULT(SUModelGetGroupDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions));
 
-  // Now, load One by One
-  for (size_t i = 0; i < countDefinitions; i++) {
+    // Now, load One by One
+    for (size_t i = 0; i < countDefinitions; i++) {
 
-    std::string definitionName;
-    if (!getSUComponentDefinitionName(definitions[i], &definitionName)) {
-      warn("Impossible to get name of component");
-      return false;
-    };
+        std::string definitionName;
+        getSUComponentDefinitionName(definitions[i], &definitionName);
 
-    ComponentDefinition * ghDefinition = model->getComponentDefinitionByName(&definitionName);
+        ComponentDefinition * ghDefinition = model->getComponentDefinitionByName(&definitionName);
 
-    // get entities
-    SUEntitiesRef entities;
-    if (!checkSUResult(
-      SUComponentDefinitionGetEntities(definitions[i], &entities),
-      "SUComponentDefinitionGetEntities",
-      __LINE__
-    )) return false;
+        // get entities
+        SUEntitiesRef entities;
+        ASSERT_SU_RESULT(SUComponentDefinitionGetEntities(definitions[i], &entities));
 
 
-    // Load faces
-    bulkFacesIntoVector(ghDefinition->getObjectsRef(), entities);
+        // Load faces
+        bulkFacesIntoVector(ghDefinition->getObjectsRef(), entities);
 
-    // load instances
-    bulkComponentInstancesIntoVector(ghDefinition->getComponentInstancesRef(), entities);
+        // load instances
+        bulkComponentInstancesIntoVector(ghDefinition->getComponentInstancesRef(), entities);
 
-  }
-  return true;
+    }
+    return true;
 
 }
 
@@ -896,13 +679,12 @@ bool SKPreader::loadInstance(SUComponentInstanceRef instance)
     // get name of layer
     SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instance);
     std::string layerName;
-    if (!getSUDrawingElementLayerName(drawingElement, &layerName))
-         return false;
-
+    getSUDrawingElementLayerName(drawingElement, &layerName);
+    
     Layer * layerRef = model->getLayerByName(&layerName);
-    if (layerRef == NULL) {
-         return false;
-    }
+    if (layerRef == nullptr)
+        throw "Trying to put an instance in inexistent layer when loading SKP file";
+    
 
     addComponentInstanceToVector(layerRef->getComponentInstancesRef(), instance);
 
@@ -913,65 +695,45 @@ bool SKPreader::loadInstance(SUComponentInstanceRef instance)
 bool SKPreader::loadGroupDefinitions()
 {
   
-  // count the component definitions
-  size_t countDefinitions = 0;
-  if (!checkSUResult(
-    SUModelGetNumGroupDefinitions(suModel, &countDefinitions),
-    "SUModelGetNumComponentDefinitions",
-    __LINE__
-  )) return false;
+    // count the component definitions
+    size_t countDefinitions = 0;
+    ASSERT_SU_RESULT(SUModelGetNumGroupDefinitions(suModel, &countDefinitions));
 
-  // return if none
-  if (countDefinitions == 0) {
-    inform("No Group definitions in model", verbose);
-    return true; // success
-  }
-  INFORM(i, std::to_string(countDefinitions) + " group definitions in model", verbose);
+      // return if none
+      if (countDefinitions == 0) {
+          inform("No Group definitions in model", verbose);
+          return true; // success
+      }
+      INFORM(i, std::to_string(countDefinitions) + " group definitions in model", verbose);
 
-  // get the component definitions
-  std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
-  if (!checkSUResult(
-    SUModelGetGroupDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions),
-    "SUModelGetComponentDefinitions",
-    __LINE__
-  )) return false;
+    // get the component definitions
+    std::vector<SUComponentDefinitionRef> definitions(countDefinitions);
+    ASSERT_SU_RESULT(SUModelGetGroupDefinitions(suModel, countDefinitions, &definitions[0], &countDefinitions));
 
-  // Now, load One by One
-  for (size_t i = 0; i < countDefinitions; i++) {
-    loadComponentDefinition(definitions[i]);
-  }
+    // Now, load One by One
+    for (size_t i = 0; i < countDefinitions; i++) {
+        loadComponentDefinition(definitions[i]);
+    }
   
-  return true;
+    return true;
 }
 
 bool SKPreader::loadLayersContent()
 {
 	// Get the entity container of the model.
 	SUEntitiesRef entities = SU_INVALID;
-	if (!checkSUResult(
-		SUModelGetEntities(suModel, &entities),
-		"SUModelGetEntities",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUModelGetEntities(suModel, &entities));
 
 
 	// count and load faces
 	size_t faceCount = 0;
-	if (!checkSUResult(
-		SUEntitiesGetNumFaces(entities, &faceCount),
-		"SUModelGetEntities",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUEntitiesGetNumFaces(entities, &faceCount));
 
 	if (faceCount > 0) {
 		INFORM(i,"Counted Faces: " + size_tToString(faceCount), verbose);
 
 		std::vector<SUFaceRef> faces(faceCount);
-		if (!checkSUResult(
-			SUEntitiesGetFaces(entities, faceCount, &faces[0], &faceCount),
-			"SUEntitiesGetFaces",
-			__LINE__
-		)) return false;
+        ASSERT_SU_RESULT(SUEntitiesGetFaces(entities, faceCount, &faces[0], &faceCount));
 	
 		for (size_t i = 0; i < faceCount; i++) {
 
@@ -985,7 +747,7 @@ bool SKPreader::loadLayersContent()
 				}
 				else if (faceLabel == SKP_ILLUM) {
                     // if it is illum
-
+                    addIllumToModel(faces[i]);
 				}
 				else if (faceLabel == SKP_WINDOW) {
                     // if it is window
@@ -996,17 +758,16 @@ bool SKPreader::loadLayersContent()
 		
 			// if has no label (i.e. is geometry face)		
 			std::string layerName;		
-			if (!getSUFaceLayerName(faces[i],&layerName))
-				return false;
+            getSUFaceLayerName(faces[i],&layerName);
 
 			Layer * layerRef = model->getLayerByName(&layerName);
-			if (layerRef == NULL) {
-				return false;
-			}
+			if (layerRef == nullptr)
+                throw "Reference to an inexistent layer when parsing SKP file";
+			
 		
 			Face * face = SUFaceToFace(faces[i]);
-			if (face == NULL)
-				return false;		
+			if (face == nullptr)
+				throw "Reference to an inexistent face when parsing SKP file";
 
 			// add the face
 			layerRef->getObjectsRef()->push_back(face);
@@ -1022,19 +783,11 @@ bool SKPreader::loadLayersContent()
 
 	// load component instances
 	size_t instanceCount = 0;
-	if (!checkSUResult(
-		SUEntitiesGetNumInstances(entities, &instanceCount),
-		"SUEntitiesGetNumInstances",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUEntitiesGetNumInstances(entities, &instanceCount));
 
     if (instanceCount > 0) {
 	  std::vector<SUComponentInstanceRef> instances(instanceCount);
-	  if (!checkSUResult(
-		  SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount),
-		  "SUEntitiesGetInstances",
-		  __LINE__
-	  )) return false;
+        ASSERT_SU_RESULT(SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount));
 
 	  // fill layers with the instances
 	  for (size_t i = 0; i < instanceCount; i++) {		
@@ -1045,28 +798,20 @@ bool SKPreader::loadLayersContent()
 
     // Load group instances   
     size_t groupCount = 0;
-    if (!checkSUResult(
-      SUEntitiesGetNumGroups(entities, &groupCount),
-      "SUModelGetEntities",
-      __LINE__
-    )) return false;
+    ASSERT_SU_RESULT(SUEntitiesGetNumGroups(entities, &groupCount));
 
     if (groupCount > 0) {
-      // Declare the vector
-      std::vector<SUGroupRef> groups(groupCount);
+        // Declare the vector
+        std::vector<SUGroupRef> groups(groupCount);
       
-      // Fill vector
-      if (!checkSUResult(
-        SUEntitiesGetGroups(entities, groupCount, &groups[0], &groupCount),
-        "SUEntitiesGetInstances",
-        __LINE__
-      )) return false;
+        // Fill vector
+        ASSERT_SU_RESULT(SUEntitiesGetGroups(entities, groupCount, &groups[0], &groupCount));
 
-      // fill layers with the instances
-      for (size_t i = 0; i < groupCount; i++) {
-        SUComponentInstanceRef instance = SUGroupToComponentInstance(groups[i]);
-        loadInstance(instance);        
-      }
+        // fill layers with the instances
+        for (size_t i = 0; i < groupCount; i++) {
+            SUComponentInstanceRef instance = SUGroupToComponentInstance(groups[i]);
+            loadInstance(instance);
+        }
 
     } // end loading groups
 
@@ -1078,58 +823,37 @@ bool SKPreader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon)
 
 	// get area
 	double area;
-	if (!checkSUResult(
-		SUFaceGetArea(face,&area),
-		"SUFaceGetArea",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUFaceGetArea(face,&area));
+    
 	polygon->setArea(TO_M2(area));
 	
 	// Get the normal
 	SUVector3D normal;
-	if (!checkSUResult(
-		SUFaceGetNormal(face, &normal),
-		"SUFaceGetArea",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUFaceGetNormal(face, &normal));
+    
 	polygon->setNormal(Vector3D(normal.x, normal.y, normal.z));
 
 	// get the outer loop
 	SULoopRef suOuterLoop = SU_INVALID;
-	if (!checkSUResult(
-		SUFaceGetOuterLoop(face,&suOuterLoop),
-		"SUFaceGetOuterLoop",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUFaceGetOuterLoop(face,&suOuterLoop));
 
 	// translate outer loop
-	if (!SULoopToLoop(suOuterLoop, polygon->getOuterLoopRef()))
-		return false;
+    SULoopToLoop(suOuterLoop, polygon->getOuterLoopRef());
 
 	// get number of inner loops
 	size_t countInnerLoops;
-	if (!checkSUResult(
-		SUFaceGetNumInnerLoops(face, &countInnerLoops),
-		"SUFaceGetNumInnerLoops",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUFaceGetNumInnerLoops(face, &countInnerLoops));
 
 	// Get and translate those loops, if at least one
 	if (countInnerLoops > 0) {
 		// get them
 		std::vector<SULoopRef> innerLoops(countInnerLoops);
 
-		if (!checkSUResult(
-			SUFaceGetInnerLoops(face, countInnerLoops, &innerLoops[0],&countInnerLoops),
-			"SUFaceGetInnerLoops",
-			__LINE__
-		)) return false;
+		ASSERT_SU_RESULT(SUFaceGetNumInnerLoops(face, &countInnerLoops));
 
 		// iterate them
-		for (int j = 0; j < countInnerLoops; j++) {			
-			if (!SULoopToLoop(innerLoops[j], polygon->addInnerLoop()))
-				return false;
-		}//end of iterating inner loops
+		for (int j = 0; j < countInnerLoops; j++)
+            SULoopToLoop(innerLoops[j], polygon->addInnerLoop());
 
 	} // end of if there is an inner loop
 
@@ -1141,33 +865,25 @@ bool SKPreader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon)
 
 bool SKPreader::SULoopToLoop(SULoopRef suLoop, Loop * loop)
 {
+    // Not sure why this happens!
+    if(suLoop.ptr == nullptr)
+        return true;
+    
 	// First, count vertices
 	size_t vertexCount;
-	if (!checkSUResult(
-		SULoopGetNumVertices(suLoop,&vertexCount),
-		"SULoopGetNumVertices", 
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SULoopGetNumVertices(suLoop,&vertexCount));
 
 	
 	// Second, retrieve vertices
 	std::vector < SUVertexRef > vertices(vertexCount);	
 	
-	if (!checkSUResult(
-		SULoopGetVertices(suLoop, vertexCount, &vertices[0], &vertexCount),
-		"SULoopGetVertices",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SULoopGetVertices(suLoop, vertexCount, &vertices[0], &vertexCount));
 
 
 	// Third, translate each vertex
 	for (int i = 0; i < vertexCount; i++) {
 		SUPoint3D position;
-		if (!checkSUResult(
-			SUVertexGetPosition(vertices[i], &position),
-			"SUVertexGetPosition",
-			__LINE__
-		)) return false;
+		ASSERT_SU_RESULT(SUVertexGetPosition(vertices[i], &position));
 
 		loop->addVertex(new Point3D(TO_M(position.x),TO_M(position.y),TO_M(position.z)));		
 	}
@@ -1188,26 +904,14 @@ bool SKPreader::getSUFaceLayerName(SUFaceRef face, std::string * name)
 bool SKPreader::getSUDrawingElementLayerName(SUDrawingElementRef element, std::string * name)
 {
 	SULayerRef layer = SU_INVALID;
-	if (!checkSUResult(
-		SUDrawingElementGetLayer(element,&layer),
-		"SUDrawingElementGetLayer",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUDrawingElementGetLayer(element,&layer));
 
 	// Create string
 	SUStringRef layerName = SU_INVALID;
-	if (!checkSUResult(
-		SUStringCreate(&layerName),
-		"SUStringCreate",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUStringCreate(&layerName));
 
 	// retrieve the value
-	if (!checkSUResult(
-		SULayerGetName(layer,&layerName),
-		"SULayerGetName",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SULayerGetName(layer,&layerName));
 
 	// get final length
 	
@@ -1218,17 +922,17 @@ bool SKPreader::getSUEntityName(SUEntityRef entity, std::string * name)
 {
 	SUTypedValueRef suValue = SU_INVALID;
 	if (getValueFromEntityGHDictionary(entity, SKP_NAME, &suValue)) {
-		// There was, indeed, a Grounghog name
-		if (!getFromSUTypedValue(suValue, name,true))
-			return false;
-
+		// There was, indeed, a Groundhog name
+        getFromSUTypedValue(suValue, name,true);
+			
 		return true;
 	}
 
 	// else, retrieve ID.
 	int32_t id = getEntityID(entity);
 	if (id < 0)
-		return false;
+        throw "Impossible to get name from SKP entity... not even by ID";
+    
 	*name = std::to_string(id);
 	return true;
 
@@ -1239,27 +943,18 @@ bool SKPreader::bulkComponentInstancesIntoVector(std::vector <ComponentInstance 
 
   /* LOAD THE COMPONENT INSTANCES FIRST */	
 	size_t instanceCount = 0;
-	if (!checkSUResult(
-		SUEntitiesGetNumInstances(entities, &instanceCount),
-		"SUEntitiesGetNumInstances",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUEntitiesGetNumInstances(entities, &instanceCount));
 
 	if (instanceCount != 0) {		
 	  std::vector<SUComponentInstanceRef> instances(instanceCount);
-	  if (!checkSUResult(
-		  SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount),
-		  "SUEntitiesGetInstances",
-		  __LINE__
-	  )) return false;
+	  ASSERT_SU_RESULT(SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount));
 
 	  // fill layers with the instances
 	  for (size_t i = 0; i < instanceCount; i++) {
 		  // get name of layer
 		  SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instances[i]);
 		  std::string layerName;
-		  if (!getSUDrawingElementLayerName(drawingElement, &layerName))
-			  return false;
+          getSUDrawingElementLayerName(drawingElement, &layerName);
 		
 		  addComponentInstanceToVector(dest, instances[i]);
 
@@ -1268,37 +963,29 @@ bool SKPreader::bulkComponentInstancesIntoVector(std::vector <ComponentInstance 
 
     /* THEN LOAD THE GROUPS */
     size_t groupInstanceCount = 0;
-    if (!checkSUResult(
-      SUEntitiesGetNumGroups(entities, &groupInstanceCount),
-      "SUEntitiesGetNumInstances",
-      __LINE__
-    )) return false;
+    ASSERT_SU_RESULT(SUEntitiesGetNumGroups(entities, &groupInstanceCount));
 
 
     if (groupInstanceCount != 0) {
       
       std::vector<SUGroupRef> groups(groupInstanceCount);
-      if (!checkSUResult(
-        SUEntitiesGetGroups(entities, groupInstanceCount, &groups[0], &groupInstanceCount),
-        "SUEntitiesGetInstances",
-        __LINE__
-      )) return false;
+      ASSERT_SU_RESULT(SUEntitiesGetGroups(entities, groupInstanceCount, &groups[0], &groupInstanceCount));
 
       // fill layers with the instances
       for (size_t i = 0; i < groupInstanceCount; i++) {
-        // Get drawing element
-        SUGroupRef group = groups[i];
-        SUComponentInstanceRef instance = SUGroupToComponentInstance(group);
-        SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instance);
+          // Get drawing element
+          SUGroupRef group = groups[i];
+          SUComponentInstanceRef instance = SUGroupToComponentInstance(group);
+          SUDrawingElementRef drawingElement = SUComponentInstanceToDrawingElement(instance);
       
-        // get name of layer
-        std::string layerName;
-        if (!getSUDrawingElementLayerName(drawingElement, &layerName))
-          return false;
+          // get name of layer
+          std::string layerName;
+          getSUDrawingElementLayerName(drawingElement, &layerName);
+          
 
-        addComponentInstanceToVector(dest, instance);
+          addComponentInstanceToVector(dest, instance);
 
-      }
+        }
     }
 
 	return true;
@@ -1308,11 +995,7 @@ bool SKPreader::fillComponentInstanceLocation(ComponentInstance * instance, SUCo
 	
 	SUTransformation transform;
 
-	if (!checkSUResult(
-		SUComponentInstanceGetTransform(suInstance, &transform),
-		"SUComponentInstanceGetTransform",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUComponentInstanceGetTransform(suInstance, &transform));
 
 	instance->setX(TO_M(transform.values[12]));
 	instance->setY(TO_M(transform.values[13]));
@@ -1361,15 +1044,12 @@ bool SKPreader::addWorkplaneToModel(SUFaceRef suFace) {
 	// get the name of the face
 	std::string name;
 	bool hasName = getSUFaceName(suFace, &name);
-	if (!hasName) {
+	if (!hasName)
 		FATAL(errorMessage,"Invalid workplane: has no name");
-		return false;
-	}
 
 	// Build the polygon
 	Polygon3D * polygon = new Polygon3D();
-	if (!SUFaceToPolygon3D(suFace, polygon))
-		return false;
+    SUFaceToPolygon3D(suFace, polygon);
 
 	model->addPolygonToWorkplane(&name, polygon);
 	return true;
@@ -1379,36 +1059,35 @@ bool SKPreader::addWindowToModel(SUFaceRef suFace)
 {
 	// get the name of the face
 	std::string name;
-	if (!getSUFaceName(suFace, &name)) { // this will allways put something
-		FATAL(errorMessage,"Impossible to get name from Window");
-		return false;
-	}
-	
-	// Create the window group string
-	std::string winGroup;
-
-	// Check if it has a Window Group
-	SUTypedValueRef suWinGroup = SU_INVALID;
-	if (getValueFromEntityGHDictionary(SUFaceToEntity(suFace), SKP_WINGROUP, &suWinGroup)) {
-		// If it has, set the windowgroup name to that...
-      if (!getFromSUTypedValue(suWinGroup, &winGroup, true)) {
-		  FATAL(errorMessage,"Error when trying to retrieve Window Group name");
-        }
-        
-	}
-	else {
-		// if not, set the name of the window.
-		winGroup = name;
-	}
+	if (!getSUFaceName(suFace, &name)) // this should allways put something in 'name'
+		throw "Impossible to get name from Window";
+    
 
 	// Create the face
 	Face * face = SUFaceToFace(suFace);
-	if (face == NULL)
-		return false;
+	if (face == nullptr)
+        throw "Trying to add an inexistent face to window group when parsing SKP model";
 		
 	// Add the window
-	model->addWindowToGroup(&winGroup, face);
+	model->addWindowToGroup(&name, face);
 	return true;
+}
+
+
+bool SKPreader::addIllumToModel(SUFaceRef suFace)
+{
+    // get the name of the face
+    std::string name;
+    if (!getSUFaceName(suFace, &name)) // this should allways put something in 'name'
+        throw "Impossible to get name from Window";
+    
+    // Create the Polygon3D
+    Polygon3D * polygon = new Polygon3D();
+    SUFaceToPolygon3D(suFace, polygon);
+    
+    // Add the window
+    model->addIllumToGroup(&name, polygon);
+    return true;
 }
 
 
@@ -1417,14 +1096,7 @@ int32_t SKPreader::getEntityID(SUEntityRef entity)
 	// if not, check for a SketchUp Assigned name		
 	// else, set ID
 	int32_t id;
-	if (!checkSUResult(
-		SUEntityGetID(entity, &id),
-		"SUEntityGetID",
-		__LINE__
-	)) {
-		FATAL(errorMessage,"Error when retrieving entity ID");
-		return -1;
-	}
+    ASSERT_SU_RESULT(SUEntityGetID(entity, &id));
 
 	return id;
 }
@@ -1434,61 +1106,33 @@ bool SKPreader::getValueFromEntityGHDictionary(SUEntityRef entity, const char * 
 {
 	// check how many dictionaries
 	size_t dictionaryCount;
-	if (!checkSUResult(
-		SUEntityGetNumAttributeDictionaries(entity, &dictionaryCount),
-		"SUEntityGetNumAttributeDictionaries",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUEntityGetNumAttributeDictionaries(entity, &dictionaryCount));
 
 	// if there are no dictionaries, then return.
 	if (dictionaryCount == 0)
-		return false;
+        return false; // No dictionary
 
 	//retrieve dictionaries
 	std::vector <SUAttributeDictionaryRef> dictionaries(dictionaryCount);
-	if (!checkSUResult(
-		SUEntityGetAttributeDictionaries(entity, dictionaryCount, &dictionaries[0], &dictionaryCount),
-		"SUEntityGetAttributeDictionaries",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUEntityGetAttributeDictionaries(entity, dictionaryCount, &dictionaries[0], &dictionaryCount));
 
 	// Check if it has a Groundhog dictionary
 	for (int i = 0; i < dictionaryCount; i++) {
 		SUStringRef dictionaryName = SU_INVALID;
-		if (!checkSUResult(
-			SUStringCreate(&dictionaryName),
-			"SUStringCreate",
-			__LINE__
-		)) return false;
+		ASSERT_SU_RESULT(SUStringCreate(&dictionaryName));
 
-		if (!checkSUResult(
-			SUAttributeDictionaryGetName(dictionaries[i], &dictionaryName),
-			"SUAttributeDictionaryGetName",
-			__LINE__
-		)) return false;
+		ASSERT_SU_RESULT(SUAttributeDictionaryGetName(dictionaries[i], &dictionaryName));
 
 
 		int result;
-		if (!checkSUResult(
-			SUStringCompare(dictionaryName, groundhogDictionaryName, &result),
-			"SUStringCompare", 
-			__LINE__
-		)) return false;
+		ASSERT_SU_RESULT(SUStringCompare(dictionaryName, groundhogDictionaryName, &result));
 
-		if (!checkSUResult(
-			SUStringRelease(&dictionaryName),
-			"SUStringRelease",
-			__LINE__
-		)) return false;
+		ASSERT_SU_RESULT(SUStringRelease(&dictionaryName));
 
 		if (result == 0) { // then, it is a Groundhog dictionary
 
 			//retrieve the value			
-			if (!checkSUResult(
-				SUTypedValueCreate(value),
-				"SUTypedValueCreate",
-				__LINE__
-			)) return false;
+			ASSERT_SU_RESULT(SUTypedValueCreate(value));
 
 
 			SUResult res = SUAttributeDictionaryGetValue(dictionaries[i], key, value);
@@ -1501,7 +1145,7 @@ bool SKPreader::getValueFromEntityGHDictionary(SUEntityRef entity, const char * 
 					"SUAttributeDictionaryGetValue",
 					__LINE__
 				);
-				return false;
+				throw "Error when getting value from Groundhog dictionary while parsing SKP file";
 			}			
 		}
 	}
@@ -1512,26 +1156,14 @@ bool SKPreader::SUStringtoString(SUStringRef suString, std::string * string, boo
 {
 
 	size_t stringLength;
-	if (!checkSUResult(
-		SUStringGetUTF8Length(suString, &stringLength),
-		"SUStringGetUTF8Length",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUStringGetUTF8Length(suString, &stringLength));
 
 	std::string utf8String;
 	utf8String.reserve(stringLength);
 
-	if (!checkSUResult(
-		SUStringGetUTF8(suString, stringLength, &utf8String[0], &stringLength),
-		"SUStringGetUTF8",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUStringGetUTF8(suString, stringLength, &utf8String[0], &stringLength));
 
-	if (!checkSUResult(
-		SUStringRelease(&suString),
-		"SUStringRelease",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUStringRelease(&suString));
 
 	string->reserve(stringLength);
 	string->resize(stringLength);
@@ -1549,21 +1181,10 @@ bool SKPreader::getFromSUTypedValue(SUTypedValueRef suValue, std::string * value
 {
 	// Create a SU String
 	SUStringRef suString = SU_INVALID;
-	if (!checkSUResult(
-		SUStringCreate(&suString),
-		"SUStringCreate",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUStringCreate(&suString));
 
 	// Retrieve the String
-	if (!checkSUResult(
-		SUTypedValueGetString(suValue, &suString),
-		"SUTypedValueGetString",
-		__LINE__
-	)) {
-		SUStringRelease(&suString);
-		return false;
-	}
+    ASSERT_SU_RESULT(SUTypedValueGetString(suValue, &suString));
 	SUStringtoString(suString, value,fix);
 	
 	return true;
@@ -1580,8 +1201,7 @@ Material * SKPreader::addMaterialToModel(SUMaterialRef material)
 
     // Check if the material exists
     std::string name;
-    if (!getSUMaterialName(material, &name))
-      return NULL;
+    getSUMaterialName(material, &name);
 
     Material * m = model->hasMaterial(&name);
     
@@ -1594,15 +1214,13 @@ Material * SKPreader::addMaterialToModel(SUMaterialRef material)
 	if (label >= 0) {
 
 		// it is a Radiance material
-		if(label != SKP_MATERIAL){
-            FATAL(errorMessage,"Material with unknown label code " + std::to_string(label));
-			return NULL;
-		}		
+		if(label != SKP_MATERIAL)
+            throw "Material with unknown label code " + std::to_string(label);
 		
 		// get the value
 		std::string value;
 		if (!getGHValueFromEntity(entityMat, &value, false)) {
-			return NULL;
+            throw "Error when getting";
 		}
 		
 		j = json::parse(value);
@@ -1620,11 +1238,12 @@ Material * SKPreader::addMaterialToModel(SUMaterialRef material)
 bool SKPreader::getGHValueFromEntity(SUEntityRef entity, std::string * value, bool fix)
 {
 	SUTypedValueRef suValue = SU_INVALID;
-	if (!getValueFromEntityGHDictionary(entity, SKP_VALUE, &suValue))
-		return false;
-
-	if (!getFromSUTypedValue(suValue, value,fix))
-		return false;
+    
+    // Check if there is a dictionary
+    if(!getValueFromEntityGHDictionary(entity, SKP_VALUE, &suValue))
+        return false;
+    
+    getFromSUTypedValue(suValue, value,fix);
 
 	return true;
 }
@@ -1633,8 +1252,7 @@ bool SKPreader::guessMaterial(SUMaterialRef material, json * j)
 {
 	std::string name;
 
-	if (!getSUMaterialName(material,&name))
-		return false;
+    getSUMaterialName(material,&name);
 
 	WARN(message,"Guessing material " + name);
 	
@@ -1643,10 +1261,7 @@ bool SKPreader::guessMaterial(SUMaterialRef material, json * j)
 
 	// set alpha
 	double alpha;
-	if (!checkSUResult(
-		SUMaterialGetOpacity(material,&alpha),
-		"SUMaterialGetOpacity", __LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUMaterialGetOpacity(material,&alpha));
 
 	//(*j)["alpha"] = alpha;
 
@@ -1655,10 +1270,7 @@ bool SKPreader::guessMaterial(SUMaterialRef material, json * j)
 
 	// set color
 	SUColor color;
-	if (!checkSUResult(
-		SUMaterialGetColor(material, &color),
-		"SUMaterialGetColor", __LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUMaterialGetColor(material, &color));
 
 		
     (*j)["color"] = {
@@ -1683,11 +1295,9 @@ bool SKPreader::getFaceMaterial(SUFaceRef face, SUMaterialRef * mat)
 		int label = getSUEntityLabel(SUMaterialToEntity(frontMat));
 		if (label >= 0) {
 			// if it has, do not bother and return.
-			if (label != SKP_MATERIAL) {
-                FATAL(errorMessage,"Weird material label code" + std::to_string(label));
-				return false;
-			}
-
+            if (label != SKP_MATERIAL)
+                FATAL(e,"Weird material label code" + std::to_string(label));
+            
 			*mat = frontMat;
 			return true; 
 		}
@@ -1700,10 +1310,9 @@ bool SKPreader::getFaceMaterial(SUFaceRef face, SUMaterialRef * mat)
 		// Check if it has physical information 
         int label = getSUEntityLabel(SUMaterialToEntity(backMat));
 		if (label >= 0) {
-			if (label != SKP_MATERIAL) {
-                FATAL(errorMessage,"Weird material label code " + std::to_string(label));
-				return false;
-			}
+            if (label != SKP_MATERIAL)
+                FATAL(e,"Weird material label code " + std::to_string(label));
+            
 			*mat = backMat;
 			return true;
 		}
@@ -1728,14 +1337,12 @@ Face * SKPreader::SUFaceToFace(SUFaceRef suFace)
 
 	// build the polygon
 	Polygon3D * polygon = new Polygon3D();
-	if (!SUFaceToPolygon3D(suFace, polygon))
-		return NULL;
+    SUFaceToPolygon3D(suFace, polygon);
 
 	// get the name of the face
 	std::string name;
 
-	if (!getSUFaceName(suFace, &name)) // this will allways put something
-		return NULL;
+    getSUFaceName(suFace, &name); // this will allways put something		
 
 	//build the face
 	Face * face = new Face(&name);
@@ -1762,20 +1369,12 @@ bool SKPreader::getSUMaterialName(SUMaterialRef material, std::string * name)
 {
 	SUStringRef suName = SU_INVALID;
 
-	if (!checkSUResult(
-		SUStringCreate(&suName),
-		"SUStringCreate",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUStringCreate(&suName));
 
-	if (!checkSUResult(
-		SUMaterialGetName(material, &suName),
-		"SUMaterialGetName", __LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUMaterialGetName(material, &suName));
 	
 	// this fixes the name as well, and releases the SUString
-	if (!SUStringtoString(suName, name,true))
-		return false;
+    SUStringtoString(suName, name,true);
 
 	return true;
 }
@@ -1784,11 +1383,7 @@ bool SKPreader::addPhotosensorsToModel(SUComponentDefinitionRef definition)
 {
 	// count instances
 	size_t numInstances;
-	if (!checkSUResult(
-		SUComponentDefinitionGetNumInstances(definition, &numInstances),
-		"SUComponentDefinitionGetNumInstances",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUComponentDefinitionGetNumInstances(definition, &numInstances));
 
 	if (numInstances == 0)
 		return true;
@@ -1796,18 +1391,13 @@ bool SKPreader::addPhotosensorsToModel(SUComponentDefinitionRef definition)
 	std::vector <SUComponentInstanceRef> instances(numInstances);
 
 	// Get the actual instances
-	if (!checkSUResult(
-		SUComponentDefinitionGetInstances(definition,numInstances,&instances[0],&numInstances),
-		"SUComponentDefinitionGetNumInstances",
-		__LINE__
-	)) return false;
+    ASSERT_SU_RESULT(SUComponentDefinitionGetInstances(definition,numInstances,&instances[0],&numInstances));
 
 	for (size_t i = 0; i < numInstances; i++) {
 
 		//get the name
 		std::string name;
-		if (!getSUEntityName(SUComponentInstanceToEntity(instances[i]), &name))
-			return false;
+        getSUEntityName(SUComponentInstanceToEntity(instances[i]), &name);
 
 		// create the photosensor object
 		Photosensor * ph = new Photosensor(name);
@@ -1815,11 +1405,7 @@ bool SKPreader::addPhotosensorsToModel(SUComponentDefinitionRef definition)
 		// Get the transformation
 		SUTransformation transform;
 
-		if (!checkSUResult(
-			SUComponentInstanceGetTransform(instances[i], &transform),
-			"SUComponentInstanceGetTransform",
-			__LINE__
-		)) return false;
+		ASSERT_SU_RESULT(SUComponentInstanceGetTransform(instances[i], &transform));
 
 		// Set the position
 		double x = TO_M(transform.values[12]);
@@ -1842,61 +1428,32 @@ bool SKPreader::getValueFromModelGHDictionary(const char * key, SUTypedValueRef 
 {
 	// check how many dictionaries
 	size_t dictionaryCount;
-	if (!checkSUResult(
-		SUModelGetNumAttributeDictionaries(suModel, &dictionaryCount),
-		"SUModelGetNumAttributeDictionaries",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUModelGetNumAttributeDictionaries(suModel, &dictionaryCount));
 
 	// if there are no dictionaries, then return.
 	if (dictionaryCount == 0)
-		return false;
+        throw "Groundhog Dictionary not found when parsing SKP model";
 
 	//retrieve dictionaries
 	std::vector <SUAttributeDictionaryRef> dictionaries(dictionaryCount);
-	if (!checkSUResult(
-		SUModelGetAttributeDictionaries(suModel, dictionaryCount, &dictionaries[0], &dictionaryCount),
-		"SUModelGetAttributeDictionaries",
-		__LINE__
-	)) return false;
+	ASSERT_SU_RESULT(SUModelGetAttributeDictionaries(suModel, dictionaryCount, &dictionaries[0], &dictionaryCount));
 
 	// Check if it has a Groundhog dictionary
 	for (int i = 0; i < dictionaryCount; i++) {
 		SUStringRef dictionaryName = SU_INVALID;
-		if (!checkSUResult(
-			SUStringCreate(&dictionaryName),
-			"SUStringCreate",
-			__LINE__
-		)) return false;
-
-		if (!checkSUResult(
-			SUAttributeDictionaryGetName(dictionaries[i], &dictionaryName),
-			"SUAttributeDictionaryGetName",
-			__LINE__
-		)) return false;
+		ASSERT_SU_RESULT(SUStringCreate(&dictionaryName));
+		ASSERT_SU_RESULT(SUAttributeDictionaryGetName(dictionaries[i], &dictionaryName));
 
 
 		int result;
-		if (!checkSUResult(
-			SUStringCompare(dictionaryName, groundhogDictionaryName, &result),
-			"SUStringCompare",
-			__LINE__
-		)) return false;
+		ASSERT_SU_RESULT(SUStringCompare(dictionaryName, groundhogDictionaryName, &result));
 
-		if (!checkSUResult(
-			SUStringRelease(&dictionaryName),
-			"SUStringRelease",
-			__LINE__
-		)) return false;
+		ASSERT_SU_RESULT(SUStringRelease(&dictionaryName));
 
 		if (result == 0) { // then, it is a Groundhog dictionary
 
 			//retrieve the value			
-			if (!checkSUResult(
-				SUTypedValueCreate(value),
-				"SUTypedValueCreate",
-				__LINE__
-			)) return false;
+			ASSERT_SU_RESULT(SUTypedValueCreate(value));
 
 
 			SUResult res = SUAttributeDictionaryGetValue(dictionaries[i], key, value);
@@ -1909,7 +1466,7 @@ bool SKPreader::getValueFromModelGHDictionary(const char * key, SUTypedValueRef 
 					"SUAttributeDictionaryGetValue",
 					__LINE__
 				);
-				return false;
+				throw "Error when getting value from GH Dictionary";
 			}
 		}
 	}
@@ -1926,8 +1483,7 @@ bool SKPreader::loadWeather()
 
 	std::string value;
 
-	if (!getFromSUTypedValue(suWeather, &value,false))
-		return false;
+    getFromSUTypedValue(suWeather, &value,false);
 	
 	json j = json::parse(value);
 

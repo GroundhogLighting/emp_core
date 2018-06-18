@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "./src/windowgroup.h"
+#include "./src/illumgroup.h"
 //#include "./src/layer.h"
 #include "./src/componentinstance.h"
 #include "./src/workplane.h"
@@ -70,7 +71,7 @@ Components, Weather, Luminaires, and more (see its private members for more info
 class GroundhogModel {
 
 private:	
-	//Objectives // **
+	//Tasks // **
 	std::vector <Layer *> layers = std::vector<Layer *>(); //!< Contains all the geometry that represents physical objects
 	std::vector <Workplane *> workplanes = std::vector<Workplane *>(); //!< Contains the Workplane objects in the model
 	std::vector <Photosensor *> photosensors = std::vector<Photosensor *>(); //!< Contains the Photosensor objects in the model
@@ -78,6 +79,7 @@ private:
 	std::vector <View *> views = std::vector<View *>(); //!< Contains all the views that are saved in the model
 	std::vector <ComponentDefinition *> definitions = std::vector<ComponentDefinition *>(); //!< Contains all the Component Definitions in the model
 	std::vector <WindowGroup *> windowGroups = std::vector<WindowGroup *>(); //!< Contains the window group
+    std::vector <IllumGroup *> illumGroups = std::vector<IllumGroup *>(); //!< Contains the window group
 	//Luminaires
 	Location location = Location(); //!< The location (i.e. longitude, latitude, timezone, etc.)
 	Date date = Date(1, 1, 12, 12); //!< The current date
@@ -248,10 +250,22 @@ public:
 	the provided name
 
 	@author German Molina
-	@param[in] windowGroupName The name of the workplane
+	@param[in] windowGroupName The name of the window group
 	@param[in] face The Face to add
 	*/
 	void addWindowToGroup(std::string * windowGroupName, Face * face);
+    
+    //! Adds a new polygon to a certain Illum Group
+    /*!
+     Searches for the corresponding illum group, and adds the polygons
+     at the end of it. If it does not exist, it will create one with
+     the provided name
+     
+     @author German Molina
+     @param[in] illumGroupName The name of the illum group
+     @param[in] polygon The Polygon3D to add
+     */
+    void addIllumToGroup(std::string * illumGroupName, Polygon3D * polygon);
 
 
 	//! Retrieves the number of window groups
@@ -260,6 +274,13 @@ public:
 	@return The number of window groups
 	*/
 	size_t getNumWindowGroups();
+    
+    //! Retrieves the number of illum groups
+    /*!
+     @author German molina
+     @return The number of window groups
+     */
+    size_t getNumIllumGroups();
 
 	//! Retrieves the number of workplanes
 	/*!
@@ -275,6 +296,14 @@ public:
 	@return The reference to the WindowGroup
 	*/
 	WindowGroup * getWindowGroupRef(size_t i);
+
+    //! Retrieves the reference to a certain IllumGroup
+    /*!
+     @author German Molina
+     @param[in] i The index of the IllumGroup
+     @return The reference to the IllumGroup
+     */
+    IllumGroup * getIllumGroupRef(size_t i);
 
 	//! Retrieves the reference to a certain Workplane
 	/*!

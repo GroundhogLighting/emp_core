@@ -47,7 +47,6 @@ using nlohmann::json;
 #define SKP_WEATHER "weather"
 #define SKP_VALUE "value"
 #define SKP_ALBEDO "albedo"
-#define SKP_WINGROUP "win_group"
 
 #define SKP_WORKPLANE 0
 #define SKP_WINDOW 1
@@ -415,6 +414,17 @@ public:
 	@return success
 	*/
 	bool addWindowToModel(SUFaceRef face);
+    
+    //! Adds an Illum to the model.
+    /*!
+     Gets the name of the face and adds it to
+     the model. The model will create a new illum Group if needed.
+     
+     @author German Molina
+     @param[in] face The face to treat as a workplane
+     @return success
+     */
+    bool addIllumToModel(SUFaceRef face);
 
 	//! Retrieves an entity ID
 	/*!

@@ -42,6 +42,7 @@ void inform(const char * message, bool verbose)
 void fatal(const char * message, int ln, const char * file)
 {	
 	std::cerr << "Fatal: " << message << " -- Line " << ln << " of File " << file<< std::endl;
+    throw message;
 }
 
 

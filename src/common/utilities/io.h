@@ -68,7 +68,7 @@ Should be used when something fatal happens. Usually, something will go wrong.
 @param[in] file The file name where this function was called
 */
 extern void fatal(const char * message, int ln, const char * file);
-#define FATAL(var,x) std::string var=std::string(x); fatal(&var[0],__LINE__,__FILE__)
+#define FATAL(var,x) {std::string var=std::string(x); fatal(&var[0],__LINE__,__FILE__);};
 
 //! Informs something
 /*!

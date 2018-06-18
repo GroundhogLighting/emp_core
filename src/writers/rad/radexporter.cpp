@@ -378,7 +378,7 @@ bool RadExporter::writeWindows(const char * dir) {
 		WindowGroup * group = model->getWindowGroupRef(i);
 		std::string name = group->getName();
 
-		size_t numWindows = group->getNumWindows();
+		size_t numWindows = group->size();
 		if (numWindows <= 0) {
 			WARN(wMsg,"Empty WindowGroup " + name);
 			continue;
@@ -421,7 +421,7 @@ bool RadExporter::writeWindows(FILE * file) {
         WindowGroup * group = model->getWindowGroupRef(i);
         std::string name = group->getName();
 
-        size_t numWindows = group->getNumWindows();
+        size_t numWindows = group->size();
         if (numWindows <= 0) {
             WARN(wMsg,"Empty WindowGroup " + name);
             continue;
