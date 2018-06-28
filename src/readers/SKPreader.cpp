@@ -166,7 +166,7 @@ bool SKPreader::parseSKPModel(std::string inputFile)
 
 	// Load layers	
     loadLayers();
-
+    
 	// load components and groups
     loadComponentDefinitions();
 		
@@ -188,6 +188,10 @@ bool SKPreader::parseSKPModel(std::string inputFile)
 	
 	// Load weather
     loadWeather();
+    
+    // Load the workplanes preferences
+    loadWorkplanesPreferences();
+
 	
 	return true;
 };
@@ -209,7 +213,7 @@ bool SKPreader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, const char *
 
     ASSERT_SU_RESULT(SUTypedValueGetString(suValue, &suString));
 	
-    SUStringtoString(suString, value,true);
+    SUStringtoString(suString, value,false);
 	
 	return true;
 }
@@ -1351,11 +1355,16 @@ Face * SKPreader::SUFaceToFace(SUFaceRef suFace)
 	// retrieve and set the material
 	SUMaterialRef suMat;
 	Material * mat;
-	if (getFaceMaterial(suFace, &suMat)) {
-		// add this material.
+    
+    int faceLabel = getSUFaceLabel(suFace);
+    
+    if(faceLabel == SKP_WINDOW){
+        // Add default glass to window
+        mat = model->addDefaultGlass();
+    } else if (getFaceMaterial(suFace, &suMat)) {
+		// add default material to un-labeled surface.
 		mat = addMaterialToModel(suMat);
-	}
-	else {
+	} else {
 		// add default material
 		mat = model->addDefaultMaterial();
 	}
@@ -1374,7 +1383,7 @@ bool SKPreader::getSUMaterialName(SUMaterialRef material, std::string * name)
 	ASSERT_SU_RESULT(SUMaterialGetName(material, &suName));
 	
 	// this fixes the name as well, and releases the SUString
-    SUStringtoString(suName, name,true);
+    SUStringtoString(suName, name, true);
 
 	return true;
 }
@@ -1490,6 +1499,26 @@ bool SKPreader::loadWeather()
 	Location * loc = model->getLocation();
 
 	return loc->fillWeatherFromJSON(&j);
+}
+
+void SKPreader::loadWorkplanesPreferences()
+{
+    SUTypedValueRef workplanesJSON = SU_INVALID;
+    if (!getValueFromModelGHDictionary(SKP_WORKPLANES_KEY, &workplanesJSON))
+        return ; // return if no weather or error.
+
+    std::string value;
+    
+    getFromSUTypedValue(workplanesJSON, &value,false);
+    json j = json::parse(value);
+    
+    for (json::iterator it = j.begin(); it != j.end(); ++it) {
+        std::string name = (*it)["name"].get<std::string>();
+        double size = (*it)["pixel_size"].get<double>();        
+        Workplane * wp = model->getWorkplaneByName(&name);
+        wp->setMaxArea(size);
+    }
+    
 }
 
 #endif // #ifndef AVOID_SKP

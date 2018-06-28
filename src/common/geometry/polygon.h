@@ -18,8 +18,7 @@
 
 *****************************************************************************/
 
-#ifndef POLYGON_3D_H
-#define POLYGON_3D_H
+#pragma once
 
 #include <vector>
 
@@ -228,4 +227,3 @@ public:
 
 extern Polygon3D polygon3D;
 
-#endif

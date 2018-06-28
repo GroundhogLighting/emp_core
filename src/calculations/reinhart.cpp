@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <cmath>
 #include "./reinhart.h"
 
+
 const size_t tnaz[7] = { 30, 30, 24, 24, 18, 12, 6 };
 
 size_t rnaz(size_t r, size_t MF)
@@ -48,9 +49,9 @@ size_t nReinhartBins(int MF)
   return 1+raccum(7*MF+1, MF);
 }
 
-size_t mfFromNBins(const int nbins)
+int mfFromNBins(const int nbins)
 {
-    size_t mf = 1;
+    int mf = 1;
     size_t currentNBins = nReinhartBins((int)mf);
     
     while( nbins >= currentNBins ){
@@ -166,3 +167,6 @@ double coneSolidAngle(double angle)
 {
   return 2.0 * 3.141592654 * (1 - cos(angle));
 }
+
+
+

@@ -82,3 +82,14 @@ void Task::replaceDependency(Task * a, Task * b)
   }
 }
 
+void Task::setParent(TaskManager * tm)
+{
+    parent = tm;
+}
+
+
+TaskManager * Task::getParent()
+{
+    return parent;
+}
+

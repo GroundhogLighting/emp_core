@@ -562,6 +562,12 @@ public:
     */
     bool loadInstance(SUComponentInstanceRef instance);
 
+    //! Loads the pixel sizes for the workplanes
+    /*!
+     @author German Molina
+     @return success
+     */
+    void loadWorkplanesPreferences();
     
 };
 

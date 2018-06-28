@@ -59,7 +59,7 @@ size_t nReinhartBins(int MF);
  @param The number of bins
  @return the MF number
  */
-size_t mfFromNBins(const int nbins);
+int mfFromNBins(const int nbins);
 
 //! Returns the row on which a patch is located
 /*!

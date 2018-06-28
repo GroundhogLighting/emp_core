@@ -10,7 +10,8 @@ project "emp_core"
 
     files {                 
         "../src/**.cpp",
-        "../src/**.h",        
+        "../src/**.h", 
+        "../include/**.h"       
     }
    
     includedirs{        
@@ -30,16 +31,16 @@ project "emp_core"
         defines { "WIN" }               
 
     elseif is_macos then
-        defines { "MACOS" }            
-        --runpathdirs { "libs" }
+        defines { "MACOS" }                    
         linkoptions {            
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"
         }    
         buildoptions {
-            "-F "..third_party_dir.."/SketchUp/MACOS/headers",            
+            "-F /Library/Frameworks",
+            "-v",          
         }
         links {
-            third_party_dir.."/SketchUp/MACOS/headers/SketchUpAPI.framework",
+            "SketchUpAPI.framework",
         }
     elseif is_linux then
         defines { "LINUX", "AVOID_SKP" }    
@@ -54,14 +55,7 @@ project "emp_core"
         "tbb"
     }
 
-    filter "configurations:Debug"
-    files {
-        
-    }
-    includedirs{
-        
-        google_test_dir.."/include",    
-    }
+    filter "configurations:Debug"    
     links {
         "tbb_debug"
     }

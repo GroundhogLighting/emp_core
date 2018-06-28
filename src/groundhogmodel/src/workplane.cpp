@@ -66,3 +66,14 @@ double Workplane::getMaxAspectRatio()
 {
     return maxAspectRatio;
 }
+
+
+void Workplane::setMaxArea(double v)
+{
+    maxArea = v;
+}
+
+void Workplane::setMaxAspectRatio(double v)
+{
+    maxAspectRatio = v;
+}

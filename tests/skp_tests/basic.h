@@ -5,30 +5,38 @@
 
 TEST(SKPRead, empty)
 {
-    int version = 2017;
-    ASSERT_LOAD_MODEL("empty",version);
+    FOR_ALL_VERSIONS{
+        ASSERT_LOAD_MODEL("empty",version);
+        
+        // Only two layer
+        size_t nLayers = model.getNumLayers();
+        ASSERT_EQ(nLayers,1);
+        
+        // Only one component
+        ASSERT_EQ(model.getNumComponentDefinitions(),1);
+        
+        // Count faces in the component
+        size_t nFaces = model.getComponentDefinitionRef(0)->getObjectsRef()->size();
+        ASSERT_EQ(nFaces,32);
+    }
     
-    // Only two layer
-    size_t nLayers = model.getNumLayers();
-    ASSERT_EQ(nLayers,1);
     
-    // Count faces in the component
-    size_t nFaces = model.getComponentDefinitionRef(0)->getObjectsRef()->size();
-    ASSERT_EQ(nFaces,32);
+    
 }
 
 
 TEST(SKPRead, deleted)
 {
-    int version = 2017;
-    ASSERT_LOAD_MODEL("deleted",version);
+    FOR_ALL_VERSIONS{        
+        ASSERT_LOAD_MODEL("deleted",version);
     
-    // Only two layer
-    size_t nLayers = model.getNumLayers();
-    ASSERT_EQ(nLayers,1);
-    
-    // Count faces in the component
-    size_t nFaces = model.getLayerRef(0)->getObjectsRef()->size();
-    ASSERT_EQ(nFaces,5);
+        // Only two layer
+        size_t nLayers = model.getNumLayers();
+        ASSERT_EQ(nLayers,1);
+        
+        // Count faces in the component
+        size_t nFaces = model.getLayerRef(0)->getObjectsRef()->size();
+        ASSERT_EQ(nFaces,5);
+    }
 }
 

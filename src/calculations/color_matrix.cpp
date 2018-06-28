@@ -133,3 +133,24 @@ void ColorMatrix::calcIlluminance(Matrix * result)
 }
 
 
+
+float ColorMatrix::calcIrradiance(size_t row, size_t col)
+{
+    double r = red.getElement(row,col);
+    double g = green.getElement(row,col);
+    double b = blue.getElement(row,col);
+    return 0.265*r + 0.67*g + 0.065*b;
+}
+
+float ColorMatrix::calcIlluminance(size_t row, size_t col)
+{
+    double r = red.getElement(row,col);
+    double g = green.getElement(row,col);
+    double b = blue.getElement(row,col);
+    return 47.5*r + 119.95*g + 11.60*b;
+    
+}
+
+
+
+

@@ -74,7 +74,8 @@ size_t TaskManager::addTask(Task * t)
 
 	// If not exist, add and return true
 	tasks.push_back(t);
-
+    t->setParent(this);
+    
     // Check for mutex    
     for (size_t i = 0; i < currentIndex; i++) {
       if ( checkMutex(tasks[i],t) ) {
@@ -89,7 +90,9 @@ size_t TaskManager::addTask(Task * t)
 		Task * dep = t->getDependencyRef(i);
 		addTask(dep);
 	}
-
+    // Set parent
+    
+    
 	return currentIndex;
 }
 
@@ -156,7 +159,7 @@ bool TaskManager::solve(json * results)
 		}
 		else {
 			for (size_t j = 0; j < nDependencies; j++) {
-				size_t dep = findTask(tasks[i]->getDependencyRef(j));
+				size_t dep = findTaskIndex(tasks[i]->getDependencyRef(j));
 				tbb::flow::make_edge(nodes[dep], nodes[i]);
 			}
 		}
@@ -275,7 +278,7 @@ void TaskManager::clean()
 }
 
 
-size_t TaskManager::findTask(Task * t)
+size_t TaskManager::findTaskIndex(Task * t)
 {
   size_t n = tasks.size();
   for (size_t i = 0; i < n; i++) {
@@ -284,4 +287,17 @@ size_t TaskManager::findTask(Task * t)
   }
   FATAL(err, "Task not found on TaskManager!");
   return -1;
+}
+
+
+
+Task * TaskManager::findTask(Task * t)
+{
+    size_t n = tasks.size();
+    for (size_t i = 0; i < n; i++) {
+        if (t->isEqual(tasks[i]))
+            return tasks[i];
+    }
+    FATAL(err, "Task not found on TaskManager!");
+    return nullptr;
 }

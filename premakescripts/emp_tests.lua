@@ -36,19 +36,18 @@ project "emp_tests"
         defines { "WIN" }               
 
     elseif is_macos then
-        defines { "MACOS" }            
-        --runpathdirs { "libs" }
+        defines { "MACOS" }     
         linkoptions {            
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"
         }    
         buildoptions {
-            "-F "..third_party_dir.."/SketchUp/MACOS/headers",
-            --"-F/Users/german/Documents/emp_core/3rdparty/SketchUp/MACOS/headers/",
+            "-F /Library/Frameworks",
             "-v"            
         }
         links {
-            third_party_dir.."/SketchUp/MACOS/headers/SketchUpAPI.framework",            
+            "SketchUpAPI.framework"
         }
+        
     elseif is_linux then
         defines { "LINUX", "AVOID_SKP" }    
         links {            
@@ -57,20 +56,13 @@ project "emp_tests"
 
     end
 
-    filter "configurations:Release"    
+    filter "configurations:RELEASE"        
     links {
         "tbb"
     }
-
-    filter "configurations:Debug"
-    files {
-        
-    }
-    includedirs{
-        
-    }
+    
+    
+    filter "configurations:DEBUG"    
     links {
         "tbb_debug"
     }
-
-

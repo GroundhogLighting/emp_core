@@ -424,4 +424,124 @@ bool genPerezSkyVector(int month, int day, float hour, float direct, float diffu
 }
 
 
+void interpolatedDCTimestep(int interp, GroundhogModel * model, ColorMatrix * DC, bool sunOnly, bool sharpSun, ColorMatrix * result)
+{
+    
+    // Get location info
+    Location * location = model -> getLocation();
+    float albedo = location->getAlbedo();
+    float latitude = location->getLatitude();
+    float longitude = location-> getLongitude();
+    float meridian = location->getTimeZone()*(-15.0);
+    double rotation = model -> getNorthCorrection();
+    
+    // Get sizes and resize
+    size_t nSensors = DC->nrows();
+    size_t nBins = DC->ncols();
+    size_t nSamples = location->getWeatherSize();
+    int mf = mfFromNBins((int)nBins);
+    size_t nstep = 0;
+    
+    if (nSamples == 0)
+        FATAL(m,"No Weather Data when CalculateDirectSunComponent");
+    
+    result->resize(nSensors,interp*nSamples);
+    
+    // Initialize Sky vector
+    ColorMatrix skyVector = ColorMatrix(nBins,1);
+    
+    // Interpolate and multiply
+    
+    for(int timestep = 0 ; timestep < nSamples; timestep++ ){
+        HourlyData now = HourlyData();
+        float floatInter = (float)interp;
+        float q;
+        for(int i = 0; i < interp; i++){
+            q = (float)i / floatInter;
+            
+            location->getInterpolatedData(timestep,q,&now);
+            
+            if(now.diffuse_horizontal > 1e-4){
+                // Is day... calculate
+                genPerezSkyVector(now.month, now.day, now.hour, now.direct_normal, now.diffuse_horizontal, albedo, latitude, longitude, meridian, mf, sunOnly, sharpSun, rotation, &skyVector);
+                
+                // Multiply
+                DC->multiplyToColumn(&skyVector, nstep, result);
+            } // No else... matrices come with zeroes
+            
+            nstep++;
+        }
+    }
+}
+
+
+void calcCBDMScore(int interp, GroundhogModel * model, int firstMonth, int lastMonth, double early, double late, double minLux, double maxLux, ColorMatrix * input, Matrix * result, std::function<double(double v, double min, double max)> scoreCalculator)
+{
+    
+    // Get size
+    size_t nsensors = input->nrows();
+    
+    // Make space for the final results results
+    result->resize(nsensors,1);
+    
+    /* Calculate the score (in percentage of time, from 0 to 100) */
+    
+    // Get location and weather data size
+    Location * location = model->getLocation();
+    size_t nSamples = location->getWeatherSize();
+    
+    // Initialize variables
+    float lux;
+    size_t nWorkingTsteps = 0;
+    size_t nstep=-1;
+    HourlyData now = HourlyData();
+    float floatInter = (float)interp;
+    float q;
+    
+    // Iterate through the weather data
+    for(int timestep = 0 ; timestep < nSamples; timestep++ ){
+        
+        // Interpolate between timesteps
+        for(int i = 0; i < interp; i++){
+            // Fraction between timesteps
+            q = (float)i / floatInter;
+            
+            // Fill the HourlyData with interpolated information
+            location->getInterpolatedData(timestep,q,&now);
+            
+            // Advance in time
+            nstep++;
+            
+            // Check if this moment counts
+            if(now.month < firstMonth || now.month > lastMonth)
+                continue;
+            
+            if(now.hour < early || now.hour > late)
+                continue;
+            
+            // Increase working timesteps, if it counts
+            nWorkingTsteps++;
+            
+            // Iterate all sensors, increasing the score if needed
+            for(int sensor = 0; sensor < nsensors; sensor++){
+                lux = input->calcIlluminance(sensor,nstep);
+                
+                double score = scoreCalculator(lux, minLux, maxLux);
+                
+                result->setElement(sensor,0,result->getElement(sensor,0)+score);
+                
+            }
+        }
+    }
+    
+    // Normalize by the total number of timestep
+    float totalSteps = (float)nWorkingTsteps/100.0;
+    
+    for(size_t sensor = 0; sensor < nsensors; sensor++){
+        result->setElement(sensor, 1, result->getElement(sensor,1)/totalSteps);
+    }
+}
+
+
+
 

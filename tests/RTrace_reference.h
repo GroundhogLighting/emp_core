@@ -1,6 +1,5 @@
 
 #include "../include/emp_core.h"
-//#include "groundhogmodel/groundhogmodel.h"
 
 const double latitude = -33.38;
 const double longitude = 70.78;
@@ -177,6 +176,7 @@ RTraceOptions options = RTraceOptions();
 options.setOption("ab",10);
 options.setOption("ad",50000);
 options.setOption("lw",0.000001);
+options.setOption("aa",0.1);
 
 // Create Models
 GroundhogModel simpleModel = GroundhogModel();
@@ -216,12 +216,13 @@ Location * emptyModelLocation = emptyModel.getLocation();
 emptyModelLocation->setLatitude(latitude);
 emptyModelLocation->setLongitude(longitude);
 emptyModelLocation->setTimeZone(time_zone);
+emptyModelLocation->markWeatherAsFilled();
 
 Location * simpleModelLocation = simpleModel.getLocation();
 simpleModelLocation->setLatitude(latitude);
 simpleModelLocation->setLongitude(longitude);
 simpleModelLocation->setTimeZone(time_zone);
-
+simpleModelLocation->markWeatherAsFilled();
 
 // Add some weather
 for(int i=0; i<48; i++){

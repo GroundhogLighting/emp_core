@@ -135,14 +135,23 @@ public:
     */
     void clean();
 
-    //! Find Task
+    //! Find a Task index
     /*!
     Retrieves the index of a certain task in the TaskManager
 
     @param[in] t The Task object
     @return The position
     */
-    size_t findTask(Task * t);
+    size_t findTaskIndex(Task * t);
+    
+    //! Find Task
+    /*!
+     Retrieves a pointer to the first equivalent Task in the TaskManager
+     
+     @param[in] t The Task object
+     @return The pointer to the equivalent task WITHIN the task manager
+     */
+    Task * findTask(Task * t);
 
 };
 

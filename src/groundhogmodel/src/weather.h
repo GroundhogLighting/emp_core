@@ -48,10 +48,11 @@ public:
 
 class Weather {
 
-private:
-	bool filled = false; //!< Indicates whether the Weather has been populated
+
+	
 
 public:
+    bool filled = false; //!< Indicates whether the Weather has been populated
 	std::vector<HourlyData> data = std::vector<HourlyData>(); //!< The actual data
 
 	//! Grabs a JSON representing the Weather file and fills the Weather object

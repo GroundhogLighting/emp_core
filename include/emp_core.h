@@ -17,7 +17,7 @@ class GroundhogModel;
 #include "../src/taskmanager/taskmanager.h"
 class TaskManager;
 
-//#include "../src/groundhogmodel/src/rtraceoptions.h"
+#include "../src/groundhogmodel/src/rtraceoptions.h"
 class RTraceOptions;
 
 #include "../src/calculations/oconv_options.h"
@@ -33,49 +33,52 @@ class SKPreader;
 #include "../src/calculations/tasks/AddSkyToOctree.h"
 class AddSkyToOctree;
 
-#include "../src/calculations/tasks/Calculate4CMDirectSkyMatrix.h"
+#include "../src/calculations/tasks/4CM/Calculate4CMDirectSkyMatrix.h"
 class Calculate4CMDirectSkyMatrix;
 
-#include "../src/calculations/tasks/Calculate4CMNaiveDirectSkyMatrix.h"
+#include "../src/calculations/tasks/4CM/Calculate4CMNaiveDirectSkyMatrix.h"
 class Calculate4CMNaiveDirectSkyMatrix;
 
-#include "../src/calculations/tasks/CalculateDDCDirectSkyMatrix.h"
+#include "../src/calculations/tasks/DDC/CalculateDDCDirectSkyMatrix.h"
 class CalculateDDCDirectSkyMatrix;
 
-#include "../src/calculations/tasks/CalculateDDCDirectSunPatchIlluminance.h"
-class CalculateDDCDirectSunPatchIlluminance;
+#include "../src/calculations/tasks/DDC/CalculateDDCDirectSunPatchComponent.h"
+class CalculateDDCDirectSunPatchComponent;
 
-#include "../src/calculations/tasks/CalculateDDCGlobalIlluminance.h"
-class CalculateDDCGlobalIlluminance;
+#include "../src/calculations/tasks/DDC/CalculateDDCGlobalComponent.h"
+class CalculateDDCGlobalComponent;
 
-#include "../src/calculations/tasks/CalculateDDCGlobalMatrix.h"
+#include "../src/calculations/tasks/DDC/CalculateDDCGlobalMatrix.h"
 class CalculateDDCGlobalMatrix;
 
-#include "../src/calculations/tasks/CalculateDaylightFactor.h"
+#include "../src/calculations/tasks/DaylightFactor/CalculateDaylightFactor.h"
 class CalculateDaylightFactor;
 
-#include "../src/calculations/tasks/CalculateDirectSunIlluminance.h"
-class CalculateDirectSunIlluminance;
+#include "../src/calculations/tasks/DirectSun/CalculateDirectSolarIlluminance.h"
+class CalculateDirectSolarIlluminance;
 
-#include "../src/calculations/tasks/CalculateDirectSunMatrix.h"
+#include "../src/calculations/tasks/DirectSun/CalculateDirectSunComponent.h"
+class CalculateDirectSunComponent;
+
+#include "../src/calculations/tasks/DirectSun/CalculateDirectSunMatrix.h"
 class CalculateDirectSunMatrix;
 
-#include "../src/calculations/tasks/Create4CMDirectSkyOctree.h"
+#include "../src/calculations/tasks/4CM/Create4CMDirectSkyOctree.h"
 class Create4CMDirectSkyOctree;
 
-#include "../src/calculations/tasks/Create4CMNaiveDirectSkyOctree.h"
+#include "../src/calculations/tasks/4CM/Create4CMNaiveDirectSkyOctree.h"
 class Create4CMNaiveDirectSkyOctree;
 
-#include "../src/calculations/tasks/CreateDDCDirectSkyOctree.h"
+#include "../src/calculations/tasks/DDC/CreateDDCDirectSkyOctree.h"
 class CreateDDCDirectSkyOctree;
 
-#include "../src/calculations/tasks/CreateDDCGlobalOctree.h"
+#include "../src/calculations/tasks/DDC/CreateDDCGlobalOctree.h"
 class CreateDDCGlobalOctree;
 
-#include "../src/calculations/tasks/CreateDaylightFactorOctree.h"
+#include "../src/calculations/tasks/DaylightFactor/CreateDaylightFactorOctree.h"
 class CreateDaylightFactorOctree;
 
-#include "../src/calculations/tasks/CreateDirectSunOctree.h"
+#include "../src/calculations/tasks/DirectSun/CreateDirectSunOctree.h"
 class CreateDirectSunOctree;
 
 #include "../src/calculations/tasks/OconvTask.h"
@@ -87,11 +90,23 @@ class RTraceTask;
 #include "../src/calculations/tasks/TriangulateWorkplane.h"
 class TriangulateWorkplane;
 
-#include "../src/calculations/tasks/do4CM.h"
-class do4CM;
+#include "../src/calculations/tasks/4CM/Calculate4CMGlobalIlluminance.h"
+class Calculate4CMGlobalIlluminance;
 
-#include "../src/calculations/tasks/doDDC.h"
-class doDDC;
+#include "../src/calculations/tasks/DDC/CalculateDDCGlobalIlluminance.h"
+class CalculateDDCGlobalIlluminance;
+
+#include "../src/calculations/tasks/DaylightFactor/CheckDFCompliance.h"
+class CheckDFCompliance;
+
+#include "../src/calculations/tasks/DirectSun/CheckASECompliance.h"
+class CheckASECompliance;
+
+#include "../src/calculations/tasks/CheckDACompliance.h"
+class CheckDACompliance;
+
+#include "../src/calculations/tasks/CheckUDICompliance.h"
+class CheckUDICompliance;
 
 // RadExporter Tasks
 #include "../src/writers/rad/tasks/WriteComponentDefinitions.h"

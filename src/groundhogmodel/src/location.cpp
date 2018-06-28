@@ -106,3 +106,42 @@ void Location::addHourlyData(HourlyData h)
 {
     weather.data.push_back(h);
 }
+
+void Location::markWeatherAsFilled()
+{
+    weather.filled = true;
+}
+
+void Location::getInterpolatedData(int beg,float i,HourlyData * data)
+{
+    if(!weather.hasData())
+        throw "Fatal: Cannot simulate because it has no data";
+    
+    size_t weaSize = weather.data.size();
+    if(beg < 0 )
+        throw "Impossible beggining data point in Weather File interpolation";
+    
+    
+    HourlyData * startData = &(weather.data[beg]);
+    HourlyData * endData = &(weather.data[(beg + 1) % weaSize]);
+    
+    data->month = startData->month;
+    data->day = startData->day;
+    data->hour = startData->hour + i*(endData->hour - startData->hour);
+    
+    // If it is night in both, return Zeroes, with the month of the previous
+    if(startData->diffuse_horizontal < 1e-3 && endData->diffuse_horizontal < 1e-3){
+        data->diffuse_horizontal = 0;
+        data->direct_normal = 0;
+        return;
+    }
+    
+    // From now on, Month and Day should be the same in both startingData and endData
+    // as nights (changes in day and month) are considered in the case before.
+    
+    // Linearly interpolate the diffuse_horizontal
+    data->diffuse_horizontal = startData->diffuse_horizontal + i*(endData->diffuse_horizontal - startData->diffuse_horizontal);
+    
+    // Deal with direct normal
+    data->direct_normal = startData->direct_normal + i*(endData->direct_normal - startData->direct_normal);
+}

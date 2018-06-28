@@ -103,10 +103,24 @@ public:
     */
     double getMaxArea();
     
+    //! Sets the maximum area for each pixel in the grid
+    /*!
+     @author German Molina
+     @param v The value
+     */
+    void setMaxArea(double v);
+    
     //! Retrieves the maximum aspect ratio for each pixel in the grid
     /*!
      @author German Molina
      @return the area
      */
     double getMaxAspectRatio();
+    
+    //! Sets the maximum aspect ratio for each pixel in the grid
+    /*!
+     @author German Molina
+     @param v The value
+     */
+    void setMaxAspectRatio(double v);
 };

@@ -40,6 +40,9 @@ This module defines constants that are used in the rest of the program.
 /// The separator used when writing files
 #define EMP_TAB "   " //!< This is the separator used when writing Radiance files
 
+/// The interpolation scheme...
+#define EMP_TIME_INTERPOLATION 6
+
 /// Maximum interior loops
 #define EMP_TOO_MANY_LOOPS 40 //!< The number of interior loops that are considered too many in a face 
 

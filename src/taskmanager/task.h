@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <string>
 #include "../common/options/optionset.h"
-
+#include "../calculations/color_matrix.h"
 
 
 
@@ -44,16 +44,18 @@ a CalculateAnnualDaylight Task is generic, but targeted to different workplanes)
 
 */
 
+class TaskManager;
+
 class Task {
-private:
-	
+private:	
 	std::string name = "ThisTaskHasNoName"; //!< The name of the task
 	std::vector<Task *> dependencies = std::vector<Task * >(); //!< The vector of Task objects that this Task depend upon
     std::vector<Task *> dependants = std::vector<Task * >(); //!< The vector of Task objects that depend on this Task
-
+    TaskManager * parent; //!< The parent Task Manager. Used for searching tasks from within tasks
+    
 public:
     bool reportResults = false; //!< True if the TaskManager should report the results or not
-    bool generatesResults = false; //!< Indicates whether or not this task is worth reporting results    
+    bool generatesResults = false; //!< Indicates whether or not this task is worth reporting results
 
     //! Virtual destructor
     /*!
@@ -127,7 +129,22 @@ public:
     @param[in] b The dependency to replace 'a' with
     */
     void replaceDependency(Task * a, Task * b);
+    
+    //! Sets the parent of the task
+    /*!
+     @author German Molina
+     @param[in] the TaskManager object
+     */
+    void setParent(TaskManager * tm);
 
+    //! Retrieves the parent of the task
+    /*!
+     @author German Molina
+     @return A pointer to the parent TaskManager object
+     */
+    TaskManager * getParent();
+
+    
 	//! Function that performs the instructions required
 	/*!
 	Each derived Task will solve some instructions and generate some data,
@@ -171,8 +188,8 @@ public:
     @param[in] results The results JSON to fill
     */
     virtual bool submitResults(json * results) = 0;
-    
 };
+
 
 #endif
 

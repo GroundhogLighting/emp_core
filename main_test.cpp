@@ -20,8 +20,8 @@
 #include "./tests/DDC_test.h"
 #include "./tests/genperezskyvec_test.h"
 #include "./tests/materials_test.h"
-#include "./tests/DF_test.h"
 #include "./tests/skp_reader_test.h"
+#include "./tests/tasks_tests.h"
 
 
 

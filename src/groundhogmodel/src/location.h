@@ -179,4 +179,20 @@ public:
 	@author German Molina
 	*/
 	bool hasWeather();
+    
+    //! Marks weather as filled
+    /*!
+     @author German Molina
+     */
+    void markWeatherAsFilled();
+    
+    //! Interpolats the weather data
+    /*!
+     @author German Molina
+     @param step The starting measured point     
+     @param i The scheme to interpolate (0 to 1)
+     @param data The HourlyData object to put the results in
+     @todo Consider interpolation at sunrise and sunset!
+     */
+    void getInterpolatedData(int step,float i,HourlyData * data);
 };

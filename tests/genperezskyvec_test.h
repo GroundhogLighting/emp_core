@@ -60,7 +60,7 @@ void radGenDayMtx(int month, int day, float hour, float direct, float diffuse, f
 TEST(GenPerezSkyVec, NoRadiation)
 {
     size_t mf=1;
-    size_t nbins = nReinhartBins(mf);
+    int nbins = nReinhartBins((int)mf);
     
     // Create the SkyVector
     ColorMatrix SkyVec = ColorMatrix(nbins,1);

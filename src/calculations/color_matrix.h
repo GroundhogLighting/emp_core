@@ -125,6 +125,24 @@ public:
      */
     void calcIlluminance(Matrix * result);
     
+    //! Calculate the irradiance value in an element
+    /*!
+     @author German Molina
+     @param row The row
+     @param col The colum
+     @return the irradiance
+     */
+    float calcIrradiance(size_t row, size_t col);
+    
+    //! Calculates the illuminance value of an element
+    /*!
+     @author German Molina
+     @param row The row
+     @param col The colum
+     @return the illuminance
+     */
+    float calcIlluminance(size_t row, size_t col);
+    
 };
 
 extern ColorMatrix colorMatrix;
