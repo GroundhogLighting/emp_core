@@ -29,12 +29,14 @@
 #include "../../taskmanager/mutexes.h"
 
 class AddSkyToOctree : public Task {
+
 public:
     GroundhogModel * model; //!< The model to Oconv
     std::string octreeName; //!< The name of the final octree
     OconvOptions options;//!< The options passed to the octree
     std::string sky; //!< The sky to add to the octree
-    
+
+
     AddSkyToOctree(GroundhogModel * theModel, OconvOptions * theOptions, std::string theSky)
     {
         

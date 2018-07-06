@@ -96,7 +96,7 @@ public:
     {        
         
         CalculateDDCGlobalMatrix * matrixTask = static_cast<CalculateDDCGlobalMatrix *>(getDependencyRef(0));
-        ColorMatrix * DC = &(matrixTask->result);
+        ColorMatrix * DC = matrixTask->getResult();
         interpolatedDCTimestep(interp, model, DC, false, false, &result);
         
         

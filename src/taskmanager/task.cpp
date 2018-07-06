@@ -32,9 +32,9 @@ void Task::setName(std::string * n)
 }
 
 
-std::string * Task::getName()
+std::string Task::getName()
 {
-	return &name;
+	return name;
 }
 
 void Task::addDependency(Task * t)

@@ -36,45 +36,62 @@ ColorMatrix::ColorMatrix(size_t nrows, size_t ncols )
     blue = Matrix(nrows,ncols);
 }
 
-size_t ColorMatrix::ncols()
+size_t ColorMatrix::ncols() const
 {
     return red.ncols();
 }
 
-size_t ColorMatrix::nrows()
+size_t ColorMatrix::nrows() const
 {
     return red.nrows();
 }
 
-Matrix * ColorMatrix::redChannel()
+const Matrix * ColorMatrix::redChannel() const
 {
     return &red;
 }
 
-Matrix * ColorMatrix::greenChannel()
+const Matrix * ColorMatrix::greenChannel() const
 {
     return &green;
 }
 
-Matrix * ColorMatrix::blueChannel()
+const Matrix * ColorMatrix::blueChannel() const
 {
     return &blue;
 }
 
-bool ColorMatrix::multiply(ColorMatrix * m, ColorMatrix * res)
+
+Matrix * ColorMatrix::r()
 {
-    red.multiply(m->redChannel(), res->redChannel());
-    green.multiply(m->greenChannel(), res->greenChannel());
-    blue.multiply(m->blueChannel(), res->blueChannel());
+    return &red;
+}
+
+Matrix * ColorMatrix::g()
+{
+    return &green;
+}
+
+Matrix * ColorMatrix::b()
+{
+    return &blue;
+}
+
+
+bool ColorMatrix::multiply(const ColorMatrix * m, ColorMatrix * res) const
+{
+    red.multiply(m->redChannel(), res->r());
+    green.multiply(m->greenChannel(), res->g());
+    blue.multiply(m->blueChannel(), res->b());
     
     return true;
 }
 
-bool ColorMatrix::multiplyToColumn(ColorMatrix * vec, size_t col, ColorMatrix * res)
+bool ColorMatrix::multiplyToColumn(const ColorMatrix * vec, size_t col, ColorMatrix * res) const
 {
-    red.multiplyToColumn(vec->redChannel(),col, res->redChannel());
-    green.multiplyToColumn(vec->greenChannel(),col, res->greenChannel());
-    blue.multiplyToColumn(vec->blueChannel(),col, res->blueChannel());
+    red.multiplyToColumn(vec->redChannel(),col, res->r());
+    green.multiplyToColumn(vec->greenChannel(),col, res->g());
+    blue.multiplyToColumn(vec->blueChannel(),col, res->b());
     
     return true;
 }
@@ -86,10 +103,10 @@ void ColorMatrix::resize(size_t nrows, size_t ncols)
     blue.resize(nrows,ncols);
 }
 
-void ColorMatrix::calcIrradiance(Matrix * result)
+void ColorMatrix::calcIrradiance(Matrix * result) const
 {
-    size_t cols = ncols();
-    size_t rows = nrows();
+    const size_t cols = ncols();
+    const size_t rows = nrows();
     
     // Check size match
     if(cols != result->ncols() || rows != result->nrows()){
@@ -109,14 +126,14 @@ void ColorMatrix::calcIrradiance(Matrix * result)
     
 }
 
-void ColorMatrix::calcIlluminance(Matrix * result)
+void ColorMatrix::calcIlluminance(Matrix * result) const
 {
-    size_t cols = ncols();
-    size_t rows = nrows();
+    const size_t cols = ncols();
+    const size_t rows = nrows();
     
     // Check size match
     if(cols != result->ncols() || rows != result->nrows()){
-        WARN(msg,"Inconsistent size of result matrix when calcIrradiance... resizing");
+        WARN(msg,"Inconsistent size of result matrix when calcIlluminance... resizing");
         result->resize(rows,cols);
     }
     
@@ -134,19 +151,19 @@ void ColorMatrix::calcIlluminance(Matrix * result)
 
 
 
-float ColorMatrix::calcIrradiance(size_t row, size_t col)
+float ColorMatrix::calcIrradiance(size_t row, size_t col) const
 {
-    double r = red.getElement(row,col);
-    double g = green.getElement(row,col);
-    double b = blue.getElement(row,col);
+    const double r = red.getElement(row,col);
+    const double g = green.getElement(row,col);
+    const double b = blue.getElement(row,col);
     return 0.265*r + 0.67*g + 0.065*b;
 }
 
-float ColorMatrix::calcIlluminance(size_t row, size_t col)
+float ColorMatrix::calcIlluminance(size_t row, size_t col) const
 {
-    double r = red.getElement(row,col);
-    double g = green.getElement(row,col);
-    double b = blue.getElement(row,col);
+    const double r = red.getElement(row,col);
+    const double g = green.getElement(row,col);
+    const double b = blue.getElement(row,col);
     return 47.5*r + 119.95*g + 11.60*b;
     
 }

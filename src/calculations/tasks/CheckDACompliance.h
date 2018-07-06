@@ -23,6 +23,7 @@
 #pragma once
 
 
+#include "./DDC/CalculateDDCGlobalIlluminance.h"
 #include "../../taskmanager/cbdm_task.h"
 
 double daScoreCalculator(double v, double minLux, double maxLux)
@@ -35,7 +36,7 @@ class CheckDACompliance : public CBDMTask {
     
 public:
     
-    CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int theMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
+    CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
     {
         model = theModel;
         minLux = theMinLux;
@@ -45,20 +46,19 @@ public:
         lastMonth = maxMonth;
         workplane = wp;
         minTime = theMinTime;
-        scoreCalculator = aseScoreCalculator;
+        scoreCalculator = daScoreCalculator;
         
         // Dependency 0
-        CalculateDirectSunComponent * illuminanceTask = new CalculateDirectSunComponent(theModel, wp, theMf, theOptions, interp);
-        addDependency(illuminanceTask);
+        CalculateDDCGlobalIlluminance * illuminanceTask = new CalculateDDCGlobalIlluminance(theModel, wp, sunMf, skyMf, theOptions, interp);
         
-        // Set the dependency results
-        depResults = &(illuminanceTask->result);
+        
+        addDependency(illuminanceTask);
         
         // Set the name
         setName(&name);
     }
     
-    CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
+    CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
     {
         
         model = theModel;
@@ -68,24 +68,25 @@ public:
         firstMonth = minMonth;
         lastMonth = maxMonth;
         minTime = theMinTime;
-        scoreCalculator = aseScoreCalculator;
+        scoreCalculator = daScoreCalculator;
         rays = theRays;
         
         // Dependency 0
-        CalculateDirectSunComponent * illuminanceTask = new CalculateDirectSunComponent(theModel, theRays, theMf, theOptions, interp);
+        CalculateDDCGlobalIlluminance * illuminanceTask = new CalculateDDCGlobalIlluminance(theModel, theRays, sunMf, skyMf, theOptions, interp);
         addDependency(illuminanceTask);
         
-        // Set the dependency results
-        depResults = &(illuminanceTask->result);
         
         // Set the name
         setName(&name);
     }
     
+    GET_DEP_RESULTS(CalculateDDCGlobalIlluminance);        
     
     
 };
 
 extern CheckDACompliance checkDA;
+
+
 
 

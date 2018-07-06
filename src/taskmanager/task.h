@@ -75,7 +75,7 @@ public:
 	@author German Molina
 	@return The name
 	*/
-	std::string * getName();
+	std::string getName();
 
 	//! Adds a dependency to the Task
 	/*!

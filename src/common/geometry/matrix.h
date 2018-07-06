@@ -54,21 +54,21 @@ public:
      
      @author German Molina
      */
-    void print();
+    void print() const;
     
     //! Returns the number of columns in a matrix
     /*!
      @author German Molina
      @return the number of columns
      */
-    size_t ncols();
+    size_t ncols() const;
     
     //! Returns the number of rows in a matrix
     /*!
      @author German Molina
      @return the number of rows
      */
-    size_t nrows();
+    size_t nrows() const;
     
     //! Retrieves a row
     /*!
@@ -95,7 +95,7 @@ public:
      @param[out] res The resulting matrix
      @return success
      */
-    bool multiply(Matrix * m, Matrix * res);
+    bool multiply(const Matrix * m, Matrix * res) const;
 
     //! Multiplies a vector (Nx1 sized matrix) by a matrix and puts the result in a column of another matrix
     /*!
@@ -105,7 +105,7 @@ public:
      @param[out] res The resulting matrix
      @return success
      */
-    bool multiplyToColumn(Matrix * vec, size_t col, Matrix * res);
+    bool multiplyToColumn( const Matrix * vec, size_t col, Matrix * res) const;
 
     
     //! Sets a certain element to a certain value
@@ -122,7 +122,7 @@ public:
      @param ncol The column number of the element
      @return the value of the element
      */
-    double getElement(size_t nrow, size_t ncol);
+    double getElement(size_t nrow, size_t ncol) const;
 };
 
 extern Matrix matrix;

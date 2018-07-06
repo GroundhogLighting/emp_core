@@ -29,6 +29,7 @@
 Matrix::Matrix()
 {
     data = std::vector< std::vector <double> >(1);
+    data[0] = std::vector <double>(1);
 }
 
 Matrix::Matrix(size_t nrows, size_t ncols)
@@ -37,7 +38,7 @@ Matrix::Matrix(size_t nrows, size_t ncols)
 }
 
 
-void Matrix::print()
+void Matrix::print() const
 {
     size_t nrows = NROWS;
     size_t ncols = NCOLS;
@@ -52,20 +53,16 @@ void Matrix::print()
     
 }
 
-size_t Matrix::ncols()
+size_t Matrix::ncols() const
 {
     return NCOLS;
 }
 
-size_t Matrix::nrows()
+size_t Matrix::nrows() const
 {
     return NROWS;
 }
 
-std::vector<double> * Matrix::operator[](size_t nrow)
-{
-    return &data[nrow];
-}
 
 void Matrix::resize(size_t nrows, size_t ncols)
 {
@@ -75,7 +72,7 @@ void Matrix::resize(size_t nrows, size_t ncols)
     }
 }
 
-bool Matrix::multiply(Matrix * m, Matrix * res)
+bool Matrix::multiply(const Matrix * m, Matrix * res) const
 {
     // Check size consistency with m
     if (NCOLS != m->nrows())
@@ -95,16 +92,16 @@ bool Matrix::multiply(Matrix * m, Matrix * res)
         for (int col = 0; col < ncols ; col++) {
             double v = 0;
             for (int i = 0; i < aux; i++) {
-                v += (data[row][i] * (*m)[i]->at(col));
+                v += (getElement(row,i) * m->getElement(i,col)); // CHECK THIS!
             }
-            (*res)[row]->at(col) = v;
+            res->setElement(row,col,v);
         }
     }
     
     return true;
 }
 
-bool Matrix::multiplyToColumn(Matrix * vec, size_t col, Matrix * res)
+bool Matrix::multiplyToColumn( const Matrix * vec, size_t col, Matrix * res) const
 {
     if ( 1 != vec->ncols())
         throw std::invalid_argument("vector needs to have only one column multiplyToLocation()");
@@ -124,9 +121,9 @@ bool Matrix::multiplyToColumn(Matrix * vec, size_t col, Matrix * res)
     for (int row = 0; row < NROWS; row++) {
         double v = 0;
         for (int i = 0; i < ncols; i++) {
-            v += (data[row][i] * (*vec)[i]->at(0));
+            v += (getElement(row,i) * vec->getElement(i,0));
         }
-        (*res)[row]->at(col) = v;
+        res->setElement(row,col,v);
     }
     
     return true;
@@ -134,12 +131,18 @@ bool Matrix::multiplyToColumn(Matrix * vec, size_t col, Matrix * res)
 
 void Matrix::setElement(size_t row, size_t col, double value)
 {
+    if ( row >= NROWS || col >= NCOLS )
+        throw std::invalid_argument("Trying to set element out of range in MATRIX");
+    
     data[row][col] = value;
 }
 
 
-double Matrix::getElement(size_t row, size_t col)
+double Matrix::getElement(size_t row, size_t col) const
 {
+    if ( row >= NROWS || col >= NCOLS )
+        throw std::invalid_argument("Trying to get element out of range in MATRIX");
+    
     return data[row][col];
 }
 

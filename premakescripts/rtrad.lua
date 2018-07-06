@@ -7,7 +7,7 @@ defines {
     "lint"
 }
 files {
-    rad_common.."/addobjnotify.c", 
+    --rad_common.."/addobjnotify.c", -- Deletef for Emp
     rad_common.."/badarg.c",
     rad_common.."/biggerlib.c",
     rad_common.."/bmalloc.c",
@@ -45,7 +45,7 @@ files {
     rad_common.."/fixargv0.c",
     rad_common.."/font.c",
     rad_common.."/fputword.c",
-    --rad_common.."/free_os.c",  -- Deleted for Glare
+    rad_common.."/free_os.c",  -- Deleted for Emp
     rad_common.."/fropen.c",
     rad_common.."/fvect.c",
     rad_common.."/gethomedir.c",

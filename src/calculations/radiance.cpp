@@ -74,6 +74,7 @@ bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool 
     std::string ropts = options->getInlineVersion();
     
     std::string command = "rcontrib -h " + v + mode + ropts + " -e MF:"+ std::to_string(mf) + " -f reinhart.cal -b rbin -bn Nrbins -m " + std::string(modifier) + " " + octname + " > " + rgbfile ;
+    // -faf
     
     // Create the file
     FILE *rt = POPEN(&command[0], "w");
@@ -119,9 +120,12 @@ bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool 
                 iss >> rval;
                 blue = stof(rval);
                 
-                (*result->redChannel())[nsensor]->at(nbin) = red;
-                (*result->greenChannel())[nsensor]->at(nbin) = green;
-                (*result->blueChannel())[nsensor]->at(nbin) = blue;
+                result->r()->setElement(nsensor,nbin,red);
+                result->g()->setElement(nsensor,nbin,green);
+                result->b()->setElement(nsensor,nbin,blue);
+                
+                //result->greenChannel())[nsensor]->at(nbin) = green;
+                //result->blueChannel())[nsensor]->at(nbin) = blue;
             }
         
             nsensor ++;
@@ -176,9 +180,9 @@ bool rtrace(RTraceOptions * options, char * octname, bool do_irradiance, bool im
         size_t i = 0;
         while (FSCANF(resultFile, "%f %f %f", &r, &g, &b) != EOF)
         {
-            result->redChannel()->setElement(i,0,r);
-            result->greenChannel()->setElement(i,0,g);
-            result->blueChannel()->setElement(i,0,b);
+            result->r()->setElement(i,0,r);
+            result->g()->setElement(i,0,g);
+            result->b()->setElement(i,0,b);
             //rays->at(i).rcol[RED] = r;
             //rays->at(i).rcol[GRN] = g;
             //rays->at(i).rcol[BLU] = b;
@@ -415,16 +419,16 @@ bool genPerezSkyVector(int month, int day, float hour, float direct, float diffu
     size_t nBins = nReinhartBins(skyMF);
     size_t aux = 0;
     for(size_t bin=0; bin < nBins; bin++){
-        skyVec->redChannel()->setElement(bin,0,mtx_data[aux++]);
-        skyVec->greenChannel()->setElement(bin,0,mtx_data[aux++]);
-        skyVec->blueChannel()->setElement(bin,0,mtx_data[aux++]);
+        skyVec->r()->setElement(bin,0,mtx_data[aux++]);
+        skyVec->g()->setElement(bin,0,mtx_data[aux++]);
+        skyVec->b()->setElement(bin,0,mtx_data[aux++]);
     }
 
     return true;
 }
 
 
-void interpolatedDCTimestep(int interp, GroundhogModel * model, ColorMatrix * DC, bool sunOnly, bool sharpSun, ColorMatrix * result)
+void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatrix * DC, bool sunOnly, bool sharpSun, ColorMatrix * result)
 {
     
     // Get location info
@@ -436,8 +440,8 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, ColorMatrix * DC
     double rotation = model -> getNorthCorrection();
     
     // Get sizes and resize
-    size_t nSensors = DC->nrows();
-    size_t nBins = DC->ncols();
+    const size_t nSensors = DC->nrows();
+    const size_t nBins = DC->ncols();
     size_t nSamples = location->getWeatherSize();
     int mf = mfFromNBins((int)nBins);
     size_t nstep = 0;
@@ -475,7 +479,7 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, ColorMatrix * DC
 }
 
 
-void calcCBDMScore(int interp, GroundhogModel * model, int firstMonth, int lastMonth, double early, double late, double minLux, double maxLux, ColorMatrix * input, Matrix * result, std::function<double(double v, double min, double max)> scoreCalculator)
+void calcCBDMScore(int interp, GroundhogModel * model, int firstMonth, int lastMonth, double early, double late, double minLux, double maxLux, const Matrix * input, Matrix * result, std::function<double(double v, double min, double max)> scoreCalculator)
 {
     
     // Get size
@@ -524,12 +528,11 @@ void calcCBDMScore(int interp, GroundhogModel * model, int firstMonth, int lastM
             
             // Iterate all sensors, increasing the score if needed
             for(int sensor = 0; sensor < nsensors; sensor++){
-                lux = input->calcIlluminance(sensor,nstep);
+                lux = input->getElement(sensor,nstep);
                 
                 double score = scoreCalculator(lux, minLux, maxLux);
                 
-                result->setElement(sensor,0,result->getElement(sensor,0)+score);
-                
+                result->setElement(sensor,0,result->getElement(sensor,0)+score);                
             }
         }
     }
@@ -538,7 +541,7 @@ void calcCBDMScore(int interp, GroundhogModel * model, int firstMonth, int lastM
     float totalSteps = (float)nWorkingTsteps/100.0;
     
     for(size_t sensor = 0; sensor < nsensors; sensor++){
-        result->setElement(sensor, 1, result->getElement(sensor,1)/totalSteps);
+        result->setElement(sensor, 0, result->getElement(sensor,0)/totalSteps);
     }
 }
 

@@ -33,7 +33,8 @@ project "emp_core"
     elseif is_macos then
         defines { "MACOS" }                    
         linkoptions {            
-            "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"
+            "-L "..libs_dir.."/%{cfg.buildcfg}/tbb",  
+            --"-Wl,-rpath,\\$ORIGIN"                                
         }    
         buildoptions {
             "-F /Library/Frameworks",

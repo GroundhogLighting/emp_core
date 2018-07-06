@@ -20,9 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include <fstream>
+
 #include "./taskmanager.h"
 #include "../common/utilities/io.h"
 #include "tbb/tbb.h"
+
 
 #ifdef _DEBUG
 // Define mutex for informing progress
@@ -105,6 +107,9 @@ size_t TaskManager::countTasks()
 bool TaskManager::solve(json * results)
 {
 
+    if(results != nullptr && !results->empty())
+        throw "Solving a task manager that is non-empty";
+    
     if(tasks.size() == 0){
 #ifndef AVOID_EMP_CORE_WARNINGS
         WARN(v,"No task to solve in TaskManager");
@@ -131,13 +136,13 @@ bool TaskManager::solve(json * results)
             try {
 #ifdef _DEBUG
                 verboseMutex.lock();
-                std::cerr << "    ... Starting Task '" << *(tasks[i]->getName()) << "'" << std::endl;
+                std::cerr << "    ... Starting Task '" << tasks[i]->getName() << "'" << std::endl;
                 verboseMutex.unlock();
 #endif
                 success= tasks[i]->solve();
 #ifdef _DEBUG
                 verboseMutex.lock();
-                std::cerr << "    ... Ended Task '" << *(tasks[i]->getName()) <<  "'" << std::endl;
+                std::cerr << "    ... Ended Task '" << tasks[i]->getName() <<  "'" << std::endl;
                 verboseMutex.unlock();
 #endif
             }catch(std::out_of_range& ex) {
@@ -176,7 +181,9 @@ bool TaskManager::solve(json * results)
     if (results == nullptr)
       return true;
 
-    // submit results
+    /* submit results */
+    
+    
     for (size_t i = 0; i < tasks.size(); i++) {
       if (tasks.at(i)->generatesResults && tasks.at(i)->reportResults) {
         tasks.at(i)->submitResults(results);
@@ -207,7 +214,7 @@ void TaskManager::print(char * filename)
 	  Task * task = tasks[i];
       size_t nDep = task->countDependencies();
       if(nDep == 0){
-          std::string ln = "\"" + *(task->getName()) + "\"";
+          std::string ln = "\"" + task->getName() + "\"";
           if (filename == nullptr) {
               std::cout << ln << ";\n";
           }
@@ -218,7 +225,7 @@ void TaskManager::print(char * filename)
       }
       
       for (size_t j = 0; j < nDep; j++) {                   
-        std::string ln = "\"" + *(task->getDependencyRef(j)->getName()) + "\" -> \"" + *(task->getName())+ "\"";
+        std::string ln = "\"" + task->getDependencyRef(j)->getName() + "\" -> \"" + task->getName()+ "\"";
         if (filename == nullptr) {
           std::cout << ln << ";\n";
         }
@@ -255,6 +262,7 @@ bool TaskManager::compareTasks(Task * a, Task * b)
     // Check deeper
 	return a->isEqual(b);
 }
+
 
 
 bool TaskManager::checkMutex(Task * a, Task * b)

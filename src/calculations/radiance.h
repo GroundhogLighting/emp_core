@@ -150,9 +150,9 @@ bool oconv(std::string octreeName, OconvOptions * options, RadExporter exporter)
 bool genPerezSkyVector(int month, int day, float hour, float direct, float diffuse, float albedo, float latitude, float longitude, float standardMeridian, int skyMF, bool sunOnly, bool sharpSun, float rotation, ColorMatrix * skyVec);
 
 
-void interpolatedDCTimestep(int interp, GroundhogModel * model, ColorMatrix * DC, bool sunOnly, bool sharpSun, ColorMatrix * result);
+void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatrix * DC, bool sunOnly, bool sharpSun, ColorMatrix * result);
 
-void calcCBDMScore(int interp, GroundhogModel * model, int firstMonth, int lastMonth, double early, double late, double minLux, double maxLux, ColorMatrix * input, Matrix * result,std::function<double(double v, double min, double max)> scoreCalculator);
+void calcCBDMScore(int interp, GroundhogModel * model, int firstMonth, int lastMonth, double early, double late, double minLux, double maxLux, const Matrix * input, Matrix * result, std::function<double(double v, double min, double max)> scoreCalculator);
     
 
 #endif

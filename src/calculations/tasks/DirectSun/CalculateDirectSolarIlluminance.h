@@ -94,6 +94,8 @@ public:
     {
         ColorMatrix * depResult = &(static_cast<CalculateDirectSunComponent *>(getDependencyRef(0))->result);
         
+        result.resize(depResult->nrows(),depResult->ncols());
+        
         depResult->calcIlluminance(&result);
         
         return true;
@@ -126,6 +128,12 @@ public:
     {
         return true;
     }
+    
+    Matrix * getResult()
+    {
+        return &result;
+    }
+    
     
 };
 

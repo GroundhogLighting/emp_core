@@ -8,8 +8,11 @@ third_party_dir = "../3rdparty"
 google_test_dir = "../googletest/googletest"
 
 -- Radiance specific locations
-rad_common = third_party_dir.."/Radiance/src/common"
-rad_rt = third_party_dir.."/Radiance/src/rt"
+rad_src = third_party_dir.."/Radiance/src"
+rad_common = rad_src.."/common"
+rad_rt = rad_src.."/rt"
+rad_ot = rad_src.."/ot"
+rad_gen = rad_src.."/gen"
 
 -- Check if it is windows
 is_windows = (os.target()=="windows")

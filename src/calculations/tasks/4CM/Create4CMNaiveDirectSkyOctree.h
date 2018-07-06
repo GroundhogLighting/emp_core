@@ -62,7 +62,7 @@ public:
     bool solve()
     {
         tbb::mutex::scoped_lock lock(oconvMutex);
-        std::string octName = *(static_cast<OconvTask *>(getDependencyRef(0))->getName()) + ".oct";
+        std::string octName = static_cast<OconvTask *>(getDependencyRef(0))->getName() + ".oct";
         octreeName = "NAIVE_DIRECT_SKY_" + octName;
         //remove(&octreeName[0]);
         std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;

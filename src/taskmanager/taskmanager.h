@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TASK_MANAGER_H
 
 #include "./task.h"
+
 #include "tbb/tbb.h"
 
 //! The TaskManager is an object that performs the calculation in an efficient way
@@ -74,7 +75,7 @@ public:
 	@return The index of the added Task
 	*/
 	size_t addTask(Task * t);
-
+   
 	//! Count Tasks
 	/*!
 	@author German Molina

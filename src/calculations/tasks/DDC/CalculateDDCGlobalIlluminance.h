@@ -26,7 +26,8 @@
 #include "../DirectSun/CalculateDirectSunComponent.h"
 
 class CalculateDDCGlobalIlluminance : public Task {
-public:
+
+private:
     GroundhogModel * model; //!< The model
     int skyMF; //!< The Reinhart subdivition scheme for the sky
     int sunMF; //!< The Reinhart subdivition scheme for the sun
@@ -35,7 +36,8 @@ public:
     RTraceOptions * options; //!< The options passed to rcontrib procsses
     Matrix result; //!< The resulting matrix
     int interp; //!< The interpolation scheme
-    
+
+public:
     CalculateDDCGlobalIlluminance(GroundhogModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
         
@@ -90,6 +92,10 @@ public:
     
     
     
+    Matrix * getResult()
+    {
+        return &result;
+    }
     
     bool isEqual(Task * t)
     {
@@ -110,37 +116,50 @@ public:
     
     bool solve()
     {
-        size_t nSensors = rays->size();
-        size_t nTimesteps = model->getLocation()->getWeatherSize();
+        size_t nSensors;
+        if(workplane == nullptr){
+            nSensors = rays->size();
+        }else{
+            TriangulateWorkplane aux = TriangulateWorkplane(workplane);
+            TaskManager * p = getParent();
+            TriangulateWorkplane * triangulate = static_cast<TriangulateWorkplane *>(p->findTask(&aux));
+            std::vector <Triangle *> * triangles = &(triangulate->triangles);
+            nSensors = triangles->size();
+        }
+        
+        size_t nTimesteps = interp*(model->getLocation()->getWeatherSize());
         
         int k=0;
-        ColorMatrix * global = &(static_cast<CalculateDDCGlobalComponent *>(getDependencyRef(k++))->result);
-        ColorMatrix * directSunPatch = &(static_cast<CalculateDDCDirectSunPatchComponent *>(getDependencyRef(k++))->result);
-        ColorMatrix * directSun = &(static_cast<CalculateDirectSunComponent *>(getDependencyRef(k++))->result);
+        const ColorMatrix * global = &(static_cast<CalculateDDCGlobalComponent *>(getDependencyRef(k++))->result);
+        const ColorMatrix * directSunPatch = &(static_cast<CalculateDDCDirectSunPatchComponent *>(getDependencyRef(k++))->result);
+        const ColorMatrix * directSun = &(static_cast<CalculateDirectSunComponent *>(getDependencyRef(k++))->result);
         
         // Resize to fit
         result.resize(nSensors,nTimesteps);
         
         // Calculate
-        Matrix * globalRed =   global->redChannel();
-        Matrix * globalGreen = global->greenChannel();
-        Matrix * globalBlue =  global->blueChannel();
+        const Matrix * globalRed =   global->redChannel();
+        const Matrix * globalGreen = global->greenChannel();
+        const Matrix * globalBlue =  global->blueChannel();
         
-        Matrix * directSunPatchRed =   directSunPatch->redChannel();
-        Matrix * directSunPatchGreen = directSunPatch->greenChannel();
-        Matrix * directSunPatchBlue =  directSunPatch->blueChannel();
+        const Matrix * directSunPatchRed =   directSunPatch->redChannel();
+        const Matrix * directSunPatchGreen = directSunPatch->greenChannel();
+        const Matrix * directSunPatchBlue =  directSunPatch->blueChannel();
         
-        Matrix * directSunRed =   directSun->redChannel();
-        Matrix * directSunGreen = directSun->greenChannel();
-        Matrix * directSunBlue =  directSun->blueChannel();
+        const Matrix * directSunRed =   directSun->redChannel();
+        const Matrix * directSunGreen = directSun->greenChannel();
+        const Matrix * directSunBlue =  directSun->blueChannel();
         
         double r,g,b;
-        for(size_t col=0; col < nTimesteps; col++){
-            for(size_t row=0; row < nSensors; row++){                
-                r = globalRed->  getElement(row,col) - directSunPatchRed->  getElement(row,col) + directSunRed->  getElement(row,col);
-                g = globalGreen->getElement(row,col) - directSunPatchGreen->getElement(row,col) + directSunGreen->getElement(row,col);
-                b = globalBlue-> getElement(row,col) - directSunPatchBlue-> getElement(row,col) + directSunBlue-> getElement(row,col);
-                result.setElement(row,col,47.5*r + 119.95*g + 11.60*b);
+        for(size_t t=0; t < nTimesteps; t++){
+            for(size_t sens=0; sens < nSensors; sens++){
+                r = globalRed->  getElement(sens,t) - directSunPatchRed->  getElement(sens,t) + directSunRed->  getElement(sens,t);
+                
+                g = globalGreen->getElement(sens,t) - directSunPatchGreen->getElement(sens,t) + directSunGreen->getElement(sens,t);
+                
+                b = globalBlue-> getElement(sens,t) - directSunPatchBlue-> getElement(sens,t) + directSunBlue-> getElement(sens,t);
+                
+                result.setElement(sens,t, 47.5*r + 119.95*g + 11.60*b);
             }
         }
         

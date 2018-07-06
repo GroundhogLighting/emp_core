@@ -24,13 +24,16 @@
 #include "./CreateDDCGlobalOctree.h"
 
 class CalculateDDCGlobalMatrix : public Task {
-public:
+
+private:
     GroundhogModel * model; //!< The model
     int mf; //!< The Reinhart sky subdivition scheme
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     ColorMatrix result; //!< The resulting matrix
     RTraceOptions options; //!< The options passed to RContrib
+
+public:
     
     //* Process a Workplane
     /*!
@@ -79,6 +82,12 @@ public:
         rays = theRays;
         
     }
+    
+    ColorMatrix * getResult()
+    {
+        return &result;
+    }
+        
     
     bool isEqual(Task * t)
     {

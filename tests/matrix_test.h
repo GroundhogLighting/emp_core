@@ -48,23 +48,23 @@ TEST(Matrix_TEST, MultiplicationResultSizeMismatch) {
 TEST(Matrix_TEST, Multiplication) {
     // Size mismatch with result
     Matrix A = Matrix(2, 4);
-    A[0]->at(0) = 4; A[0]->at(1) = 0; A[0]->at(2) = 2; A[0]->at(3) = 3;
-    A[1]->at(0) = 1; A[1]->at(1) = 5; A[1]->at(2) = 6; A[1]->at(3) = 7;
+    A.setElement(0,0,4); A.setElement(0,1,0); A.setElement(0,2,2); A.setElement(0,3,3);
+    A.setElement(1,0,1); A.setElement(1,1,5); A.setElement(1,2,6); A.setElement(1,3,7);
     
     Matrix B = Matrix(4, 2);
-    B[0]->at(0) = 4; B[0]->at(1) = 8;
-    B[1]->at(0) = 9; B[1]->at(1) = -2;
-    B[2]->at(0) = 1; B[2]->at(1) = 0;
-    B[3]->at(0) = 5; B[3]->at(1) = -3;
+    B.setElement(0,0,4); B.setElement(0,1,8);
+    B.setElement(1,0,9); B.setElement(1,1,-2);
+    B.setElement(2,0,1); B.setElement(2,1,0);
+    B.setElement(3,0,5); B.setElement(3,1,-3);
     
     Matrix res = Matrix(A.nrows(), B.ncols());
     
     A.multiply(&B,&res);
         
-    ASSERT_EQ(res[0]->at(0),33);
-    ASSERT_EQ(res[0]->at(1),23);
-    ASSERT_EQ(res[1]->at(0),90);
-    ASSERT_EQ(res[1]->at(1),-23);
+    ASSERT_EQ(res.getElement(0,0),33);
+    ASSERT_EQ(res.getElement(0,1),23);
+    ASSERT_EQ(res.getElement(1,0),90);
+    ASSERT_EQ(res.getElement(1,1),-23);
 }
 
 
@@ -81,9 +81,9 @@ TEST(Matrix_TEST, MultiplyLocate) {
     
     // Fill with random
     for(int row=0; row < nrows; row++){
-        b[row]->at(0)=rand();
+        b.setElement(row,0,rand());
         for(int col=0; col < ncols; col++){
-            A[row]->at(col)=rand();
+            A.setElement(row,col,rand());
         }
     }
     
@@ -95,9 +95,9 @@ TEST(Matrix_TEST, MultiplyLocate) {
     for(int row = 0; row<nrows; row++){
         for(int col = 0; col < ncols; col++){
             if(col == destCol){
-                ASSERT_EQ(res2[row]->at(0),res[row]->at(col));
+                ASSERT_EQ(res2.getElement(row,0),res.getElement(row,col));
             }else{
-                ASSERT_EQ(res[row]->at(col),0.0);
+                ASSERT_EQ(res.getElement(row,col),0.0);
             }
         }
     }

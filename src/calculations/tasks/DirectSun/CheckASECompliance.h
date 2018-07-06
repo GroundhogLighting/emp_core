@@ -49,11 +49,8 @@ public:
         scoreCalculator = aseScoreCalculator;
         
         // Dependency 0
-        CalculateDirectSunComponent * illuminanceTask = new CalculateDirectSunComponent(theModel, wp, theMf, theOptions, interp);
+        CalculateDirectSolarIlluminance * illuminanceTask = new CalculateDirectSolarIlluminance(theModel, wp, theMf, theOptions, interp);
         addDependency(illuminanceTask);
-        
-        // Set the dependency results
-        depResults = &(illuminanceTask->result);
         
         // Set the name
         setName(&name);
@@ -73,7 +70,7 @@ public:
         rays = theRays;
         
         // Dependency 0
-        CalculateDirectSunComponent * illuminanceTask = new CalculateDirectSunComponent(theModel, theRays, theMf, theOptions, interp);
+        CalculateDirectSolarIlluminance * illuminanceTask = new CalculateDirectSolarIlluminance(theModel, theRays, theMf, theOptions, interp);
         addDependency(illuminanceTask);
         
         // Set the dependency results
@@ -83,6 +80,7 @@ public:
         setName(&name);
     }
     
+    GET_DEP_RESULTS(CalculateDirectSolarIlluminance);    
    
     
 };

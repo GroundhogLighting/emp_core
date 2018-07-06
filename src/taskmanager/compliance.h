@@ -22,7 +22,7 @@
 #include "../calculations/radiance.h"
 #include "../common/geometry/triangle.h"
 
-double calcRaysCompliance(std::vector<RAY> * rays, double minTime, double maxTime, Matrix * result)
+double calcRaysCompliance(const std::vector<RAY> * rays, double minTime, double maxTime, const Matrix * result)
 {
     double compliance = 0;
     
@@ -40,7 +40,7 @@ double calcRaysCompliance(std::vector<RAY> * rays, double minTime, double maxTim
     return compliance / ((float)nrays/100.0);
 }
 
-double calcWorkplaneCompliance(std::vector <Triangle *> * triangles, double minTime, double maxTime, Matrix * result)
+double calcWorkplaneCompliance(const std::vector <Triangle *> * triangles, double minTime, double maxTime, const Matrix * result)
 {
     double compliance = 0;
     size_t nTriangles = triangles->size();
@@ -58,4 +58,45 @@ double calcWorkplaneCompliance(std::vector <Triangle *> * triangles, double minT
     }
     
     return compliance / (totalArea/100.0);
+}
+
+void bulkResultsIntoJSON(std::string taskName, std::string wpName, const Matrix * results, double compliance, json * j)
+{
+    
+    
+    size_t nrows = results->nrows();
+    size_t ncols = results->ncols();
+    
+    // Ensure existence of Summary and Details
+    auto summary = (*j)["summary"];
+    if( summary.is_null() )
+        (*j)["summary"] = json::object();
+    
+    auto details = (*j)["details"];
+    if( details.is_null() )
+        (*j)["details"] = json::object();
+    
+    
+    /* FILL SUMMARY */
+    // Ensure it exists
+    auto aux1 = (*j)["summary"][taskName];
+    if(aux1.is_null())
+        (*j)["summary"][taskName] = json::object();
+    
+    // Fill
+    (*j)["summary"][taskName][wpName] = compliance;
+    
+    /* FILL DETAILS */
+    // Ensure it exists
+    auto aux2 = (*j)["details"][taskName];
+    if(aux2.is_null())
+        (*j)["details"][taskName] = json::object();
+    
+    // Fill
+    (*j)["details"][taskName][wpName] = json::array();
+    
+    for(size_t row = 0; row < nrows; row++){
+        (*j)["details"][taskName][wpName].push_back(results->getElement(row,0));
+    }    
+               
 }

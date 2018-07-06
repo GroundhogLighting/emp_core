@@ -185,13 +185,17 @@ public:
      @param[out] results The results json object
      @return true or false
      */
-    bool submitResults(json * results)
+    bool submitResults(json * j)
     {
         std::string wp = *(workplane->getName());
         size_t nrows = triangles.size();
         std::string name = *(workplane->getName());
         
-        (*results)[wp] = json::array();
+        auto workplanes = (*j)["workplanes"];
+        if( workplanes.is_null() )
+            (*j)["workplanes"] = json::object();
+        
+        (*j)["workplanes"][wp] = json::array();
         Triangle * t;
         Point3D a = Point3D(0,0,0);
         Point3D b = Point3D(0,0,0);
@@ -203,7 +207,7 @@ public:
             a = t->getVertex(0);
             b = t->getVertex(1);
             c = t->getVertex(2);
-            (*results)[name].push_back({
+            (*j)["workplanes"][name].push_back({
                 {a.getX(), a.getY() ,a.getZ() },
                 {b.getX(), b.getY() ,b.getZ() },
                 {c.getX(), c.getY() ,c.getZ() },

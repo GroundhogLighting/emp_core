@@ -52,35 +52,56 @@ public:
      @author German Molina
      @return the number of columns
      */
-    size_t ncols();
+    size_t ncols() const;
     
     //! Returns the number of rows in a matrix
     /*!
      @author German Molina
      @return the number of rows
      */
-    size_t nrows();
+    size_t nrows() const;
     
-    //! Retrieves the red component
+    //! Retrieves the constant red component
     /*!
      @author German Molina
      @return A pointer to the red matrix
      */
-    Matrix * redChannel();
+    const Matrix * redChannel() const;
     
-    //! Retrieves the green component
+    //! Retrieves the constant green component
     /*!
      @author German Molina
      @return A pointer to the green matrix
      */
-    Matrix * greenChannel();
+    const Matrix * greenChannel() const;
+    
+    //! Retrieves the constant blue component
+    /*!
+     @author German Molina
+     @return A pointer to the blue matrix
+     */
+    const Matrix * blueChannel() const;
+    
+    //! Retrieves the red component
+    /*!
+     @author German Molina
+     @return A pointer to the blue matrix
+     */
+    Matrix * r();
+    
+    //! Retrieves the green component
+    /*!
+     @author German Molina
+     @return A pointer to the blue matrix
+     */
+    Matrix * g();
     
     //! Retrieves the blue component
     /*!
      @author German Molina
      @return A pointer to the blue matrix
      */
-    Matrix * blueChannel();
+    Matrix * b();
     
     //! Multiplies a matrix by another matrix
     /*!
@@ -89,7 +110,7 @@ public:
      @param[out] res The resulting matrix
      @return success
      */
-    bool multiply(ColorMatrix * m, ColorMatrix * res);
+    bool multiply(const ColorMatrix * m, ColorMatrix * res) const;
     
     //! Multiplies a vector (Nx1 sized matrix) by a matrix and puts the result in a column of another matrix
     /*!
@@ -99,7 +120,7 @@ public:
      @param[out] res The resulting matrix
      @return success
      */
-    bool multiplyToColumn(ColorMatrix * vec, size_t col, ColorMatrix * res);
+    bool multiplyToColumn(const ColorMatrix * vec, size_t col, ColorMatrix * res) const;
     
     //! Resizes the matrix to new sizes
     /*!
@@ -116,14 +137,14 @@ public:
      @author German Molina
      @param result The matrix to alocate the results
      */
-    void calcIrradiance(Matrix * result);
+    void calcIrradiance(Matrix * result) const;
     
     //! Transforms a ColorMatrix into a Matrix with the illuminance values
     /*!
      @author German Molina
      @param result The matrix to alocate the results
      */
-    void calcIlluminance(Matrix * result);
+    void calcIlluminance(Matrix * result) const;
     
     //! Calculate the irradiance value in an element
     /*!
@@ -132,7 +153,7 @@ public:
      @param col The colum
      @return the irradiance
      */
-    float calcIrradiance(size_t row, size_t col);
+    float calcIrradiance(size_t row, size_t col) const;
     
     //! Calculates the illuminance value of an element
     /*!
@@ -141,7 +162,7 @@ public:
      @param col The colum
      @return the illuminance
      */
-    float calcIlluminance(size_t row, size_t col);
+    float calcIlluminance(size_t row, size_t col) const;
     
 };
 

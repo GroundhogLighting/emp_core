@@ -30,9 +30,9 @@ void radGenDayMtx(int month, int day, float hour, float direct, float diffuse, f
     
     if (results)
     {
-        Matrix * red = skyVec->redChannel();
-        Matrix * green = skyVec->greenChannel();
-        Matrix * blue = skyVec->blueChannel();
+        Matrix * red = skyVec->r();
+        Matrix * green = skyVec->g();
+        Matrix * blue = skyVec->b();
         
         float r;
         float g;
@@ -69,14 +69,14 @@ TEST(GenPerezSkyVec, NoRadiation)
     genPerezSkyVector(1, 1, 12.0, 0, 0, 0.2, -32, -75, -32, mf, false, false, 0, &SkyVec);
     
     // Iterate the matrix
-    Matrix * red = SkyVec.redChannel();
-    Matrix * green = SkyVec.greenChannel();
-    Matrix * blue = SkyVec.blueChannel();
+    const Matrix * red = SkyVec.redChannel();
+    const Matrix * green = SkyVec.greenChannel();
+    const Matrix * blue = SkyVec.blueChannel();
     
     for(size_t row=0; row < nbins; row++){
-        ASSERT_EQ((*red)[row]->at(0),0.0);
-        ASSERT_EQ((*green)[row]->at(0),0.0);
-        ASSERT_EQ((*blue)[row]->at(0),0.0);
+        ASSERT_EQ(red->getElement(row,0),0.0);
+        ASSERT_EQ(green->getElement(row,0),0.0);
+        ASSERT_EQ(blue->getElement(row,0),0.0);
     }
 }
 
@@ -118,33 +118,33 @@ TEST(GenPerezSkyVec, DirectOnlySharpSun)
         radGenDayMtx(month, day, hour, direct, difuse, albedo, latitude, longitude, meridian, mf, directOnly, sharpSun, rotation, &referenceSkyVec);
         
         // Iterate the matrix
-        Matrix * red = skyVec.redChannel();
-        Matrix * green = skyVec.greenChannel();
-        Matrix * blue = skyVec.blueChannel();
+        Matrix * red = skyVec.r();
+        Matrix * green = skyVec.g();
+        Matrix * blue = skyVec.b();
         
-        Matrix * referenceRed = referenceSkyVec.redChannel();
-        Matrix * referenceGreen = referenceSkyVec.greenChannel();
-        Matrix * referenceBlue = referenceSkyVec.blueChannel();
+        const Matrix * referenceRed = referenceSkyVec.redChannel();
+        const Matrix * referenceGreen = referenceSkyVec.greenChannel();
+        const Matrix * referenceBlue = referenceSkyVec.blueChannel();
         
         
         for(size_t row=0; row < nbins; row++){
             
             // Due to print and read, try this...
             
-            if( (*red)[row]->at(0) > 100 ){
-                (*red)[row]->at(0) = round((*red)[row]->at(0));
+            if( red->getElement(row,0) > 100 ){
+                red->setElement(row,0,round(red->getElement(row,0)));
             }
-            if( (*green)[row]->at(0) > 100 ){
-                (*green)[row]->at(0) = round((*green)[row]->at(0));
+            if( green->getElement(row,0) > 100 ){
+                green->setElement(row,0,round(green->getElement(row,0)));
             }
-            if( (*blue)[row]->at(0) > 100 ){
-                (*blue)[row]->at(0) = round((*blue)[row]->at(0));
+            if( blue->getElement(row,0) > 100 ){
+                blue->setElement(row,0, round(blue->getElement(row,0)));
             }
             
             // Less than 1% error
-            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.02*(*referenceRed)[row]->at(0));
-            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.02*(*referenceGreen)[row]->at(0));
-            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.02*(*referenceBlue)[row]->at(0));
+            ASSERT_NEAR(red->  getElement(row,0), referenceRed  ->getElement(row,0),0.02*referenceRed  ->getElement(row,0));
+            ASSERT_NEAR(green->getElement(row,0), referenceGreen->getElement(row,0),0.02*referenceGreen->getElement(row,0));
+            ASSERT_NEAR(blue-> getElement(row,0), referenceBlue ->getElement(row,0),0.02*referenceBlue ->getElement(row,0));
             
         }
     }
@@ -189,33 +189,32 @@ TEST(GenPerezSkyVec, DirectOnlyWideSun)
         radGenDayMtx(month, day, hour, direct, difuse, albedo, latitude, longitude, meridian, mf, directOnly, sharpSun, rotation, &referenceSkyVec);
         
         // Iterate the matrix
-        Matrix * red = skyVec.redChannel();
-        Matrix * green = skyVec.greenChannel();
-        Matrix * blue = skyVec.blueChannel();
+        Matrix * red = skyVec.r();
+        Matrix * green = skyVec.g();
+        Matrix * blue = skyVec.b();
         
-        Matrix * referenceRed = referenceSkyVec.redChannel();
-        Matrix * referenceGreen = referenceSkyVec.greenChannel();
-        Matrix * referenceBlue = referenceSkyVec.blueChannel();
+        const Matrix * referenceRed = referenceSkyVec.redChannel();
+        const Matrix * referenceGreen = referenceSkyVec.greenChannel();
+        const Matrix * referenceBlue = referenceSkyVec.blueChannel();
         
         
         for(size_t row=0; row < nbins; row++){
             
             // Due to print and read, try this...
-            //std::cout << (*red)[row]->at(0) << " == " << (*referenceRed)[row]->at(0)  << std::endl;
-            if( (*red)[row]->at(0) > 100 ){
-                (*red)[row]->at(0) = round((*red)[row]->at(0));
+            if( red->getElement(row,0) > 100 ){
+                red->setElement(row,0, round(red->getElement(row,0)));
             }
-            if( (*green)[row]->at(0) > 100 ){
-                (*green)[row]->at(0) = round((*green)[row]->at(0));
+            if( green->getElement(row,0) > 100 ){
+                green->setElement(row,0, round(green->getElement(row,0)));
             }
-            if( (*blue)[row]->at(0) > 100 ){
-                (*blue)[row]->at(0) = round((*blue)[row]->at(0));
+            if( blue->getElement(row,0) > 100 ){
+                blue->setElement(row,0, round(blue->getElement(row,0)));
             }
             
             // Less than 1% error
-            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.02*(*referenceRed)[row]->at(0));
-            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.02*(*referenceGreen)[row]->at(0));
-            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.02*(*referenceBlue)[row]->at(0));
+            ASSERT_NEAR(red  ->getElement(row,0), referenceRed  ->getElement(row,0),0.02* referenceRed  ->getElement(row,0));
+            ASSERT_NEAR(green->getElement(row,0), referenceGreen->getElement(row,0),0.02* referenceGreen->getElement(row,0));
+            ASSERT_NEAR(blue ->getElement(row,0), referenceBlue ->getElement(row,0),0.02* referenceBlue ->getElement(row,0));
             
         }
     }
@@ -258,33 +257,33 @@ TEST(GenPerezSkyVec, FulllSkyWideSun)
         radGenDayMtx(month, day, hour, direct, difuse, albedo, latitude, longitude, meridian, mf, directOnly, sharpSun, 0, &referenceSkyVec);
         
         // Iterate the matrix
-        Matrix * red = skyVec.redChannel();
-        Matrix * green = skyVec.greenChannel();
-        Matrix * blue = skyVec.blueChannel();
+        Matrix * red = skyVec.r();
+        Matrix * green = skyVec.g();
+        Matrix * blue = skyVec.b();
         
-        Matrix * referenceRed = referenceSkyVec.redChannel();
-        Matrix * referenceGreen = referenceSkyVec.greenChannel();
-        Matrix * referenceBlue = referenceSkyVec.blueChannel();
+        const Matrix * referenceRed = referenceSkyVec.redChannel();
+        const Matrix * referenceGreen = referenceSkyVec.greenChannel();
+        const Matrix * referenceBlue = referenceSkyVec.blueChannel();
         
         
         for(size_t row=0; row < nbins; row++){
             
             // Due to print and read, try this...
             
-            if( (*red)[row]->at(0) > 100 ){
-                (*red)[row]->at(0) = round((*red)[row]->at(0));
+            if( red->getElement(row,0) > 100 ){
+                red->setElement(row,0, round(red->getElement(row,0)));
             }
-            if( (*green)[row]->at(0) > 100 ){
-                (*green)[row]->at(0) = round((*green)[row]->at(0));
+            if( green->getElement(row,0)> 100 ){
+                green->setElement(row,0,round(green->getElement(row,0)));
             }
-            if( (*blue)[row]->at(0) > 100 ){
-                (*blue)[row]->at(0) = round((*blue)[row]->at(0));
+            if( blue->getElement(row,0) > 100 ){
+                blue->setElement(row,0, round(blue->getElement(row,0)));
             }
             
             // Less than 1% error
-            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.02*(*referenceRed)[row]->at(0));
-            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.02*(*referenceGreen)[row]->at(0));
-            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.02*(*referenceBlue)[row]->at(0));
+            ASSERT_NEAR(red  ->getElement(row,0),referenceRed  ->getElement(row,0),0.02* referenceRed  ->getElement(row,0));
+            ASSERT_NEAR(green->getElement(row,0),referenceGreen->getElement(row,0),0.02* referenceGreen->getElement(row,0));
+            ASSERT_NEAR(blue ->getElement(row,0),referenceBlue ->getElement(row,0),0.02* referenceBlue ->getElement(row,0));
             
         }
     }
@@ -325,33 +324,33 @@ TEST(GenPerezSkyVec, FullSkySharpSun)
         radGenDayMtx(month, day, hour, direct, difuse, albedo, latitude, longitude, meridian, mf, directOnly, sharpSun, rotation, &referenceSkyVec);
         
         // Iterate the matrix
-        Matrix * red = skyVec.redChannel();
-        Matrix * green = skyVec.greenChannel();
-        Matrix * blue = skyVec.blueChannel();
+        Matrix * red = skyVec.r();
+        Matrix * green = skyVec.g();
+        Matrix * blue = skyVec.b();
         
-        Matrix * referenceRed = referenceSkyVec.redChannel();
-        Matrix * referenceGreen = referenceSkyVec.greenChannel();
-        Matrix * referenceBlue = referenceSkyVec.blueChannel();
+        const Matrix * referenceRed = referenceSkyVec.redChannel();
+        const Matrix * referenceGreen = referenceSkyVec.greenChannel();
+        const Matrix * referenceBlue = referenceSkyVec.blueChannel();
         
         
         for(size_t row=0; row < nbins; row++){
             
             // Due to print and read, try this...
             
-            if( (*red)[row]->at(0) > 100 ){
-                (*red)[row]->at(0) = round((*red)[row]->at(0));
+            if( red->getElement(row,0) > 100 ){
+                red->setElement(row,0,round(red->getElement(row,0)));
             }
-            if( (*green)[row]->at(0) > 100 ){
-                (*green)[row]->at(0) = round((*green)[row]->at(0));
+            if( green->getElement(row,0) > 100 ){
+                green->setElement(row,0, round(green->getElement(row,0)));
             }
-            if( (*blue)[row]->at(0) > 100 ){
-                (*blue)[row]->at(0) = round((*blue)[row]->at(0));
+            if( blue->getElement(row,0) > 100 ){
+                blue->setElement(row,0,round(blue->getElement(row,0)));
             }
             
             // Less than 1% error
-            ASSERT_NEAR((*red)[row]->at(0),(*referenceRed)[row]->at(0),0.02*(*referenceRed)[row]->at(0));
-            ASSERT_NEAR((*green)[row]->at(0),(*referenceGreen)[row]->at(0),0.02*(*referenceGreen)[row]->at(0));
-            ASSERT_NEAR((*blue)[row]->at(0),(*referenceBlue)[row]->at(0),0.02*(*referenceBlue)[row]->at(0));
+            ASSERT_NEAR(red  ->getElement(row,0), referenceRed  ->getElement(row,0),0.02* referenceRed  ->getElement(row,0));
+            ASSERT_NEAR(green->getElement(row,0), referenceGreen->getElement(row,0),0.02* referenceGreen->getElement(row,0));
+            ASSERT_NEAR(blue ->getElement(row,0), referenceBlue ->getElement(row,0),0.02* referenceBlue ->getElement(row,0));
             
         }
     }

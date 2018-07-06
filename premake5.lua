@@ -38,8 +38,12 @@ dofile(premakescripts_dir.."/raycalls.lua")
 dofile(premakescripts_dir.."/emp_tests.lua")
 dofile(premakescripts_dir.."/google_test.lua")
 dofile(premakescripts_dir.."/emp_core.lua")
+dofile(premakescripts_dir.."/rtrace.lua")
+dofile(premakescripts_dir.."/rcontrib.lua")
+dofile(premakescripts_dir.."/oconv.lua")
+dofile(premakescripts_dir.."/gendaylit.lua")
+dofile(premakescripts_dir.."/gensky.lua")
   
-
 package.path = package.path .. ";"..premakescripts_dir.."/?.lua"
 require("tbb")
 

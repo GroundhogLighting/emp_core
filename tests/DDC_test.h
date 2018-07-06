@@ -1,7 +1,7 @@
 
-
-//#include "calculations/tasks/CalculateDDCGlobalIlluminance.h"
 #include "../include/emp_core.h"
+
+
 
 TEST(DDC_TEST,Empty_CalculateDDCGlobalMatrix){
     #include "./RTrace_reference.h"
@@ -14,15 +14,17 @@ TEST(DDC_TEST,Empty_CalculateDDCGlobalMatrix){
     
     // Add task and solve
     tm.addTask(calcTask);
-    tm.solve(NULL);
     
-    ColorMatrix * results = &(calcTask->result);
+    tm.solve();
+    
+    
+    ColorMatrix * results = calcTask->getResult();
         
     // ASSES
     // Check ground
-    ASSERT_EQ(0.0,(*results->redChannel())[0]->at(0));
-    ASSERT_EQ(0.0,(*results->greenChannel())[0]->at(0));
-    ASSERT_EQ(0.0,(*results->blueChannel())[0]->at(0));
+    ASSERT_EQ(0.0,results->redChannel()->getElement(0,0));
+    ASSERT_EQ(0.0,results->greenChannel()->getElement(0,0));
+    ASSERT_EQ(0.0,results->blueChannel()->getElement(0,0));
     
     // Compare with approximated analytical solution
     double solidAngle;
@@ -31,9 +33,9 @@ TEST(DDC_TEST,Empty_CalculateDDCGlobalMatrix){
         double altitude = asin(a.getZ());
         double v = sin(altitude)*solidAngle;                
         
-        ASSERT_NEAR(v,(*results->redChannel())[0]->at(i),1e-2);
-        ASSERT_NEAR(v,(*results->greenChannel())[0]->at(i),1e-2);
-        ASSERT_NEAR(v,(*results->blueChannel())[0]->at(i),1e-2);
+        ASSERT_NEAR(v,results->redChannel()->getElement(0,i),1e-2);
+        ASSERT_NEAR(v,results->greenChannel()->getElement(0,i),1e-2);
+        ASSERT_NEAR(v,results->blueChannel()->getElement(0,i),1e-2);
         
     }
 }
@@ -57,9 +59,9 @@ TEST(DDC_TEST,Empty_CalculateDDCDirectSkyMatrix){
     
     // ASSES
     // Check ground
-    ASSERT_EQ(0.0,(*results->redChannel())[0]->at(0));
-    ASSERT_EQ(0.0,(*results->greenChannel())[0]->at(0));
-    ASSERT_EQ(0.0,(*results->blueChannel())[0]->at(0));
+    ASSERT_EQ(0.0,results->redChannel()->getElement(0,0));
+    ASSERT_EQ(0.0,results->greenChannel()->getElement(0,0));
+    ASSERT_EQ(0.0,results->blueChannel()->getElement(0,0));
     
     // Compare with approximated analytical solution
     double solidAngle;
@@ -68,9 +70,9 @@ TEST(DDC_TEST,Empty_CalculateDDCDirectSkyMatrix){
         double altitude = asin(a.getZ());
         double v = sin(altitude)*solidAngle;
         
-        ASSERT_NEAR(v,(*results->redChannel())[0]->at(i),1e-2);
-        ASSERT_NEAR(v,(*results->greenChannel())[0]->at(i),1e-2);
-        ASSERT_NEAR(v,(*results->blueChannel())[0]->at(i),1e-2);        
+        ASSERT_NEAR(v,results->redChannel()->getElement(0,i),1e-2);
+        ASSERT_NEAR(v,results->greenChannel()->getElement(0,i),1e-2);
+        ASSERT_NEAR(v,results->blueChannel()->getElement(0,i),1e-2);
     }
 }
 
@@ -275,7 +277,7 @@ TEST(DDC_TEST,Empty_full_DDC_vs_RTRACE){
     
     // Compare to reference Solution
     for(int i=0; i<48; i++){
-        double value = task->result.getElement(0,i);
+        double value = task->getResult()->getElement(0,i);
         double reference = 179.0*emptyReference[i][3];
         //std::cout << value << " " << reference << std::endl;
         ASSERT_NEAR(value,reference,reference*0.035);
@@ -302,7 +304,7 @@ TEST(DDC_TEST,Simple_full_DDC_vs_RTRACE){
     double msd = 0;
     int count = 0;
     for(int i=0; i<48; i++){
-        double value = task->result.getElement(0,i);
+        double value = task->getResult()->getElement(0,i);
         double reference = 179.0*simpleReference[i][3];
         if(reference > 1e-3){
             double v = ((value - reference)/reference);

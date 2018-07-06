@@ -46,7 +46,7 @@ public:
         std::string name = buildName();
         setName(&name);
         model = theModel;
-        octreeName = *getName() + ".oct";
+        octreeName = getName() + ".oct";
     }
     
     ~OconvTask()

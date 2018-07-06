@@ -123,21 +123,21 @@ public:
         result.resize(nSensors,nTimesteps);
         
         // Calculate
-        Matrix * globalRed = global->redChannel();
-        Matrix * globalGreen = global->greenChannel();
-        Matrix * globalBlue = global->blueChannel();
+        const Matrix * globalRed = global->redChannel();
+        const Matrix * globalGreen = global->greenChannel();
+        const Matrix * globalBlue = global->blueChannel();
         
-        Matrix * directSunPatchRed = directSunPatch->redChannel();
-        Matrix * directSunPatchGreen = directSunPatch->greenChannel();
-        Matrix * directSunPatchBlue = directSunPatch->blueChannel();
+        const Matrix * directSunPatchRed = directSunPatch->redChannel();
+        const Matrix * directSunPatchGreen = directSunPatch->greenChannel();
+        const Matrix * directSunPatchBlue = directSunPatch->blueChannel();
         
-        Matrix * directSunRed = directSun->redChannel();
-        Matrix * directSunGreen = directSun->greenChannel();
-        Matrix * directSunBlue = directSun->blueChannel();
+        const Matrix * directSunRed = directSun->redChannel();
+        const Matrix * directSunGreen = directSun->greenChannel();
+        const Matrix * directSunBlue = directSun->blueChannel();
         
-        Matrix * red = result.redChannel();
-        Matrix * green = result.greenChannel();
-        Matrix * blue = result.blueChannel();
+        Matrix * red = result.r();
+        Matrix * green = result.g();
+        Matrix * blue = result.b();
         
         for(size_t col=0; col < nTimesteps; col++){
             for(size_t row=0; row < nSensors; row++){

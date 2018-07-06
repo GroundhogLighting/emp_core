@@ -38,14 +38,15 @@ project "emp_tests"
     elseif is_macos then
         defines { "MACOS" }     
         linkoptions {            
-            "-L "..libs_dir.."/%{cfg.buildcfg}/tbb"
+            "-L "..libs_dir.."/%{cfg.buildcfg}/tbb",  
+            --"-Wl,-rpath,\\$ORIGIN"          
         }    
         buildoptions {
             "-F /Library/Frameworks",
             "-v"            
         }
         links {
-            "SketchUpAPI.framework"
+            "SketchUpAPI.framework",
         }
         
     elseif is_linux then

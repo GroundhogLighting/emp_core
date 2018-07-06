@@ -62,7 +62,7 @@ public:
         const double dAngle = 0.4 * pi / 180.0;
         const double elementBrighness =  pi/0.51757717132568359;
         
-        std::string octName = *(static_cast<OconvTask *>(getDependencyRef(0))->getName()) + ".oct";
+        std::string octName = static_cast<OconvTask *>(getDependencyRef(0))->getName() + ".oct";
         octreeName = "DIRECT_SKY_" + octName;
         std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
         
