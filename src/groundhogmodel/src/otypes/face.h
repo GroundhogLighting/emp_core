@@ -86,7 +86,7 @@ public:
 	@author German Molina
 	@return has inner Loop ?
 	*/
-	bool hasInnerLoops()
+	bool hasInnerLoops() const
 	{
 		return polygon->hasInnerLoops();
 	}
@@ -96,7 +96,7 @@ public:
 	@author German Molina
 	@return has too many inner Loop ?
 	*/
-	bool hasTooManyInnerLoops()
+	bool hasTooManyInnerLoops() const
 	{
 		return polygon->countInnerLoops() > EMP_TOO_MANY_LOOPS;
 	}
@@ -106,7 +106,7 @@ public:
 	@author German Molina
 	@return The reference to the Outer Loop
 	*/
-	Loop * getOuterLoopRef()
+    Loop * getOuterLoopRef() const
 	{
 		return polygon->getOuterLoopRef();
 	}
@@ -118,7 +118,7 @@ public:
 	@see Polygon3D::getClosedLoop()
 	@note Should delete the closed Loop after its use
 	*/
-	Loop * getClosedLoop()
+    Loop * getClosedLoop() const
 	{
 		return polygon->getClosedLoop();
 	}

@@ -24,19 +24,19 @@ TEST(SKPRead, default_materials)
         
         // Check the material of the window
         Otype * win = wg->getWindowRef(0);
-        Material * winMaterial = win->getMaterial();
+        const Material * winMaterial = win->getMaterial();
         
         // Check class
-        ASSERT_NE(dynamic_cast<Glass *>(winMaterial),nullptr);
-        ASSERT_EQ(*(winMaterial->getName()),"Default-Glass");
+        ASSERT_NE(dynamic_cast<const Glass *>(winMaterial),nullptr);
+        ASSERT_EQ(winMaterial->getName(),"Default Glass");
         
         // Check the material of the window
-        Otype * face = model.getLayerRef(0)->getObjectRef(0);
-        Material * faceMaterial = face->getMaterial();
+        const Otype * face = model.getLayerRef(0)->getObjectRef(0);
+        const Material * faceMaterial = face->getMaterial();
         
         // Check class
-        ASSERT_NE(dynamic_cast<Plastic *>(faceMaterial),nullptr);
-        ASSERT_EQ(*(faceMaterial->getName()),"Default-Material");
+        ASSERT_NE(dynamic_cast<const Plastic *>(faceMaterial),nullptr);
+        ASSERT_EQ(faceMaterial->getName(),"Default Material");
         
         
         

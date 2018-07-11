@@ -56,9 +56,9 @@ public:
 	Defaults to a non-rotated non-translated and non-scaled instance.
 
 	@author German Molina
-	@param[in] definitionRef The ComponentDefinition to which this ComponentInstance points
+	@param[in] definitionPt The pointer to the ComponentDefinition to which this ComponentInstance points
 	*/
-	ComponentInstance(ComponentDefinition * definitionRef);
+	ComponentInstance(ComponentDefinition * const definitionPt);
 
 	//! Destroys a ComponentInstance object
 	/*!
@@ -113,42 +113,42 @@ public:
 	@author German Molina
 	@return The X location
 	*/
-	double getX();
+	double getX() const;
 
 	//! Retrieves the Y location
 	/*!
 	@author German Molina
 	@return The Y location
 	*/
-	double getY();
+	double getY() const;
 
 	//! Retrieves the Z location
 	/*!
 	@author German Molina
 	@return The Z location
 	*/
-	double getZ();
+	double getZ() const;
 
 	//! Retrieves the X rotation
 	/*!
 	@author German Molina
 	@return The X location
 	*/
-	double getRotationX();
+	double getRotationX() const;
 
 	//! Retrieves the Y rotation
 	/*!
 	@author German Molina
 	@return The Y location
 	*/
-	double getRotationY();
+	double getRotationY() const;
 
 	//! Retrieves the Z rotation
 	/*!
 	@author German Molina
 	@return The Z location
 	*/
-	double getRotationZ();
+	double getRotationZ() const;
 
 	//! Sets the scale of the instance
 	/*!
@@ -162,20 +162,20 @@ public:
 	@author German Molina
 	@return The scale
 	*/
-	double getScale();
+	double getScale() const;
 
 	//! Retrieves the ComponentDefinition reference of the instance
 	/*!
 	@author German Molina
 	@return The ComponentDefinition reference
 	*/
-	ComponentDefinition * getDefinitionRef();
+	const ComponentDefinition * const getDefinitionRef() const;
 
     //! Retrieves a Transform object corresponding to this instance
     /*!
     @author German Molina
     @return The Transform
     */
-    Transform * getTransform();
+    Transform * getTransform() const;
 
 };

@@ -21,8 +21,8 @@ TEST(SKPRead, small_square)
         ASSERT_EQ(nComponents,0);
     
         // Check the face
-        Otype * o = model.getLayerRef(0)->getObjectRef(0);
-        Loop * loop = static_cast<Face *>(o)->getOuterLoopRef();
+        const Otype * o = model.getLayerRef(0)->getObjectRef(0);
+        Loop * loop = static_cast<const Face *>(o)->getOuterLoopRef();
         size_t nVertices = loop->size();
         ASSERT_EQ(nVertices,4);
     
@@ -62,7 +62,7 @@ TEST(SKPRead, face_with_holes)
         ASSERT_EQ(nComponents,0);
         
         // Check the face
-        Face * face = static_cast<Face *>(model.getLayerRef(0)->getObjectRef(0));
+        const Face * face = static_cast<const Face *>(model.getLayerRef(0)->getObjectRef(0));
         ASSERT_TRUE(face->hasInnerLoops());
         
         ASSERT_EQ(face->polygon->countInnerLoops(),7);

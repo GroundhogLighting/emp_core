@@ -8,5 +8,6 @@
 #include "./skp_tests/tasks.h"
 #include "./skp_tests/windows.h"
 #include "./skp_tests/workplanes.h"
+#include "./skp_tests/task_udi.h"
 
 

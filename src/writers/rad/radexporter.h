@@ -54,7 +54,7 @@ public:
 	@return success
 	@param[in] filename The subdirectory to export
 	*/
-	bool writeModelInfo(const char * filename);
+	bool writeModelInfo(const char * filename) const;
 	
 	//! Writes all the View objects in Radiance format in different files
 	/*!
@@ -64,7 +64,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeViews(const char * dir);
+	bool writeViews(const char * dir) const;
 
 	//! Writes all the component definitions in different files
 	/*!
@@ -78,7 +78,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeComponentDefinitions(const char * dir);
+	bool writeComponentDefinitions(const char * dir) const;
 	
 	//! Writes all the layers in different files
 	/*!
@@ -92,7 +92,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeLayers(const char * dir);
+	bool writeLayers(const char * dir) const;
 
     //! Writes all the layers in a single file
     /*!
@@ -107,7 +107,7 @@ public:
     @param[in] file The file
     @param[in] newMaterial The name of the material
     */
-    bool writeLayersInOneFile(FILE * file, const char * newMaterial);
+    bool writeLayersInOneFile(FILE * file, std::string * newMaterial) const;
 
     //! Writes all the layers in a single file
     /*!
@@ -120,7 +120,7 @@ public:
      @param[in] file The file
      @param[in] newMaterial The name of the material
      */
-    bool writeLayersInOneFile(FILE * file);
+    bool writeLayersInOneFile(FILE * file) const;
 
     
 	//! Writes an XFORM call to a ComponentInstance in Radiance format
@@ -129,7 +129,7 @@ public:
 	@param[in] file The file to write this in
 	@param[in] instance The ComponentInstance to write
 	*/
-	void writeComponentInstance(FILE * file, ComponentInstance * instance);
+	void writeComponentInstance(FILE * file, const ComponentInstance * const instance) const;
 	
     //! Writes a ComponentInstance in Radiance format
     /*!
@@ -144,7 +144,7 @@ public:
     @param[in] scale The scale to apply to the instance
     @param[in] A material name that overrides the actual materials of the geometry (i.e. xform -m 'newMaterial' option)
     */
-    void writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * transform, double scale, const char * newMaterial);
+    void writeComponentInstance(FILE * file, const ComponentInstance * const instance, Transform * transform, double scale, std::string * newMaterial) const;
 
 
 	//! Writes all the window groups in Radiance format
@@ -153,7 +153,7 @@ public:
 	@return success
 	@param[in] dir The subdirectory to export
 	*/
-	bool writeWindows(const char * dir);
+	bool writeWindows(const char * dir) const;
 
     //! Writes all the windows in a single file
     /*!
@@ -161,7 +161,7 @@ public:
     @return success
     @param[in] file the file
     */
-    bool writeWindows(FILE * file);
+    bool writeWindows(FILE * file) const;
 
 	//! Writes all the Material objects in Radiance format
 	/*!
@@ -170,7 +170,7 @@ public:
 	@param[in] dir The subdirectory to export
      @param[in] filename The name of the file that references all materials
 	*/
-	bool writeMaterials(const char * dir, const std::string filename);
+	bool writeMaterials(const char * dir, const std::string filename) const;
 
     //! Writes all the Material objects in a single FILE * object
     /*!
@@ -178,7 +178,7 @@ public:
     @return success
     @param[in] file The FILE object to write to
     */
-    bool writeMaterials(FILE * file);
+    bool writeMaterials(FILE * file) const;
 
 	//! Writes the standard Clear Sky
 	/*!
@@ -186,7 +186,7 @@ public:
 	@param[in] file The File to write the sky to
 	@return [Boolean] Success
 	*/
-	bool writeSky(FILE * file);
+	bool writeSky(FILE * file) const;
 
     //! Writes the standard Clear Sky
     /*!
@@ -195,7 +195,7 @@ public:
      @param[in] filename The name of the file to write
     @return [Boolean] Success
     */
-    bool writeSky(const char * dir, const std::string filename);
+    bool writeSky(const char * dir, const std::string filename) const;
 
 	//! Writes the scene file
 	/*!
@@ -204,7 +204,7 @@ public:
 	@param[in] dir The directory to export
 	@todo There is a bug that would cause an error if the exporting Directory of Layers and Views changes.
 	*/
-	bool writeSceneFile(const char * dir, OptionSet * options);
+	bool writeSceneFile(const char * dir, OptionSet * options) const;
 
     //! Writes the rif file
     /*!
@@ -214,7 +214,7 @@ public:
      @todo There is a bug that would cause an error if the exporting Directory of Layers changes.
      @todo Get the bounding box of the model
      */
-    bool writeRifFile(const char * dir, OptionSet * options);
+    bool writeRifFile(const char * dir, OptionSet * options) const;
 
     
 	//! Writes the Photosensors
@@ -223,7 +223,7 @@ public:
 	@param[in] dir The directory to export
 	@return [Boolean] Success
 	*/
-	bool writePhotosensors(const char * dir);
+	bool writePhotosensors(const char * dir) const;
 
 	//! Writes the weather file
 	/*!
@@ -232,7 +232,7 @@ public:
      @param[in] filename The name of the file to write
 	@return sucess
 	*/
-    bool writeWeather(const char * dir, const std::string filename);
+    bool writeWeather(const char * dir, const std::string filename) const;
     
     //! Writes an Object in Radiance Format, potentially applying a transformation, scale and changing material
     /*!
@@ -244,7 +244,7 @@ public:
      @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
      @return success
      */
-    bool writeOtype(Otype * object, FILE * file, const char * material, Transform * transform, double scale);
+    bool writeOtype(const Otype * const object, FILE * file, const std::string * const material, Transform * transform, double scale) const;
     
     //! Writes an Object in Radiande Format
     /*!
@@ -253,7 +253,7 @@ public:
      @param file The file to write the object in
      @return success
      */
-    bool writeOtype(Otype * object, FILE * file);
+    bool writeOtype(const Otype * const object, FILE * file) const;
     
     //! Writes an Object in Radiance Format, potentially changing the material
     /*!
@@ -263,115 +263,124 @@ public:
      @param material An optional material name that will override the one assigned to the object
      @return success
      */
-    bool writeOtype(Otype * object, FILE * file, const char * material);
+    bool writeOtype(const Otype * const object, FILE * file, std::string * material) const;
 
     //! Writes an Bubble in Radiance Format, potentially applying a transformation, scale and changing material
     /*!
      @author German Molina
      @param object The Object to write in Radiance format
      @param file The file to write the object in
+     @param name The name of the object
      @param material An optional material name that will override the one assigned to the object
      @param transform An optional transformation to apply to the object before writing it
      @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
      @return success
      */
-    bool writeBubble(Bubble * object, FILE * file, const char * material, Transform * transform, double scale);
+    bool writeBubble(const Bubble * const object, const std::string * name, FILE * file, const char * material, Transform * transform, double scale) const;
 
     //! Writes an Cone in Radiance Format, potentially applying a transformation, scale and changing material
     /*!
      @author German Molina
      @param object The Object to write in Radiance format
+     @param name The name of the object
      @param file The file to write the object in
      @param material An optional material name that will override the one assigned to the object
      @param transform An optional transformation to apply to the object before writing it
      @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
      @return success
      */
-    bool writeCone(Cone * object, FILE * file, const char * material, Transform * transform, double scale);
+    bool writeCone(const Cone * const object, const std::string * name, FILE * file, const char * material, Transform * transform, double scale) const;
 
     //! Writes an Cup in Radiance Format, potentially applying a transformation, scale and changing material
     /*!
      @author German Molina
      @param object The Object to write in Radiance format
      @param file The file to write the object in
+     @param name The name of the object
      @param material An optional material name that will override the one assigned to the object
      @param transform An optional transformation to apply to the object before writing it
      @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
      @return success
      */
-    bool writeCup(Cup * object, FILE * file, const char * material, Transform * transform, double scale);
+    bool writeCup(const Cup * const object, const std::string * name, FILE * file, const char * material, Transform * transform, double scale) const;
 
     //! Writes an Cylinder in Radiance Format, potentially applying a transformation, scale and changing material
     /*!
      @author German Molina
      @param object The Object to write in Radiance format
      @param file The file to write the object in
+     @param name The name of the object
      @param material An optional material name that will override the one assigned to the object
      @param transform An optional transformation to apply to the object before writing it
      @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
      @return success
      */
-    bool writeCylinder(Cylinder * object, FILE * file, const char * material, Transform * transform, double scale);
+    bool writeCylinder(const Cylinder * const object, const std::string * name, FILE * file, const char * material, Transform * transform, double scale) const;
 
     //! Writes an Face in Radiance Format, potentially applying a transformation, scale and changing material
     /*!
      @author German Molina
      @param object The Object to write in Radiance format
      @param file The file to write the object in
+     @param name The name of the object
      @param material An optional material name that will override the one assigned to the object
      @param transform An optional transformation to apply to the object before writing it
      @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
      @return success
      */
-    bool writeFace(Face * object, FILE * file, const char * material, Transform * transform, double scale);
+    bool writeFace(const Face * const object, const std::string * name, FILE * file, const char * material, Transform * transform, double scale) const;
 
     //! Writes an Ring in Radiance Format, potentially applying a transformation, scale and changing material
     /*!
      @author German Molina
      @param object The Object to write in Radiance format
      @param file The file to write the object in
+     @param name The name of the object
      @param material An optional material name that will override the one assigned to the object
      @param transform An optional transformation to apply to the object before writing it
      @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
      @return success
      */
-    bool writeRing(Ring * object, FILE * file, const char * material, Transform * transform, double scale);
+    bool writeRing(const Ring * const object, const std::string * name, FILE * file, const char * material, Transform * transform, double scale) const;
 
     //! Writes an Source in Radiance Format, potentially applying a transformation, scale and changing material
     /*!
      @author German Molina
      @param object The Object to write in Radiance format
      @param file The file to write the object in
+     @param name The name of the object
      @param material An optional material name that will override the one assigned to the object
      @param transform An optional transformation to apply to the object before writing it
      @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
      @return success
      */
-    bool writeSource(Source * object, FILE * file, const char * material, Transform * transform, double scale);
+    bool writeSource(const Source * const object, const std::string * name, FILE * file, const char * material, Transform * transform, double scale) const;
 
     //! Writes an Sphere in Radiance Format, potentially applying a transformation, scale and changing material
     /*!
      @author German Molina
      @param object The Object to write in Radiance format
      @param file The file to write the object in
+     @param name The name of the object
      @param material An optional material name that will override the one assigned to the object
      @param transform An optional transformation to apply to the object before writing it
      @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
      @return success
      */
-    bool writeSphere(Sphere * object, FILE * file, const char * material, Transform * transform, double scale);
+    bool writeSphere(const Sphere * const object, const std::string * name, FILE * file, const char * material, Transform * transform, double scale) const;
 
     //! Writes an Tube in Radiance Format, potentially applying a transformation, scale and changing material
     /*!
      @author German Molina
      @param object The Object to write in Radiance format
      @param file The file to write the object in
+     @param name The name of the object
      @param material An optional material name that will override the one assigned to the object
      @param transform An optional transformation to apply to the object before writing it
      @param scale The scale to apply to the object before writing it. Ignored if transform is NULL
      @return success
      */
-    bool writeTube(Tube * object, FILE * file, const char * material, Transform * transform, double scale);
+    bool writeTube(const Tube * const object, const std::string * name, FILE * file, const char * material, Transform * transform, double scale) const;
 
     //! Writes a material in a File, in Radiance format
     /*!
@@ -380,7 +389,7 @@ public:
     @param file The file to write the material to
     @return success
     */
-    bool writeMaterial(Material * material, FILE * file);
+    bool writeMaterial(const Material * const material, FILE * file) const;
 };
 
 extern RadExporter radexporter;

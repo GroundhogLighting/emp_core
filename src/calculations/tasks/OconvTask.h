@@ -47,6 +47,7 @@ public:
         setName(&name);
         model = theModel;
         octreeName = getName() + ".oct";
+        fixString(&octreeName);
     }
     
     ~OconvTask()

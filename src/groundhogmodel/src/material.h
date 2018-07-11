@@ -62,7 +62,7 @@ public:
 	@author German Molina
 	@return The name of the material
 	*/
-	std::string * getName();
+	std::string getName() const;
     
     //! Retrieves a value from a JSON, if it exists
     /*!
@@ -77,21 +77,21 @@ public:
 	@param The name
 	@return The name of the material
 	*/
-	void setName(std::string * name);
+	void setName(const std::string * name);
 
 	//! Retrieves the type of the Material
 	/*!
 	@author German Molina
 	@return The type of the material
 	*/
-	std::string * getType();
+    std::string getType() const;
 
 	//! Sets the type of the Material
 	/*!
 	@author German Molina
 	@return The type of the material
 	*/
-	void setType(std::string type);
+	void setType(const std::string type);
 
 	//! Compares a name with another string
 	/*!
@@ -99,7 +99,7 @@ public:
 	@param[in] otherName The pointer to another string
 	@return is equal
 	*/
-	bool compareName(std::string * otherName);
+	bool compareName(const std::string * const otherName) const;
 	
 	//! Parses a tokenized Groundhog primitive
 	/*!

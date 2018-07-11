@@ -113,7 +113,7 @@ public:
     
     bool submitResults(json * j)
     {
-        std::string wpName = *(workplane->getName());
+        std::string wpName = workplane->getName();
         bulkResultsIntoJSON(getName(), wpName, &result, compliance, j);
         return true;
     }

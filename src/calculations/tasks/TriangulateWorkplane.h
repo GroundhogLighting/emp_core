@@ -60,7 +60,7 @@ public:
         // It Does generate results
         generatesResults = true;
         
-        std::string name = "Triangulate workplane " + *(aWorkplane->getName());
+        std::string name = "Triangulate workplane " + aWorkplane->getName();
         setName(&name);
         
     }
@@ -187,9 +187,9 @@ public:
      */
     bool submitResults(json * j)
     {
-        std::string wp = *(workplane->getName());
+        std::string wp = workplane->getName();
         size_t nrows = triangles.size();
-        std::string name = *(workplane->getName());
+        std::string name = workplane->getName();
         
         auto workplanes = (*j)["workplanes"];
         if( workplanes.is_null() )

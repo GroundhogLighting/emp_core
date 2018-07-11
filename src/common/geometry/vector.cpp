@@ -38,48 +38,48 @@ Vector3D::~Vector3D()
 }
 */
 
-double Vector3D::getX()
+double Vector3D::getX() const
 {
 	return x;
 }
 
-double Vector3D::getY()
+double Vector3D::getY() const
 {
 	return y;
 }
 
-double Vector3D::getZ()
+double Vector3D::getZ() const
 {
 	return z;
 }
 
 
-double Vector3D::operator*(Vector3D v)
+double Vector3D::operator*(Vector3D v) const
 {
 	return x*v.x + y*v.y + z*v.z;
 }
 
-Vector3D Vector3D::operator*(double s)
+Vector3D Vector3D::operator*(double s) const
 {
 	return Vector3D(x*s,y*s,z*s);
 }
 
-Vector3D Vector3D::operator/(double s)
+Vector3D Vector3D::operator/(double s) const
 {
 	return Vector3D(x / s, y / s, z / s);
 }
 
-Vector3D Vector3D::operator+(Vector3D v)
+Vector3D Vector3D::operator+(Vector3D v) const
 {
 	return Vector3D(x + v.x, y + v.y, z + v.z);
 }
 
-Vector3D Vector3D::operator-(Vector3D v)
+Vector3D Vector3D::operator-(Vector3D v) const
 {
 	return Vector3D(x - v.x, y - v.y, z - v.z);
 }
 
-Vector3D Vector3D::operator%(Vector3D v)
+Vector3D Vector3D::operator%(Vector3D v) const
 {
 	double dX = y*v.z - z*v.y;
 	double dY = z*v.x - x*v.z;
@@ -87,7 +87,7 @@ Vector3D Vector3D::operator%(Vector3D v)
 	return Vector3D(dX, dY, dZ);
 }
 
-bool  Vector3D::isParallel(Vector3D v)
+bool  Vector3D::isParallel(Vector3D v) const
 {
 
 	if (v.isZero() || isZero()){
@@ -134,7 +134,7 @@ bool  Vector3D::isParallel(Vector3D v)
 	return true;
 }
 
-bool Vector3D::sameDirection(Vector3D v)
+bool Vector3D::sameDirection(Vector3D v) const
 {
 	if (!isParallel(v))
 		return false;
@@ -152,24 +152,24 @@ bool Vector3D::sameDirection(Vector3D v)
 
 }
 
-bool Vector3D::isZero()
+bool Vector3D::isZero() const
 {
 	return (std::abs(x) < EMP_TINY &&  std::abs(y) < EMP_TINY && std::abs(z) < EMP_TINY);
 }
 
-bool Vector3D::isEqual(Vector3D v)
+bool Vector3D::isEqual(Vector3D v) const
 {
 	return (std::abs(x - v.x) < EMP_TINY &&  std::abs(y - v.y) < EMP_TINY && std::abs(z - v.z) < EMP_TINY);
 }
 
 
-double Vector3D::getLength()
+double Vector3D::getLength() const
 {
 	return sqrt(x*x+y*y+z*z);
 }
 
 
-double Vector3D::getSquaredLength()
+double Vector3D::getSquaredLength() const
 {
 	return (x*x + y*y + z*z);
 }
@@ -186,7 +186,7 @@ void Vector3D::normalize()
 }
 
 
-void Vector3D::print()
+void Vector3D::print() const
 {
 	std::cerr << "Vector3D(";
 	std::cerr << x << ",";
@@ -195,7 +195,7 @@ void Vector3D::print()
 }
 
 
-Vector3D Vector3D::transform(Transform * t)
+Vector3D Vector3D::transform(Transform * t) const
 {
     
     Matrix4x4 * m = t->getMatrix();

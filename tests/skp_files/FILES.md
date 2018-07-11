@@ -165,8 +165,25 @@ An empty model that has been assigned a weather file located in Country: CHL; Ci
 
 ## da.skp
 
-## 
+## task_udi.skp
 
+A model that only has two simple 1x1 workplanes: "with task" and "without task". The former has an UDI task assigned. The task has the following data:
+
+* name: "UDI"
+* min_lux: 300
+* max_lux: 3000
+* early: 8
+* late: 18
+* min_month: 1
+* max_month: 12
+* min_time: 50
+
+### Expected behavior
+
+1. No throw on load
+2. Has two workplanes
+3. Has one task
+4. The task is assigned only to the "with task" WP
 
 # Materials
 

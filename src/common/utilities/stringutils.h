@@ -106,6 +106,17 @@ and Small letters as they were, and replaces everything else by the DEFAULT_CHAR
 */
 extern void fixString(char * s, size_t stringLength);
 
+//! Some strings would be ilegal in Radiance format. This function fixes that
+/*!
+ Replaces spaces and # and | by an underscore, leaves Digits, Capital Letters
+ and Small letters as they were, and replaces everything else by the DEFAULT_CHAR
+ 
+ @author German Molina
+ @param[in] s the input string
+ @note this transforms the string, does not create a new one.
+ */
+extern void fixString(std::string * s);
+
 //! Transforms a size_t into a string
 /*!
 @author German Molina (based on the internet)

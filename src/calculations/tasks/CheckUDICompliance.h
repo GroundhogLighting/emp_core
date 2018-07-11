@@ -81,6 +81,7 @@ public:
         // Set the name
         setName(&name);
     }
+        
     
     GET_DEP_RESULTS(CalculateDDCGlobalIlluminance);
     

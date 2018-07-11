@@ -62,8 +62,10 @@ public:
     {
         tbb::mutex::scoped_lock lock(oconvMutex);
         std::string octName = (static_cast<OconvTask *>(getDependencyRef(0))->octreeName);
+        
         octreeName = "DIRECT_SUN_" + octName;
-        //remove(&octreeName[0]);
+        fixString(&octreeName);
+        
         std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
         
         FILE *octree = POPEN(&command[0], "w");

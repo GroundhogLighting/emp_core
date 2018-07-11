@@ -8,7 +8,7 @@ TEST(SKPRead, empty)
     FOR_ALL_VERSIONS{
         ASSERT_LOAD_MODEL("empty",version);
         
-        // Only two layer
+        // Only one layer
         size_t nLayers = model.getNumLayers();
         ASSERT_EQ(nLayers,1);
         
@@ -30,7 +30,7 @@ TEST(SKPRead, deleted)
     FOR_ALL_VERSIONS{        
         ASSERT_LOAD_MODEL("deleted",version);
     
-        // Only two layer
+        // Only one layer
         size_t nLayers = model.getNumLayers();
         ASSERT_EQ(nLayers,1);
         

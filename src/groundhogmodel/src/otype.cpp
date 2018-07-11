@@ -32,39 +32,39 @@ Otype::~Otype()
 }
 
 
-std::string * Otype::getName()
+std::string Otype::getName() const
 {
-	return &name;
+	return name;
 }
 
-void Otype::setName(std::string * newName)
+void Otype::setName(const std::string * newName)
 {
 	name = *newName;
 }
 
 
-std::string * Otype::getType()
+std::string Otype::getType() const
 {
-	return &type;
+	return type;
 }
 
-bool Otype::compareName(std::string * otherName)
+bool Otype::compareName(const std::string * otherName) const
 {
 	return (name == *otherName);
 }
 
-void Otype::setType(std::string theType)
+void Otype::setType(const std::string theType)
 {
     type = theType;
 }
 
 
-Material * Otype::getMaterial()
+const Material * const Otype::getMaterial() const
 {
 	return material;
 }
 
-void Otype::setMaterial(Material * mat)
+void Otype::setMaterial(Material * const mat)
 {
 	material = mat;
 }

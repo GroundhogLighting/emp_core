@@ -114,6 +114,14 @@ void fixString(char * s, size_t stringLength)
 
 }
 
+void fixString(std::string * s)
+{
+    size_t size = s->size();
+    if(size == 0)
+        throw std::invalid_argument("String to fix has 0 size.");
+    
+    fixString(&(s->at(0)),size);
+}
 
 std::string size_tToString(size_t sz) 
 {

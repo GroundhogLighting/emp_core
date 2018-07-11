@@ -26,6 +26,7 @@
 #include "../../groundhogmodel/groundhogmodel.h"
 #include "./radexporter.h"
 #include "../../os_definitions.h"
+#include "../../common/utilities/stringutils.h"
 
 #include <fstream>
 
@@ -36,7 +37,7 @@ RadExporter::RadExporter(GroundhogModel * the_model)
 }
 
 
-bool RadExporter::writeModelInfo(const char * filename)
+bool RadExporter::writeModelInfo(const char * filename) const
 {
 	// create and open file
 	std::ofstream file;
@@ -60,7 +61,7 @@ bool RadExporter::writeModelInfo(const char * filename)
 	return true;
 }
 
-bool RadExporter::writeViews(const char * dir)
+bool RadExporter::writeViews(const char * dir) const
 {
 	size_t numViews = model->getNumViews();
 	
@@ -91,8 +92,12 @@ bool RadExporter::writeViews(const char * dir)
 
 		// create and open file
 		std::ofstream file;
-        std::string * viewName = view->getName();
-		file.open(baseDir + "/" + *viewName + ".vf");
+        
+        std::string viewName = *(view->getName());
+        fixString(&viewName);
+        
+        
+		file.open(baseDir + "/" + viewName + ".vf");
 
 		// initialize
 		file << "rvu ";
@@ -127,7 +132,7 @@ bool RadExporter::writeViews(const char * dir)
 	return true;
 }
 
-bool RadExporter::writeComponentDefinitions(const char * dir)
+bool RadExporter::writeComponentDefinitions(const char * dir) const
 {
 	size_t numDefinitions= model->getNumComponentDefinitions();
 
@@ -142,20 +147,21 @@ bool RadExporter::writeComponentDefinitions(const char * dir)
 		ComponentDefinition * definition = model->getComponentDefinitionRef(i);
         size_t numObjects = definition->getObjectsRef()->size();
         
-		std::string * componentName = definition->getName();
+		std::string componentName = *(definition->getName());
+        fixString(&componentName);
 
 		// create the file
-        std::string fileName = baseDir + "/" + *componentName + ".rad";
+        std::string fileName = baseDir + "/" + componentName + ".rad";
     
         FOPEN(file,&fileName[0], "w");
 
 		// get instances within the model
-		std::vector < ComponentInstance * > * instances = definition->getComponentInstancesRef();
+		const std::vector < ComponentInstance * > * const instances = definition->getComponentInstancesRef();
 		size_t numInstances = instances->size();
 		
 		// export faces
 		if (numObjects < 1 && numInstances < 1) {
-			WARN(wMsg,"Empty component '" + *componentName + "'");
+			WARN(wMsg,"Empty component '" + componentName + "'");
 			continue;
 		}
 
@@ -180,7 +186,7 @@ bool RadExporter::writeComponentDefinitions(const char * dir)
 	return true;
 }
 
-bool RadExporter::writeLayers(const char * dir)
+bool RadExporter::writeLayers(const char * dir) const
 {
 
 	size_t numLayers = model->getNumLayers();
@@ -197,20 +203,22 @@ bool RadExporter::writeLayers(const char * dir)
 	for (size_t i = 0; i < numLayers; i++) {
         
 		// get the layer
-		Layer * layer = model->getLayerRef(i);	
-		std::string * layerName = layer->getName();
+		Layer * layer = model->getLayerRef(i);
+        
+        std::string layerName = *(layer->getName());
+        fixString(&layerName);
         
 		if (layer->isEmpty()) {
-			WARN(wMsg,"Skipping layer '" + *layerName + "' when writing, because it is empty.");
+			WARN(wMsg,"Skipping layer '" + layerName + "' when writing, because it is empty.");
 			continue;
 		}
 
-        std::string flnm = baseDir + "/" + *layerName + ".rad";
+        std::string flnm = baseDir + "/" + layerName + ".rad";
         
         FOPEN(file, &flnm[0], "w");
 
 		/* WRITE COMPONENT INSTANCES */
-		std::vector < ComponentInstance * > * instances = layer->getComponentInstancesRef();
+		const std::vector < ComponentInstance * > * const instances = layer->getComponentInstancesRef();
 		size_t numInstances = instances->size();
 		for (size_t j = 0; j < numInstances; j++) {
 			writeComponentInstance(file, layer->getComponentInstanceRef(j));
@@ -221,7 +229,7 @@ bool RadExporter::writeLayers(const char * dir)
         /* WRITE OBJECTS */
         
         // Get the objects
-		std::vector < Otype * > * objects = layer->getObjectsRef();
+		const std::vector < Otype * > * const objects = layer->getObjectsRef();
         
         // Count the objects
 		size_t numObjs= objects->size();
@@ -240,7 +248,7 @@ bool RadExporter::writeLayers(const char * dir)
 }
 
 
-bool RadExporter::writeLayersInOneFile(FILE * file, const char * newMaterial)
+bool RadExporter::writeLayersInOneFile(FILE * file, std::string * newMaterial) const
 {
 
     size_t numLayers = model->getNumLayers();
@@ -256,7 +264,7 @@ bool RadExporter::writeLayersInOneFile(FILE * file, const char * newMaterial)
         Transform transform = Transform();
         double scale = 1;
         // Get the instances
-        std::vector < ComponentInstance * > * instances = layer->getComponentInstancesRef();
+        const std::vector < ComponentInstance * > * const instances = layer->getComponentInstancesRef();
         
         // Iterate the instances
         size_t numInstances = instances->size();
@@ -269,7 +277,7 @@ bool RadExporter::writeLayersInOneFile(FILE * file, const char * newMaterial)
         /* WRITE THE OBJECTS */
         
         // Get the objects
-        std::vector < Otype * > * objects = layer->getObjectsRef();
+        const std::vector < Otype * > * const objects = layer->getObjectsRef();
         
         // Count the objects
         size_t numObjs = objects->size();
@@ -284,20 +292,22 @@ bool RadExporter::writeLayersInOneFile(FILE * file, const char * newMaterial)
     return true;
 }
 
-bool RadExporter::writeLayersInOneFile(FILE * file)
+bool RadExporter::writeLayersInOneFile(FILE * file) const
 {
     return writeLayersInOneFile(file, nullptr);
 }
 
-void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instance) 
+void RadExporter::writeComponentInstance(FILE * file, const ComponentInstance * const instance) const
 {	
-	ComponentDefinition * definition = instance->getDefinitionRef();
+	const ComponentDefinition * definition = instance->getDefinitionRef();
 	if (definition == nullptr) {
 		WARN(wMsg,"Trying to export an instance with nullptr definition... instance ignored.");
 		return;
 	}
+    
+    std::string instanceName = *(definition->getName());
+    fixString(&instanceName);
 
-    std::string * instanceName = instance->getDefinitionRef()->getName();
 
     fprintf(file, "!xform -s %f -rz %f -ry %f -rx %f -t %f %f %f ../Components/%s.rad\n",
       instance->getScale(),
@@ -307,33 +317,34 @@ void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instan
       instance->getX(),
       instance->getY(),
       instance->getZ(),
-      &(instanceName->at(0))
+      &instanceName[0]
     );   
 }
 
 
-void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instance, Transform * parentTransform, double scale, const char * newMaterial)
+void RadExporter::writeComponentInstance(FILE * file, const ComponentInstance * const instance, Transform * parentTransform, double scale, std::string * newMaterial) const
 {
   
-    ComponentDefinition * definition = instance->getDefinitionRef();
+    const ComponentDefinition * definition = instance->getDefinitionRef();
     if (definition == nullptr) {
         warn("Trying to export an instance with nullptr definition... instance ignored.");
         return;
     }
 
     // Get the definition Name
-    std::string * componentName = definition->getName();
+    std::string componentName = *(definition->getName());
+    fixString(&componentName);
 
     // Count objects
     size_t numObjects = definition->getObjectsRef()->size();
 
     // get instances within the model
-    std::vector < ComponentInstance * > * instances = definition->getComponentInstancesRef();
+    const std::vector < ComponentInstance * > * const instances = definition->getComponentInstancesRef();
     size_t numInstances = instances->size();
 
     // export faces
     if (numObjects < 1 && numInstances < 1) {
-        WARN(wMsg,"Empty ComponentDefinition '" + *componentName + "'");
+        WARN(wMsg,"Empty ComponentDefinition '" + componentName + "'");
         return;
     }
 
@@ -363,7 +374,8 @@ void RadExporter::writeComponentInstance(FILE * file, ComponentInstance * instan
 }
 
 
-bool RadExporter::writeWindows(const char * dir) {
+bool RadExporter::writeWindows(const char * dir) const
+{
 	size_t numGroups = model->getNumWindowGroups();
 	if (numGroups == 0)
 		return true;
@@ -377,6 +389,8 @@ bool RadExporter::writeWindows(const char * dir) {
 		
 		WindowGroup * group = model->getWindowGroupRef(i);
 		std::string name = group->getName();
+        fixString(&name);
+
 
 		size_t numWindows = group->size();
 		if (numWindows <= 0) {
@@ -395,14 +409,16 @@ bool RadExporter::writeWindows(const char * dir) {
 		for (size_t j = 0; j < numWindows; j++) {
 			Face * window = group->getWindowRef(j);
 
-            Material * mat = window->getMaterial();
+            const Material * mat = window->getMaterial();
 
-            std::string * material = mat->getName();
+            std::string material = mat->getName();
+            fixString(&material);
+            
             if (mat == nullptr) {
-              WARN(wMsg,"Window " + *material + " has not material... it will be ignored");
+              WARN(wMsg,"Window " + material + " has not material... it will be ignored");
               continue;
             }
-            writeOtype(window, file, &(material->at(0)));
+            writeOtype(window, file, &material);
 		}
 
         fclose(file);
@@ -413,13 +429,15 @@ bool RadExporter::writeWindows(const char * dir) {
 }
 
 
-bool RadExporter::writeWindows(FILE * file) {
+bool RadExporter::writeWindows(FILE * file) const
+{
     size_t numGroups = model->getNumWindowGroups();
   
     for (size_t i = 0; i < numGroups; i++) {
 
         WindowGroup * group = model->getWindowGroupRef(i);
         std::string name = group->getName();
+        fixString(&name);
 
         size_t numWindows = group->size();
         if (numWindows <= 0) {
@@ -430,13 +448,16 @@ bool RadExporter::writeWindows(FILE * file) {
         for (size_t j = 0; j < numWindows; j++) {
             Face * window = group->getWindowRef(j);
 
-            Material * mat = window->getMaterial();
-            std::string * material = mat->getName();
+            const Material * mat = window->getMaterial();
+            
+            std::string material = mat->getName();
+            fixString(&material);
+            
             if (mat == nullptr) {
-                WARN(wMsg,"Window " + *material + " has not material... it will be ignored");
+                WARN(wMsg,"Window " + material + " has not material... it will be ignored");
                 continue;
             }
-            writeOtype(window, file, &(material->at(0)));
+            writeOtype(window, file, &material);
         }
     }
 
@@ -444,7 +465,7 @@ bool RadExporter::writeWindows(FILE * file) {
 }
 
 
-bool RadExporter::writeMaterials(const char * dir, const std::string flnm)
+bool RadExporter::writeMaterials(const char * dir, const std::string flnm) const
 {
 	size_t numMaterials = model->getNumMaterials();
 	if (numMaterials == 0)
@@ -463,8 +484,8 @@ bool RadExporter::writeMaterials(const char * dir, const std::string flnm)
 
 		Material * mat = model->getMaterialRef(i);
 
-        std::string * name  = mat->getName();
-        std::string filename = "./"+std::string(baseDir) + "/" + *name + ".mat";
+        std::string name  = mat->getName();
+        std::string filename = "./"+std::string(baseDir) + "/" + name + ".mat";
         
         
         //FILE * file = fopen(&filename[0],"w");
@@ -474,13 +495,13 @@ bool RadExporter::writeMaterials(const char * dir, const std::string flnm)
         
         fclose(file);
 
-		mainFile << "!xform ." << materialsSubdir << "/" << *name << ".mat" << "\n";
+		mainFile << "!xform ." << materialsSubdir << "/" << name << ".mat" << "\n";
 	}
     mainFile.close();
 	return true;
 }
 
-bool RadExporter::writeMaterials(FILE * file)
+bool RadExporter::writeMaterials(FILE * file) const
 {
   size_t numMaterials = model->getNumMaterials(); 
  
@@ -491,7 +512,7 @@ bool RadExporter::writeMaterials(FILE * file)
   return true;
 }
 
-bool RadExporter::writeSky(const char * dir, const std::string flnm)
+bool RadExporter::writeSky(const char * dir, const std::string flnm) const
 {
   // create directory
   std::string baseDir = std::string(dir);
@@ -505,7 +526,7 @@ bool RadExporter::writeSky(const char * dir, const std::string flnm)
   return true;
 }
 
-bool RadExporter::writeSky(FILE * file)
+bool RadExporter::writeSky(FILE * file) const
 {
   
 	Location * loc = model->getLocation();
@@ -527,7 +548,7 @@ bool RadExporter::writeSky(FILE * file)
 	return true;
 }
 
-bool RadExporter::writeSceneFile(const char * dir, OptionSet * options)
+bool RadExporter::writeSceneFile(const char * dir, OptionSet * options) const
 {
 
 	std::ofstream file;
@@ -546,8 +567,9 @@ bool RadExporter::writeSceneFile(const char * dir, OptionSet * options)
 	// Write Geometry
 	file << "###### GEOMETRY" << "\n" << "\n";
 	for (size_t i = 0; i < model->getNumLayers(); i++) {
-		std::string * name = model->getLayerRef(i)->getName();
-		file << "!xform ./" << layersLocation << "/" << *name << ".rad" << "\n";
+        std::string name = *(model->getLayerRef(i)->getName());
+        fixString(&name);
+		file << "!xform ./" << layersLocation << "/" << name << ".rad" << "\n";
 	}
 
 	file.close();
@@ -556,7 +578,7 @@ bool RadExporter::writeSceneFile(const char * dir, OptionSet * options)
 }
 
 
-bool RadExporter::writeRifFile(const char * dir, OptionSet * options)
+bool RadExporter::writeRifFile(const char * dir, OptionSet * options) const
 {
     std::ofstream file;
     file.open(dir);
@@ -600,6 +622,8 @@ bool RadExporter::writeRifFile(const char * dir, OptionSet * options)
     for(size_t i=0; i<nViews;i++){
         View * view = model->getViewRef(i);
         std::string name = *(view->getName());
+        fixString(&name);
+        
         file << "view=" << name << " -vf " << viewsLocation << "/" << name << ".vf" << "\n";
         
     }
@@ -620,30 +644,14 @@ bool RadExporter::writeRifFile(const char * dir, OptionSet * options)
             groups.each do |gr|
                 f.puts("illum=./Windows/"+gr.tr(" ","_")+".rad\n")
                 end
-                
-    //then the rest of the windows
-                f.puts("\n\n#OTHER WINDOWS\n\n")
-                nwin=1 #this will count the windows
-                windows.each do |win|
-                    c=Labeler.get_win_group(win)
-                    if c==nil then # if the window has no group
-                        
-                        winname=win.get_attribute("Groundhog","Name") #get the name
-                        if winname==nil then #if it does not have one
-                            f.puts("./Windows/WindowSet_"+nwin.to_s+".rad\n")
-                            nwin=nwin+1
-                            else #if it has one
-                                f.puts("./Windows/"+winname+".rad\n")
-                                end
-                                end
-                                end
+                    
 */
     
     file.close();
     return true;
 }
 
-bool RadExporter::writePhotosensors(const char * dir)
+bool RadExporter::writePhotosensors(const char * dir) const
 {
 	size_t numPhotosensors = model->countPhotosensors();
 	
@@ -663,6 +671,7 @@ bool RadExporter::writePhotosensors(const char * dir)
 	for (size_t i = 0; i < numPhotosensors; i++) {
 		Photosensor * ph = model->getPhotosensorRef(i);
 		std::string name = ph->getName();
+        fixString(&name);
 		Point3D position = ph->getPosition();
 		Vector3D direction = ph->getDirection();
 
@@ -698,7 +707,7 @@ bool RadExporter::writePhotosensors(const char * dir)
 
 
 
-bool RadExporter::writeWeather(const char * dir, const std::string filename)
+bool RadExporter::writeWeather(const char * dir, const std::string filename) const
 {
     Location * loc = model->getLocation();
     if (!loc -> hasWeather())
@@ -730,9 +739,8 @@ bool RadExporter::writeWeather(const char * dir, const std::string filename)
     return true;
 }
 
-bool RadExporter::writeBubble(Bubble * object, FILE * file, const char * material, Transform * transform, double scale)
+bool RadExporter::writeBubble(const Bubble * const object, const std::string * oName, FILE * file, const char * material, Transform * transform, double scale) const
 {
-    std::string * oName = object->getName();
     
     fprintf(file, "%s %s %s\n", material, "bubble", oName->c_str());
     fprintf(file, "0\n");
@@ -752,9 +760,8 @@ bool RadExporter::writeBubble(Bubble * object, FILE * file, const char * materia
     return true;
 }
 
-bool RadExporter::writeCone(Cone * object, FILE * file, const char * material, Transform * transform, double scale)
+bool RadExporter::writeCone(const Cone * const object, const std::string * oName, FILE * file, const char * material, Transform * transform, double scale) const
 {
-    std::string * oName = object->getName();
     
     fprintf(file, "%s %s %s\n", material, "cone", oName->c_str());
     fprintf(file, "0\n");
@@ -778,9 +785,9 @@ bool RadExporter::writeCone(Cone * object, FILE * file, const char * material, T
     return true;
 }
 
-bool RadExporter::writeCup(Cup * object, FILE * file, const char * material, Transform * transform, double scale)
+bool RadExporter::writeCup(const Cup * const object, const std::string * oName, FILE * file, const char * material, Transform * transform, double scale) const
 {
-    std::string * oName = object->getName();
+    
     
     fprintf(file, "%s %s %s\n", material, "cup", oName->c_str());
     fprintf(file, "0\n");
@@ -804,9 +811,8 @@ bool RadExporter::writeCup(Cup * object, FILE * file, const char * material, Tra
     return true;
 }
 
-bool RadExporter::writeCylinder(Cylinder * object, FILE * file, const char * material, Transform * transform, double scale)
+bool RadExporter::writeCylinder(const Cylinder * const object, const std::string * oName, FILE * file, const char * material, Transform * transform, double scale) const
 {
-    std::string * oName = object->getName();
     
     fprintf(file, "%s %s %s\n", material, "cylinder", oName->c_str());
     fprintf(file, "0\n");
@@ -831,9 +837,8 @@ bool RadExporter::writeCylinder(Cylinder * object, FILE * file, const char * mat
     
 }
 
-bool RadExporter::writeFace(Face * face, FILE * file, const char * material, Transform * transform, double scale)
+bool RadExporter::writeFace(const Face * const face, const std::string * oName, FILE * file, const char * material, Transform * transform, double scale) const
 {
-    std::string * oName = face->getName();
     
     fprintf(file, "%s %s %s\n", material, "polygon", oName->c_str());
     fprintf(file, "0\n");
@@ -847,8 +852,9 @@ bool RadExporter::writeFace(Face * face, FILE * file, const char * material, Tra
     }
     
     // define the loop that will be written
-    Loop * finalLoop = NULL;
+    Loop * finalLoop = nullptr;
     bool needToDelete = false;
+    
     if (face->hasInnerLoops()) {
         finalLoop = face->getClosedLoop();
         needToDelete = true;
@@ -889,9 +895,9 @@ bool RadExporter::writeFace(Face * face, FILE * file, const char * material, Tra
     return true;
 }
 
-bool RadExporter::writeRing(Ring * object, FILE * file, const char * material, Transform * transform, double scale)
+bool RadExporter::writeRing(const Ring * const object, const std::string * oName, FILE * file, const char * material, Transform * transform, double scale) const
 {
-    std::string * oName = object->getName();
+    
     
     fprintf(file, "%s %s %s\n", material, "ring", oName->c_str());
     fprintf(file, "0\n");
@@ -916,9 +922,8 @@ bool RadExporter::writeRing(Ring * object, FILE * file, const char * material, T
 }
 
 
-bool RadExporter::writeSource(Source * object, FILE * file, const char * material, Transform * transform, double scale)
+bool RadExporter::writeSource(const Source * const object, const std::string * oName, FILE * file, const char * material, Transform * transform, double scale) const
 {
-    std::string * oName = object->getName();
     
     
     fprintf(file, "%s %s %s\n", material, "source", oName->c_str());
@@ -939,9 +944,8 @@ bool RadExporter::writeSource(Source * object, FILE * file, const char * materia
     return true;
 }
 
-bool RadExporter::writeSphere(Sphere * object, FILE * file, const char * material, Transform * transform, double scale)
+bool RadExporter::writeSphere(const Sphere * const object, const std::string * oName, FILE * file, const char * material, Transform * transform, double scale) const
 {
-    std::string * oName = object->getName();
     
     fprintf(file, "%s %s %s\n", material, "sphere", oName->c_str());
     fprintf(file, "0\n");
@@ -963,10 +967,9 @@ bool RadExporter::writeSphere(Sphere * object, FILE * file, const char * materia
 }
     
 
-bool RadExporter::writeTube(Tube * object, FILE * file, const char * material, Transform * transform, double scale)
+bool RadExporter::writeTube(const Tube * const object, const std::string * oName, FILE * file, const char * material, Transform * transform, double scale) const
 {
-    std::string * oName = object->getName();
- 
+    
     fprintf(file, "%s %s %s\n", material, "tube", oName->c_str());
     fprintf(file, "0\n");
     fprintf(file, "0\n");
@@ -989,62 +992,73 @@ bool RadExporter::writeTube(Tube * object, FILE * file, const char * material, T
     return true;
 }
 
-bool RadExporter::writeOtype(Otype * object, FILE * file, const char * material, Transform * transform, double scale)
+bool RadExporter::writeOtype(const Otype * const object, FILE * file, const std::string * const material, Transform * transform, double scale) const
 {
+    
     // Check type of object
-    std::string * type = object->getType();
-    std::string * oName = object->getName();
+    std::string aux = object->getType();
+    const char * type = aux.c_str();
+    
+    std::string objectName = object->getName();
+    fixString(&objectName);
+    
+    std::string materialName;
     
     // Verify the material
     if(material == nullptr){
-        Material * m = object->getMaterial();
+        const Material * m = object->getMaterial();
         if(m == nullptr){
-            WARN(wMsg,"Object '" + *oName + "' has no Material... it has been ignored");
+            WARN(wMsg,"Object '" + objectName + "' has no Material... it has been ignored");
             return false;
         }
-        material = m->getName()->c_str();
+        
+        materialName = m->getName();
+    }else{
+        materialName = *material;
     }
     
+    fixString(&materialName);
+    
     // Write down
-    if(strcmp(type->c_str(),"bubble") == 0){
+    if(strcmp(type,"bubble") == 0){
+        const Bubble * o = dynamic_cast<const Bubble *>(object);
+        writeBubble(o, &objectName, file, materialName.c_str(), transform, scale);
         
-        writeBubble(static_cast<Bubble *>(object), file, material, transform, scale);
+    } else if(strcmp(type,"cone") == 0){
+        const Cone * o = dynamic_cast<const Cone *>(object);
+        writeCone(o,  &objectName, file, materialName.c_str(), transform, scale);
         
-    } else if(strcmp(type->c_str(),"cone") == 0){
+    } else if(strcmp(type,"cup") == 0){
+        const Cup * o = dynamic_cast<const Cup *>(object);
+        writeCup(o,  &objectName, file, materialName.c_str(), transform, scale);
         
-        writeCone(static_cast<Cone *>(object), file, material, transform, scale);
+    } else if(strcmp(type,"cylinder") == 0){
+        const Cylinder * o = dynamic_cast<const Cylinder *>(object);
+        writeCylinder(o,  &objectName, file, materialName.c_str(), transform, scale);
         
-    } else if(strcmp(type->c_str(),"cup") == 0){
+    } else if(strcmp(type,"polygon") == 0){
+        const Face * o = dynamic_cast<const Face *>(object);
+        writeFace(o,  &objectName, file, materialName.c_str(), transform, scale);
         
-        writeCup(static_cast<Cup *>(object), file, material, transform, scale);
+    } else if(strcmp(type,"ring") == 0){
+        const Ring * o = dynamic_cast<const Ring *>(object);
+        writeRing(o,  &objectName, file, materialName.c_str(), transform, scale);
         
-    } else if(strcmp(type->c_str(),"cylinder") == 0){
+    } else if(strcmp(type,"source") == 0){
+        const Source * o = dynamic_cast<const Source *>(object);
+        writeSource(o,  &objectName, file, materialName.c_str(), transform, scale);
         
-        writeCylinder(static_cast<Cylinder *>(object), file, material, transform, scale);
+    } else if(strcmp(type,"sphere") == 0){
+        const Sphere * o = dynamic_cast<const Sphere *>(object);
+        writeSphere(o,  &objectName, file, materialName.c_str(), transform, scale);
         
-    } else if(strcmp(type->c_str(),"polygon") == 0){
-        
-        writeFace(static_cast<Face *>(object), file, material, transform, scale);
-        
-    } else if(strcmp(type->c_str(),"ring") == 0){
-        
-        writeRing(static_cast<Ring *>(object), file, material, transform, scale);
-        
-    } else if(strcmp(type->c_str(),"source") == 0){
-        
-        writeSource(static_cast<Source *>(object), file, material, transform, scale);
-        
-    } else if(strcmp(type->c_str(),"sphere") == 0){
-        
-        writeSphere(static_cast<Sphere *>(object), file, material, transform, scale);
-        
-    } else if(strcmp(type->c_str(),"tube") == 0){
-        
-        writeTube(static_cast<Tube *>(object), file, material, transform, scale);
+    } else if(strcmp(type,"tube") == 0){
+        const Tube * o = dynamic_cast<const Tube *>(object);
+        writeTube(o,  &objectName, file, materialName.c_str(), transform, scale);
         
     } else {
-        std::string errMsg = "Unkown Otype '"+*type+"' in object called '"+*oName+"' when trying to write it in Radiance format... ignoring it";
-        WARN(e,errMsg.c_str());
+        std::string errMsg = "Unkown Otype '"+std::string(type)+"' in object called '"+std::string(objectName)+"' when trying to write it in Radiance format... ignoring it";
+        FATAL(e,errMsg.c_str());
         return false;
     }
     fprintf(file,"\n");
@@ -1052,81 +1066,85 @@ bool RadExporter::writeOtype(Otype * object, FILE * file, const char * material,
     return true;
 }
 
-bool RadExporter::writeOtype(Otype * object, FILE * file)
+bool RadExporter::writeOtype(const Otype * const object, FILE * file) const
 {
     return writeOtype(object, file, nullptr, nullptr, 1);
 }
 
-bool RadExporter::writeOtype(Otype * object, FILE * file, const char * material)
+bool RadExporter::writeOtype(const Otype * const object, FILE * file, std::string * material) const
 {
     return writeOtype(object, file, material, nullptr, 1);
 }
 
 
-bool RadExporter::writeMaterial(Material * material, FILE * file)
+bool RadExporter::writeMaterial(const Material * const material, FILE * file) const
 {
     // Check type of material
-    std::string * type = material->getType();
-    std::string * name = material->getName();
+    std::string materialType = material->getType();
+    std::string materialName = material->getName();
+    fixString(&materialName);
+    
+    const char * type = materialType.c_str();
+    const char * name = materialName.c_str();
     
     // Write down
-    if(strcmp(type->c_str(),"dielectric") == 0){
+    if(strcmp(type,"dielectric") == 0){
         
-        Dielectric * m = static_cast<Dielectric *>(material);
-        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        const Dielectric * m = static_cast<const Dielectric *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type, name);
         fprintf(file, "5 %f %f %f %f %f\n", m->r, m->g, m->b, m->refractionIndex, m->hartmannConstant);
         
-    } else if(strcmp(type->c_str(),"glass") == 0){
+    } else if(strcmp(type,"glass") == 0){
         
-        Glass * m = static_cast<Glass *>(material);
-        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        const Glass * m = static_cast<const Glass *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type, name);
         fprintf(file, "3 %f %f %f\n", m->r, m->g, m->b);
         
-    } else if(strcmp(type->c_str(),"glow") == 0){
+    } else if(strcmp(type,"glow") == 0){
         
-        Glow * m = static_cast<Glow *>(material);
-        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        const Glow * m = static_cast<const Glow *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type, name);
         fprintf(file, "4 %f %f %f %f\n", m->r, m->g, m->b, m->maxRadius);
         
-    } else if(strcmp(type->c_str(),"interface") == 0){
+    } else if(strcmp(type,"interface") == 0){
         
-        Interface * m = static_cast<Interface *>(material);
-        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        const Interface * m = static_cast<const Interface *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type, name);
         fprintf(file, "8 %f %f %f %f %f %f %f %f\n", m->r1, m->g1, m->b1, m->refractionIndex1,
                 m->r2, m->g2, m->b2, m->refractionIndex2);
         
-    } else if(strcmp(type->c_str(),"light") == 0){
+    } else if(strcmp(type,"light") == 0){
         
-        Light * m = static_cast<Light *>(material);
-        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        const Light * m = static_cast<const Light *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type, name);
         fprintf(file, "3 %f %f %f\n", m->r, m->g, m->b);
         
-    } else if(strcmp(type->c_str(),"metal") == 0){
+    } else if(strcmp(type,"metal") == 0){
         
-        Metal * m = static_cast<Metal *>(material);
-        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        const Metal * m = static_cast<const Metal *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type, name);
         fprintf(file, "5 %f %f %f %f %f\n", m->r, m->g, m->b, m->specularity, m->roughness);
         
-    } else if(strcmp(type->c_str(),"plastic") == 0){
+    } else if(strcmp(type,"plastic") == 0){
         
-        Plastic * m = static_cast<Plastic *>(material);
-        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        const Plastic * m = static_cast<const Plastic *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type, name);
         fprintf(file, "5 %f %f %f %f %f\n", m->r, m->g, m->b, m->specularity, m->roughness);
         
-    } else if(strcmp(type->c_str(),"spotlight") == 0){
+    } else if(strcmp(type,"spotlight") == 0){
         
-        Spotlight * m = static_cast<Spotlight *>(material);
-        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        const Spotlight * m = static_cast<const Spotlight *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type, name);
         fprintf(file, "7 %f %f %f %f %f %f %f\n", m->r, m->g, m->b, m->angle, m->direction.getX(), m->direction.getY(), m->direction.getZ());
         
-    } else if(strcmp(type->c_str(),"trans") == 0){
+    } else if(strcmp(type,"trans") == 0){
         
-        Trans * m = static_cast<Trans *>(material);
-        fprintf(file, "void %s %s\n0\n0\n", type->c_str(), name->c_str());
+        const Trans * m = static_cast<const Trans *>(material);
+        fprintf(file, "void %s %s\n0\n0\n", type, name);
         fprintf(file, "7 %f %f %f %f %f %f %f\n", m->r, m->g, m->b, m->specularity, m->roughness, m->transmissivity, m->tspec);
         
     } else {
-        std::string errMsg = "Unkown Material '"+*type+"' in material called '"+*name+"' when trying to write it in Radiance format... ignoring it";
+        std::string errMsg = "Unkown Material '"+std::string(type)+"' in material called '"+std::string(name)+"' when trying to write it in Radiance format... ignoring it";
         WARN(e,errMsg.c_str());
         return false;
     }

@@ -54,21 +54,21 @@ public:
 	@author German Molina
 	@return the X component of the vector
 	*/
-	double getX();
+	double getX() const;
 
 	//! Retrieves the Y component of the vector
 	/*!
 	@author German Molina
 	@return the Y component of the vector
 	*/
-	double getY();
+	double getY() const;
 
 	//! Retrieves the Z component of the vector
 	/*!
 	@author German Molina
 	@return the Z component of the vector
 	*/
-	double getZ();
+	double getZ() const;
 
 	//! Dot product
 	/*!
@@ -76,7 +76,7 @@ public:
 	@param[in] v The other vector
 	@return The dot product
 	*/
-	double operator*(Vector3D v);
+	double operator*(Vector3D v) const;
 
 	//! Scaling (i.e. product by a constant)
 	/*!
@@ -84,7 +84,7 @@ public:
 	@param[in] s The scaling factor
 	@return The result
 	*/
-	Vector3D operator*(double s);
+	Vector3D operator*(double s) const;
 
 	//! Inverse scaling (i.e. division by a constant)
 	/*!
@@ -92,7 +92,7 @@ public:
 	@param[in] s The scaling factor
 	@return The result
 	*/
-	Vector3D operator/(double s);
+	Vector3D operator/(double s) const;
 
 	//! Vector addition
 	/*!
@@ -100,7 +100,7 @@ public:
 	@param[in] v The other vector
 	@return The addition 
 	*/
-	Vector3D operator+(Vector3D v);
+	Vector3D operator+(Vector3D v) const;
 
 	//! Vector sustraction
 	/*!
@@ -108,7 +108,7 @@ public:
 	@param[in] v The other vector
 	@return The result
 	*/
-	Vector3D operator-(Vector3D v);
+	Vector3D operator-(Vector3D v) const;
 
 	//! Cross product
 	/*!
@@ -117,7 +117,7 @@ public:
 	@return The cross product
 	@note Remember to remove!
 	*/
-	Vector3D operator%(Vector3D v);
+	Vector3D operator%(Vector3D v) const;
 
 	//! Checks if two vectors are parallel
 	/*!
@@ -126,7 +126,7 @@ public:
 	@return True if they are parallel
 	@note One can be oposite to the other.
 	*/
-	bool  isParallel(Vector3D v);
+	bool  isParallel(Vector3D v) const;
 
 	//! Checks if two vectors go in the same direction
 	/*!
@@ -134,14 +134,14 @@ public:
 	@param[in] v The other vector
 	@return True if they are the same direction
 	*/
-	bool  sameDirection(Vector3D v);
+	bool  sameDirection(Vector3D v) const;
 
 	//! Checks if a vector can be considered Zero
 	/*!
 	@author German Molina
 	@return True or False
 	*/
-	bool isZero();
+	bool isZero() const;
 
 	//! Checks if a vector can be considered equal to another
 	/*!
@@ -149,21 +149,21 @@ public:
 	@param[in] v The other vector
 	@return True or False
 	*/
-	bool isEqual(Vector3D v);
+	bool isEqual(Vector3D v) const;
 
 	//! Calculates the length of a vector
 	/*!
 	@author German Molina
 	@return length
 	*/
-	double getLength();
+	double getLength() const;
 
 	//! Calculates the squared length of a vector
 	/*!
 	@author German Molina
 	@return length
 	*/
-	double getSquaredLength();
+	double getSquaredLength() const;
 
 	//! Normalizes a Vector3D
 	/*!
@@ -175,7 +175,7 @@ public:
 	/*!
 	@author German Molina
 	*/
-	void print();
+	void print() const;
     
     //! Transforms a Vector based on a Transform object
     /*!
@@ -183,7 +183,7 @@ public:
      @param[in] t The transformation to apply
      @return the transformed Vector3D object
      */
-    Vector3D transform(Transform * t);
+    Vector3D transform(Transform * t) const;
 };
 
 extern Vector3D vector3D;

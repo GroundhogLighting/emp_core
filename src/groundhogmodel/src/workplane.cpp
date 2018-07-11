@@ -36,44 +36,59 @@ Workplane::~Workplane() {
         delete x;
 }
 
-void Workplane::addPolygon(Polygon3D * polygon) {
+void Workplane::addPolygon(Polygon3D * polygon)
+{
 	polygons.push_back(polygon);
 }
 
-std::string * Workplane::getName() {
-	return &name;
+std::string Workplane::getName() const
+{
+	return name;
 }
 
-bool Workplane::compareName(std::string * otherName) {
+bool Workplane::compareName(const std::string * const otherName) const
+{
 	return name == *otherName;
 }
 
 
-size_t Workplane::getNumPolygons() {
+const size_t Workplane::getNumPolygons() const
+{
 	return polygons.size();
 }
 
-Polygon3D * Workplane::getPolygonRef(size_t i) {
+Polygon3D * const Workplane::getPolygonRef(const size_t i) const
+{
 	return polygons[i];
 }
 
-double Workplane::getMaxArea()
+const double Workplane::getMaxArea() const
 {
   return maxArea;
 }
 
-double Workplane::getMaxAspectRatio()
+const double Workplane::getMaxAspectRatio() const
 {
     return maxAspectRatio;
 }
 
 
-void Workplane::setMaxArea(double v)
+void Workplane::setMaxArea(const double v)
 {
     maxArea = v;
 }
 
-void Workplane::setMaxAspectRatio(double v)
+void Workplane::setMaxAspectRatio(const double v)
 {
     maxAspectRatio = v;
+}
+
+void Workplane::addTask(const std::string taskName)
+{
+    tasks.push_back(taskName);
+}
+
+const std::vector<std::string> * const Workplane::getTasks() const
+{
+    return &tasks;
 }

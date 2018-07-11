@@ -58,6 +58,8 @@
 #include "./src/otypes/sphere.h"
 #include "./src/otypes/tube.h"
 
+#include "../taskmanager/task.h"
+
 #include "json/json.hpp"
 using nlohmann::json;
 
@@ -71,7 +73,8 @@ Components, Weather, Luminaires, and more (see its private members for more info
 class GroundhogModel {
 
 private:	
-	//Tasks // **
+	
+    std::vector <json> tasks = std::vector<json>(); //!< Contains all the tasks in the model, in JSON format
 	std::vector <Layer *> layers = std::vector<Layer *>(); //!< Contains all the geometry that represents physical objects
 	std::vector <Workplane *> workplanes = std::vector<Workplane *>(); //!< Contains the Workplane objects in the model
 	std::vector <Photosensor *> photosensors = std::vector<Photosensor *>(); //!< Contains the Photosensor objects in the model
@@ -320,7 +323,7 @@ public:
 	@param[in] wp The name of the workplane
 	@return The found workplane or NULL (if not found)
 	*/
-	Workplane * getWorkplaneByName(std::string * wp);
+    Workplane * getWorkplaneByName(const std::string * const wp) const;
 
 	//! Adds a Material to the Groundhogmodel
 	/*!
@@ -436,8 +439,32 @@ public:
      @param[in] objectName The name of the definition
      @return the reference to the Layer; nullptr if not found
      */
-    Otype *  getOtypeByName(std::string * objectName);
+    const Otype *  const getOtypeByName(std::string * objectName) const;
 
+    //! Adds a Task object to the model
+    /*!
+     
+     @author German Molina
+     @param[in] task The task to add
+     */
+    void  addTask(json task);
+    
+    //! Gets the number of tasks in the model
+    /*!
+     @author German Molina
+     @return The number of tasks
+     */
+    size_t countTasks();
+    
+    //! Retrieves a specific task in the model
+    /*!
+     @author German Molina
+     @param i The index of the task to retrieve
+     @return The pointer to the task
+     */
+    json * getTask(size_t i);
+
+    
 
 };
 

@@ -51,35 +51,44 @@ void Layer::addComponentInstance(ComponentInstance * instance)
     instances.push_back(instance);
 }
 
-std::vector <ComponentInstance * > * Layer::getComponentInstancesRef() 
+const std::vector <ComponentInstance * > * const Layer::getComponentInstancesRef() const
 {
 	return &instances;
 }
 
-std::string * Layer::getName() 
+std::vector <ComponentInstance * > * const Layer::getModifiableComponentInstancesRef()
+{
+    return &instances;
+}
+
+const std::string * Layer::getName() const
 {
 	return &name;
 }
 
-std::vector <Otype * > * Layer::getObjectsRef() 
+const std::vector <Otype * > * const Layer::getObjectsRef() const
 {
 	return &objects;
 }
 
+std::vector <Otype * > * const Layer::getModifiableObjectsRef() 
+{
+    return &objects;
+}
 
-Otype * Layer::getObjectRef(size_t i) 
+const Otype * const Layer::getObjectRef(size_t i) const
 {
 	return objects[i];
 }
 
 
-ComponentInstance * Layer::getComponentInstanceRef(size_t i) 
+const ComponentInstance * const Layer::getComponentInstanceRef(size_t i) const
 {
 	return instances[i];
 }
 
 
-bool Layer::isEmpty() 
+bool Layer::isEmpty() const
 {
 	return (objects.size() == 0 && instances.size() == 0);
 }

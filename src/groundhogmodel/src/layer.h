@@ -83,40 +83,55 @@ public:
 	*/
 	void addComponentInstance(ComponentInstance * instance);
 
-	//! Retrieves the reference to the ComponentInstance vector
+	//! Retrieves a constant pointer to the ComponentInstance vector
 	/*!
 	@author German Molina
 	@return The reference to the ComponentInstance vector
 	*/
-	std::vector <ComponentInstance * > * getComponentInstancesRef();
+	const std::vector <ComponentInstance * > * const getComponentInstancesRef() const;
+    
+    //! Retrieves a NON-CONSTANT pointer to the ComponentInstance vector
+    /*!
+     @author German Molina
+     @return The reference to the ComponentInstance vector
+     */
+    std::vector <ComponentInstance * > * const getModifiableComponentInstancesRef();
 
 	//! Retrieves the name of the Layer
 	/*!
 	@author German Molina
 	@return The name of the Layer
 	*/
-	std::string * getName();
+	const std::string * getName() const;
 
-	//! Retrieves the reference to the Otype vector
+	//! Retrieves a constant pointer to the Otype vector
 	/*!
 	@author German Molina
 	@return The reference to the Face vector
 	*/
-	std::vector <Otype * > * getObjectsRef();
+	const std::vector <Otype * > * const getObjectsRef() const;
 
+    
+    //! Retrieves a NON-CONSTANT pointer to the Otype vector
+    /*!
+     @author German Molina
+     @return The reference to the Face vector
+     */
+    std::vector <Otype * > * const getModifiableObjectsRef();
+    
 	//! Retrieve the reference to a specific Otype
 	/*!
 	@author German molina
 	@param[in] i The index of the Face to retrieve
 	*/
-	Otype * getObjectRef(size_t i);
+	const Otype * const getObjectRef(size_t i) const;
 
-	//! Retrieve the reference to a specific ComponentInstance
+	//! Retrieve a constant pointer to a specific ComponentInstance
 	/*!
 	@author German molina
 	@param[in] i The index of the ComponentInstance to retrieve
 	*/
-	ComponentInstance * getComponentInstanceRef(size_t i);
+	const ComponentInstance * const getComponentInstanceRef(size_t i) const;
 
 	//! Checks if the Layer is empty
 	/*!
@@ -125,7 +140,7 @@ public:
 	@author German Molina
 	@return is empty ?
 	*/
-	bool isEmpty();
+	bool isEmpty() const;
 };
 
 extern Layer layer;

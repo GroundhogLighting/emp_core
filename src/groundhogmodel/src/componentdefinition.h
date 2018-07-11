@@ -23,9 +23,8 @@
 class Layer;
 #include "./layer.h"
 
-//#include <vector>
 
-//class ComponentInstance;
+//class ComponentDefinition;
 
 //! Groups of Face (or other geometry) meant to be placed several times in a GroudhogModel
 
@@ -34,15 +33,6 @@ They are referenced within other ComponentInstance or Layers by mean of Componen
 */
 class ComponentDefinition : public Layer {
 
-//private:
-	//-- std::string name; //!< The name of the ComponentDefinition
-	//-- std::vector <Otype *> objects; //!< All the Face within the ComponentDefinition
-	//Workplanes // **
-	//Sensors // **
-	//std::vector <Material *> materials;	
-	//-- std::vector <ComponentInstance *> instances; //!< All the ComponentInstance within the ComponentDefinition
-	//WindowGroups
-	//Observers // **	
 
 public:
 
@@ -58,63 +48,6 @@ public:
     ComponentDefinition(std::string * componentName) : Layer(componentName)
     {
         
-    }
-    
-	//! Destroys a ComponentDefinition object
-	/*!
-	@author German Molina
-	*/
-	//-- ~ComponentDefinition();
-
-	//! Add an Otype to the ComponentDefinition
-	/*!
-	@author German Molina
-	@param[in] face The Face to add
-	*/
-	//-- void addObject(Otype * o);
-
-	//! Counts the number of Otype in the ComponentDefinition
-	/*!
-	@author German Molina
-	@return The number of faces in the ComponentDefinition
-	*/
-	//-- size_t getNumObjects();
-
-	//! Retrieves the name of the ComponentDefinition
-	/*!
-	@author German Molina
-	@return The name of the ComponentDefinition
-	*/
-	//-- std::string * getName();
-	
-	//! Retrieves an Otype reference of the ComponentDefinition
-	/*!
-	@author German Molina
-	@param[in] i The index of the Face to retrieve
-	@return The reference to the Face
-	*/
-	//-- Otype * getObjectRef(size_t i);
-
-	//! Retrieves a ComponentInstance reference of the ComponentDefinition
-	/*!
-	@author German Molina
-	@param[in] i The index of the ComponentInstance to retrieve
-	@return The reference to the ComponentInstance
-	*/
-	//-- ComponentInstance * getComponentInstanceRef(size_t i);
-
-	//! Retrieves the reference to the Otype vector
-	/*!
-	@author German Molina
-	@return The reference to the Face vector
-	*/
-	//-- std::vector <Otype * > * getObjectsRef();
-
-	//! Retrieves the reference to the ComponentInstance vector
-	/*!
-	@author German Molina
-	@return The reference to the ComponentInstance vector
-	*/
-	//-- std::vector <ComponentInstance * > * getComponentInstancesRef();
+    }    
     
 };

@@ -50,6 +50,7 @@
 #include <SketchUpAPI/model/shadow_info.h>
 #include <SketchUpAPI/model/material.h>
 #include <SketchUpAPI/model/group.h>
+#include <SketchUpAPI/model/model.h>
 
 #include <vector>
 #include <string>
@@ -89,7 +90,7 @@ SKPreader::~SKPreader()
 };
 
 
-bool SKPreader::checkSUResult(SUResult res, std::string functionName, int ln)
+bool SKPreader::checkSUResult(SUResult res, std::string functionName, int ln) const
 {
 	if (res == SU_ERROR_NONE) {
 		return true;
@@ -162,8 +163,8 @@ bool SKPreader::checkSUResult(SUResult res, std::string functionName, int ln)
 bool SKPreader::parseSKPModel(std::string inputFile)
 {
 	//Load model
-	ASSERT_SU_RESULT(SUModelCreateFromFile(&suModel, inputFile.c_str()));
-
+	ASSERT_SU_RESULT(SUModelCreateFromFile(&suModel, inputFile.c_str()));    
+    
 	// Load layers	
     loadLayers();
     
@@ -192,12 +193,15 @@ bool SKPreader::parseSKPModel(std::string inputFile)
     // Load the workplanes preferences
     loadWorkplanesPreferences();
 
+    // Load tasks
+    loadTasks();
+    
 	
 	return true;
 };
 
 
-bool SKPreader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, std::string * value)
+bool SKPreader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, std::string * value) const
 {
 	SUTypedValueRef suValue = SU_INVALID;
     
@@ -213,12 +217,12 @@ bool SKPreader::getStringFromShadowInfo(SUShadowInfoRef shadowInfo, const char *
 
     ASSERT_SU_RESULT(SUTypedValueGetString(suValue, &suString));
 	
-    SUStringtoString(suString, value,false);
+    SUStringtoString(suString, value);
 	
 	return true;
 }
 
-bool SKPreader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, double * value)
+bool SKPreader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo, const char * key, double * value) const
 {
 	SUTypedValueRef suValue= SU_INVALID;
     
@@ -231,7 +235,7 @@ bool SKPreader::getDoubleFromShadowInfo(SUShadowInfoRef shadowInfo, const char *
 }
 
 
-bool SKPreader::getTimeFromShadowInfo(SUShadowInfoRef shadowInfo, int64_t * value)
+bool SKPreader::getTimeFromShadowInfo(SUShadowInfoRef shadowInfo, int64_t * value) const
 {
 	SUTypedValueRef suValue = SU_INVALID;
 	
@@ -243,7 +247,7 @@ bool SKPreader::getTimeFromShadowInfo(SUShadowInfoRef shadowInfo, int64_t * valu
 	return true;
 }
 
-bool SKPreader::loadModelInfo()
+bool SKPreader::loadModelInfo() const
 {
 	// load north correction
 	double northC;
@@ -304,7 +308,7 @@ bool SKPreader::loadModelInfo()
 	return true;
 }
 
-bool SKPreader::SUCameraToView(std::string * viewName, SUCameraRef camera, View * view)
+bool SKPreader::SUCameraToView(std::string * viewName, SUCameraRef camera, View * view) const
 {
 
 	// set the name
@@ -372,7 +376,7 @@ bool SKPreader::SUCameraToView(std::string * viewName, SUCameraRef camera, View 
 	return true;
 }
 
-bool SKPreader::SUViewToView(SUSceneRef suView, View * view)
+bool SKPreader::SUViewToView(SUSceneRef suView, View * view) const
 {
 	// get the name of the view
 	
@@ -383,7 +387,7 @@ bool SKPreader::SUViewToView(SUSceneRef suView, View * view)
 	
 	std::string viewName;
 
-    SUStringtoString(suViewName,&viewName,true);
+    SUStringtoString(suViewName,&viewName);
 
 	// Get the camera
 	SUCameraRef camera = SU_INVALID;
@@ -394,7 +398,7 @@ bool SKPreader::SUViewToView(SUSceneRef suView, View * view)
 	return true;
 }
 
-bool SKPreader::loadViews()
+bool SKPreader::loadViews() const
 {
 	
 	// get the current view
@@ -428,7 +432,7 @@ bool SKPreader::loadViews()
 	return true;
 }
 
-bool SKPreader::loadLayers()
+bool SKPreader::loadLayers() const
 {
 
 	// count layers
@@ -451,7 +455,7 @@ bool SKPreader::loadLayers()
 
 		std::string layerName;
 
-        SUStringtoString(suLayerName,&layerName,true);
+        SUStringtoString(suLayerName,&layerName);
 		
 		model->addLayer(&layerName);
 		INFORM(informMessage,"Layer " + layerName + " added",verbose);
@@ -460,7 +464,7 @@ bool SKPreader::loadLayers()
 	return true;
 } // end of Load Layers
 
-bool SKPreader::getSUComponentDefinitionName(SUComponentDefinitionRef definition, std::string * name)
+bool SKPreader::getSUComponentDefinitionName(SUComponentDefinitionRef definition, std::string * name) const
 {
 	//define a SUString
 	SUStringRef suComponentName = SU_INVALID;
@@ -470,14 +474,14 @@ bool SKPreader::getSUComponentDefinitionName(SUComponentDefinitionRef definition
     ASSERT_SU_RESULT(SUComponentDefinitionGetName(definition, &suComponentName));
 
 	std::string componentName;
-    SUStringtoString(suComponentName,&componentName,true);
+    SUStringtoString(suComponentName,&componentName);
 
 	*name = componentName;
 	return true;
 }
 
 
-bool SKPreader::addComponentInstanceToVector(std::vector <ComponentInstance * > * dest, SUComponentInstanceRef suComponentInstance)
+bool SKPreader::addComponentInstanceToVector(std::vector <ComponentInstance * > * dest, SUComponentInstanceRef suComponentInstance) const
 {
 
 	// get definition
@@ -505,7 +509,7 @@ bool SKPreader::addComponentInstanceToVector(std::vector <ComponentInstance * > 
 }
 
 
-bool SKPreader::bulkFacesIntoVector(std::vector <Otype * > * dest, SUEntitiesRef entities)
+bool SKPreader::bulkFacesIntoVector(std::vector <Otype * > * const dest, SUEntitiesRef entities) const
 {
 
 	// count faces in these entities
@@ -532,7 +536,7 @@ bool SKPreader::bulkFacesIntoVector(std::vector <Otype * > * dest, SUEntitiesRef
 }
 
 
-bool SKPreader::loadComponentDefinition(SUComponentDefinitionRef definition)
+bool SKPreader::loadComponentDefinition(SUComponentDefinitionRef definition) const
 {
     // Check if it has label
     int label = getSUEntityLabel(SUComponentDefinitionToEntity(definition));
@@ -557,7 +561,7 @@ bool SKPreader::loadComponentDefinition(SUComponentDefinitionRef definition)
     return true;
 }
 
-bool SKPreader::loadComponentDefinitions()
+bool SKPreader::loadComponentDefinitions() const
 {
     // count the component definitions
     size_t countDefinitions = 0;
@@ -583,7 +587,7 @@ bool SKPreader::loadComponentDefinitions()
 
 
 
-bool SKPreader::fillComponentDefinitions()
+bool SKPreader::fillComponentDefinitions() const
 {
 	// count the component definitions
 	size_t countDefinitions = 0;
@@ -614,10 +618,10 @@ bool SKPreader::fillComponentDefinitions()
 
 
       // Load faces
-      bulkFacesIntoVector(ghDefinition->getObjectsRef(), entities);
+      bulkFacesIntoVector(ghDefinition->getModifiableObjectsRef(), entities);
 
       // load instances
-      bulkComponentInstancesIntoVector(ghDefinition->getComponentInstancesRef(), entities);
+      bulkComponentInstancesIntoVector(ghDefinition->getModifiableComponentInstancesRef(), entities);
       
 	}
 	return true;
@@ -626,7 +630,7 @@ bool SKPreader::fillComponentDefinitions()
 
 
 
-bool SKPreader::fillGroupDefinitions()
+bool SKPreader::fillGroupDefinitions() const
 {
     // count the component definitions
     size_t countDefinitions = 0;
@@ -656,17 +660,17 @@ bool SKPreader::fillGroupDefinitions()
 
 
         // Load faces
-        bulkFacesIntoVector(ghDefinition->getObjectsRef(), entities);
+        bulkFacesIntoVector(ghDefinition->getModifiableObjectsRef(), entities);
 
         // load instances
-        bulkComponentInstancesIntoVector(ghDefinition->getComponentInstancesRef(), entities);
+        bulkComponentInstancesIntoVector(ghDefinition->getModifiableComponentInstancesRef(), entities);
 
     }
     return true;
 
 }
 
-bool SKPreader::loadInstance(SUComponentInstanceRef instance)
+bool SKPreader::loadInstance(SUComponentInstanceRef instance) const
 {
   
   
@@ -690,13 +694,13 @@ bool SKPreader::loadInstance(SUComponentInstanceRef instance)
         throw "Trying to put an instance in inexistent layer when loading SKP file";
     
 
-    addComponentInstanceToVector(layerRef->getComponentInstancesRef(), instance);
+    addComponentInstanceToVector(layerRef->getModifiableComponentInstancesRef(), instance);
 
     return true;
 }
 
 
-bool SKPreader::loadGroupDefinitions()
+bool SKPreader::loadGroupDefinitions() const
 {
   
     // count the component definitions
@@ -722,7 +726,7 @@ bool SKPreader::loadGroupDefinitions()
     return true;
 }
 
-bool SKPreader::loadLayersContent()
+bool SKPreader::loadLayersContent() const
 {
 	// Get the entity container of the model.
 	SUEntitiesRef entities = SU_INVALID;
@@ -774,7 +778,7 @@ bool SKPreader::loadLayersContent()
 				throw "Reference to an inexistent face when parsing SKP file";
 
 			// add the face
-			layerRef->getObjectsRef()->push_back(face);
+			layerRef->getModifiableObjectsRef()->push_back(face);
 
 		} // end of iterating faces
 	            
@@ -822,7 +826,7 @@ bool SKPreader::loadLayersContent()
 	return true;
 } // end of Load Faces
 
-bool SKPreader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon)
+bool SKPreader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon) const
 {
 
 	// get area
@@ -867,7 +871,7 @@ bool SKPreader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon)
 	return true;
 }
 
-bool SKPreader::SULoopToLoop(SULoopRef suLoop, Loop * loop)
+bool SKPreader::SULoopToLoop(SULoopRef suLoop, Loop * loop) const
 {
     // Not sure why this happens!
     if(suLoop.ptr == nullptr)
@@ -895,17 +899,17 @@ bool SKPreader::SULoopToLoop(SULoopRef suLoop, Loop * loop)
 	return true;
 }
 
-bool SKPreader::getSUFaceName(SUFaceRef face, std::string * name)
+bool SKPreader::getSUFaceName(SUFaceRef face, std::string * name) const
 {
 	return getSUEntityName(SUFaceToEntity(face), name);
 }
 
-bool SKPreader::getSUFaceLayerName(SUFaceRef face, std::string * name)
+bool SKPreader::getSUFaceLayerName(SUFaceRef face, std::string * name) const
 {	
 	return getSUDrawingElementLayerName( SUFaceToDrawingElement(face), name);
 }
 
-bool SKPreader::getSUDrawingElementLayerName(SUDrawingElementRef element, std::string * name)
+bool SKPreader::getSUDrawingElementLayerName(SUDrawingElementRef element, std::string * name) const
 {
 	SULayerRef layer = SU_INVALID;
 	ASSERT_SU_RESULT(SUDrawingElementGetLayer(element,&layer));
@@ -919,15 +923,15 @@ bool SKPreader::getSUDrawingElementLayerName(SUDrawingElementRef element, std::s
 
 	// get final length
 	
-	return SUStringtoString(layerName,name,true);
+	return SUStringtoString(layerName,name);
 };
 
-bool SKPreader::getSUEntityName(SUEntityRef entity, std::string * name)
+bool SKPreader::getSUEntityName(SUEntityRef entity, std::string * name) const
 {
 	SUTypedValueRef suValue = SU_INVALID;
 	if (getValueFromEntityGHDictionary(entity, SKP_NAME, &suValue)) {
 		// There was, indeed, a Groundhog name
-        getFromSUTypedValue(suValue, name,true);
+        getFromSUTypedValue(suValue, name);
 			
 		return true;
 	}
@@ -943,7 +947,8 @@ bool SKPreader::getSUEntityName(SUEntityRef entity, std::string * name)
 } // end of Get Entity Name
 
 
-bool SKPreader::bulkComponentInstancesIntoVector(std::vector <ComponentInstance * > * dest, SUEntitiesRef  entities) {
+bool SKPreader::bulkComponentInstancesIntoVector(std::vector <ComponentInstance * > * const dest, SUEntitiesRef  entities) const
+{
 
   /* LOAD THE COMPONENT INSTANCES FIRST */	
 	size_t instanceCount = 0;
@@ -995,7 +1000,8 @@ bool SKPreader::bulkComponentInstancesIntoVector(std::vector <ComponentInstance 
 	return true;
 }
 
-bool SKPreader::fillComponentInstanceLocation(ComponentInstance * instance, SUComponentInstanceRef suInstance) {
+bool SKPreader::fillComponentInstanceLocation(ComponentInstance * instance, SUComponentInstanceRef suInstance) const
+{
 	
 	SUTransformation transform;
 
@@ -1023,13 +1029,13 @@ bool SKPreader::fillComponentInstanceLocation(ComponentInstance * instance, SUCo
 }
 
 
-int SKPreader::getSUFaceLabel(SUFaceRef face)
+int SKPreader::getSUFaceLabel(SUFaceRef face) const
 {
 	return getSUEntityLabel(SUFaceToEntity(face));
 }
 
 
-int SKPreader::getSUEntityLabel(SUEntityRef entity)
+int SKPreader::getSUEntityLabel(SUEntityRef entity) const
 {
 	SUTypedValueRef suValue = SU_INVALID;
 	if (!getValueFromEntityGHDictionary(entity, SKP_LABEL, &suValue))
@@ -1043,7 +1049,8 @@ int SKPreader::getSUEntityLabel(SUEntityRef entity)
     }
 }
 
-bool SKPreader::addWorkplaneToModel(SUFaceRef suFace) {
+bool SKPreader::addWorkplaneToModel(SUFaceRef suFace) const
+{
 
 	// get the name of the face
 	std::string name;
@@ -1059,7 +1066,7 @@ bool SKPreader::addWorkplaneToModel(SUFaceRef suFace) {
 	return true;
 }
 
-bool SKPreader::addWindowToModel(SUFaceRef suFace)
+bool SKPreader::addWindowToModel(SUFaceRef suFace) const
 {
 	// get the name of the face
 	std::string name;
@@ -1078,7 +1085,7 @@ bool SKPreader::addWindowToModel(SUFaceRef suFace)
 }
 
 
-bool SKPreader::addIllumToModel(SUFaceRef suFace)
+bool SKPreader::addIllumToModel(SUFaceRef suFace) const
 {
     // get the name of the face
     std::string name;
@@ -1095,7 +1102,7 @@ bool SKPreader::addIllumToModel(SUFaceRef suFace)
 }
 
 
-int32_t SKPreader::getEntityID(SUEntityRef entity)
+int32_t SKPreader::getEntityID(SUEntityRef entity) const
 {
 	// if not, check for a SketchUp Assigned name		
 	// else, set ID
@@ -1106,7 +1113,7 @@ int32_t SKPreader::getEntityID(SUEntityRef entity)
 }
 
 
-bool SKPreader::getValueFromEntityGHDictionary(SUEntityRef entity, const char * key, SUTypedValueRef * value)
+bool SKPreader::getValueFromEntityGHDictionary(SUEntityRef entity, const char * key, SUTypedValueRef * value) const
 {
 	// check how many dictionaries
 	size_t dictionaryCount;
@@ -1156,7 +1163,29 @@ bool SKPreader::getValueFromEntityGHDictionary(SUEntityRef entity, const char * 
 	return false; //should not reach here.
 }
 
-bool SKPreader::SUStringtoString(SUStringRef suString, std::string * string, bool fix)
+void SKPreader::loadTasks() const
+{
+    SUTypedValueRef tasksJSON = SU_INVALID;
+    if (!getValueFromModelGHDictionary(SKP_TASKS, &tasksJSON))
+        return ; // return if no tasks or error.
+    
+    std::string value;
+    
+    getFromSUTypedValue(tasksJSON, &value);
+    json j = json::parse(value);
+    
+    // Check it is an array
+    if(! j.is_array())
+        FATAL(err, "Incorrect format in Tasks JSON in SketchUp Model");
+    
+    // Iterate array
+    for (json task : j.get<json>()) {
+        model->addTask(task);
+    }
+}
+
+
+bool SKPreader::SUStringtoString(SUStringRef suString, std::string * string) const
 {
 
 	size_t stringLength;
@@ -1173,15 +1202,12 @@ bool SKPreader::SUStringtoString(SUStringRef suString, std::string * string, boo
 	string->resize(stringLength);
 
 	utf8toASCII(&utf8String[0], stringLength, &(*string)[0], &stringLength);
-	
-	if(fix)
-		fixString(&(*string)[0], stringLength);
 
 	return true;
 
 }
 
-bool SKPreader::getFromSUTypedValue(SUTypedValueRef suValue, std::string * value, bool fix)
+bool SKPreader::getFromSUTypedValue(SUTypedValueRef suValue, std::string * value) const
 {
 	// Create a SU String
 	SUStringRef suString = SU_INVALID;
@@ -1189,13 +1215,13 @@ bool SKPreader::getFromSUTypedValue(SUTypedValueRef suValue, std::string * value
 
 	// Retrieve the String
     ASSERT_SU_RESULT(SUTypedValueGetString(suValue, &suString));
-	SUStringtoString(suString, value,fix);
+	SUStringtoString(suString, value);
 	
 	return true;
 }
 
 
-Material * SKPreader::addMaterialToModel(SUMaterialRef material)
+Material * SKPreader::addMaterialToModel(SUMaterialRef material) const
 {	
 	
 	// create the json
@@ -1239,7 +1265,7 @@ Material * SKPreader::addMaterialToModel(SUMaterialRef material)
 	return model->addMaterial(&j);
 }
 
-bool SKPreader::getGHValueFromEntity(SUEntityRef entity, std::string * value, bool fix)
+bool SKPreader::getGHValueFromEntity(SUEntityRef entity, std::string * value, bool fix) const
 {
 	SUTypedValueRef suValue = SU_INVALID;
     
@@ -1247,12 +1273,12 @@ bool SKPreader::getGHValueFromEntity(SUEntityRef entity, std::string * value, bo
     if(!getValueFromEntityGHDictionary(entity, SKP_VALUE, &suValue))
         return false;
     
-    getFromSUTypedValue(suValue, value,fix);
+    getFromSUTypedValue(suValue, value);
 
 	return true;
 }
 
-bool SKPreader::guessMaterial(SUMaterialRef material, json * j)
+bool SKPreader::guessMaterial(SUMaterialRef material, json * j) const
 {
 	std::string name;
 
@@ -1289,7 +1315,7 @@ bool SKPreader::guessMaterial(SUMaterialRef material, json * j)
 	return true;
 }
 
-bool SKPreader::getFaceMaterial(SUFaceRef face, SUMaterialRef * mat)
+bool SKPreader::getFaceMaterial(SUFaceRef face, SUMaterialRef * mat) const
 {
 	// Check the front material
 	SUMaterialRef frontMat;
@@ -1336,7 +1362,7 @@ bool SKPreader::getFaceMaterial(SUFaceRef face, SUMaterialRef * mat)
 }
 
 
-Face * SKPreader::SUFaceToFace(SUFaceRef suFace)
+Face * SKPreader::SUFaceToFace(SUFaceRef suFace) const
 {
 
 	// build the polygon
@@ -1374,7 +1400,7 @@ Face * SKPreader::SUFaceToFace(SUFaceRef suFace)
 	return face;
 }
 
-bool SKPreader::getSUMaterialName(SUMaterialRef material, std::string * name)
+bool SKPreader::getSUMaterialName(SUMaterialRef material, std::string * name) const
 {
 	SUStringRef suName = SU_INVALID;
 
@@ -1383,12 +1409,12 @@ bool SKPreader::getSUMaterialName(SUMaterialRef material, std::string * name)
 	ASSERT_SU_RESULT(SUMaterialGetName(material, &suName));
 	
 	// this fixes the name as well, and releases the SUString
-    SUStringtoString(suName, name, true);
+    SUStringtoString(suName, name);
 
 	return true;
 }
 
-bool SKPreader::addPhotosensorsToModel(SUComponentDefinitionRef definition)
+bool SKPreader::addPhotosensorsToModel(SUComponentDefinitionRef definition) const
 {
 	// count instances
 	size_t numInstances;
@@ -1433,7 +1459,7 @@ bool SKPreader::addPhotosensorsToModel(SUComponentDefinitionRef definition)
 }
 
 
-bool SKPreader::getValueFromModelGHDictionary(const char * key, SUTypedValueRef * value)
+bool SKPreader::getValueFromModelGHDictionary(const char * key, SUTypedValueRef * value) const
 {
 	// check how many dictionaries
 	size_t dictionaryCount;
@@ -1483,7 +1509,7 @@ bool SKPreader::getValueFromModelGHDictionary(const char * key, SUTypedValueRef 
 }
 
 
-bool SKPreader::loadWeather()
+bool SKPreader::loadWeather() const
 {
 
 	SUTypedValueRef suWeather = SU_INVALID;
@@ -1492,7 +1518,7 @@ bool SKPreader::loadWeather()
 
 	std::string value;
 
-    getFromSUTypedValue(suWeather, &value,false);
+    getFromSUTypedValue(suWeather, &value);
 	
 	json j = json::parse(value);
 
@@ -1501,22 +1527,32 @@ bool SKPreader::loadWeather()
 	return loc->fillWeatherFromJSON(&j);
 }
 
-void SKPreader::loadWorkplanesPreferences()
+void SKPreader::loadWorkplanesPreferences() const
 {
     SUTypedValueRef workplanesJSON = SU_INVALID;
-    if (!getValueFromModelGHDictionary(SKP_WORKPLANES_KEY, &workplanesJSON))
-        return ; // return if no weather or error.
+    if (!getValueFromModelGHDictionary(SKP_WORKPLANES, &workplanesJSON))
+        return ; // return if no value or error.
 
     std::string value;
     
-    getFromSUTypedValue(workplanesJSON, &value,false);
+    getFromSUTypedValue(workplanesJSON, &value);
     json j = json::parse(value);
     
     for (json::iterator it = j.begin(); it != j.end(); ++it) {
         std::string name = (*it)["name"].get<std::string>();
-        double size = (*it)["pixel_size"].get<double>();        
+        double size = (*it)["pixel_size"].get<double>();
+        json tasks = (*it)["tasks"].get<json>();
+        if(!tasks.is_array())
+            FATAL(e, "Tasks object assigned in a worplane should be an array");
+        
         Workplane * wp = model->getWorkplaneByName(&name);
         wp->setMaxArea(size);
+        
+        // Iterate array
+        for (json task : tasks.get<json>()) {            
+            wp->addTask(task);
+        }
+        
     }
     
 }

@@ -25,9 +25,9 @@ TEST(SKPRead, small_square_WP)
         
         // Check the Workplane
         Workplane * wp = model.getWorkplaneRef(0);
-        std::string * wpName = wp->getName();
+        std::string wpName = wp->getName();
         
-        ASSERT_TRUE(*wpName == std::string("WP"));
+        ASSERT_EQ(wpName, std::string("WP"));
         
         Loop * loop = wp->getPolygonRef(0)->getOuterLoopRef();
         
@@ -79,8 +79,8 @@ TEST(SKPRead, workplane_group)
         
         // Check the Workplane
         Workplane * wp = model.getWorkplaneRef(0);
-        std::string * wpName = wp->getName();
-        ASSERT_TRUE(*wpName == std::string("WP"));
+        std::string wpName = wp->getName();
+        ASSERT_EQ(wpName, std::string("WP"));
         
         ASSERT_EQ(3,wp->getNumPolygons());
         
@@ -115,8 +115,8 @@ TEST(SKPRead, ugly_workplane)
         
         // Check the Workplane
         Workplane * wp = model.getWorkplaneRef(0);
-        std::string * wpName = wp->getName();
-        ASSERT_TRUE(*wpName == std::string("WP"));
+        std::string wpName = wp->getName();
+        ASSERT_EQ(wpName, std::string("WP"));
         
         ASSERT_EQ(1,wp->getNumPolygons());
         

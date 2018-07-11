@@ -43,6 +43,7 @@ private:
 	std::vector <Polygon3D * > polygons; //!< The polygons in the workplane.
     double maxArea = 0.25; //!< The desired 'pixel' resolution when triangulating
     double maxAspectRatio = 1.3; //!< The desired maximum aspect ratio
+    std::vector <std::string> tasks = std::vector<std::string>(0); //!< The tasks assigned to the workplane
     
 public:
 
@@ -71,7 +72,7 @@ public:
 	@author German Molina
 	@return the name;
 	*/
-	std::string * getName();
+    std::string getName() const;
 
 	//! Checks if the workplane has a certain name
 	/*!
@@ -79,14 +80,14 @@ public:
 	@param[in] name The name to check
 	@return Is the same name;
 	*/
-	bool compareName(std::string * name);
+	bool compareName(const std::string * const name) const;
 
 	//! Retrieves the number of Polygon3D in the Workplane
 	/*!
 	@author German Molina
 	@return The number of Workplane
 	*/
-	size_t getNumPolygons();
+	const size_t getNumPolygons() const;
 
 	//! Retrieves the reference to a Polygon3D in polygons
 	/*!
@@ -94,33 +95,47 @@ public:
 	@param i The index of the Polygon3D to extract
 	@return The reference
 	*/
-	Polygon3D * getPolygonRef(size_t i);
+	Polygon3D * const getPolygonRef(const size_t i) const;
 
     //! Retrieves the maximum area for each pixel in the grid
     /*!
     @author German Molina
     @return the area
     */
-    double getMaxArea();
+    const double getMaxArea() const;
     
     //! Sets the maximum area for each pixel in the grid
     /*!
      @author German Molina
      @param v The value
      */
-    void setMaxArea(double v);
+    void setMaxArea(const double v);
     
     //! Retrieves the maximum aspect ratio for each pixel in the grid
     /*!
      @author German Molina
      @return the area
      */
-    double getMaxAspectRatio();
+    const double getMaxAspectRatio() const;
     
     //! Sets the maximum aspect ratio for each pixel in the grid
     /*!
      @author German Molina
      @param v The value
      */
-    void setMaxAspectRatio(double v);
+    void setMaxAspectRatio(const double v);
+    
+    //! Adds a task to the Workplane
+    /*!
+     @author German Molina
+     @param taskName the name of the task
+    */
+    void addTask(const std::string taskName);
+    
+    //! Retrieves a certain Task Name
+    /*!
+     @author German Molina
+     @return A pointer to the task name
+     */
+     const std::vector<std::string> * const getTasks() const;
 };

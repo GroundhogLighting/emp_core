@@ -23,8 +23,8 @@
 #include "../../common/utilities/io.h"
 
 
-ComponentInstance::ComponentInstance(ComponentDefinition * definitionRef) {
-	definition = definitionRef;	
+ComponentInstance::ComponentInstance(ComponentDefinition * const definitionPt) {
+	definition = definitionPt;	
 	rotationX = 0; 
 	rotationY = 0; 
 	rotationZ = 0; 
@@ -53,15 +53,18 @@ void ComponentInstance::setZ(double newZ) {
 	z = newZ;
 }
 
-double ComponentInstance::getX() {
+double ComponentInstance::getX() const
+{
 	return x;
 }
 
-double ComponentInstance::getY() {
+double ComponentInstance::getY() const
+{
 	return y;
 }
 
-double ComponentInstance::getZ() {
+double ComponentInstance::getZ() const
+{
 	return z;
 }
 
@@ -78,15 +81,18 @@ void ComponentInstance::setRotationZ(double newRotationZ) {
 	rotationZ = newRotationZ;
 }
 
-double ComponentInstance::getRotationX() {
+double ComponentInstance::getRotationX() const
+{
 	return rotationX;
 }
 
-double ComponentInstance::getRotationY() {
+double ComponentInstance::getRotationY() const
+{
 	return rotationY;
 }
 
-double ComponentInstance::getRotationZ() {
+double ComponentInstance::getRotationZ() const
+{
 	return rotationZ;
 }
 
@@ -94,15 +100,17 @@ void ComponentInstance::setScale(double s) {
 	scale = s;
 }
 
-double ComponentInstance::getScale() {
+double ComponentInstance::getScale() const
+{
 	return scale;
 }
 
-ComponentDefinition * ComponentInstance::getDefinitionRef() {
+const ComponentDefinition * const ComponentInstance::getDefinitionRef() const
+{
 	return definition;
 }
 
-Transform * ComponentInstance::getTransform()
+Transform * ComponentInstance::getTransform() const
 {
 
   Transform * res = new Transform();
@@ -116,29 +124,26 @@ Transform * ComponentInstance::getTransform()
   delete scale;
   */
   // Translation
-  double x = getX();
-  double y = getY();
-  double z = getZ();
   Matrix4x4 * translation = res->getTranslationMatrix(x, y, z);
   m->multiplyThis(translation);
   delete translation;
 
   
   // Rotation X
-  double rx = getRotationX();
+  double rx = rotationX;
   Matrix4x4 * rotationX = res->getRotationXMatrix(rx);
   m->multiplyThis(rotationX);
   delete rotationX;
 
 
   // Rotation Y
-  double ry = getRotationY();
+  double ry = rotationY;
   Matrix4x4 * rotationY = res->getRotationYMatrix(ry);
   m->multiplyThis(rotationY);
   delete rotationY;
 
   // Rotation Z
-  double rz = getRotationZ();
+  double rz = rotationZ;
   Matrix4x4 * rotationZ = res->getRotationZMatrix(rz);
   m->multiplyThis(rotationZ);
   delete rotationZ;

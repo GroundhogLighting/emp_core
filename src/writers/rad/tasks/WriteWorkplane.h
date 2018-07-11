@@ -40,7 +40,7 @@ public:
      */
     WriteWorkplane(Workplane * workplane, std::string name)
     {
-        std::string n = "Export workplane " + *(workplane->getName());
+        std::string n = "Export workplane " + workplane->getName();
         setName(&n);
         generatesResults = true;
         

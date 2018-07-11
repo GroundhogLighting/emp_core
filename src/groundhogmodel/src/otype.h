@@ -60,14 +60,14 @@ public:
 	@author German Molina
 	@return The name of the Otype
 	*/
-	std::string * getName();
+	std::string getName() const;
 
 	//! Sets the name of the Otype
 	/*!
 	@author German Molina
 	@param[in] newName The name of the Otype
 	*/
-	void setName(std::string * newName);
+	void setName(const std::string * const newName);
 
 
 	//! Retrieves the type of the Otype
@@ -75,14 +75,14 @@ public:
 	@author German Molina
 	@return The type of the Otype
 	*/
-	std::string * getType();
+    std::string getType() const;
 
     //! Sets the type of the Otype
     /*!
      @author German Molina
      @return The type of the Otype
      */
-    void setType(std::string type);
+    void setType(const std::string type);
 
 	//! Compares a name with another string
 	/*!
@@ -90,7 +90,7 @@ public:
 	@param[in] otherName The pointer to another string
 	@return is equal
 	*/
-	bool compareName(std::string * otherName);
+	bool compareName(const std::string * const otherName) const;
 	
 
 	//! Retrieves the Material assigned to the Otype
@@ -98,14 +98,14 @@ public:
 	@author German Molina
 	@return The pointer to the Material
 	*/
-	Material * getMaterial();
+	const Material * const getMaterial() const;
 
 	//! Assigns a Material to the Otype
 	/*!
 	@author German Molina
 	@param[in] mat The pointer to the Material
 	*/
-    void setMaterial(Material * mat);
+    void setMaterial(Material * const mat);
 
     
 	

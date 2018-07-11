@@ -51,6 +51,7 @@ GroundhogModel::~GroundhogModel()
     
     for(auto x : windowGroups)
         delete x;
+        
 }
 
 
@@ -62,13 +63,9 @@ void GroundhogModel::addLayer(std::string * layerName)
 
 bool GroundhogModel::addObjectToLayer(std::string * layerName, Otype * o)
 {
-	for (unsigned layerCount = 0; layerCount < layers.size(); layerCount++) {		
-		if (layers[layerCount]->compareName(layerName)) {
-			layers[layerCount]->getObjectsRef()->push_back(o);
-			return true;
-		}
-	}
-	FATAL(errorMessage,"Layer " + *layerName + " could not be found");
+    Layer * layer = getLayerByName(layerName);
+    layer->addObject(o);
+        
 	return false;
 }
 
@@ -104,7 +101,7 @@ void GroundhogModel::addComponentDefinition(std::string * name)
 ComponentDefinition *  GroundhogModel::getComponentDefinitionByName(std::string * definitionName)
 {
 	for (size_t i = 0; i < definitions.size(); i++) {
-      std::string * name = definitions[i]->getName();
+      const std::string * name = definitions[i]->getName();
 	  if (*definitionName == *name) {
 		  return definitions[i];
 	  }
@@ -118,10 +115,10 @@ ComponentDefinition *  GroundhogModel::getComponentDefinitionByName(std::string 
 Layer *  GroundhogModel::getLayerByName(std::string * layerName)
 {
     size_t nLayers = layers.size();
-    std::string * name;
+    
     
 	for (size_t i = 0; i < nLayers; i++) {
-      name = layers[i]->getName();
+      const std::string * name = layers[i]->getName();
 	  if (*layerName == *name) {
 		  return layers[i];
 	  }
@@ -132,19 +129,19 @@ Layer *  GroundhogModel::getLayerByName(std::string * layerName)
 	return nullptr;
 }
 
-Otype *  GroundhogModel::getOtypeByName(std::string * objectName)
+const Otype * const GroundhogModel::getOtypeByName(std::string * objectName) const
 {
     size_t nLayers = layers.size();
-    std:: string * name;
-    Otype * object;
+    
+    
     
     // First, check layers
     for (size_t i = 0; i < nLayers; i++) {
         size_t nObjects = layers[i]->getObjectsRef()->size();
         for(size_t j = 0; j < nObjects; j++){
-            object = layers[i]->getObjectRef(j);
-            name = object->getName();
-            if (*objectName == *name) {
+            const Otype * object = layers[i]->getObjectRef(j);
+            std:: string name = object->getName();
+            if (*objectName == name) {
                 return object;
             }
         }
@@ -156,9 +153,9 @@ Otype *  GroundhogModel::getOtypeByName(std::string * objectName)
     for (size_t i = 0; i < nDefinitions; i++) {
         size_t nObjects = definitions[i]->getObjectsRef()->size();
         for(size_t j = 0; j < nObjects; j++){
-            object = definitions[i]->getObjectRef(j);
-            name = object->getName();
-            if (*objectName == *name) {
+            const Otype * object = definitions[i]->getObjectRef(j);
+            std::string name = object->getName();
+            if (*objectName == name) {
                 return object;
             }
         }
@@ -290,11 +287,11 @@ Workplane * GroundhogModel::getWorkplaneRef(size_t i)
 	return workplanes[i];
 }
 
-Workplane * GroundhogModel::getWorkplaneByName(std::string * wp)
+Workplane * GroundhogModel::getWorkplaneByName(const std::string * const wp) const
 {
 	for (size_t i = 0; i < workplanes.size(); i++) {
-        std::string * name = workplanes[i]->getName();
-		if (*name == *wp)
+        std::string name = workplanes[i]->getName();
+		if (name == *wp)
 			return workplanes[i];
 	}
 #ifndef AVOID_EMP_CORE_WARNINGS
@@ -367,7 +364,7 @@ void GroundhogModel::addMaterial(Material * m)
 Material * GroundhogModel::addDefaultMaterial()
 {
   json j = {
-      { "name" , "Default-Material" },
+      { "name" , "Default Material" },
       { "class" , "plastic" },
       { "color",{
           {"r",0.6},{"g",0.6},{"b",0.6}
@@ -381,7 +378,7 @@ Material * GroundhogModel::addDefaultMaterial()
 Material * GroundhogModel::addDefaultGlass()
 { 
   json j = {
-      { "name" , "Default-Glass" },
+      { "name" , "Default Glass" },
       { "class" , "glass" },
       { "color",{
           {"r",0.86},{"g",0.86},{"b",0.86}
@@ -404,8 +401,8 @@ Material * GroundhogModel::getMaterialRef(size_t i)
 Material *  GroundhogModel::getMaterialByName(std::string * materialName)
 {
     for (size_t i = 0; i < materials.size(); i++) {
-        std::string * name = materials[i]->getName();
-        if (*materialName == *name) {
+        std::string name = materials[i]->getName();
+        if (*materialName == name) {
             return materials[i];
         }
     }
@@ -459,4 +456,19 @@ Material * GroundhogModel::hasMaterial(std::string * matName)
     }
   }
   return NULL;
+}
+
+void GroundhogModel::addTask(json task)
+{
+    tasks.push_back(task);
+}
+
+size_t GroundhogModel::countTasks()
+{
+    return tasks.size();
+}
+
+json * GroundhogModel::getTask(size_t i)
+{
+    return &tasks[i];
 }

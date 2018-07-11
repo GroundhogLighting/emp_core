@@ -45,27 +45,27 @@ double Material::getFromJSON(const char * key, json * j)
     return -1;
 }
 
-std::string * Material::getName()
+std::string Material::getName() const
 {
-	return &name;
+	return name;
 }
 
-void Material::setName(std::string * aName)
+void Material::setName(const std::string * const aName)
 {
 	name = *aName;
 }
 
-std::string * Material::getType()
+std::string Material::getType() const
 {
-	return &type;
+	return type;
 }
 
-void Material::setType(std::string theType)
+void Material::setType(const std::string theType)
 {
 	type = theType;
 }
 
-bool Material::compareName(std::string * otherName)
+bool Material::compareName(const std::string * const otherName)const 
 {
 	return (name == *otherName);
 }

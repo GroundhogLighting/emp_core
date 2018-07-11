@@ -47,7 +47,8 @@ a CalculateAnnualDaylight Task is generic, but targeted to different workplanes)
 class TaskManager;
 
 class Task {
-private:	
+    
+protected:	
 	std::string name = "ThisTaskHasNoName"; //!< The name of the task
 	std::vector<Task *> dependencies = std::vector<Task * >(); //!< The vector of Task objects that this Task depend upon
     std::vector<Task *> dependants = std::vector<Task * >(); //!< The vector of Task objects that depend on this Task
