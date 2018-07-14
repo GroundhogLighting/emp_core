@@ -11,11 +11,12 @@
 
 // Extern classes
 
+#include "../src/taskmanager/taskmanager.h"
+class TaskManager;
+
 #include "../src/groundhogmodel/groundhogmodel.h"
 class GroundhogModel;
 
-#include "../src/taskmanager/taskmanager.h"
-class TaskManager;
 
 #include "../src/groundhogmodel/src/rtraceoptions.h"
 class RTraceOptions;
@@ -84,8 +85,8 @@ class CreateDirectSunOctree;
 #include "../src/calculations/tasks/OconvTask.h"
 class OconvTask;
 
-#include "../src/calculations/tasks/RTraceTask.h"
-class RTraceTask;
+#include "../src/calculations/tasks/CalculateStaticIlluminance.h"
+class CalculateStaticIlluminance;
 
 #include "../src/calculations/tasks/TriangulateWorkplane.h"
 class TriangulateWorkplane;
@@ -107,6 +108,9 @@ class CheckDACompliance;
 
 #include "../src/calculations/tasks/CheckUDICompliance.h"
 class CheckUDICompliance;
+
+#include "../src/calculations/tasks/CheckLUXCompliance.h"
+class CheckLUXCompliance;
 
 // RadExporter Tasks
 #include "../src/writers/rad/tasks/WriteComponentDefinitions.h"

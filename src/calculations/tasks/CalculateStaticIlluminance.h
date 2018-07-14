@@ -24,19 +24,19 @@
 #include "../oconv_options.h"
 #include "./AddSkyToOctree.h"
 
-class RTraceTask : public Task {
+class CalculateStaticIlluminance : public Task {
     
 public:
     GroundhogModel * model; //!< The model
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
-    ColorMatrix result; //!< The resulting matrix
+    Matrix result; //!< The resulting matrix
     RTraceOptions * rtraceOptions; //!< The options passed to rcontrib
     OconvOptions * oconvOptions; //!< The OconvOptions
     std::string ambientFileName; //!< The name of the ambient file used
     std::string sky; //!< The sky to add to the octree
     
-    RTraceTask(GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, OconvOptions * theOconvOptions, std::string theSky)
+    CalculateStaticIlluminance(GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, OconvOptions * theOconvOptions, std::string theSky)
     {
         model = theModel;
         rtraceOptions = theOptions;
@@ -58,7 +58,7 @@ public:
         setName(&name);
     }
     
-    RTraceTask(GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays , OconvOptions * theOconvOptions, std::string theSky)
+    CalculateStaticIlluminance(GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays , OconvOptions * theOconvOptions, std::string theSky)
     {
         model = theModel;
         rtraceOptions = theOptions;
@@ -76,7 +76,7 @@ public:
         setName(&name);
     }
     
-    ~RTraceTask()
+    ~CalculateStaticIlluminance()
     {
         remove(&ambientFileName[0]);
     }
@@ -85,11 +85,11 @@ public:
     {
         
         return (
-                rtraceOptions->isEqual(static_cast<RTraceTask *>(t)->rtraceOptions) &&
-                oconvOptions->isEqual(static_cast<RTraceTask *>(t)->oconvOptions) &&
-                workplane == static_cast<RTraceTask *>(t)->workplane &&
-                rays == static_cast<RTraceTask *>(t)->rays &&
-                sky == static_cast<RTraceTask *>(t)->sky
+                rtraceOptions->isEqual(static_cast<CalculateStaticIlluminance *>(t)->rtraceOptions) &&
+                oconvOptions->isEqual(static_cast<CalculateStaticIlluminance *>(t)->oconvOptions) &&
+                workplane == static_cast<CalculateStaticIlluminance *>(t)->workplane &&
+                rays == static_cast<CalculateStaticIlluminance *>(t)->rays &&
+                sky == static_cast<CalculateStaticIlluminance *>(t)->sky
                 );
     }
     
@@ -101,8 +101,16 @@ public:
         if(workplane != nullptr){
             rays = &(static_cast<TriangulateWorkplane *>(getDependencyRef(1))->rays);
         }
-        result.resize(rays->size(),1);
-        rtrace_I(rtraceOptions, &octname[0], ambientFileName, rays, &result);        
+        
+        size_t nrays=rays->size();
+        
+        result.resize(nrays,1);
+        
+        ColorMatrix aux = ColorMatrix(nrays,1);
+        
+        rtrace_I(rtraceOptions, &octname[0], ambientFileName, rays, &aux);
+        
+        aux.calcIrradiance(&result);
         
         return true;
     }
@@ -110,8 +118,8 @@ public:
     bool isMutex(Task * t)
     {
         return (
-                oconvOptions->isEqual(static_cast<RTraceTask *>(t)->oconvOptions) &&
-                sky == (static_cast<RTraceTask *>(t)->sky)
+                oconvOptions->isEqual(static_cast<CalculateStaticIlluminance *>(t)->oconvOptions) &&
+                sky == (static_cast<CalculateStaticIlluminance *>(t)->sky)
                 );
     }
     
@@ -122,5 +130,5 @@ public:
     
 };
 
-extern RTraceTask rTraceTask;
+extern CalculateStaticIlluminance calcStaticIlluminance;
 

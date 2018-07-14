@@ -20,14 +20,15 @@
 
 #pragma once
 
+#include "./taskmanager.h"
 #include "../calculations/tasks/TriangulateWorkplane.h"
 #include "../config_constants.h"
 #include "./compliance.h"
 
-#define GET_DEP_RESULTS(x) \
+#define GET_DEP_RESULTS(depClass) \
 Matrix * getDependencyResults() \
 { \
-    return static_cast<x *>(getDependencyRef(0))->getResult(); \
+    return static_cast< depClass *>(getDependencyRef(0))->getResult(); \
 } \
 
 class CBDMTask : public Task {
@@ -96,7 +97,7 @@ public:
             // Get the workplane's triangulation
             TriangulateWorkplane aux = TriangulateWorkplane(workplane);
             TaskManager * p = getParent();
-            TriangulateWorkplane * triangulate = static_cast<TriangulateWorkplane *>(p->findTask(&aux));
+            TriangulateWorkplane * triangulate = static_cast<TriangulateWorkplane *>( p->findTask(&aux) );
             std::vector <Triangle *> triangles = triangulate->triangles;
             
             compliance = calcWorkplaneCompliance(&triangles, minTime,  maxTime, &result);

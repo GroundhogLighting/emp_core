@@ -147,7 +147,7 @@ bool RadExporter::writeComponentDefinitions(const char * dir) const
 		ComponentDefinition * definition = model->getComponentDefinitionRef(i);
         size_t numObjects = definition->getObjectsRef()->size();
         
-		std::string componentName = *(definition->getName());
+		std::string componentName = definition->getName();
         fixString(&componentName);
 
 		// create the file
@@ -205,7 +205,7 @@ bool RadExporter::writeLayers(const char * dir) const
 		// get the layer
 		Layer * layer = model->getLayerRef(i);
         
-        std::string layerName = *(layer->getName());
+        std::string layerName = layer->getName();
         fixString(&layerName);
         
 		if (layer->isEmpty()) {
@@ -305,7 +305,7 @@ void RadExporter::writeComponentInstance(FILE * file, const ComponentInstance * 
 		return;
 	}
     
-    std::string instanceName = *(definition->getName());
+    std::string instanceName = definition->getName();
     fixString(&instanceName);
 
 
@@ -332,7 +332,7 @@ void RadExporter::writeComponentInstance(FILE * file, const ComponentInstance * 
     }
 
     // Get the definition Name
-    std::string componentName = *(definition->getName());
+    std::string componentName = definition->getName();
     fixString(&componentName);
 
     // Count objects
@@ -567,7 +567,7 @@ bool RadExporter::writeSceneFile(const char * dir, OptionSet * options) const
 	// Write Geometry
 	file << "###### GEOMETRY" << "\n" << "\n";
 	for (size_t i = 0; i < model->getNumLayers(); i++) {
-        std::string name = *(model->getLayerRef(i)->getName());
+        std::string name = model->getLayerRef(i)->getName();
         fixString(&name);
 		file << "!xform ./" << layersLocation << "/" << name << ".rad" << "\n";
 	}

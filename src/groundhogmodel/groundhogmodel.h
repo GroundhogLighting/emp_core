@@ -454,7 +454,7 @@ public:
      @author German Molina
      @return The number of tasks
      */
-    size_t countTasks();
+    size_t countTasks() const;
     
     //! Retrieves a specific task in the model
     /*!
@@ -462,7 +462,15 @@ public:
      @param i The index of the task to retrieve
      @return The pointer to the task
      */
-    json * getTask(size_t i);
+    const json * getTask(size_t i) const;
+    
+    //! Retrieves a specific task in the model
+    /*!
+     @author German Molina
+     @param i The index of the task to retrieve
+     @return The pointer to the task
+     */
+    const json * getTask(std::string name) const;
 
     
 

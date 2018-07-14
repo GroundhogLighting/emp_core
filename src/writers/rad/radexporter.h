@@ -22,7 +22,6 @@
 #define RAD_EXPORTER_H
 
 #include "../../groundhogmodel/groundhogmodel.h"
-
 #include "../../common/geometry/transform.h"
 
 //! The main object for exporting a GroundhogModel in Radiance format.

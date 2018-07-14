@@ -22,6 +22,8 @@
 
 #include "../../../taskmanager/mutexes.h"
 #include "../../../os_definitions.h"
+#include "../OconvTask.h"
+
 
 class CreateDirectSunOctree : public Task {
 public:

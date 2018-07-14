@@ -22,7 +22,7 @@
 
 #pragma once
 #include "../../radiance.h"
-#include "CalculateDirectSunMatrix.h"
+#include "./CalculateDirectSunMatrix.h"
 
 class CalculateDirectSunComponent : public Task {
 public:

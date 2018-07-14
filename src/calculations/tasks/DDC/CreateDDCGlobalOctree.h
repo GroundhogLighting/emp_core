@@ -19,6 +19,7 @@
  *****************************************************************************/
 
 #pragma once
+#include "../../../os_definitions.h"
 
 #include "../OconvTask.h"
 #include "../../../taskmanager/mutexes.h"

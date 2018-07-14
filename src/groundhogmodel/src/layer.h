@@ -102,7 +102,7 @@ public:
 	@author German Molina
 	@return The name of the Layer
 	*/
-	const std::string * getName() const;
+	std::string getName() const;
 
 	//! Retrieves a constant pointer to the Otype vector
 	/*!

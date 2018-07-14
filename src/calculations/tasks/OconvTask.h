@@ -21,6 +21,8 @@
 #pragma once
 
 
+#include "../../common/utilities/stringutils.h"
+
 
 #include "../../taskmanager/task.h"
 #include "../oconv_options.h"

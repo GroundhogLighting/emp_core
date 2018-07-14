@@ -101,8 +101,8 @@ void GroundhogModel::addComponentDefinition(std::string * name)
 ComponentDefinition *  GroundhogModel::getComponentDefinitionByName(std::string * definitionName)
 {
 	for (size_t i = 0; i < definitions.size(); i++) {
-      const std::string * name = definitions[i]->getName();
-	  if (*definitionName == *name) {
+      std::string name = definitions[i]->getName();
+	  if (*definitionName == name) {
 		  return definitions[i];
 	  }
 	}
@@ -118,8 +118,8 @@ Layer *  GroundhogModel::getLayerByName(std::string * layerName)
     
     
 	for (size_t i = 0; i < nLayers; i++) {
-      const std::string * name = layers[i]->getName();
-	  if (*layerName == *name) {
+      std::string name = layers[i]->getName();
+	  if (*layerName == name) {
 		  return layers[i];
 	  }
 	}
@@ -463,12 +463,24 @@ void GroundhogModel::addTask(json task)
     tasks.push_back(task);
 }
 
-size_t GroundhogModel::countTasks()
+size_t GroundhogModel::countTasks() const
 {
     return tasks.size();
 }
 
-json * GroundhogModel::getTask(size_t i)
+const json * GroundhogModel::getTask(size_t i) const
 {
     return &tasks[i];
+}
+
+const json * GroundhogModel::getTask(std::string name) const
+{
+    size_t nTasks = tasks.size();
+    for(size_t i=0; i<nTasks; i++){
+        
+        if(tasks[i]["name"].get<std::string>() == name)
+            return &tasks[i];
+    }
+    
+    return nullptr;
 }

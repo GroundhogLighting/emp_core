@@ -27,64 +27,19 @@
 #include "./DDC/CalculateDDCGlobalIlluminance.h"
 #include "../../taskmanager/cbdm_task.h"
 
-double udiScoreCalculator(double v, double minLux, double maxLux)
-{
-    return ( (v >= minLux && v <= minLux) ? 1 : 0);
-}
+double udiScoreCalculator(double v, double minLux, double maxLux);
 
 
 class CheckUDICompliance : public CBDMTask {
     
 public:
     
-    CheckUDICompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theMaxLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
-    {
-        model = theModel;
-        minLux = theMinLux;
-        maxLux = theMaxLux;
-        early = theEarly;
-        late = theLate;
-        firstMonth = minMonth;
-        lastMonth = maxMonth;
-        workplane = wp;
-        minTime = theMinTime;
-        scoreCalculator = udiScoreCalculator;
-        
-        // Dependency 0
-        CalculateDDCGlobalIlluminance * illuminanceTask = new CalculateDDCGlobalIlluminance(theModel, wp, sunMf, skyMf, theOptions, interp);
-        
-        
-        addDependency(illuminanceTask);
-        
-        // Set the name
-        setName(&name);
-    }
+    CheckUDICompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theMaxLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime);
     
-    CheckUDICompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theMaxLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
-    {
-        
-        model = theModel;
-        minLux = theMinLux;
-        maxLux = theMaxLux;
-        early = theEarly;
-        late = theLate;
-        firstMonth = minMonth;
-        lastMonth = maxMonth;
-        minTime = theMinTime;
-        scoreCalculator = udiScoreCalculator;
-        rays = theRays;
-        
-        // Dependency 0
-        CalculateDDCGlobalIlluminance * illuminanceTask = new CalculateDDCGlobalIlluminance(theModel, theRays, sunMf, skyMf, theOptions, interp);
-        addDependency(illuminanceTask);
-                
-        // Set the name
-        setName(&name);
-    }
-        
     
+    CheckUDICompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theMaxLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime);
+                    
     GET_DEP_RESULTS(CalculateDDCGlobalIlluminance);
-    
 };
 
 extern CheckUDICompliance checkUDI;

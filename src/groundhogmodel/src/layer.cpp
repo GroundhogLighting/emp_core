@@ -61,9 +61,9 @@ std::vector <ComponentInstance * > * const Layer::getModifiableComponentInstance
     return &instances;
 }
 
-const std::string * Layer::getName() const
+std::string Layer::getName() const
 {
-	return &name;
+	return name;
 }
 
 const std::vector <Otype * > * const Layer::getObjectsRef() const

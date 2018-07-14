@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include "../../../taskmanager/taskmanager.h"
 #include "./CalculateDDCGlobalComponent.h"
 #include "./CalculateDDCDirectSunPatchComponent.h"
 #include "../DirectSun/CalculateDirectSunComponent.h"
@@ -122,7 +123,7 @@ public:
         }else{
             TriangulateWorkplane aux = TriangulateWorkplane(workplane);
             TaskManager * p = getParent();
-            TriangulateWorkplane * triangulate = static_cast<TriangulateWorkplane *>(p->findTask(&aux));
+            TriangulateWorkplane * triangulate = static_cast<TriangulateWorkplane *>( p->findTask(&aux) );
             std::vector <Triangle *> * triangles = &(triangulate->triangles);
             nSensors = triangles->size();
         }

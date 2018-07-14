@@ -19,6 +19,7 @@
  *****************************************************************************/
 
 #pragma once
+
 #include "../../radiance.h"
 #include "./CalculateDirectSunComponent.h"
 
@@ -86,7 +87,7 @@ public:
             return (sameModel && sameMF && rays == static_cast<CalculateDirectSunComponent *>(t)->rays);
         }
         
-        FATAL(e,"CalculateDirectSunIlluminance with null Workplane and Rays");
+        FATAL(e,"CalculateDirectSolarIlluminance with null Workplane and Rays");
         return true;
     }
     

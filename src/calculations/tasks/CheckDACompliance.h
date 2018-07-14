@@ -26,64 +26,18 @@
 #include "./DDC/CalculateDDCGlobalIlluminance.h"
 #include "../../taskmanager/cbdm_task.h"
 
-double daScoreCalculator(double v, double minLux, double maxLux)
-{
-    return (v >= minLux ? 1 : 0);
-}
+double daScoreCalculator(double v, double minLux, double maxLux);
 
 
 class CheckDACompliance : public CBDMTask {
     
 public:
     
-    CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
-    {
-        model = theModel;
-        minLux = theMinLux;
-        early = theEarly;
-        late = theLate;
-        firstMonth = minMonth;
-        lastMonth = maxMonth;
-        workplane = wp;
-        minTime = theMinTime;
-        scoreCalculator = daScoreCalculator;
-        
-        // Dependency 0
-        CalculateDDCGlobalIlluminance * illuminanceTask = new CalculateDDCGlobalIlluminance(theModel, wp, sunMf, skyMf, theOptions, interp);
-        
-        
-        addDependency(illuminanceTask);
-        
-        // Set the name
-        setName(&name);
-    }
+    CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime);
     
-    
-    
-    CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
-    {
-        
-        model = theModel;
-        minLux = theMinLux;
-        early = theEarly;
-        late = theLate;
-        firstMonth = minMonth;
-        lastMonth = maxMonth;
-        minTime = theMinTime;
-        scoreCalculator = daScoreCalculator;
-        rays = theRays;
-        
-        // Dependency 0
-        CalculateDDCGlobalIlluminance * illuminanceTask = new CalculateDDCGlobalIlluminance(theModel, theRays, sunMf, skyMf, theOptions, interp);
-        addDependency(illuminanceTask);
-        
-        
-        // Set the name
-        setName(&name);
-    }
-    
-    GET_DEP_RESULTS(CalculateDDCGlobalIlluminance);        
-    
+    CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime);
+
+    GET_DEP_RESULTS(CalculateDDCGlobalIlluminance);
     
 };
 

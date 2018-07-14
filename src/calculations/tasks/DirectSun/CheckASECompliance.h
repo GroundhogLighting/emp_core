@@ -23,62 +23,21 @@
 #pragma once
 
 
-#include "./CalculateDirectSunComponent.h"
+#include "./CalculateDirectSolarIlluminance.h"
 #include "../../../taskmanager/cbdm_task.h"
 
-double aseScoreCalculator(double v, double minLux, double maxLux)
-{
-    return (v >= minLux ? 1 : 0);
-}
+double aseScoreCalculator(double v, double minLux, double maxLux);
 
 
 class CheckASECompliance : public CBDMTask {
     
 public:
    
-    CheckASECompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int theMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
-    {
-        model = theModel;
-        minLux = theMinLux;
-        early = theEarly;
-        late = theLate;
-        firstMonth = minMonth;
-        lastMonth = maxMonth;
-        workplane = wp;
-        minTime = theMinTime;
-        scoreCalculator = aseScoreCalculator;
-        
-        // Dependency 0
-        CalculateDirectSolarIlluminance * illuminanceTask = new CalculateDirectSolarIlluminance(theModel, wp, theMf, theOptions, interp);
-        addDependency(illuminanceTask);
-        
-        // Set the name
-        setName(&name);
-    }
+    CheckASECompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int theMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime);
     
-    CheckASECompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
-    {
-        
-        model = theModel;
-        minLux = theMinLux;
-        early = theEarly;
-        late = theLate;
-        firstMonth = minMonth;
-        lastMonth = maxMonth;
-        minTime = theMinTime;
-        scoreCalculator = aseScoreCalculator;
-        rays = theRays;
-        
-        // Dependency 0
-        CalculateDirectSolarIlluminance * illuminanceTask = new CalculateDirectSolarIlluminance(theModel, theRays, theMf, theOptions, interp);
-        addDependency(illuminanceTask);
-        
-        // Set the dependency results
-        depResults = &(illuminanceTask->result);
-        
-        // Set the name
-        setName(&name);
-    }
+    
+    CheckASECompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime);
+    
     
     GET_DEP_RESULTS(CalculateDirectSolarIlluminance);    
    

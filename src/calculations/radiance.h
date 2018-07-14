@@ -21,12 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef EMP_RADIANCE_H
 #define EMP_RADIANCE_H
 
+#include <stddef.h> // In macOS we need this because size_t does not work
+
 #include "./reinhart.h"
 #include "./color_matrix.h"
 #include "./oconv_options.h"
-#include "../groundhogmodel/src/rtraceoptions.h"
 #include "../writers/rad/radexporter.h"
-
 
 
 /// Do not change this, please... it is required to compile Radiance in C++
