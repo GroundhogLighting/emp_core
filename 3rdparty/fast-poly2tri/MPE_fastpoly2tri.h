@@ -1773,7 +1773,10 @@ void MPE_EdgeEventPoints(MPEPolyContext* PolyContext, MPEPolyPoint* EdgeP, MPEPo
     MPEPolyTriangle* NewTriangle;
     i32 NewPointIndex = (i32)MPEPolyEdgeLUT[PointIndex+(i32)Orientation1+1];
     NewTriangle = Triangle->Neighbors[NewPointIndex];
-    MPE_Assert(NewTriangle);
+    MPE_Assert(NewTriangle); // This fails sometimes!
+    //if(NewTriangle == NULL)
+    //  return;
+      
     NewPointIndex = MPE_PolyPointIndex(NewTriangle, Point);
     MPE_Assert(NewPointIndex == MPE_PolyPointIndex(NewTriangle, Point));
     MPE_EdgeEventPoints(PolyContext, EdgeP, EdgeQ, EdgeQIndex, NewTriangle, Point, NewPointIndex);

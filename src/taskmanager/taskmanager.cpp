@@ -139,10 +139,12 @@ bool TaskManager::solve(json * results)
                 std::cerr << "    ... Starting Task '" << tasks[i]->getName() << "'" << std::endl;
                 verboseMutex.unlock();
 #endif
+                tbb::tick_count t0 = tbb::tick_count::now();
                 success= tasks[i]->solve();
+                tbb::tick_count t1 = tbb::tick_count::now();
 #ifdef _DEBUG
                 verboseMutex.lock();
-                std::cerr << "    ... Ended Task '" << tasks[i]->getName() <<  "'" << std::endl;
+                std::cerr << "    ... Ended Task '" << tasks[i]->getName() <<  "' in " << (t1 - t0).seconds() << " seconds" << std::endl;
                 verboseMutex.unlock();
 #endif
             }catch(std::out_of_range& ex) {
@@ -173,7 +175,11 @@ bool TaskManager::solve(json * results)
     // Solve!
     try {
         start.try_put(tbb::flow::continue_msg());
+        tbb::tick_count t0 = tbb::tick_count::now();
         g.wait_for_all();
+        tbb::tick_count t1 = tbb::tick_count::now();
+        std::cerr << "All tasks solved in "  << (t1 - t0).seconds() << " seconds" << std::endl;
+        
     } catch(std::out_of_range& ex) {
         std::cout << "Exception: " << ex.what() << std::endl;
     }

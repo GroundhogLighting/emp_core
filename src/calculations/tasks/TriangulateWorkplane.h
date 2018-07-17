@@ -109,17 +109,16 @@ public:
         double maxAspectRatio = workplane->getMaxAspectRatio();
         
         // Triangulate in parallel
-        //tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols, EMP_TRIANGULATION_GRAIN_SIZE),
-          //                [=](const tbb::blocked_range<size_t>& r) {
-            //                  for (size_t i = r.begin(); i != r.end(); ++i) {
-                            for (size_t i = 0; i < nPols; i++) {
+        tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols, EMP_TRIANGULATION_GRAIN_SIZE),
+                          [=](const tbb::blocked_range<size_t>& r) {
+                              for (size_t i = r.begin(); i != r.end(); ++i) {
+                            //for (size_t i = 0; i < nPols; i++) {
                                   triangulations.at(i)->mesh(maxArea,maxAspectRatio);
                                   triangulations.at(i)->purge();
-                                
-                                
-                            }
-                         // }
-        //);
+                            //}
+                         }
+                }
+        );
         
         // Fill the results... in series
         size_t rayCount = 0;
