@@ -18,8 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
-#ifndef TASK_H
-#define TASK_H
+#pragma once
 
 #include <vector>
 #include <string>
@@ -190,9 +189,4 @@ public:
     */
     virtual bool submitResults(json * results) = 0;
 };
-
-
-#endif
-
-
 

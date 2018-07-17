@@ -98,7 +98,8 @@ TEST(DDC_TEST, Empty_global_DDC_vs_reference){
     for(int i=0; i<48; i++){
         double value = irradiance.getElement(0,i);
         double reference = emptyReference[i][0];
-        //std::cout << value << " " << reference << std::endl;
+        
+        //std::cout << value << "," << reference << std::endl;
         ASSERT_NEAR(value,reference,reference * 0.05);
     }
 }

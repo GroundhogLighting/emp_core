@@ -20,12 +20,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-#include "tbb/tbb.h"
+
 #include <fstream>
 
 #include "./radiance.h"
 #include "../config_constants.h"
 #include "../common/utilities/stringutils.h"
+#include "tbb/tbb.h"
 #include "../os_definitions.h"
 #include "./gendaymtx.h"
 
@@ -468,7 +469,7 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatri
                                   
                                   q = (float)i / floatInter;
                                   
-                                  location->getInterpolatedData(timestep,q,&now);
+                                  location->getInterpolatedData(static_cast<int>(timestep),q,&now);
                                   
                                   if(now.diffuse_horizontal > 1e-4){
                                       

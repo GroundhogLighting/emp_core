@@ -18,8 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
-#ifndef TASK_MANAGER_H
-#define TASK_MANAGER_H
+#pragma once
 
 #include "./task.h"
 
@@ -158,4 +157,4 @@ public:
 
 extern TaskManager tManager;
 
-#endif
+

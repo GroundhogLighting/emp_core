@@ -1,7 +1,9 @@
 #include <iostream>
-//#include "./src/emp.h"
+
 
 #include "gtest/gtest.h"
+
+#include "include/emp_tbb_malloc.h"
 
 #include "./tests/loop_test.h" 
 #include "./tests/point3d_test.h"

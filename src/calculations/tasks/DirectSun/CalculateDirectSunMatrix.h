@@ -93,7 +93,7 @@ public:
         
         std::string octname = static_cast<CreateDirectSunOctree *>(getDependencyRef(0))->octreeName;
         
-        options.setOption("ab",0);
+        options.setOption("ab",1);
         options.setOption("dc",1);
         options.setOption("dt",0);
         options.setOption("st",1);

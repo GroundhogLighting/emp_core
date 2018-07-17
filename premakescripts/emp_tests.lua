@@ -57,13 +57,13 @@ project "emp_tests"
 
     end
 
-    filter "configurations:RELEASE"        
+    
+    filter "configurations:RELEASE"    
     links {
-        "tbb"
+        "tbb","tbbmalloc","tbbmalloc_proxy"
     }
-    
-    
+
     filter "configurations:DEBUG"    
     links {
-        "tbb_debug"
+        "tbb_debug","tbbmalloc_debug","tbbmalloc_proxy_debug"
     }

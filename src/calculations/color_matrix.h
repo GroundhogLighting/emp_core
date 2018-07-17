@@ -19,10 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
 
 
-#ifndef COLOR_MATRIX_H
-#define COLOR_MATRIX_H
+#pragma once
 
 #include "../common/geometry/matrix.h"
+#include "tbb/tbb.h"
 
 //! A set of 3 matrices of double numbers, each matrix representing the Red, Green and Blue channel
 
@@ -168,4 +168,4 @@ public:
 
 extern ColorMatrix colorMatrix;
 
-#endif
+

@@ -112,10 +112,10 @@ public:
         tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols),
                           [=](const tbb::blocked_range<size_t>& r) {
                               for (size_t i = r.begin(); i != r.end(); ++i) {
-                            //for (size_t i = 0; i < nPols; i++) {
-                                  triangulations.at(i)->mesh(maxArea,maxAspectRatio);
-                                  triangulations.at(i)->purge();
-                            //}
+                            
+                                triangulations.at(i)->mesh(maxArea,maxAspectRatio);
+                                triangulations.at(i)->purge();
+                            
                          }
                 },
                 tbb::auto_partitioner()

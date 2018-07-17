@@ -24,6 +24,7 @@
 #include "../utilities/io.h"
 #include "tbb/tbb.h"
 
+
 #define NROWS data.size()
 #define NCOLS data[0].size()
 
@@ -101,23 +102,13 @@ bool Matrix::multiply(const Matrix * m, Matrix * res) const
                                 [=](const tbb::blocked_range<size_t>& r2) {
                                     for (size_t col = r2.begin(); col != r2.end(); ++col) {
                                         
-                                        //double v = 0;
+                                        double v = 0;
+                                        for (int i = 0; i < aux; i++) {
+                                            v += (getElement(row,i) * m->getElement(i,col)); // CHECK THIS!
+                                        }
+                                        res->setElement(row,col,v);
                                         
-                                        // Third for --> in i
-                                        tbb::parallel_for(tbb::blocked_range<size_t>(0, aux),
-                                          [=](const tbb::blocked_range<size_t>& r3) {
-                                              for (size_t i = r3.begin(); i != r3.end(); ++i) {
-                                                  
-                                                  double a = res->getElement(row,col);
-                                                  double b = (getElement(row,i) * m->getElement(i,col));
-                                                  res->setElement(row, col, a+b);
-                                                  //v += (getElement(row,i) * m->getElement(i,col)); // CHECK THIS!
-                                              }
-                                          },
-                                          tbb::auto_partitioner()
-                                          );// end of loop in i
-                                        // Set the actual value
-                                        //res->setElement(row,col,v);
+                                        
                                 }
                             },
                             tbb::auto_partitioner()
@@ -160,6 +151,24 @@ bool Matrix::multiplyToColumn( const Matrix * vec, size_t col, Matrix * res) con
     
     // Multiply
     const size_t ncols = vec->nrows();
+    const size_t nrows = NROWS;
+    
+    // Loop in rows
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, nrows),
+                      [=](const tbb::blocked_range<size_t>& r1) {
+                          for (size_t row = r1.begin(); row != r1.end(); ++row) {
+                              
+                              double v = 0;
+                              for (int i = 0; i < ncols; i++) {
+                                  v += (getElement(row,i) * vec->getElement(i,0));
+                              }
+                              res->setElement(row,col,v);
+              
+          }
+      },
+      tbb::auto_partitioner()
+      );// end of loop in rows
+    /*
     for (int row = 0; row < NROWS; row++) {
         double v = 0;
         for (int i = 0; i < ncols; i++) {
@@ -167,6 +176,7 @@ bool Matrix::multiplyToColumn( const Matrix * vec, size_t col, Matrix * res) con
         }
         res->setElement(row,col,v);
     }
+     */
     
     return true;
 }

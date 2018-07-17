@@ -15,7 +15,7 @@ newaction {
         
         -- Compile tbb in Release and Debug format. Will create the 
         --tbb_release and tbb_debug directories in ./build
-        os.execute("cd 3rdparty/IntelTBB; make compiler=clang stdlib=libc++ tbb_build_prefix='tbb' tbb")
+        os.execute("cd 3rdparty/IntelTBB; make compiler=clang stdlib=libc++ tbb_build_prefix='tbb' tbb tbbmalloc")
 
         -- Create the lib 
         os.mkdir("libs/DEBUG")
@@ -39,6 +39,10 @@ newaction {
         -- Move the dynamic lib to the bin
         os.execute(cp.." libs/RELEASE/tbb/libtbb.dylib bin/RELEASE/libtbb.dylib") 
         os.execute(cp.." libs/DEBUG/tbb/libtbb_debug.dylib bin/DEBUG/libtbb_debug.dylib") 
+        os.execute(cp.." libs/RELEASE/tbb/libtbbmalloc.dylib bin/RELEASE/libtbbmalloc.dylib") 
+        os.execute(cp.." libs/DEBUG/tbb/libtbbmalloc_debug.dylib bin/DEBUG/libtbbmalloc_debug.dylib") 
+        os.execute(cp.." libs/RELEASE/tbb/libtbbmalloc_proxy.dylib bin/RELEASE/libtbbmalloc_proxy.dylib") 
+        os.execute(cp.." libs/DEBUG/tbb/libtbbmalloc_proxy_debug.dylib bin/DEBUG/libtbbmalloc_proxy_debug.dylib") 
 
         
         -- Clean new ones

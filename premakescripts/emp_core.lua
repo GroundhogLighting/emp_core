@@ -33,8 +33,7 @@ project "emp_core"
     elseif is_macos then
         defines { "MACOS" }                    
         linkoptions {            
-            "-L "..libs_dir.."/%{cfg.buildcfg}/tbb",  
-            --"-Wl,-rpath,\\$ORIGIN"                                
+            "-L "..libs_dir.."/%{cfg.buildcfg}/tbb",                                                      
         }    
         buildoptions {
             "-F /Library/Frameworks",
@@ -51,14 +50,14 @@ project "emp_core"
 
     end
 
-    filter "configurations:Release"    
+    filter "configurations:RELEASE"    
     links {
-        "tbb"
+        "tbb","tbbmalloc","tbbmalloc_proxy"
     }
 
-    filter "configurations:Debug"    
+    filter "configurations:DEBUG"    
     links {
-        "tbb_debug"
+        "tbb_debug","tbbmalloc_debug","tbbmalloc_proxy_debug"
     }
 
 

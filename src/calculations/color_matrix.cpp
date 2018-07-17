@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "./color_matrix.h"
 #include "../common/utilities/io.h"
 
+
 ColorMatrix::ColorMatrix()
 {
     red = Matrix();
@@ -80,6 +81,7 @@ Matrix * ColorMatrix::b()
 
 bool ColorMatrix::multiply(const ColorMatrix * m, ColorMatrix * res) const
 {
+    
     red.multiply(m->redChannel(), res->r());
     green.multiply(m->greenChannel(), res->g());
     blue.multiply(m->blueChannel(), res->b());
@@ -114,15 +116,29 @@ void ColorMatrix::calcIrradiance(Matrix * result) const
         result->resize(rows,cols);
     }
     
-    double r,g,b;
-    for(size_t col = 0; col < cols; col++){
-        for(size_t row=0;row<rows;row++){
-            r = red.getElement(row,col);
-            g = green.getElement(row,col);
-            b = blue.getElement(row,col);
-            result->setElement(row,col,0.265*r + 0.67*g + 0.065*b);
-        }
-    }
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, cols),
+                      [=](const tbb::blocked_range<size_t>& r1) {
+                          for (size_t col = r1.begin(); col != r1.end(); ++col) {
+                              
+                              tbb::parallel_for(tbb::blocked_range<size_t>(0, rows),
+                                                [=](const tbb::blocked_range<size_t>& r2) {
+                                                    for (size_t row = r2.begin(); row != r2.end(); ++row) {
+                                                        
+                                                        double r = red.getElement(row,col);
+                                                        double g = green.getElement(row,col);
+                                                        double b = blue.getElement(row,col);
+                                                        result->setElement(row,col,0.265*r + 0.67*g + 0.065*b);
+                                                        
+                                }
+                            },
+                            tbb::auto_partitioner()
+                            );// end of loop in rows
+                              
+                          }
+                      },
+      tbb::auto_partitioner()
+      );// end of loop in cols
+
     
 }
 
@@ -137,15 +153,30 @@ void ColorMatrix::calcIlluminance(Matrix * result) const
         result->resize(rows,cols);
     }
     
-    double r,g,b;
-    for(size_t col = 0; col < cols; col++){
-        for(size_t row=0;row<rows;row++){
-            r = red.getElement(row,col);
-            g = green.getElement(row,col);
-            b = blue.getElement(row,col);
-            result->setElement(row,col,47.5*r + 119.95*g + 11.60*b);
-        }
-    }
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, cols),
+                      [=](const tbb::blocked_range<size_t>& r1) {
+                          for (size_t col = r1.begin(); col != r1.end(); ++col) {
+                              
+                              tbb::parallel_for(tbb::blocked_range<size_t>(0, rows),
+                                                [=](const tbb::blocked_range<size_t>& r2) {
+                                                    for (size_t row = r2.begin(); row != r2.end(); ++row) {
+                                                        
+                                                        double r = red.getElement(row,col);
+                                                        double g = green.getElement(row,col);
+                                                        double b = blue.getElement(row,col);
+                                                        result->setElement(row,col,47.5*r + 119.95*g + 11.60*b);
+                                                        
+                                                    }
+                                                },
+                                                tbb::auto_partitioner()
+                                                );// end of loop in rows
+                              
+                          }
+                      },
+                      tbb::auto_partitioner()
+                      );// end of loop in cols
+
+    
     
 }
 

@@ -18,8 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 *****************************************************************************/
 
-#ifndef EMP_RADIANCE_H
-#define EMP_RADIANCE_H
+#pragma once
 
 #include <stddef.h> // In macOS we need this because size_t does not work
 
@@ -155,4 +154,4 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatri
 void calcCBDMScore(int interp, GroundhogModel * model, int firstMonth, int lastMonth, double early, double late, double minLux, double maxLux, const Matrix * input, Matrix * result, std::function<double(double v, double min, double max)> scoreCalculator);
     
 
-#endif
+
