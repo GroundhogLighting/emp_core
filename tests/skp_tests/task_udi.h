@@ -14,7 +14,7 @@ TEST(SKPRead, task_udi)
         ASSERT_EQ(nLayers,1);
         
         // Check names
-        ASSERT_TRUE(*model.getLayerRef(0)->getName() == "Layer0");
+        ASSERT_EQ(model.getLayerRef(0)->getName(), "Layer0");
         
         // Count components in the component
         size_t nComponents = model.getNumComponentDefinitions();
@@ -26,7 +26,7 @@ TEST(SKPRead, task_udi)
         ASSERT_EQ(1,nTasks);
         
         // Check the kind and name of task
-        json * task = model.getTask(0);
+        const json * task = model.getTask(0);
         std::string taskName = (*task)["name"].get<std::string>();
         ASSERT_EQ(taskName,"UDI task");
         

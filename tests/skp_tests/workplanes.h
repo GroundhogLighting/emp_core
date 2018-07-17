@@ -13,8 +13,8 @@ TEST(SKPRead, small_square_WP)
         ASSERT_EQ(nLayers,2);
         
         // Check names
-        ASSERT_TRUE(*model.getLayerRef(0)->getName() == "Layer0");
-        ASSERT_TRUE(*model.getLayerRef(1)->getName() == "Layer1");
+        ASSERT_EQ(model.getLayerRef(0)->getName(), "Layer0");
+        ASSERT_EQ(model.getLayerRef(1)->getName(), "Layer1");
         
         // Count components in the component
         size_t nComponents = model.getNumComponentDefinitions();
@@ -65,7 +65,7 @@ TEST(SKPRead, workplane_group)
         ASSERT_EQ(nLayers,1);
         
         // Check names
-        ASSERT_TRUE(*model.getLayerRef(0)->getName() == "Layer0");
+        ASSERT_EQ(model.getLayerRef(0)->getName(), "Layer0");
         
         // CHeck geometry
         ASSERT_EQ(0,model.getLayerRef(0)->getObjectsRef()->size());
@@ -103,7 +103,7 @@ TEST(SKPRead, ugly_workplane)
         ASSERT_EQ(nLayers,1);
         
         // Check names
-        ASSERT_TRUE(*model.getLayerRef(0)->getName() == "Layer0");
+        ASSERT_EQ(model.getLayerRef(0)->getName(), "Layer0");
         
         
         // Count components in the component

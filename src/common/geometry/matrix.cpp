@@ -22,6 +22,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "../utilities/io.h"
+#include "tbb/tbb.h"
 
 #define NROWS data.size()
 #define NCOLS data[0].size()
@@ -88,6 +89,46 @@ bool Matrix::multiply(const Matrix * m, Matrix * res) const
     }
     
     // Multiply
+    const size_t nrows = NROWS;
+    
+    // First for --> in rows
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, nrows),
+                      [=](const tbb::blocked_range<size_t>& r1) {
+                          for (size_t row = r1.begin(); row != r1.end(); ++row) {
+                              
+                              // Second for --> in cols
+                              tbb::parallel_for(tbb::blocked_range<size_t>(0, ncols),
+                                [=](const tbb::blocked_range<size_t>& r2) {
+                                    for (size_t col = r2.begin(); col != r2.end(); ++col) {
+                                        
+                                        //double v = 0;
+                                        
+                                        // Third for --> in i
+                                        tbb::parallel_for(tbb::blocked_range<size_t>(0, aux),
+                                          [=](const tbb::blocked_range<size_t>& r3) {
+                                              for (size_t i = r3.begin(); i != r3.end(); ++i) {
+                                                  
+                                                  double a = res->getElement(row,col);
+                                                  double b = (getElement(row,i) * m->getElement(i,col));
+                                                  res->setElement(row, col, a+b);
+                                                  //v += (getElement(row,i) * m->getElement(i,col)); // CHECK THIS!
+                                              }
+                                          },
+                                          tbb::auto_partitioner()
+                                          );// end of loop in i
+                                        // Set the actual value
+                                        //res->setElement(row,col,v);
+                                }
+                            },
+                            tbb::auto_partitioner()
+                            ); // end of loop in col
+                              
+                              
+                          }
+                      },
+                      tbb::auto_partitioner()
+      ); // end of loop in row
+    /*
     for (int row = 0; row < NROWS; row++) {
         for (int col = 0; col < ncols ; col++) {
             double v = 0;
@@ -97,6 +138,7 @@ bool Matrix::multiply(const Matrix * m, Matrix * res) const
             res->setElement(row,col,v);
         }
     }
+     */
     
     return true;
 }

@@ -109,7 +109,7 @@ public:
         double maxAspectRatio = workplane->getMaxAspectRatio();
         
         // Triangulate in parallel
-        tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols, EMP_TRIANGULATION_GRAIN_SIZE),
+        tbb::parallel_for(tbb::blocked_range<size_t>(0, nPols),
                           [=](const tbb::blocked_range<size_t>& r) {
                               for (size_t i = r.begin(); i != r.end(); ++i) {
                             //for (size_t i = 0; i < nPols; i++) {
@@ -117,7 +117,8 @@ public:
                                   triangulations.at(i)->purge();
                             //}
                          }
-                }
+                },
+                tbb::auto_partitioner()
         );
         
         // Fill the results... in series

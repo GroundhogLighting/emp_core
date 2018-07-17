@@ -164,10 +164,10 @@ TEST(LoopTests, clean)
 	for (int i = 0; i < loop.size(); i++) {
 		if (i == 1) {
 			// Test colinear point
-			ASSERT_TRUE(loop.getVertexRef(i) == NULL);
+			ASSERT_TRUE(loop.getVertexRef(i) == nullptr);
 		}
 		else {
-			ASSERT_FALSE(loop.getVertexRef(i) == NULL);
+			ASSERT_FALSE(loop.getVertexRef(i) == nullptr);
 		}
 	}
 }

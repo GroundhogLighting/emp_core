@@ -14,8 +14,8 @@ TEST(SKPRead, small_square_window)
         ASSERT_EQ(nLayers,2);
         
         // Check names
-        ASSERT_TRUE(*model.getLayerRef(0)->getName() == "Layer0");
-        ASSERT_TRUE(*model.getLayerRef(1)->getName() == "Layer1");
+        ASSERT_EQ(model.getLayerRef(0)->getName(), "Layer0");
+        ASSERT_EQ(model.getLayerRef(1)->getName(), "Layer1");
         
         // Count components in the component
         size_t nComponents = model.getNumComponentDefinitions();
