@@ -30,38 +30,48 @@ Location::Location() {
 	timeZone = 0;
 }
 
-double Location::getLatitude() {
+double Location::getLatitude() const
+{
 	return latitude;
 }
-void Location::setLatitude(double l) {
+void Location::setLatitude(double l)
+{
 	latitude = l;
 }
-double Location::getLongitude() {
+double Location::getLongitude() const
+{
 	return longitude;
 }
-void Location::setLongitude(double l) {
+void Location::setLongitude(double l)
+{
 	longitude = l;
 }
-double Location::getTimeZone() {
+double Location::getTimeZone() const
+{
 	return timeZone;
 }
-void Location::setTimeZone(double t) {
+void Location::setTimeZone(double t)
+{
 	timeZone = t;
 }
 
-std::string Location::getCity() {
+std::string Location::getCity() const
+{
 	return city;
 }
 
-void Location::setCity(std::string c) {
+void Location::setCity(std::string c)
+{
 	city = c;
 }
 
-std::string Location::getCountry() {
+std::string Location::getCountry() const
+{
 	return country;
 }
 
-void Location::setCountry(std::string c) {
+void Location::setCountry(std::string c)
+{
 	country = c;
 }
 
@@ -70,7 +80,7 @@ void Location::setAlbedo(double a)
 	albedo = a;
 }
 
-double Location::getAlbedo()
+double Location::getAlbedo() const
 {
 	return albedo;
 }
@@ -82,22 +92,22 @@ bool Location::fillWeatherFromJSON(json * j)
 }
 
 
-double Location::getElevation()
+double Location::getElevation() const
 {
 	return elevation;
 }
 
-bool Location::hasWeather()
+bool Location::hasWeather() const
 {
 	return weather.hasData();
 }
 
 HourlyData * Location::getHourlyData(size_t hour)
 {
-	return &(weather.data[hour]);
+	return &(weather.data.at(hour));
 }
 
-size_t Location::getWeatherSize()
+size_t Location::getWeatherSize() const
 {
     return weather.data.size();
 }
@@ -112,7 +122,7 @@ void Location::markWeatherAsFilled()
     weather.filled = true;
 }
 
-void Location::getInterpolatedData(int beg,float i,HourlyData * data)
+void Location::getInterpolatedData(int beg,float i,HourlyData * data) const
 {
     if(!weather.hasData())
         throw "Fatal: Cannot simulate because it has no data";
@@ -122,8 +132,8 @@ void Location::getInterpolatedData(int beg,float i,HourlyData * data)
         throw "Impossible beggining data point in Weather File interpolation";
     
     
-    HourlyData * startData = &(weather.data[beg]);
-    HourlyData * endData = &(weather.data[(beg + 1) % weaSize]);
+    const HourlyData * startData = &(weather.data[beg]);
+    const HourlyData * endData = &(weather.data[(beg + 1) % weaSize]);
     
     data->month = startData->month;
     data->day = startData->day;

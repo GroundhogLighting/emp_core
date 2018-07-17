@@ -40,7 +40,7 @@ bool Weather::fillFromJSON(json * j)
 	return true;
 }
 
-bool Weather::hasData()
+bool Weather::hasData() const
 {
 	return filled;
 }

@@ -84,5 +84,5 @@ public:
 	@author German Molina
 	@return filled
 	*/
-	bool hasData();
+	bool hasData() const;
 };

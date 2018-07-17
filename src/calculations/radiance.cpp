@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#include "tbb/tbb.h"
 #include <fstream>
 
 #include "./radiance.h"
@@ -433,30 +434,63 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatri
 {
     
     // Get location info
-    Location * location = model -> getLocation();
-    float albedo = location->getAlbedo();
-    float latitude = location->getLatitude();
-    float longitude = location-> getLongitude();
-    float meridian = location->getTimeZone()*(-15.0);
-    double rotation = model -> getNorthCorrection();
+    const Location * location = model -> getLocation();
+    const float albedo = location->getAlbedo();
+    const float latitude = location->getLatitude();
+    const float longitude = location-> getLongitude();
+    const float meridian = location->getTimeZone()*(-15.0);
+    const double rotation = model -> getNorthCorrection();
     
     // Get sizes and resize
     const size_t nSensors = DC->nrows();
     const size_t nBins = DC->ncols();
-    size_t nSamples = location->getWeatherSize();
+    const size_t nSamples = location->getWeatherSize();
     int mf = mfFromNBins((int)nBins);
-    size_t nstep = 0;
     
     if (nSamples == 0)
         FATAL(m,"No Weather Data when CalculateDirectSunComponent");
     
     result->resize(nSensors,interp*nSamples);
     
-    // Initialize Sky vector
-    ColorMatrix skyVector = ColorMatrix(nBins,1);
+    
     
     // Interpolate and multiply
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, nSamples),
+                      [=](const tbb::blocked_range<size_t>& r) {
+                          for (size_t timestep = r.begin(); timestep != r.end(); ++timestep) {
+                                                                                          
+                              HourlyData now = HourlyData();
+                              float floatInter = (float)interp;
+                              float q;
+                              
+                              for(int i = 0; i < interp; i++){
+                                  size_t nstep = timestep * interp + i;
+                                  
+                                  q = (float)i / floatInter;
+                                  
+                                  location->getInterpolatedData(timestep,q,&now);
+                                  
+                                  if(now.diffuse_horizontal > 1e-4){
+                                      
+                                      // Initialize Sky vector
+                                      ColorMatrix skyVector = ColorMatrix(nBins,1);
+                                      
+                                      // Is day... calculate
+                                      genPerezSkyVector(now.month, now.day, now.hour, now.direct_normal, now.diffuse_horizontal, albedo, latitude, longitude, meridian, mf, sunOnly, sharpSun, rotation, &skyVector);
+                                      
+                                      // Multiply
+                                      DC->multiplyToColumn(&skyVector, nstep, result);
+                                  } // No else... matrices come with zeroes
+                                  
+                              }// enf loop in i
+                              
+                          }
+          },
+          tbb::auto_partitioner()
+    );// end of parallel_for
     
+    /*
+    size_t nstep = 0;
     for(int timestep = 0 ; timestep < nSamples; timestep++ ){
         HourlyData now = HourlyData();
         float floatInter = (float)interp;
@@ -477,6 +511,8 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatri
             nstep++;
         }
     }
+     */
+    
 }
 
 
@@ -502,8 +538,7 @@ void calcCBDMScore(int interp, GroundhogModel * model, int firstMonth, int lastM
     HourlyData now = HourlyData();
     float floatInter = (float)interp;
     float q;
-    
-    // Iterate through the weather data
+        
     for(int timestep = 0 ; timestep < nSamples; timestep++ ){
         
         // Interpolate between timesteps

@@ -58,7 +58,7 @@ public:
 	@author German Molina
 	@return the latitude
 	*/
-	double getLatitude();
+	double getLatitude() const;
 
 	//! Sets the latitude
 	/*!
@@ -72,7 +72,7 @@ public:
 	@author German Molina
 	@return the longitude
 	*/
-	double getLongitude();
+	double getLongitude() const;
 
 	//! Sets the Longitude
 	/*!
@@ -86,7 +86,7 @@ public:
 	@author German Molina
 	@return the time zone
 	*/
-	double getTimeZone();
+	double getTimeZone() const;
 
 	//! Sets the Time zone
 	/*!
@@ -100,7 +100,7 @@ public:
 	@author German Molina
 	@return the city name
 	*/
-	std::string getCity();
+	std::string getCity() const;
 
 	//! Sets the City name
 	/*!
@@ -114,7 +114,7 @@ public:
 	@author German Molina
 	@return the country name
 	*/
-	std::string getCountry();
+	std::string getCountry() const;
 
 	//! Sets the Country name
 	/*!
@@ -135,7 +135,7 @@ public:
 	@author German Molina
 	@return The albedo
 	*/
-	double getAlbedo();
+	double getAlbedo() const;
 
 	//! Fill Weather member from JSON object
 	/*!
@@ -150,7 +150,7 @@ public:
 	@author German Molina
 	@return The elevation
 	*/
-	double getElevation();
+	double getElevation() const;
 
 	//! Gets the HourlyData for some hour
 	/*!
@@ -172,13 +172,13 @@ public:
      @author German Molina
      @return The weather data length
      */
-    size_t getWeatherSize();
+    size_t getWeatherSize() const;
 
 	//! Checks if the weather has been filled with data
 	/*!
 	@author German Molina
 	*/
-	bool hasWeather();
+	bool hasWeather() const;
     
     //! Marks weather as filled
     /*!
@@ -194,5 +194,5 @@ public:
      @param data The HourlyData object to put the results in
      @todo Consider interpolation at sunrise and sunset!
      */
-    void getInterpolatedData(int step,float i,HourlyData * data);
+    void getInterpolatedData(int step,float i,HourlyData * data) const;
 };
