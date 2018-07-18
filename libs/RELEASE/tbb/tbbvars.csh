@@ -1,6 +1,6 @@
 #!/bin/csh
-setenv TBBROOT "/Users/german/Documents/emp_core/3rdparty/IntelTBB" #
-setenv tbb_bin "/Users/german/Documents/emp_core/3rdparty/IntelTBB/build/tbb_release" #
+setenv TBBROOT "/Users/german/Documents/emp/emp_core/3rdparty/IntelTBB" #
+setenv tbb_bin "/Users/german/Documents/emp/emp_core/3rdparty/IntelTBB/build/tbb_release" #
 if (! $?CPATH) then #
     setenv CPATH "${TBBROOT}/include" #
 else #
