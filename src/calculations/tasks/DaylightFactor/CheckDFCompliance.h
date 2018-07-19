@@ -44,7 +44,8 @@ public:
         depResults = &(dep->result); 
         
         // Set the name
-        setName(&name);
+        std::string the_name = name + " " + wp->getName();
+        setName(&the_name);
     }
     
     CheckDFCompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, double min, double max)

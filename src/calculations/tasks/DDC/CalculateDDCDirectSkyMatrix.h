@@ -40,7 +40,7 @@ public:
     CalculateDDCDirectSkyMatrix(GroundhogModel * theModel, Workplane * wp, int theMF,RTraceOptions * theOptions)
     {
         
-        std::string name = "DDC Direct Sky Matrix";
+        std::string name = "DDC Direct Sky Matrix "+wp->getName();
         setName(&name);
         model = theModel;
         mf = theMF;

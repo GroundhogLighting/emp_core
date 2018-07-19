@@ -34,7 +34,7 @@ public:
     CalculateDirectSunMatrix(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions)
     {
         
-        std::string name = "Direct Sun Matrix";
+        std::string name = "Direct Sun Matrix "+ wp->getName();
         setName(&name);
         model = theModel;
         mf = theMF;        

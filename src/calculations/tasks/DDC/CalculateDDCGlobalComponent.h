@@ -40,7 +40,7 @@ public:
      */
     CalculateDDCGlobalComponent(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions, int interpolation)
     {
-        std::string name = "DDC Global Component";
+        std::string name = "DDC Global Component "+wp->getName();
         setName(&name);
         model = theModel;
         mf = theMF;

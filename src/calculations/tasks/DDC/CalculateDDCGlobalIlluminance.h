@@ -42,7 +42,7 @@ public:
     CalculateDDCGlobalIlluminance(GroundhogModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
         
-        std::string name = "DDC";
+        std::string name = "DDC Illuminance "+wp->getName();
         setName(&name);
         model = theModel;
         sunMF = theSunMF;

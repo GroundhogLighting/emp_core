@@ -47,7 +47,8 @@ CheckASECompliance::CheckASECompliance(std::string name, GroundhogModel * theMod
     addDependency(illuminanceTask);
     
     // Set the name
-    setName(&name);
+    std::string the_name = name + " " + wp->getName();
+    setName(&the_name);
 }
 
 CheckASECompliance::CheckASECompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)

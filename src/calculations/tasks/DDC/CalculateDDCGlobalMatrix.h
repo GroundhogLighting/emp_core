@@ -42,7 +42,7 @@ public:
     CalculateDDCGlobalMatrix(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions)
     {
         
-        std::string name = "DDC Global Matrix";
+        std::string name = "DDC Global Matrix "+wp->getName();
         setName(&name);
         model = theModel;
         mf = theMF;

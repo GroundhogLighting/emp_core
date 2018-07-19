@@ -53,7 +53,7 @@ public:
         addDependency(triangulateWorkplaneTask);
         
         // Set the name
-        std::string name = "DaylightFactor";
+        std::string name = "DaylightFactor "+wp->getName();
         ambientFileName = name + ".amb";
         setName(&name);
     }

@@ -40,7 +40,7 @@ public:
      */
     CalculateDirectSunComponent(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions, int interpolation)
     {
-        std::string name = "DDC Direct Sun Component";
+        std::string name = "DDC Direct Sun Component "+ wp->getName();
         setName(&name);
         model = theModel;
         mf = theMF;
