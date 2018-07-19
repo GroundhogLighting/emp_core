@@ -1,0 +1,210 @@
+/*****************************************************************************
+ Emp
+ 
+ Copyright (C) 2017  German Molina (germolinal@gmail.com)
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ *****************************************************************************/
+
+
+#include "./solar.h"
+#include <math.h>
+#include "../common/utilities/io.h"
+
+#define PI 3.141592654
+#define MAX_DEC 0.4092797096461111 // 23.45 degrees in Radians
+#define MIN_DEC -MAX_DEC
+
+
+
+/* THESE FUNCTION COME FROM RADIANCE */
+
+/* Julian date (days into year) */
+int jdate(int month,int day)
+{
+    static short  mo_da[12] = {0,31,59,90,120,151,181,212,243,273,304,334};
+    
+    return(mo_da[month-1] + day);
+}
+
+/* solar time adjustment from Julian date */
+double stadj(int  jd,double s_longitude,double s_meridian)
+{
+    return( 0.170 * sin( (4*PI/373) * (jd - 80) ) -
+           0.129 * sin( (2*PI/355) * (jd - 8) ) +
+           12 * (s_meridian - s_longitude) / PI );
+}
+
+/* solar declination angle from Julian date */
+double sdec(int  jd)
+{
+    return( 0.4093 * sin( (2*PI/368) * (jd - 81) ) );
+}
+
+/* solar altitude from solar declination and solar time */
+double salt(double sd,double st,double s_latitude)
+{
+    return( asin( sin(s_latitude) * sin(sd) -
+                 cos(s_latitude) * cos(sd) * cos(st*(PI/12)) ) );
+}
+
+
+double
+sazi(    /* solar azimuth from solar declination and solar time */
+     double sd,
+     double st,
+     double s_latitude
+     )
+{
+    return( -atan2( cos(sd)*sin(st*(PI/12)),
+                   -cos(s_latitude)*sin(sd) -
+                   sin(s_latitude)*cos(sd)*cos(st*(PI/12)) ) );
+}
+
+/* END OF RADIANCE */
+ 
+double getHourAngle(const double phi, const double givenX, const double dec)
+{
+    
+    // define auxiliary variables
+    const double A = cos(phi)*cos(dec);
+    const double B = sin(phi)*sin(dec);
+    
+    /* Check if point (X,Y) is below the summer solstice line */
+    
+    double w = -fabs(B/A); // Start with sunrise
+    int n = 0;
+    while( true ){
+        
+        // Calculate the Z (cosZenith) corresponding to that hour angle
+        double cosTheta = A * cos(w)+B;
+        double sinTheta = sqrt(1 - cosTheta * cosTheta);
+        double x = sin(w)*cos(dec)/sinTheta;
+        
+        double err = (givenX - x);
+        
+        // Return if correct
+        if (fabs(err) < 0.01)
+            return w;
+
+        // Throw if too many iterations
+        //if(w > fabs(B/A))
+        if(n++ > 5000)
+            FATAL(e,"getHourAngle function did not converge");
+        
+        //std::cout << w << std::endl;
+        
+        // else, update w
+        w += (err)*0.1;
+        
+    }
+    
+    return 0;
+ 
+}
+
+
+bool isInSolarTrajectory(const Vector3D dir, const double lat, const int mf)
+{
+
+    // TEST ALL POSSIBLE COMBINATIONS
+    const double phi = DegToRad(-lat); // Change sign of latitude, probably because of convention
+    
+    // maximum difference, given by the mg
+    const double alpha = 0.5 * PI / (mf * 7 + 0.5);
+    //const double tstep = 10/60.0; //  minute?
+    const double tstep = 2.0*alpha/0.261799;
+
+    double dec, alt, azi, cosDifference, difference;
+    
+    
+    
+    for(int day = 1; day <= 365; day++){
+        
+        // Get declination for the day
+        dec = sdec(day);
+        
+        // Calculate sunrise from eq. 1.6.11 of Duffy and Beckmann
+        const double ws = fabs(acos(-tan(phi)*tan(dec)));
+        const double halfDay = ws/0.261799;
+        const double sunrise = 12.0 - halfDay;
+        const double sunset = 12.0 + halfDay;
+        
+        for(double solarTime = sunrise; solarTime <= sunset; solarTime+= tstep){
+            // Calculate position of the sun
+            alt = salt(dec,solarTime,phi);
+            azi = sazi( dec, solarTime,phi);
+            
+            
+            double v1 = cos(alt);
+            double v0 = (v1*sin(azi));
+            v1 *= cos(azi);
+            double v2 = (sin(alt));
+            Vector3D sunDir = Vector3D(v0,v1,v2);
+            
+            // cosine of the angle
+            cosDifference = sunDir*dir;
+            difference = acos(cosDifference);
+            
+            //check
+            if(difference <= alpha)
+                return true;
+        
+        }// end of iterate the day
+        
+    }// end of iterate year
+    return false;
+    
+    
+    /*
+    double phi = RADIANS(lat);
+    
+    double givenX = dir.getX();
+    double givenY = dir.getY();
+    
+    // Get both hour angles in which solstices are at the same X
+    const double maxW = getHourAngle(phi, givenX, MAX_DEC);
+    const double minW = getHourAngle(phi, givenX, MIN_DEC);
+    
+    // get Zenith angle (which is Z)
+    const double maxCosTheta = cos(phi)*cos(MAX_DEC)*cos(maxW) + sin(phi)*sin(MAX_DEC);
+    const double minCosTheta = cos(phi)*cos(MIN_DEC)*cos(minW) + sin(phi)*sin(MIN_DEC);
+    
+    // Calculate Y^2
+    const double maxY2 = (1 - maxCosTheta*maxCosTheta - givenX * givenX);
+    const double minY2 = (1 - minCosTheta*minCosTheta - givenX * givenX);
+    
+    // Sort them (do not necessarily match summer and winter)
+    const double summerY2 = (maxY2 >=  minY2 ? maxY2 : minY2);
+    const double winterY2 = (maxY2 <= minY2 ? maxY2 : minY2);
+    
+    double summerY, winterY;
+    if(summerY2 >= 0){
+        summerY = sqrt(summerY2);
+    }else{
+        return false;
+        summerY = -sqrt(-summerY2);
+    }
+    if(winterY2 >= 0){
+        winterY = sqrt(winterY2);
+    }else{
+        return false;
+        winterY = -sqrt(-winterY2);
+    }
+    
+    return (givenY <= summerY && givenY >= winterY);
+    
+    */
+}

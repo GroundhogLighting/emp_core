@@ -398,11 +398,11 @@ bool genPerezSkyVector(int month, int day, float hour, float direct, float diffu
         memset(mtx_data, 0, sizeof(float)*3*g.nskypatch);
     }else { // it is daytime
         /* compute solar position */
-        g.julian_date = g.jdate(mo, da);
-        sda = g.sdec(g.julian_date);
-        sta = g.stadj(g.julian_date);
-        g.altitude = g.salt(sda, hr+sta);
-        g.azimuth = g.sazi(sda, hr+sta) + PI - DegToRad(rotation);
+        g.julian_date = jdate(mo, da);
+        sda = sdec(g.julian_date);
+        sta = stadj(g.julian_date,g.s_longitude,g.s_meridian);
+        g.altitude = salt(sda, hr+sta,g.s_latitude);
+        g.azimuth = sazi(sda, hr+sta,g.s_latitude) + PI - DegToRad(rotation);
         /* convert measured values */
         if (dir_is_horiz && g.altitude > 0.)
             dir /= sin(g.altitude);

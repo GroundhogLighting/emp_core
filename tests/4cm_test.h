@@ -1,11 +1,14 @@
 
-/*
+
 TEST(FourCM, UnitDirectSkyLightSources)
 {
     TaskManager tm = TaskManager();
     GroundhogModel model = GroundhogModel();
     
-    Create4CMDirectSkyOctree * task = new Create4CMDirectSkyOctree(&model);
+    Location * location = model.getLocation();
+    location->setLatitude(33.0);
+    
+    CreateDirectSunOctree * task = new CreateDirectSunOctree(&model,6);
     tm.addTask(task);
     
     tm.solve();
@@ -28,14 +31,16 @@ TEST(FourCM, UnitDirectSkyLightSources)
     options.setOption("dt", 0);
     
     
-    std::string amb = "./test_outputs/aa.amb";
-    ColorMatrix result = ColorMatrix(1,1);
-    rtrace_I(&options, &octname[0], &amb[0], &rays,&result);
+    //std::string amb = "./test_outputs/aa.amb";
+    //ColorMatrix result = ColorMatrix(1,1);
+    //rtrace_I(&options, &octname[0], &amb[0], &rays,&result);
     
-    remove(&amb[0]);
+    //remove(&amb[0]);
     
-    ASSERT_NEAR(result.redChannel()->getElement(0,0),PI,1e-3);
+    //ASSERT_NEAR(result.redChannel()->getElement(0,0),PI,1e-3);
 }
+
+/*
 
 TEST(FourCM, DirectSkyMatrix)
 {

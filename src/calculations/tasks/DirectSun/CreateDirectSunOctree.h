@@ -23,7 +23,7 @@
 #include "../../../taskmanager/mutexes.h"
 #include "../../../os_definitions.h"
 #include "../OconvTask.h"
-
+#include "../../solar.h"
 
 class CreateDirectSunOctree : public Task {
 public:
@@ -52,7 +52,7 @@ public:
     
     ~CreateDirectSunOctree()
     {
-        remove(&octreeName[0]);
+        //remove(&octreeName[0]);
     }
     
     bool isEqual(Task * t)
@@ -74,9 +74,17 @@ public:
         fprintf(octree, "void light solar 0 0 3 1e6 1e6 1e6\n");
         size_t nbins = nReinhartBins(mf);
         Vector3D dir = Vector3D(0,0,0);
+        
+        const double latitude = model->getLocation()->getLatitude();
+        
         for(size_t bin = 1; bin <= nbins; bin++){
             dir = reinhartCenterDir(bin,mf);
-            fprintf(octree, "solar source sun 0 0 4 %f %f %f 0.533\n", dir.getX(), dir.getY(), dir.getZ());            
+            
+            if(!isInSolarTrajectory(dir,latitude, mf))
+                continue;
+            
+            fprintf(octree, "solar source sun 0 0 4 %f %f %f 0.533\n", dir.getX(), dir.getY(), dir.getZ());
+            
         }
         
         PCLOSE(octree);

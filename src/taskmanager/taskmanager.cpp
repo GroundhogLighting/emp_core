@@ -26,10 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-//#ifdef _DEBUG
 // Define mutex for informing progress
 tbb::mutex verboseMutex;
-//#endif
+
 
 TaskManager::TaskManager()
 {
@@ -134,19 +133,15 @@ bool TaskManager::solve(json * results)
 		nodes.push_back(tbb::flow::continue_node<tbb::flow::continue_msg>(g, [=](const tbb::flow::continue_msg &) {
             bool success;
             try {
-#ifdef _DEBUG
-                verboseMutex.lock();
-                std::cerr << "    ... Starting Task '" << tasks[i]->getName() << "'" << std::endl;
-                verboseMutex.unlock();
-#endif
+
                 tbb::tick_count t0 = tbb::tick_count::now();
                 success= tasks[i]->solve();
                 tbb::tick_count t1 = tbb::tick_count::now();
-//#ifdef _DEBUG
+
                 verboseMutex.lock();
                 std::cerr << "    ... Ended Task '" << tasks[i]->getName() <<  "' in " << (t1 - t0).seconds() << " seconds" << std::endl;
                 verboseMutex.unlock();
-//#endif
+
             }catch(std::out_of_range& ex) {
                 std::cout << "Exception: " << ex.what() << std::endl;
             }

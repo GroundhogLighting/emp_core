@@ -3,7 +3,6 @@
 #include <cmath>
 
 #include "../include/emp_core.h"
-//#include "../src/common/geometry/segment.h"
 
 
 TEST(SegmentTest, ConstructorByComponents) {
