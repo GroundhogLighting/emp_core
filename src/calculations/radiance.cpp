@@ -329,7 +329,7 @@ bool oconv(std::string octname, OconvOptions * options, RadExporter exporter)
     return true;
 }
 
-bool genPerezSkyVector(int month, int day, float hour, float direct, float diffuse, float albedo, float latitude, float longitude, float standardMeridian, int skyMF, bool sunOnly, bool sharpSun, float rotate, ColorMatrix * skyVec)
+int genPerezSkyVector(int month, int day, float hour, float direct, float diffuse, float albedo, float latitude, float longitude, float standardMeridian, int skyMF, bool sunOnly, bool sharpSun, float rotate, ColorMatrix * skyVec)
 {
     GenDayMtx g = GenDayMtx();
     
@@ -427,7 +427,7 @@ bool genPerezSkyVector(int month, int day, float hour, float direct, float diffu
         skyVec->b()->setElement(bin,0,mtx_data[aux++]);
     }
 
-    return true;
+    return g.sharp_patch;
 }
 
 
@@ -471,17 +471,24 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatri
                                   
                                   location->getInterpolatedData(static_cast<int>(timestep),q,&now);
                                   
+                                  // If it is day
                                   if(now.diffuse_horizontal > 1e-4){
                                       
                                       // Initialize Sky vector
                                       ColorMatrix skyVector = ColorMatrix(nBins,1);
                                       
                                       // Is day... calculate
-                                      genPerezSkyVector(now.month, now.day, now.hour, now.direct_normal, now.diffuse_horizontal, albedo, latitude, longitude, meridian, mf, sunOnly, sharpSun, rotation, &skyVector);
+                                      int sharpPatch = genPerezSkyVector(now.month, now.day, now.hour, now.direct_normal, now.diffuse_horizontal, albedo, latitude, longitude, meridian, mf, sunOnly, sharpSun, rotation, &skyVector);
                                       
-                                      // Multiply
-                                      DC->multiplyToColumn(&skyVector, nstep, result);
-                                  } // No else... matrices come with zeroes
+                                      if(sharpSun && sunOnly){
+                                          if(sharpPatch >= 0)
+                                              DC->multiplyRowToColumn(&skyVector, sharpPatch, nstep, result);
+                                      }else{
+                                          // Multiply
+                                          DC->multiplyToColumn(&skyVector, nstep, result);
+                                      }
+                                      
+                                  } // No else... answer is Zero and matrices come with zeroes
                                   
                               }// enf loop in i
                               

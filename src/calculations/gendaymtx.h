@@ -65,7 +65,8 @@ public:
     double  s_latitude = 0.66;    /* site latitude (radians) */
     double  s_longitude = 2.13;    /* site longitude (radians) */
     double  s_meridian = 2.0944;    /* standard meridian (radians) */
-
+    
+    int sharp_patch = -1; // The near patch to the real sun... used for sharp sun
 
 
     
@@ -366,6 +367,8 @@ public:
                     break;
                 }
         }
+        sharp_patch = near_patch[0];
+        
         wtot = 0;			/* weight by proximity */
         for (i = nsuns; i--; )
             wtot += wta[i] = 1./(1.002 - near_dprod[i]);

@@ -68,7 +68,7 @@ TEST(Matrix_TEST, Multiplication) {
 }
 
 
-TEST(Matrix_TEST, MultiplyLocate) {
+TEST(Matrix_TEST, MultiplyToColumn) {
     
     int nrows = 5;
     int ncols = 5;
@@ -91,6 +91,53 @@ TEST(Matrix_TEST, MultiplyLocate) {
     A.multiply(&b,&res2);
     A.multiplyToColumn(&b,destCol,&res);
         
+    // Check results
+    for(int row = 0; row<nrows; row++){
+        for(int col = 0; col < ncols; col++){
+            if(col == destCol){
+                ASSERT_EQ(res2.getElement(row,0),res.getElement(row,col));
+            }else{
+                ASSERT_EQ(res.getElement(row,col),0.0);
+            }
+        }
+    }
+    
+}
+
+
+TEST(Matrix_TEST, MultiplyRowToColumn) {
+    
+    int nrows = 5;
+    int ncols = 5;
+    int destCol = rand()%ncols;
+    int noZeroRow = rand()%ncols;
+    
+    Matrix res = Matrix(nrows,ncols);
+    Matrix res2 = Matrix(nrows,1);
+    Matrix A = Matrix(nrows,ncols);
+    Matrix b = Matrix(nrows,1);
+    
+    // Fill with random
+    for(int row=0; row < nrows; row++){
+        
+        // Fill only the corresponding matrix
+        if(row == noZeroRow)
+            b.setElement(row,0,rand());
+        
+        for(int col=0; col < ncols; col++){
+            A.setElement(row,col,rand());
+        }
+    }
+    
+    A.print();
+    b.print();
+    
+    A.multiply(&b,&res2);
+    A.multiplyRowToColumn(&b,noZeroRow,destCol,&res);
+    
+    res.print();
+    res2.print();
+    
     // Check results
     for(int row = 0; row<nrows; row++){
         for(int col = 0; col < ncols; col++){

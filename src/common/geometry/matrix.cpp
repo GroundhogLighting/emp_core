@@ -134,10 +134,14 @@ bool Matrix::multiply(const Matrix * m, Matrix * res) const
     return true;
 }
 
-bool Matrix::multiplyToColumn( const Matrix * vec, size_t col, Matrix * res) const
+
+bool Matrix::multiplyRowToColumn( const Matrix * vec, size_t row, size_t col, Matrix * res) const
 {
+    if(vec->nrows() <= row)
+        throw std::invalid_argument("Trying to multiply by an exceeding row ("+ std::to_string(row) +") in multiplyRowToColumn()");
+    
     if ( 1 != vec->ncols())
-        throw std::invalid_argument("vector needs to have only one column multiplyToLocation()");
+        throw std::invalid_argument("vector needs to have only one column multiplyRowToColumn()");
     
     // Check size consistency with m
     if (NCOLS != vec->nrows())
@@ -150,7 +154,43 @@ bool Matrix::multiplyToColumn( const Matrix * vec, size_t col, Matrix * res) con
     }
     
     // Multiply
-    const size_t ncols = vec->nrows();
+    const size_t nrows = NROWS;
+    const double vecValue = vec->getElement(row,0);
+                       
+    // Loop in rows
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, nrows),
+                      [=](const tbb::blocked_range<size_t>& r1) {
+                          for (size_t i = r1.begin(); i != r1.end(); ++i) {
+                              
+                              double v = getElement(i,row) * vecValue;
+                              res->setElement(i,col,v);
+                              
+                          }
+                      },
+                      tbb::auto_partitioner()
+                      );// end of loop in rows
+
+    
+    return true;
+}
+
+bool Matrix::multiplyToColumn( const Matrix * vec, size_t col, Matrix * res) const
+{
+    if ( 1 != vec->ncols())
+        throw std::invalid_argument("vector needs to have only one column multiplyToColumn()");
+    
+    // Check size consistency with m
+    if (NCOLS != vec->nrows())
+        throw std::invalid_argument("Size mismatch between matrices when trying to multiply()");
+    
+    // Check size consistency with res
+    if(res->ncols() <= col || res->nrows() != NROWS){
+        WARN(msg, "Size mismatch between resulting matrix and factors... resizing results");
+        res->resize(NROWS,col);
+    }
+    
+    // Multiply
+    const size_t ncols = NCOLS;
     const size_t nrows = NROWS;
     
     // Loop in rows
@@ -168,15 +208,7 @@ bool Matrix::multiplyToColumn( const Matrix * vec, size_t col, Matrix * res) con
       },
       tbb::auto_partitioner()
       );// end of loop in rows
-    /*
-    for (int row = 0; row < NROWS; row++) {
-        double v = 0;
-        for (int i = 0; i < ncols; i++) {
-            v += (getElement(row,i) * vec->getElement(i,0));
-        }
-        res->setElement(row,col,v);
-    }
-     */
+    
     
     return true;
 }

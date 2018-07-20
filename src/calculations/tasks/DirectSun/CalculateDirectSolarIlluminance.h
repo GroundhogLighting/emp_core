@@ -39,7 +39,7 @@ public:
      */
     CalculateDirectSolarIlluminance(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions, int interpolation)
     {
-        std::string name = "DDC Direct Sun Illuminance "+ wp->getName();
+        std::string name = "Direct Sun Illuminance "+ wp->getName();
         setName(&name);
         model = theModel;
         mf = theMF;

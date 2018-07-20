@@ -98,6 +98,15 @@ bool ColorMatrix::multiplyToColumn(const ColorMatrix * vec, size_t col, ColorMat
     return true;
 }
 
+bool ColorMatrix::multiplyRowToColumn( const ColorMatrix * vec, size_t row, size_t col, ColorMatrix * res) const
+{
+    red.multiplyRowToColumn(vec->redChannel(), row, col, res->r());
+    green.multiplyRowToColumn(vec->greenChannel(), row, col, res->g());
+    blue.multiplyRowToColumn(vec->blueChannel(), row, col, res->b());
+    
+    return true;
+}
+
 void ColorMatrix::resize(size_t nrows, size_t ncols)
 {
     red.resize(nrows,ncols);

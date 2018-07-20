@@ -105,7 +105,20 @@ public:
      @return success
      */
     bool multiplyToColumn( const Matrix * vec, size_t col, Matrix * res) const;
-
+    
+    //! Multiplies a single row of a vector vector (Nx1 sized matrix) by a matrix and puts the result in a column of another matrix
+    /*!
+     This method is used for when the vector Vec has only zeroes with the exception of
+     one item.
+     
+     @author German Molina
+     @param[in] vec A pointer to the Vector
+     @param[in] row The element in the vector that is not Zero
+     @param[in] col The column of res where to put the answer
+     @param[out] res The resulting matrix
+     @return success
+     */
+    bool multiplyRowToColumn( const Matrix * vec, size_t row, size_t col, Matrix * res) const;
     
     //! Sets a certain element to a certain value
     /*!

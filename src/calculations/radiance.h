@@ -130,7 +130,7 @@ bool oconv(std::string octreeName, OconvOptions * options, RadExporter exporter)
 //! Calculates a single sky vector according to the Perez model
 /*!
  @author German Molina
- @return success
+ @return the patch that uses the sun
  @param month The month of the year
  @param day The day of the month
  @param hour The hour of the day
@@ -146,7 +146,7 @@ bool oconv(std::string octreeName, OconvOptions * options, RadExporter exporter)
  @param rotation Rotate the sky (in degrees)
  @param[out] skyVec The resulting sky vector
  */
-bool genPerezSkyVector(int month, int day, float hour, float direct, float diffuse, float albedo, float latitude, float longitude, float standardMeridian, int skyMF, bool sunOnly, bool sharpSun, float rotation, ColorMatrix * skyVec);
+int genPerezSkyVector(int month, int day, float hour, float direct, float diffuse, float albedo, float latitude, float longitude, float standardMeridian, int skyMF, bool sunOnly, bool sharpSun, float rotation, ColorMatrix * skyVec);
 
 
 void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatrix * DC, bool sunOnly, bool sharpSun, ColorMatrix * result);
