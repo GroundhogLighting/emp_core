@@ -151,18 +151,46 @@ public:
         const Matrix * directSunGreen = directSun->greenChannel();
         const Matrix * directSunBlue =  directSun->blueChannel();
         
-        double r,g,b;
+        // Loop in timesteps
+        tbb::parallel_for(tbb::blocked_range<size_t>(0, nTimesteps),
+                          [=](const tbb::blocked_range<size_t>& r1) {
+                              for (size_t t = r1.begin(); t != r1.end(); ++t) {
+                                  
+                                  // Loop in sensors
+                                  tbb::parallel_for(tbb::blocked_range<size_t>(0, nSensors),
+                                                    [=](const tbb::blocked_range<size_t>& r2) {
+                                                        for (size_t sens = r2.begin(); sens != r2.end(); ++sens) {
+                                                            
+                                                            double r = globalRed->  getElement(sens,t) - directSunPatchRed->  getElement(sens,t) + directSunRed->  getElement(sens,t);
+                                                            double g = globalGreen->getElement(sens,t) - directSunPatchGreen->getElement(sens,t) + directSunGreen->getElement(sens,t);
+                                                            double b = globalBlue-> getElement(sens,t) - directSunPatchBlue-> getElement(sens,t) + directSunBlue-> getElement(sens,t);
+                                                            
+                                                            result.setElement(sens,t, 47.5*r + 119.95*g + 11.60*b);
+                                                            
+                                                        }
+                                                    },
+                                                    tbb::auto_partitioner()
+                                                    );// end of loop in sensors
+                                  
+                              }
+                          },
+                          tbb::auto_partitioner()
+                          );// end of loop in timesteps
+        
+        /*
         for(size_t t=0; t < nTimesteps; t++){
             for(size_t sens=0; sens < nSensors; sens++){
-                r = globalRed->  getElement(sens,t) - directSunPatchRed->  getElement(sens,t) + directSunRed->  getElement(sens,t);
+                double r = globalRed->  getElement(sens,t) - directSunPatchRed->  getElement(sens,t) + directSunRed->  getElement(sens,t);
                 
-                g = globalGreen->getElement(sens,t) - directSunPatchGreen->getElement(sens,t) + directSunGreen->getElement(sens,t);
+                double g = globalGreen->getElement(sens,t) - directSunPatchGreen->getElement(sens,t) + directSunGreen->getElement(sens,t);
                 
-                b = globalBlue-> getElement(sens,t) - directSunPatchBlue-> getElement(sens,t) + directSunBlue-> getElement(sens,t);
+                double b = globalBlue-> getElement(sens,t) - directSunPatchBlue-> getElement(sens,t) + directSunBlue-> getElement(sens,t);
                 
                 result.setElement(sens,t, 47.5*r + 119.95*g + 11.60*b);
             }
         }
+         */
+        
         
         return true;
     }

@@ -1,3 +1,4 @@
+/*
 
 
 TEST(FourCM, UnitDirectSkyLightSources)
@@ -40,7 +41,6 @@ TEST(FourCM, UnitDirectSkyLightSources)
     //ASSERT_NEAR(result.redChannel()->getElement(0,0),PI,1e-3);
 }
 
-/*
 
 TEST(FourCM, DirectSkyMatrix)
 {

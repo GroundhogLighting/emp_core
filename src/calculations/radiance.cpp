@@ -481,10 +481,12 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatri
                                       int sharpPatch = genPerezSkyVector(now.month, now.day, now.hour, now.direct_normal, now.diffuse_horizontal, albedo, latitude, longitude, meridian, mf, sunOnly, sharpSun, rotation, &skyVector);
                                       
                                       if(sharpSun && sunOnly){
+                                          // In this case, we know that only one of the elements in the
+                                          // sky vector is not zero; so we multiply only that one.
                                           if(sharpPatch >= 0)
                                               DC->multiplyRowToColumn(&skyVector, sharpPatch, nstep, result);
                                       }else{
-                                          // Multiply
+                                          // Multiply the whole matrices
                                           DC->multiplyToColumn(&skyVector, nstep, result);
                                       }
                                       
