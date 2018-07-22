@@ -654,11 +654,16 @@ bool SKPreader::fillGroupDefinitions() const
 
         ComponentDefinition * ghDefinition = model->getComponentDefinitionByName(&definitionName);
 
+        // If the definition does not exist, it means that it was skipped
+        // (i.e. it was labelled as solve_workplane)
+        if(ghDefinition == nullptr)
+            continue;
+        
         // get entities
         SUEntitiesRef entities;
         ASSERT_SU_RESULT(SUComponentDefinitionGetEntities(definitions[i], &entities));
-
-
+        
+        
         // Load faces
         bulkFacesIntoVector(ghDefinition->getModifiableObjectsRef(), entities);
 
@@ -857,8 +862,9 @@ bool SKPreader::SUFaceToPolygon3D(SUFaceRef face, Polygon3D * polygon) const
 		// get them
 		std::vector<SULoopRef> innerLoops(countInnerLoops);
 
-		ASSERT_SU_RESULT(SUFaceGetNumInnerLoops(face, &countInnerLoops));
-
+		//ASSERT_SU_RESULT(SUFaceGetNumInnerLoops(face, &countInnerLoops));
+        ASSERT_SU_RESULT(SUFaceGetInnerLoops(face, countInnerLoops, &innerLoops[0], &countInnerLoops));
+        
 		// iterate them
 		for (int j = 0; j < countInnerLoops; j++)
             SULoopToLoop(innerLoops[j], polygon->addInnerLoop());

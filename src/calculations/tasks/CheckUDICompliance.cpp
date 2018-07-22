@@ -24,7 +24,7 @@
 
 double udiScoreCalculator(double v, double minLux, double maxLux)
 {
-    return ( (v >= minLux && v <= minLux) ? 1 : 0);
+    return ( (v >= minLux && v <= maxLux) ? 1 : 0);
 }
 
 CheckUDICompliance::CheckUDICompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theMaxLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)

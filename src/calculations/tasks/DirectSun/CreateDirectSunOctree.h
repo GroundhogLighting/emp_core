@@ -52,7 +52,7 @@ public:
     
     ~CreateDirectSunOctree()
     {
-        //remove(&octreeName[0]);
+        remove(&octreeName[0]);
     }
     
     bool isEqual(Task * t)

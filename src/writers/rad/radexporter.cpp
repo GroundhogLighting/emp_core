@@ -485,6 +485,7 @@ bool RadExporter::writeMaterials(const char * dir, const std::string flnm) const
 		Material * mat = model->getMaterialRef(i);
 
         std::string name  = mat->getName();
+        fixString(&name);
         std::string filename = "./"+std::string(baseDir) + "/" + name + ".mat";
         
         

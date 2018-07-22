@@ -46,9 +46,8 @@ CheckASECompliance::CheckASECompliance(std::string name, GroundhogModel * theMod
     CalculateDirectSolarIlluminance * illuminanceTask = new CalculateDirectSolarIlluminance(theModel, wp, theMf, theOptions, interp);
     addDependency(illuminanceTask);
     
-    // Set the name
-    std::string the_name = name + " " + wp->getName();
-    setName(&the_name);
+    // Set the name    
+    setName(&name);
 }
 
 CheckASECompliance::CheckASECompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)

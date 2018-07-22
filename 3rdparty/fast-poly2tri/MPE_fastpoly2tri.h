@@ -1407,9 +1407,7 @@ void MPE_FillLeftConcaveEdgeEvent(MPEPolyContext* PolyContext, MPEPolyEdge* Edge
            Node->Prev == NULL ||
            Node->Prev->Point == NULL ||
            Node->Prev->Prev == NULL ||
-           Node->Prev->Prev->Point == NULL){
-            /// TESTING
-            WARN(e, "ASDASD");
+           Node->Prev->Prev->Point == NULL){            
         }
       // Below
       if (MPE_PolyOrient2D(Node->Point, Node->Prev->Point, Node->Prev->Prev->Point) == MPEPolyOrientation_CW)

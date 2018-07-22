@@ -499,30 +499,6 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatri
           tbb::auto_partitioner()
     );// end of parallel_for
     
-    /*
-    size_t nstep = 0;
-    for(int timestep = 0 ; timestep < nSamples; timestep++ ){
-        HourlyData now = HourlyData();
-        float floatInter = (float)interp;
-        float q;
-        for(int i = 0; i < interp; i++){
-            q = (float)i / floatInter;
-            
-            location->getInterpolatedData(timestep,q,&now);
-            
-            if(now.diffuse_horizontal > 1e-4){
-                // Is day... calculate
-                genPerezSkyVector(now.month, now.day, now.hour, now.direct_normal, now.diffuse_horizontal, albedo, latitude, longitude, meridian, mf, sunOnly, sharpSun, rotation, &skyVector);
-                
-                // Multiply
-                DC->multiplyToColumn(&skyVector, nstep, result);
-            } // No else... matrices come with zeroes
-            
-            nstep++;
-        }
-    }
-     */
-    
 }
 
 
