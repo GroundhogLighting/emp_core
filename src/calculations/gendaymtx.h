@@ -41,6 +41,37 @@
 class GenDayMtx {
     
 public:
+    
+#ifndef NSUNPATCH
+#define    NSUNPATCH    4        /* max. # patches to spread sun into */
+#endif
+    
+    
+    
+    
+    
+    
+    int        nsuns = NSUNPATCH;    /* number of sun patches to use */
+    double        fixed_sun_sa = -1;    /* fixed solid angle per sun? */
+    
+    int        rhsubdiv = 1;        /* Reinhart sky subdivisions */
+    
+    COLOR        skycolor = {1.0, 1.0, 1.0}; //{.96, 1.004, 1.118};    /* sky coloration */
+    COLOR        suncolor = {1., 1., 1.};    /* sun color */
+    COLOR        grefl = {.2, .2, .2};        /* ground reflectance */
+    
+    int        nskypatch;        /* number of Reinhart patches */
+    float        *rh_palt;        /* sky patch altitudes (radians) */
+    float        *rh_pazi;        /* sky patch azimuths (radians) */
+    float        *rh_dom;        /* sky patch solid angle (sr) */
+    
+    
+    
+    //extern int    rh_init(void);
+    //extern float *    resize_dmatrix(float *mtx_data, int nsteps, int npatch);
+    //extern void    AddDirect(float *parr);
+    
+
     const char * gendaymtxname = "genPerezSkyVec";
     char errmsg[128];                            /* Error message buffer */
     const double DC_SolarConstantE = 1367.0;    /* Solar constant W/m^2 */
@@ -68,7 +99,13 @@ public:
     
     int sharp_patch = -1; // The near patch to the real sun... used for sharp sun
 
-
+    ~GenDayMtx()
+    {
+        // Free
+        free(rh_palt);// = (float *)malloc(sizeof(float)*nskypatch);
+        free(rh_pazi);// = (float *)malloc(sizeof(float)*nskypatch);
+        free(rh_dom);// = (float *)malloc(sizeof(float)*nskypatch);
+    }
     
   
 
@@ -185,36 +222,6 @@ public:
         { 101.18,  1.58, -1.10,  -8.29 }
     };
 
-    #ifndef NSUNPATCH
-    #define	NSUNPATCH	4		/* max. # patches to spread sun into */
-    #endif
-
-    
-   
-
-    
-
-    int		nsuns = NSUNPATCH;	/* number of sun patches to use */
-    double		fixed_sun_sa = -1;	/* fixed solid angle per sun? */
-
-    int		rhsubdiv = 1;		/* Reinhart sky subdivisions */
-
-    COLOR		skycolor = {1.0, 1.0, 1.0}; //{.96, 1.004, 1.118};	/* sky coloration */
-    COLOR		suncolor = {1., 1., 1.};	/* sun color */
-    COLOR		grefl = {.2, .2, .2};		/* ground reflectance */
-
-    int		nskypatch;		/* number of Reinhart patches */
-    float		*rh_palt;		/* sky patch altitudes (radians) */
-    float		*rh_pazi;		/* sky patch azimuths (radians) */
-    float		*rh_dom;		/* sky patch solid angle (sr) */
-
-    
-
-    //extern int	rh_init(void);
-    //extern float *	resize_dmatrix(float *mtx_data, int nsteps, int npatch);
-    //extern void	AddDirect(float *parr);
-
-
     static const char *
     getfmtname(int fmt)
     {
@@ -255,19 +262,19 @@ public:
 
         /* Compute the inputs for the calculation of the sky distribution */
         
-        if (input == 0)					/* XXX never used */
-        {
-            /* Calculate irradiance */
-            diff_irrad = CalcDiffuseIrradiance();
-            dir_irrad = CalcDirectIrradiance();
-            
-            /* Calculate illuminance */
-            index = GetCategoryIndex();
-            diff_illum = diff_irrad * CalcDiffuseIllumRatio(index);
-            dir_illum = dir_irrad * CalcDirectIllumRatio(index);
-        }
-        else if (input == 1)
-        {
+        //if (input == 0)					/* XXX never used */
+        //{
+        //    /* Calculate irradiance */
+        //    diff_irrad = CalcDiffuseIrradiance();
+        //    dir_irrad = CalcDirectIrradiance();
+        //
+        //    /* Calculate illuminance */
+        //    index = GetCategoryIndex();
+        //    diff_illum = diff_irrad * CalcDiffuseIllumRatio(index);
+        //    dir_illum = dir_irrad * CalcDirectIllumRatio(index);
+        //}
+        //else if (input == 1)
+        //{
             sky_brightness = CalcSkyBrightness();
             sky_clearness =  CalcSkyClearness();
 
@@ -283,17 +290,17 @@ public:
             index = GetCategoryIndex();
             diff_illum = diff_irrad * CalcDiffuseIllumRatio(index);
             dir_illum = dir_irrad * CalcDirectIllumRatio(index);
-        }
-        else if (input == 2)
-        {
-            /* Calculate sky brightness and clearness from illuminance values */
-            index = CalcSkyParamFromIllum();
-        }
+        //}
+        //else if (input == 2)
+        //{
+        //    /* Calculate sky brightness and clearness from illuminance values */
+        //    index = CalcSkyParamFromIllum();
+        //}
 
-        if (output == 1) {			/* hack for solar radiance */
-            diff_illum = diff_irrad * WHTEFFICACY;
-            dir_illum = dir_irrad * WHTEFFICACY;
-        }
+        //if (output == 1) {			/* hack for solar radiance */
+        //    diff_illum = diff_irrad * WHTEFFICACY;
+        //    dir_illum = dir_irrad * WHTEFFICACY;
+        //}
 
         if (bright(skycolor) <= 1e-4) {			/* 0 sky component? */
             memset(parr, 0, sizeof(float)*3*nskypatch);
@@ -356,7 +363,8 @@ public:
             double	dprod;
             rh_vector(pvec, p);
             dprod = DOT(pvec, svec);
-            for (i = 0; i < nsuns; i++)
+            for (i = 0; i < nsuns; i++){
+                
                 if (dprod > near_dprod[i]) {
                     for (j = nsuns; --j > i; ) {
                         near_dprod[j] = near_dprod[j-1];
@@ -366,7 +374,9 @@ public:
                     near_patch[i] = p;
                     break;
                 }
-        }
+                
+            }// End of for i < nsuns
+        }// End of for p < skypatch
         sharp_patch = near_patch[0];
         
         wtot = 0;			/* weight by proximity */
@@ -397,15 +407,19 @@ public:
         nskypatch = 0;
         for (p = 0; p < NROW; p++)
             nskypatch += tnaz[p];
+        
         nskypatch *= rhsubdiv*rhsubdiv;
         nskypatch += 2;
+        
         rh_palt = (float *)malloc(sizeof(float)*nskypatch);
         rh_pazi = (float *)malloc(sizeof(float)*nskypatch);
         rh_dom = (float *)malloc(sizeof(float)*nskypatch);
+        
         if ((rh_palt == NULL) | (rh_pazi == NULL) | (rh_dom == NULL)) {
             fprintf(stderr, "%s: out of memory in rh_init()\n", gendaymtxname);
             exit(1);
         }
+        
         rh_palt[0] = -PI/2.;		/* ground & zenith patches */
         rh_pazi[0] = 0.;
         rh_dom[0] = 2.*PI;

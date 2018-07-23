@@ -75,52 +75,13 @@ sazi(    /* solar azimuth from solar declination and solar time */
 
 /* END OF RADIANCE */
  
-double getHourAngle(const double phi, const double givenX, const double dec)
-{
-    
-    // define auxiliary variables
-    const double A = cos(phi)*cos(dec);
-    const double B = sin(phi)*sin(dec);
-    
-    /* Check if point (X,Y) is below the summer solstice line */
-    
-    double w = -fabs(B/A); // Start with sunrise
-    int n = 0;
-    while( true ){
-        
-        // Calculate the Z (cosZenith) corresponding to that hour angle
-        double cosTheta = A * cos(w)+B;
-        double sinTheta = sqrt(1 - cosTheta * cosTheta);
-        double x = sin(w)*cos(dec)/sinTheta;
-        
-        double err = (givenX - x);
-        
-        // Return if correct
-        if (fabs(err) < 0.01)
-            return w;
-
-        // Throw if too many iterations
-        //if(w > fabs(B/A))
-        if(n++ > 5000)
-            FATAL(e,"getHourAngle function did not converge");
-        
-        //std::cout << w << std::endl;
-        
-        // else, update w
-        w += (err)*0.1;
-        
-    }
-    
-    return 0;
- 
-}
 
 
 bool isInSolarTrajectory(const Vector3D dir, const double lat, const int mf)
 {
 
     // TEST ALL POSSIBLE COMBINATIONS
-    const double phi = DegToRad(-lat); // Change sign of latitude, probably because of convention
+    const double phi = DegToRad(lat); 
     
     // maximum difference, given by the mg
     const double alpha = 0.5 * PI / (mf * 7 + 0.5);
@@ -138,14 +99,14 @@ bool isInSolarTrajectory(const Vector3D dir, const double lat, const int mf)
         
         // Calculate sunrise from eq. 1.6.11 of Duffy and Beckmann
         const double ws = fabs(acos(-tan(phi)*tan(dec)));
-        const double halfDay = ws/0.261799;
+        const double halfDay = ws/0.261799; // divide per radians/hour (15 degrees per hour)
         const double sunrise = 12.0 - halfDay;
         const double sunset = 12.0 + halfDay;
         
         for(double solarTime = sunrise; solarTime <= sunset; solarTime+= tstep){
             // Calculate position of the sun
             alt = salt(dec,solarTime,phi);
-            azi = sazi( dec, solarTime,phi);
+            azi = sazi( dec, solarTime,phi) + PI;
             
             
             double v1 = cos(alt);

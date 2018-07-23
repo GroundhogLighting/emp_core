@@ -230,3 +230,5 @@ double Matrix::getElement(size_t row, size_t col) const
     return data[row][col];
 }
 
+#undef NROWS 
+#undef NCOLS
