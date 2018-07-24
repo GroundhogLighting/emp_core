@@ -333,19 +333,8 @@ int genPerezSkyVector(int mo, int da, float hr, float dir, float dif, float albe
 {
     GenDayMtx g = GenDayMtx();
     
-    //double	rotation = rotate;		/* site rotation (degrees) */
-    //int	dir_is_horiz = 0;		/* direct is meas. on horizontal? */
     float	*mtx_data = NULL;	/* our matrix data */
-    //int	ntsteps = 1;		/* number of rows in matrix */
-    //int	step_alloc = 0;
-    //int	mo = month; int da = day;			/* month (1-12) and day (1-31) */
-    //double	hr = hour;			/* hour (local standard time) */
-    //double	dir = direct, dif=diffuse;		/* direct and diffuse values */
-    
-    //g.s_latitude = latitude;
-    //g.s_longitude = longitude;
-    //g.s_meridian = standardMeridian;
-    
+   
     /* convert quantities to radians */
     g.s_latitude = DegToRad(latitude);
     g.s_longitude = DegToRad(longitude);
@@ -367,40 +356,17 @@ int genPerezSkyVector(int mo, int da, float hr, float dir, float dif, float albe
         g.fixed_sun_sa = PI/360.0*0.533;
         g.fixed_sun_sa *= g.fixed_sun_sa*PI;
     }
-    /*
-    switch (g.input) {        // translate units
-        case 1:
-            g.input = 1;        // radiometric quantities
-            dir_is_horiz = 0;    // direct is perpendicular meas.
-            break;
-        case 2:
-            g.input = 1;        // radiometric quantities
-            dir_is_horiz = 1;    // solar measured horizontally
-            break;
-        case 3:
-            g.input = 2;        // photometric quantities
-            dir_is_horiz = 0;    // direct is perpendicular meas.
-            break;
-        default:
-            FATAL(x,"Impossible input format");
-            return false;
-    }
-    */
-    /* START CALCULATION */
     
+
     g.rh_init();			/* initialize sky patches */
     
     
     
     double		sda, sta;
-                /* make space for next time step */
     
-    //if (1 > step_alloc) {
-    int    step_alloc = 0;
-        step_alloc += (step_alloc>>1) + 8;
-        mtx_data = g.resize_dmatrix(mtx_data, step_alloc, g.nskypatch);
-    //}
-     //*/
+    /* make space for time step */
+    mtx_data = g.resize_dmatrix(mtx_data, 8, g.nskypatch);
+    
     
     if (dif <= 1e-4) { // it is night
         memset(mtx_data, 0, sizeof(float)*3*g.nskypatch);
@@ -412,16 +378,6 @@ int genPerezSkyVector(int mo, int da, float hr, float dir, float dif, float albe
         g.altitude = salt(sda, hr+sta,g.s_latitude);
         g.azimuth = sazi(sda, hr+sta,g.s_latitude) + PI - DegToRad(rotation);
         
-        /* convert measured values */
-        //if (dir_is_horiz && g.altitude > 0.)
-        //    dir /= sin(g.altitude);
-        //if (g.input == 1) {
-        //    g.dir_irrad = dir;
-        //    g.diff_irrad = dif;
-        //} else /* input == 2 */ {
-        //    g.dir_illum = dir;
-        //    g.diff_illum = dif;
-        //}
         /* compute sky patch values */
         g.ComputeSky(mtx_data);
         g.AddDirect(mtx_data);
@@ -435,9 +391,6 @@ int genPerezSkyVector(int mo, int da, float hr, float dir, float dif, float albe
         skyVec->g()->setElement(bin,0,mtx_data[aux++]);
         skyVec->b()->setElement(bin,0,mtx_data[aux++]);
     }
-    
-    
-    
     
     
     return g.sharp_patch;

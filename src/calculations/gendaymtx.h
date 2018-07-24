@@ -262,46 +262,22 @@ public:
 
         /* Compute the inputs for the calculation of the sky distribution */
         
-        //if (input == 0)					/* XXX never used */
-        //{
-        //    /* Calculate irradiance */
-        //    diff_irrad = CalcDiffuseIrradiance();
-        //    dir_irrad = CalcDirectIrradiance();
-        //
-        //    /* Calculate illuminance */
-        //    index = GetCategoryIndex();
-        //    diff_illum = diff_irrad * CalcDiffuseIllumRatio(index);
-        //    dir_illum = dir_irrad * CalcDirectIllumRatio(index);
-        //}
-        //else if (input == 1)
-        //{
-            sky_brightness = CalcSkyBrightness();
-            sky_clearness =  CalcSkyClearness();
+        sky_brightness = CalcSkyBrightness();
+        sky_clearness =  CalcSkyClearness();
 
-            /* Limit sky clearness */
-            if (sky_clearness > 11.9)
-                sky_clearness = 11.9;
+        /* Limit sky clearness */
+        if (sky_clearness > 11.9)
+            sky_clearness = 11.9;
 
-            /* Limit sky brightness */
-            if (sky_brightness < 0.01)
-                sky_brightness = 0.01;
+        /* Limit sky brightness */
+        if (sky_brightness < 0.01)
+            sky_brightness = 0.01;
 
-            /* Calculate illuminance */
-            index = GetCategoryIndex();
-            diff_illum = diff_irrad * CalcDiffuseIllumRatio(index);
-            dir_illum = dir_irrad * CalcDirectIllumRatio(index);
-        //}
-        //else if (input == 2)
-        //{
-        //    /* Calculate sky brightness and clearness from illuminance values */
-        //    index = CalcSkyParamFromIllum();
-        //}
-
-        //if (output == 1) {			/* hack for solar radiance */
-        //    diff_illum = diff_irrad * WHTEFFICACY;
-        //    dir_illum = dir_irrad * WHTEFFICACY;
-        //}
-
+        /* Calculate illuminance */
+        index = GetCategoryIndex();
+        diff_illum = diff_irrad * CalcDiffuseIllumRatio(index);
+        dir_illum = dir_irrad * CalcDirectIllumRatio(index);
+   
         if (bright(skycolor) <= 1e-4) {			/* 0 sky component? */
             memset(parr, 0, sizeof(float)*3*nskypatch);
             return;
@@ -377,6 +353,8 @@ public:
                 
             }// End of for i < nsuns
         }// End of for p < skypatch
+        
+        // Set the output
         sharp_patch = near_patch[0];
         
         wtot = 0;			/* weight by proximity */

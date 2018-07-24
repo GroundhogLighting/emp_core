@@ -13,7 +13,7 @@ void radGenDayMtx(int month, int day, float hour, float direct, float diffuse, f
     weafile << "place SANTIAGO_CHL" << std::endl;
     weafile << "latitude " << latitude << std::endl;
     weafile << "longitude " << longitude << std::endl;
-    weafile << "time_zone " << standardMeridian/15 << std::endl;
+    weafile << "time_zone " << standardMeridian << std::endl;
     weafile << "site_elevation " << 0 << std::endl;
     weafile << "weather_data_file_units 1" << std::endl;
     weafile << month << " " << day << " " << hour << " " << direct << " " << diffuse << std::endl;
@@ -24,10 +24,12 @@ void radGenDayMtx(int month, int day, float hour, float direct, float diffuse, f
     
     // Calc gendaymtx
     std::string command = "gendaymtx -h -m " + std::to_string(skyMF) + " -g " + std::to_string(albedo) + " " + std::to_string(albedo) + " " + std::to_string(albedo) + " -c 1 1 1 -r " + std::to_string(rotation) + sharpSunMode + dMode +  " " + weafilename;
+    
+    std::cout << command << std::endl;
+    
     FILE * results = POPEN(&command[0],"r");
         
     // Read results
-    
     if (results)
     {
         Matrix * red = skyVec->r();
@@ -41,6 +43,7 @@ void radGenDayMtx(int month, int day, float hour, float direct, float diffuse, f
         size_t i = 0;
         while (FSCANF(results, "%f %f %f", &r, &g, &b) != EOF)
         {
+            std::cout << r << "," << g << "," << b << std::endl;
             red->setElement(i,0,r);
             green->setElement(i,0,g);
             blue->setElement(i,0,b);
@@ -53,14 +56,14 @@ void radGenDayMtx(int month, int day, float hour, float direct, float diffuse, f
     }
     
     // Remove resulting file
-    // remove(&weafilename[0]);
+    remove(&weafilename[0]);
 }
 
 
 TEST(GenPerezSkyVec, NoRadiation)
 {
     // Lets do this several times
-    for(int i=0;i<10;i++){
+    for(int i=0;i<100;i++){
         int month = (rand() % 12) + 1;
         int day = (rand() % 28) + 1;
         float hour = 12.0 + ((rand() % 8) - 4.0);
@@ -108,22 +111,22 @@ TEST(GenPerezSkyVec, DirectOnlySharpSun)
     bool sharpSun = true;
     
     // Lets do this several times
-    for(int i=0;i<1;i++){
-        int month = 7;//(rand() % 12) + 1;
-        int day = 1;//(rand() % 28) + 1;
-        float hour = 18.5;//12.0 + ((rand() % 8) - 4.0);
+    for(int i=0;i<100;i++){
+        int month = (rand() % 12) + 1;
+        int day = (rand() % 28) + 1;
+        float hour = 12.0 + ((rand() % 8) - 4.0);
         
-        float direct = 258;//(rand() % 700);
-        float diffuse = 430;//(rand() % 500);
-        float albedo = 0.72;//(rand() % 100) / 100.0;
+        float direct = (rand() % 700);
+        float diffuse = (rand() % 500);
+        float albedo = (rand() % 100) / 100.0;
         
-        int latitude = 43;//(rand() % 180) - 90;
-        int longitude = 45;//(rand() % 360) - 180;
-        int meridian = 45;//longitude + ((rand() % 6) - 3);
+        int latitude = (rand() % 180) - 90;
+        int longitude = (rand() % 360) - 180;
+        int meridian = longitude + ((rand() % 6) - 3);
         
-        int rotation = 0;//rand()%360;
+        int rotation = rand()%360;
         
-        int mf = 1;//(rand() % 5) + 1;
+        int mf = (rand() % 5) + 1;
         size_t nbins = nReinhartBins(mf);
         
         // Create the SkyVector
@@ -143,13 +146,10 @@ TEST(GenPerezSkyVec, DirectOnlySharpSun)
         const Matrix * referenceGreen = referenceSkyVec.greenChannel();
         const Matrix * referenceBlue = referenceSkyVec.blueChannel();
         
-        //red -> print();
-        
-        //referenceRed -> print();
         
         for(size_t row=0; row < nbins; row++){
 
-            /*
+            
             // Due to print and read, try this...
             if( red->getElement(row,0) > 100 ){
                 red->setElement(row,0,round(red->getElement(row,0)));
@@ -160,7 +160,6 @@ TEST(GenPerezSkyVec, DirectOnlySharpSun)
             if( blue->getElement(row,0) > 100 ){
                 blue->setElement(row,0, round(blue->getElement(row,0)));
             }
-            */
             
             // All rows, except PATCH, should be zero...
             // unless PATCH is -1, in which case all should be zero
@@ -171,9 +170,9 @@ TEST(GenPerezSkyVec, DirectOnlySharpSun)
             }
             
             // Less than 1% error
-            ASSERT_NEAR(red->  getElement(row,0), referenceRed  ->getElement(row,0),0.02*referenceRed  ->getElement(row,0));
-            //ASSERT_NEAR(green->getElement(row,0), referenceGreen->getElement(row,0),0.02*referenceGreen->getElement(row,0));
-            //ASSERT_NEAR(blue-> getElement(row,0), referenceBlue ->getElement(row,0),0.02*referenceBlue ->getElement(row,0));
+            ASSERT_NEAR(red->  getElement(row,0), referenceRed->getElement(row,0),0.02*referenceRed->getElement(row,0));
+            ASSERT_NEAR(green->getElement(row,0), referenceGreen->getElement(row,0),0.02*referenceGreen->getElement(row,0));
+            ASSERT_NEAR(blue-> getElement(row,0), referenceBlue ->getElement(row,0),0.02*referenceBlue ->getElement(row,0));
             
         }
     }
@@ -191,7 +190,8 @@ TEST(GenPerezSkyVec, DirectOnlyWideSun)
     bool sharpSun = false;
     
     // Lets do this several times
-    for(int i=0;i<1;i++){
+    for(int i=0;i<100;i++){
+        std::cout << i << std::endl;
         int month = (rand() % 12) + 1;
         int day = (rand() % 28) + 1;
         float hour = 12.0 + ((rand() % 8) - 4.0);
@@ -206,7 +206,7 @@ TEST(GenPerezSkyVec, DirectOnlyWideSun)
         
         int rotation = rand()%360;
         
-        int mf = 1;// (rand() % 4) + 1; //... Rounding error? With an MF larger than 1, the values end up in other patches
+        int mf = (rand() % 4) + 1;
         size_t nbins = nReinhartBins(mf);
         
         // Create the SkyVector
@@ -226,6 +226,9 @@ TEST(GenPerezSkyVec, DirectOnlyWideSun)
         const Matrix * referenceGreen = referenceSkyVec.greenChannel();
         const Matrix * referenceBlue = referenceSkyVec.blueChannel();
         
+        red->print();
+        referenceRed->print();
+        
         
         for(size_t row=0; row < nbins; row++){
             
@@ -239,6 +242,7 @@ TEST(GenPerezSkyVec, DirectOnlyWideSun)
             if( blue->getElement(row,0) > 100 ){
                 blue->setElement(row,0, round(blue->getElement(row,0)));
             }
+            
             
             // Less than 1% error
             ASSERT_NEAR(red  ->getElement(row,0), referenceRed  ->getElement(row,0),0.02* referenceRed  ->getElement(row,0));
@@ -260,7 +264,8 @@ TEST(GenPerezSkyVec, FullSkyWideSun)
     bool sharpSun = false;
     
     // Lets do this several times
-    for(int i=0;i<1;i++){
+    for(int i=0;i<100;i++){
+        std::cout << i << std::endl;
         int month = (rand() % 12) + 1;
         int day = (rand() % 28) + 1;
         float hour = 12.0 + ((rand() % 8) - 4.0);
@@ -326,7 +331,7 @@ TEST(GenPerezSkyVec, FullSkySharpSun)
     bool sharpSun = true;
     
     // Lets do this several times
-    for(int i=0;i<1;i++){
+    for(int i=0;i<100;i++){
         int month = (rand() % 12) + 1;
         int day = (rand() % 28) + 1;
         float hour = 12.0 + ((rand() % 8) - 4.0);
