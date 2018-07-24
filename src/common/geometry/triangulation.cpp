@@ -643,10 +643,12 @@ bool Triangulation::doCDT() {
 		FATAL(errorMessage,"Impossible to triangulate because of an error in calculating inverse of auxiliar axes");
 		return false;
 	}
+
+    const int totalPoints = (int)(polygon2D->countRealPoints());
     
 	// Request how much memory (in bytes) you should
 	// allocate for the library
-	size_t MemoryRequired = MPE_PolyMemoryRequired(EMP_MAX_POINTS_IN_WORKPLANE);
+	size_t MemoryRequired = MPE_PolyMemoryRequired(totalPoints);
 
 	// Allocate a void* memory block of size MemoryRequired
 	// IMPORTANT: The memory must be zero initialized
@@ -655,7 +657,7 @@ bool Triangulation::doCDT() {
 	// Initialize the poly context by passing the memory pointer,
 	// and max number of points from before
 	MPEPolyContext PolyContext;
-	if (MPE_PolyInitContext(&PolyContext, Memory, EMP_MAX_POINTS_IN_WORKPLANE))
+	if (MPE_PolyInitContext(&PolyContext, Memory, totalPoints))
 	{
 
 		// This value is lost in translation... so store it here
@@ -667,7 +669,7 @@ bool Triangulation::doCDT() {
 
 			if (p == nullptr)
 				continue;
-
+            
 			// TRANSFORM TO 2D;
 			// for now we assume the plane is on the XZ plane
 			MPEPolyPoint* Point = MPE_PolyPushPoint(&PolyContext);
@@ -731,10 +733,12 @@ bool Triangulation::doCDT() {
             }
             addTriangle(t);
         }
-    }
+        // free memory
+        free(Memory);
+        
+    }// end if worked
 		
 	
-
 	// delete this.
 	delete polygon2D;
 

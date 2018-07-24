@@ -58,9 +58,6 @@ This module defines constants that are used in the rest of the program.
 /// Minus tiny number
 #define EMP_MINUS_TINY -EMP_TINY //!< This is a very small number that may be used by several sections of the program
 
-/// Maximum number of points in a triangulation before refining
-#define EMP_MAX_POINTS_IN_WORKPLANE 1000 //!< This number is required on the poly2tri function
-
 /// The sky and ground hemispheres needed for completing a sky definition
 #define RADIANCE_SKY_COMPLEMENT "skyfunc glow skyglow 0 0 4 1 1 1 0 skyglow source skyball 0 0 4 0 0 1 360\n\n"
 

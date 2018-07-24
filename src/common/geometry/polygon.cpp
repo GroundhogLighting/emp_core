@@ -74,7 +74,7 @@ bool Polygon3D::hasInnerLoops()
 
 
 
-size_t Polygon3D::countInnerLoops() 
+size_t Polygon3D::countInnerLoops() const
 {
 	return innerLoops.size();
 }
@@ -191,7 +191,7 @@ void Polygon3D::clean() {
 }
 
 
-Loop * Polygon3D::getInnerLoopRef(size_t i) 
+Loop * Polygon3D::getInnerLoopRef(size_t i) const
 {
 	return innerLoops[i];
 }
@@ -395,45 +395,36 @@ bool Polygon3D::getAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * aux
 	}
 	else {
 		// All other workplanes
-        //if (std::abs(nz) > EMP_TINY) {
-          //i = Vector3D(-ny/nx,1,0);
-          //i.normalize();
-          
-			i = Vector3D(1, 0, -nx / nz);
-			i.normalize();
-          
-			j = k%i;
-		//}
-        /*else if (std::abs(nz) > EMP_TINY) {
-          //j = Vector3D(1, -nx / ny, 0);
-          //j.normalize();
-          
-            j = Vector3D(0, 1, -ny / nz);
-			j.normalize();
-          
-			i = j%k;
-        }else if(std::abs(nx) < EMP_TINY && abs(ny) < EMP_TINY){
-            i = Vector3D(1, 0, 0);
-			j = k%i;
-		}
-		else {
-			FATAL(errorMessage,"Not considered situation when calculating auxiliar axes of polygon");
-			normal.print();
-			return false;
-		}*/
+        i = Vector3D(1, 0, -nx / nz);
+        i.normalize();
+      
+        j = k%i;
+    
 	}
 	
 	// set values
 	*auxi = i; *auxj = j; *auxk = k;
 	
     if (i.getLength() < EMP_TINY || j.getLength() < EMP_TINY || k.getLength() < EMP_TINY) {
-      i.print();
-      j.print();
-      k.print();
-      std::cout << "normal " << std::endl;
-      normal.print();
-      FATAL(errmsg, "Auxiliar axes are bad defined");      
+          i.print();
+          j.print();
+          k.print();
+          std::cout << "normal " << std::endl;
+          normal.print();
+          FATAL(errmsg, "Auxiliar axes are bad defined");
     }
 
 	return true;
+}
+
+size_t Polygon3D::countRealPoints() const
+{
+    size_t nPoints = outerLoop->realSize();
+    
+    const size_t nLoops = countInnerLoops();
+    for(size_t i=0; i<nLoops; i++){
+        nPoints += getInnerLoopRef(i)->realSize();
+    }
+    
+    return nPoints;
 }

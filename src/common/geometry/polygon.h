@@ -111,7 +111,7 @@ public:
 	@author German Molina
 	@return The number of interior loops
 	*/
-	size_t countInnerLoops();
+	size_t countInnerLoops() const;
 
 	//! Returns a pointer to a new loop that represents the same area and geometry, but connects all the interior loops to the exterior loop (no holes)
 	/*!
@@ -137,7 +137,7 @@ public:
 	@author German Molina
 	@return The pointer
 	*/
-	Loop * getInnerLoopRef(size_t i);
+	Loop * getInnerLoopRef(size_t i) const;
 
 	//! Sets the normal
 	/*!
@@ -222,6 +222,13 @@ public:
 	@return success
 	*/
 	bool getInverseAuxiliarAxes(Vector3D normal, Vector3D * auxi, Vector3D * auxj, Vector3D * auxk);
+    
+    //! Returns the total number of points that are not NULL in the polygon
+    /*!
+     @author German Molina
+     @return the number of points
+     */
+    size_t countRealPoints() const;
 
 };
 

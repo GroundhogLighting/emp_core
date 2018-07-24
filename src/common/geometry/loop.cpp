@@ -56,17 +56,18 @@ void Loop::addVertex(Point3D * point)
 }
 
 
-size_t Loop::size() 
+size_t Loop::size() const
 {
 	return vertices.size();
 }
 
 
-size_t Loop::realSize()
+size_t Loop::realSize() const
 {
 	size_t n = 0;
-	for (size_t i = 0; i < size(); i++) {
-		if (vertices[i] != NULL)
+    size_t N = size();
+	for (size_t i = 0; i < N; i++) {
+		if (vertices[i] != nullptr)
 			n++;
 	}
 	return n;
