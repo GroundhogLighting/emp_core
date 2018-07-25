@@ -405,7 +405,7 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatri
     const float albedo = location->getAlbedo();
     const float latitude = location->getLatitude();
     const float longitude = location-> getLongitude();
-    const float meridian = location->getTimeZone()*(-15.0);
+    const float meridian = location->getTimeZone()*(15.0);
     const double rotation = model -> getNorthCorrection();
     
     // Get sizes and resize
@@ -417,7 +417,8 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatri
     if (nSamples == 0)
         FATAL(m,"No Weather Data when CalculateDirectSunComponent");
     
-    result->resize(nSensors,interp*nSamples);
+    if(result->nrows() != nSensors || result->ncols() != interp*nSamples)
+        result->resize(nSensors,interp*nSamples);
     
     
     
