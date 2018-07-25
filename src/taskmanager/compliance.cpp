@@ -1,7 +1,7 @@
 /*****************************************************************************
  Emp
  
- Copyright (C) 2017  German Molina (germolinal@gmail.com)
+ Copyright (C) 2018  German Molina (germolinal@gmail.com)
  
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ void bulkResultsIntoJSON(std::string taskName, std::string wpName, const Matrix 
     
     
     size_t nrows = results->nrows();
-    size_t ncols = results->ncols();
+    //size_t ncols = results->ncols();
     
     // Ensure existence of Summary and Details
     auto summary = (*j)["summary"];

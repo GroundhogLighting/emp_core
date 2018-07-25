@@ -1,7 +1,7 @@
 /*****************************************************************************
  Emp
  
- Copyright (C) 2017  German Molina (germolinal@gmail.com)
+ Copyright (C) 2018  German Molina (germolinal@gmail.com)
  
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #pragma once
 
 
-#include "./DDC/CalculateDDCGlobalIlluminance.h"
+#include "./Calculate2PhaseGlobalIlluminance.h"
 #include "../../taskmanager/cbdm_task.h"
 
 double daScoreCalculator(double v, double minLux, double maxLux);
@@ -37,7 +37,7 @@ public:
     
     CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime);
 
-    GET_DEP_RESULTS(CalculateDDCGlobalIlluminance);
+    GET_DEP_RESULTS(Calculate2PhaseGlobalIlluminance);
     
 };
 

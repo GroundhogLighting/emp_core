@@ -1,3 +1,4 @@
+
 /*****************************************************************************
  Emp
  
@@ -20,85 +21,94 @@
 
 #pragma once
 
-#include "../../radiance.h"
-#include "./CalculateDirectSunComponent.h"
+#include "../../taskmanager/taskmanager.h"
+#include "./DDC/CalculateDDCGlobalComponent.h"
 
-class CalculateDirectSolarIlluminance : public Task {
-public:
+class Calculate2PhaseGlobalIlluminance : public Task {
+
+private:
     GroundhogModel * model; //!< The model
-    int mf; //!< The Reinhart sky subdivition scheme for the sun
+    int skyMF; //!< The Reinhart subdivition scheme for the sky
+    int sunMF; //!< The Reinhart subdivition scheme for the sun
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
+    RTraceOptions * options; //!< The options passed to rcontrib procsses
     Matrix result; //!< The resulting matrix
-    RTraceOptions * options; //!< Options passed to rcontrib
     int interp; //!< The interpolation scheme
-    
-    //* Process a Workplane
-    /*!
-     @author German Molina
-     */
-    CalculateDirectSolarIlluminance(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions, int interpolation)
+
+public:
+    Calculate2PhaseGlobalIlluminance(GroundhogModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
-        std::string name = "Direct Sun Illuminance "+ wp->getName();
+        
+        std::string name = "2-Phase Illuminance "+wp->getName();
         setName(&name);
         model = theModel;
-        mf = theMF;
+        sunMF = theSunMF;
+        skyMF = theSkyMF;
+        options = theOptions;
         workplane = wp;
-        options = theOptions;
         interp = interpolation;
         
-        // Dependency 0: matrix task
-        CalculateDirectSunComponent * calcComponentTask = new CalculateDirectSunComponent(model,workplane,mf,options, interp);
-        addDependency(calcComponentTask);
+        // Dependency 0: Global illuminance
+        CalculateDDCGlobalComponent * globalIlluminanceTask = new CalculateDDCGlobalComponent(model, workplane, skyMF, options, interp);
+        addDependency(globalIlluminanceTask);                
+        
     }
     
-    //! Process a vector of rays
-    /*!
-     @author German Molina
-     */
-    CalculateDirectSolarIlluminance(GroundhogModel * theModel, std::vector<RAY> * theRays, int theMF, RTraceOptions * theOptions, int interpolation)
+    
+    Calculate2PhaseGlobalIlluminance(GroundhogModel * theModel,  std::vector<RAY> * theRays, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
-        std::string name = "DDC Direct Sun Illuminance";
+        
+        std::string name = "2-Phase Iluminance";
         setName(&name);
         model = theModel;
-        mf = theMF;
+        sunMF = theSunMF;
+        skyMF = theSkyMF;
         options = theOptions;
+        rays = theRays;
         interp = interpolation;
         
-        // Set the rays
-        rays = theRays;
-        
-        // Dependency 0: matrix task
-        CalculateDirectSunComponent * calcMatrixTask = new CalculateDirectSunComponent(model,rays,mf,options,interp);
-        addDependency(calcMatrixTask);
-        
+        // Dependency 0: Global illuminance
+        CalculateDDCGlobalComponent * globalIlluminanceTask = new CalculateDDCGlobalComponent(model, rays, skyMF, options, interp);
+        addDependency(globalIlluminanceTask);
+                
     }
     
+    
+    
+    Matrix * getResult()
+    {
+        return &result;
+    }
     
     bool isEqual(Task * t)
     {
-        bool sameModel = (model == static_cast<CalculateDirectSunComponent *>(t)->model);
-        bool sameMF = (mf == static_cast<CalculateDirectSunComponent *>(t)->mf);
+        bool sameModel = (model == static_cast<Calculate2PhaseGlobalIlluminance *>(t)->model);
+        bool sameMF = (sunMF == static_cast<Calculate2PhaseGlobalIlluminance *>(t)->sunMF && (skyMF == static_cast<Calculate2PhaseGlobalIlluminance *>(t)->skyMF));
+        
         
         if(workplane != nullptr){
-            return (sameModel && sameMF && workplane == static_cast<CalculateDirectSunComponent *>(t)->workplane);
+            return (sameModel && sameMF && workplane == static_cast<Calculate2PhaseGlobalIlluminance *>(t)->workplane);
         }
         if(rays != nullptr){
-            return (sameModel && sameMF && rays == static_cast<CalculateDirectSunComponent *>(t)->rays);
+            return (sameModel && sameMF && rays == static_cast<Calculate2PhaseGlobalIlluminance *>(t)->rays);
         }
         
-        FATAL(e,"CalculateDirectSolarIlluminance with null Workplane and Rays");
+        FATAL(e,"Calculate2PhaseGlobalIlluminance with null Workplane and Rays");
         return true;
     }
     
     bool solve()
     {
-        ColorMatrix * depResult = &(static_cast<CalculateDirectSunComponent *>(getDependencyRef(0))->result);
+                        
+        const ColorMatrix * depResult = &(static_cast<CalculateDDCGlobalComponent *>(getDependencyRef(0))->result);
         
+        // Resize to fit
         result.resize(depResult->nrows(),depResult->ncols());
         
+        // Calculate illuminance
         depResult->calcIlluminance(&result);
-        
+                
         return true;
     }
     
@@ -129,13 +139,6 @@ public:
     {
         return true;
     }
-    
-    Matrix * getResult()
-    {
-        return &result;
-    }
-    
-    
 };
 
-extern CalculateDirectSolarIlluminance calcDirectSunIlluminance;
+extern Calculate2PhaseGlobalIlluminance do2PM;

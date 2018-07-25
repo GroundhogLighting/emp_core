@@ -2,7 +2,7 @@
 /*****************************************************************************
  Emp
  
- Copyright (C) 2017  German Molina (germolinal@gmail.com)
+ Copyright (C) 2018  German Molina (germolinal@gmail.com)
  
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -176,21 +176,7 @@ public:
                           },
                           tbb::auto_partitioner()
                           );// end of loop in timesteps
-        
-        /*
-        for(size_t t=0; t < nTimesteps; t++){
-            for(size_t sens=0; sens < nSensors; sens++){
-                double r = globalRed->  getElement(sens,t) - directSunPatchRed->  getElement(sens,t) + directSunRed->  getElement(sens,t);
-                
-                double g = globalGreen->getElement(sens,t) - directSunPatchGreen->getElement(sens,t) + directSunGreen->getElement(sens,t);
-                
-                double b = globalBlue-> getElement(sens,t) - directSunPatchBlue-> getElement(sens,t) + directSunBlue-> getElement(sens,t);
-                
-                result.setElement(sens,t, 47.5*r + 119.95*g + 11.60*b);
-            }
-        }
-         */
-        
+               
         
         return true;
     }

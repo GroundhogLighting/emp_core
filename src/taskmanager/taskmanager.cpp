@@ -1,7 +1,7 @@
 /*****************************************************************************
 Emp
 
-Copyright (C) 2017  German Molina (germolinal@gmail.com)
+Copyright (C) 2018  German Molina (germolinal@gmail.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -173,7 +173,7 @@ bool TaskManager::solve(json * results)
         tbb::tick_count t0 = tbb::tick_count::now();
         g.wait_for_all();
         tbb::tick_count t1 = tbb::tick_count::now();
-        std::cerr << "All tasks solved in "  << (t1 - t0).seconds() << " seconds" << std::endl;
+        std::cerr << "All tasks solved in "  << (t1 - t0).seconds()/60.0 << " minutes" << std::endl;
         
     } catch(std::out_of_range& ex) {
         std::cout << "Exception: " << ex.what() << std::endl;

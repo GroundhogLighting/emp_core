@@ -2,7 +2,7 @@
 /*****************************************************************************
  Emp
  
- Copyright (C) 2017  German Molina (germolinal@gmail.com)
+ Copyright (C) 2018  German Molina (germolinal@gmail.com)
  
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ CheckUDICompliance::CheckUDICompliance(std::string name, GroundhogModel * theMod
     scoreCalculator = udiScoreCalculator;
     
     // Dependency 0
-    CalculateDDCGlobalIlluminance * illuminanceTask = new CalculateDDCGlobalIlluminance(theModel, wp, sunMf, skyMf, theOptions, interp);
+    Calculate2PhaseGlobalIlluminance * illuminanceTask = new Calculate2PhaseGlobalIlluminance(theModel, wp, sunMf, skyMf, theOptions, interp);
     
     
     addDependency(illuminanceTask);
@@ -65,7 +65,7 @@ CheckUDICompliance::CheckUDICompliance(std::string name, GroundhogModel * theMod
     rays = theRays;
     
     // Dependency 0
-    CalculateDDCGlobalIlluminance * illuminanceTask = new CalculateDDCGlobalIlluminance(theModel, theRays, sunMf, skyMf, theOptions, interp);
+    Calculate2PhaseGlobalIlluminance * illuminanceTask = new Calculate2PhaseGlobalIlluminance(theModel, theRays, sunMf, skyMf, theOptions, interp);
     addDependency(illuminanceTask);
             
     // Set the name
