@@ -25,7 +25,6 @@ void radGenDayMtx(int month, int day, float hour, float direct, float diffuse, f
     // Calc gendaymtx
     std::string command = "gendaymtx -h -m " + std::to_string(skyMF) + " -g " + std::to_string(albedo) + " " + std::to_string(albedo) + " " + std::to_string(albedo) + " -c 1 1 1 -r " + std::to_string(rotation) + sharpSunMode + dMode +  " " + weafilename;
     
-    std::cout << command << std::endl;
     
     FILE * results = POPEN(&command[0],"r");
         
@@ -42,8 +41,7 @@ void radGenDayMtx(int month, int day, float hour, float direct, float diffuse, f
         
         size_t i = 0;
         while (FSCANF(results, "%f %f %f", &r, &g, &b) != EOF)
-        {
-            std::cout << r << "," << g << "," << b << std::endl;
+        {            
             red->setElement(i,0,r);
             green->setElement(i,0,g);
             blue->setElement(i,0,b);
@@ -225,9 +223,6 @@ TEST(GenPerezSkyVec, DirectOnlyWideSun)
         const Matrix * referenceRed = referenceSkyVec.redChannel();
         const Matrix * referenceGreen = referenceSkyVec.greenChannel();
         const Matrix * referenceBlue = referenceSkyVec.blueChannel();
-        
-        red->print();
-        referenceRed->print();
         
         
         for(size_t row=0; row < nbins; row++){

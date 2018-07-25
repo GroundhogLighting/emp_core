@@ -1,6 +1,6 @@
 
 #include "../include/emp_core.h"
-
+#include <algorithm>
 
 
 TEST(DDC_TEST,Empty_CalculateDDCGlobalMatrix){
@@ -100,7 +100,7 @@ TEST(DDC_TEST, Empty_global_DDC_vs_reference){
         double reference = emptyReference[i][0];
         
         //std::cout << value << "," << reference << std::endl;
-        ASSERT_NEAR(value,reference,reference * 0.05);
+        ASSERT_NEAR(value,reference,std::max(reference * 0.05, 5.0));
     }
 }
 
@@ -129,11 +129,13 @@ TEST(DDC_TEST, Simple_global_DDC_vs_reference){
     for(int i=0; i<48; i++){
         double value = irradiance.getElement(0,i);
         double reference = simpleReference[i][0];
+        //std::cout << value << "," << reference << std::endl;
         if(reference > 1e-3){
             double v = ((value - reference)/reference);
             msd += (v*v);
             count++;
         }
+        ASSERT_NEAR(value,reference,std::max(reference * 0.05, 5.0));
     }
     ASSERT_TRUE( std::sqrt(msd/(double)count) < 0.05);
 }
@@ -188,12 +190,13 @@ TEST(DDC_TEST, Simple_directSunPatch_DDC_vs_reference){
     int count = 0;
     for(int i=0; i<48; i++){
         double value = irradiance.getElement(0,i);
-        double reference = simpleReference[i][2];
+        double reference = simpleReference[i][1];
         if(reference > 1e-3){
             double v = ((value - reference)/reference);
             msd += (v*v);
             count++;
         }
+        ASSERT_NEAR(value,reference, std::max(reference * 0.05, 5.0) );
     }
     ASSERT_TRUE( std::sqrt(msd/(double)count) < 0.05);
     
@@ -256,6 +259,7 @@ TEST(DDC_TEST, Simple_directSharpSun_DDC_vs_reference){
             msd += (v*v);
             count++;
         }
+        ASSERT_NEAR(value,reference,std::max(reference * 0.05, 5.0));
     }
     ASSERT_TRUE( std::sqrt(msd/(double)count) < 0.05);
     
@@ -312,6 +316,7 @@ TEST(DDC_TEST,Simple_full_DDC_vs_RTRACE){
             msd += (v*v);
             count++;
         }
+        ASSERT_NEAR(value,reference,std::max(reference * 0.05, 5.0));
     }
     ASSERT_TRUE( std::sqrt(msd/(double)count) < 0.05);
     
