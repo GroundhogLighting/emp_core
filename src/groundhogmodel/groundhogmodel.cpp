@@ -429,6 +429,15 @@ Photosensor * GroundhogModel::getPhotosensorRef(size_t i)
 	return photosensors[i];
 }
 
+Photosensor * GroundhogModel::getPhotosensorRef(std::string name)
+{
+    for(auto p : photosensors){
+        if(p->getName() == name)
+            return p;        
+    }
+    return nullptr;
+}
+
 Location * GroundhogModel::getLocation()
 {
 	return &location;

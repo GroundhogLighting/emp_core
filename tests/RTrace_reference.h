@@ -4,7 +4,7 @@
 // Santiago weather, but located in 70.78E instead of W, and in time zone GMT+4 instead of -4
 const double latitude = -33.38;
 const double longitude = 70.78;
-const int time_zone = 4;
+const int time_zone = -4;
 
 int skyMF = 1;
 int sunMF = 6;

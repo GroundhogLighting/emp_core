@@ -402,6 +402,14 @@ public:
 	@return The pointer to the Photosensor
 	*/
 	Photosensor * getPhotosensorRef(size_t i);
+    
+    //! Retrieves a pointer to a certain Photosensor in the model
+    /*!
+     @author German Molina
+     @param[in] i The name of the Photosensor
+     @return The pointer to the Photosensor
+     */
+    Photosensor * getPhotosensorRef(std::string name);
 
 
 	//! Retrieves the Location object

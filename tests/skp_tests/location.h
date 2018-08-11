@@ -12,7 +12,7 @@ TEST(SKPRead, location)
         ASSERT_EQ(loc->getCountry(),"New Zealand");
         ASSERT_EQ(loc->getCity(),"Wellington");
         ASSERT_EQ(loc->getLatitude(),-41.1);
-        ASSERT_EQ(loc->getLongitude(),-174.1);
+        ASSERT_EQ(loc->getLongitude(),174.1);
         ASSERT_EQ(loc->getAlbedo(),0.2);
         ASSERT_EQ(loc->getTimeZone(),12);
     }

@@ -9,7 +9,7 @@ TEST(SKPRead, default_materials)
     FOR_ALL_VERSIONS {
         ASSERT_LOAD_MODEL("default_materials",version);
                 
-        // Only one component
+        // No components
         ASSERT_EQ(model.getNumComponentDefinitions(),0);
         
         // Check number of materials

@@ -76,7 +76,6 @@ bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool 
     std::string ropts = options->getInlineVersion();
     
     std::string command = "rcontrib -h " + v + mode + ropts + " -e MF:"+ std::to_string(mf) + " -f reinhart.cal -b rbin -bn Nrbins -m " + std::string(modifier) + " " + octname + " > " + rgbfile ;
-    // -faf
     
     // Create the file
     FILE *rt = POPEN(&command[0], "w");
@@ -157,8 +156,8 @@ bool rtrace(RTraceOptions * options, char * octname, bool do_irradiance, bool im
     }
     std::string ropts = options->getInlineVersion();
     
-    std::string command = "rtrace -h" + mode + ropts + " -af " + amb + " " + octname + " > " + rgbfile ;
-    
+    fixString(&amb);
+    std::string command = "rtrace -h" + mode + ropts + " -af " + amb + " " + octname + " > " + rgbfile ;    
     
     // Create the file
     FILE *rt = POPEN(&command[0], "w");
@@ -405,7 +404,7 @@ void interpolatedDCTimestep(int interp, GroundhogModel * model, const ColorMatri
     const float albedo = location->getAlbedo();
     const float latitude = location->getLatitude();
     const float longitude = location-> getLongitude();
-    const float meridian = location->getTimeZone()*(15.0);
+    const float meridian = location->getTimeZone()*(-15.0);
     const double rotation = model -> getNorthCorrection();
     
     // Get sizes and resize

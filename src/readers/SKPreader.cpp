@@ -269,7 +269,7 @@ bool SKPreader::loadModelInfo() const
 	// Set longitude
 	double longitude;
 	getDoubleFromShadowInfo(shadowInfo, "Longitude", &longitude);
-	loc->setLongitude(longitude);
+	loc->setLongitude(-longitude); // Negative due to conventions
 
 	// Set time zone
 	double timeZone;

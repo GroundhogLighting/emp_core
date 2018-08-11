@@ -202,3 +202,27 @@ A model that only has two surfaces: a Window and a surface without material
 
 ## glass.skp
 
+
+# Photosensors
+
+## photosensors.skp
+
+An empty model with three photosensors, 'Origin', '1m', and '2m east'. All except the latter point UP. The later points East (1,0,0).
+The positions of all are (0,0,0), (0,0,1), and (0,0,2), respectively.
+
+### Expected behavioour
+1. No throw on load
+2. No components in model
+3. Two photosensors named and locatet properly
+
+# Luminaires
+
+## luminaire1.skp
+
+A single model with one component, which is a luminaire
+
+### Expected behaviour
+1. No throw
+2. Manufacturer is ERCO GmbH
+3. Name of luminaire is Parscan Spotlight
+4. Lamp is LED 12W neutral white
