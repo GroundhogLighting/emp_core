@@ -23,15 +23,15 @@
 class WriteModelInfo : public Task {
 public:
     std::string filename; //!< The name of the file to write
-    GroundhogModel * model; //!< The model to export
+    EmpModel * model; //!< The model to export
     
     //! Constructor
     /*!
      @author German Molina
      @param[in] theFilename The file name
-     @param[in] theModel The GroundhogModel object
+     @param[in] theModel The EmpModel object
      */
-    WriteModelInfo(std::string theFilename, GroundhogModel * theModel)
+    WriteModelInfo(std::string theFilename, EmpModel * theModel)
     {
         std::string name = "Write model information";
         setName(&name);

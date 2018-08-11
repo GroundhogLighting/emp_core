@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /*!
 
-The TaskManager intends to perform all the calculations needed by the GroundhogModel
+The TaskManager intends to perform all the calculations needed by the EmpModel
 or user in a safer, efficient and easier way. In order to do that, certain characteristics
 have been added to this object:
 

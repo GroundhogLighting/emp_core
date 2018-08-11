@@ -29,7 +29,7 @@
 
 class ComponentInstance;
 
-//! A Layer is the main group of geometry in a GroundhogModel. 
+//! A Layer is the main group of geometry in a EmpModel. 
 
 /*!
 Every ComponentInstance or Face that is not in another ComponentDefinition will be 

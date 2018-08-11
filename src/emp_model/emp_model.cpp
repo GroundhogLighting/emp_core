@@ -19,16 +19,16 @@
 *****************************************************************************/
 
 
-#include "./groundhogmodel.h"
+#include "./emp_model.h"
 #include "../common/utilities/io.h"
 
 
 
-GroundhogModel::GroundhogModel()
+EmpModel::EmpModel()
 {
 };
 
-GroundhogModel::~GroundhogModel()
+EmpModel::~EmpModel()
 {
     
     for(auto x : layers)
@@ -55,13 +55,13 @@ GroundhogModel::~GroundhogModel()
 }
 
 
-void GroundhogModel::addLayer(std::string * layerName)
+void EmpModel::addLayer(std::string * layerName)
 {	
 	Layer * l = new Layer(layerName);
 	layers.push_back( l );	
 }
 
-bool GroundhogModel::addObjectToLayer(std::string * layerName, Otype * o)
+bool EmpModel::addObjectToLayer(std::string * layerName, Otype * o)
 {
     Layer * layer = getLayerByName(layerName);
     layer->addObject(o);
@@ -70,35 +70,35 @@ bool GroundhogModel::addObjectToLayer(std::string * layerName, Otype * o)
 }
 
 
-size_t GroundhogModel::getNumLayers()
+size_t EmpModel::getNumLayers()
 {
 	return layers.size();
 }
 
-size_t GroundhogModel::getNumComponentDefinitions()
+size_t EmpModel::getNumComponentDefinitions()
 {
 	return definitions.size();
 }
 
-Layer * GroundhogModel::getLayerRef(size_t i)
+Layer * EmpModel::getLayerRef(size_t i)
 {
 	return layers[i];
 }
 
-ComponentDefinition * GroundhogModel::getComponentDefinitionRef(size_t i)
+ComponentDefinition * EmpModel::getComponentDefinitionRef(size_t i)
 {
 	return definitions[i];
 }
 
 
-void GroundhogModel::addComponentDefinition(std::string * name)
+void EmpModel::addComponentDefinition(std::string * name)
 {	
 	ComponentDefinition * c = new ComponentDefinition(name);
 	definitions.push_back( c );
 }
 
 
-ComponentDefinition *  GroundhogModel::getComponentDefinitionByName(std::string * definitionName)
+ComponentDefinition *  EmpModel::getComponentDefinitionByName(std::string * definitionName)
 {
 	for (size_t i = 0; i < definitions.size(); i++) {
       std::string name = definitions[i]->getName();
@@ -112,7 +112,7 @@ ComponentDefinition *  GroundhogModel::getComponentDefinitionByName(std::string 
     return nullptr;
 }
 
-Layer *  GroundhogModel::getLayerByName(std::string * layerName)
+Layer *  EmpModel::getLayerByName(std::string * layerName)
 {
     size_t nLayers = layers.size();
     
@@ -129,7 +129,7 @@ Layer *  GroundhogModel::getLayerByName(std::string * layerName)
 	return nullptr;
 }
 
-const Otype * const GroundhogModel::getOtypeByName(std::string * objectName) const
+const Otype * const EmpModel::getOtypeByName(std::string * objectName) const
 {
     size_t nLayers = layers.size();
     
@@ -168,17 +168,17 @@ const Otype * const GroundhogModel::getOtypeByName(std::string * objectName) con
     return nullptr;
 }
 
-void GroundhogModel::addView(View * view)
+void EmpModel::addView(View * view)
 {
 	views.push_back(view);
 }
 
-View * GroundhogModel::getViewRef(size_t i)
+View * EmpModel::getViewRef(size_t i)
 {
 	return views[i];
 }
 
-View * GroundhogModel::getViewByName(std::string * viewName)
+View * EmpModel::getViewByName(std::string * viewName)
 {
     size_t nViews = views.size();
     for (size_t i = 0; i < nViews; i++) {
@@ -193,22 +193,22 @@ View * GroundhogModel::getViewByName(std::string * viewName)
         return nullptr;
 }
 
-size_t GroundhogModel::getNumViews()
+size_t EmpModel::getNumViews()
 {
 	return views.size();
 }
 
-void GroundhogModel::setNorthCorrection(double nC)
+void EmpModel::setNorthCorrection(double nC)
 {
 	northCorrection = nC;
 }
-double GroundhogModel::getNorthCorrection()
+double EmpModel::getNorthCorrection()
 {
 	return northCorrection;
 }
 
 
-void GroundhogModel::addPolygonToWorkplane(std::string * workplaneName, Polygon3D * polygon) 
+void EmpModel::addPolygonToWorkplane(std::string * workplaneName, Polygon3D * polygon) 
 {
 	for (unsigned i = 0; i < workplanes.size(); i++) {
 		if (workplanes[i]->compareName(workplaneName)) {
@@ -224,7 +224,7 @@ void GroundhogModel::addPolygonToWorkplane(std::string * workplaneName, Polygon3
 }
 
 
-void GroundhogModel::addWindowToGroup(std::string * windowGroupName, Face * face) 
+void EmpModel::addWindowToGroup(std::string * windowGroupName, Face * face) 
 {
 	for (size_t i = 0; i < windowGroups.size(); i++) {
 		if (windowGroups[i]->compareName(windowGroupName)) {
@@ -239,7 +239,7 @@ void GroundhogModel::addWindowToGroup(std::string * windowGroupName, Face * face
 	windowGroups.push_back(wg);
 }
 
-void GroundhogModel::addIllumToGroup(std::string * illumGroupName, Polygon3D * polygon)
+void EmpModel::addIllumToGroup(std::string * illumGroupName, Polygon3D * polygon)
 {
     for (size_t i = 0; i < illumGroups.size(); i++) {
         if (illumGroups[i]->compareName(illumGroupName)) {
@@ -255,39 +255,39 @@ void GroundhogModel::addIllumToGroup(std::string * illumGroupName, Polygon3D * p
 }
 
 
-size_t GroundhogModel::getNumWindowGroups() 
+size_t EmpModel::getNumWindowGroups() 
 {
 	return windowGroups.size();
 }
 
-size_t GroundhogModel::getNumIllumGroups()
+size_t EmpModel::getNumIllumGroups()
 {
     return illumGroups.size();
 }
 
-size_t GroundhogModel::getNumWorkplanes() 
+size_t EmpModel::getNumWorkplanes() 
 {
 	return workplanes.size();
 }
 
 
-WindowGroup * GroundhogModel::getWindowGroupRef(size_t i) 
+WindowGroup * EmpModel::getWindowGroupRef(size_t i) 
 {
 	return windowGroups[i];
 }
 
-IllumGroup * GroundhogModel::getIllumGroupRef(size_t i)
+IllumGroup * EmpModel::getIllumGroupRef(size_t i)
 {
     return illumGroups[i];
 }
 
 
-Workplane * GroundhogModel::getWorkplaneRef(size_t i) 
+Workplane * EmpModel::getWorkplaneRef(size_t i) 
 {
 	return workplanes[i];
 }
 
-Workplane * GroundhogModel::getWorkplaneByName(const std::string * const wp) const
+Workplane * EmpModel::getWorkplaneByName(const std::string * const wp) const
 {
 	for (size_t i = 0; i < workplanes.size(); i++) {
         std::string name = workplanes[i]->getName();
@@ -300,7 +300,7 @@ Workplane * GroundhogModel::getWorkplaneByName(const std::string * const wp) con
 	return NULL;
 }
 
-Material * GroundhogModel::addMaterial(json * j)
+Material * EmpModel::addMaterial(json * j)
 {
 	// Check if material already exists
 	std::string name = (*j)["name"];
@@ -355,13 +355,13 @@ Material * GroundhogModel::addMaterial(json * j)
 	}
 }
 
-void GroundhogModel::addMaterial(Material * m)
+void EmpModel::addMaterial(Material * m)
 {    
     materials.push_back(m);
 }
 
 
-Material * GroundhogModel::addDefaultMaterial()
+Material * EmpModel::addDefaultMaterial()
 {
   json j = {
       { "name" , "Default Material" },
@@ -375,7 +375,7 @@ Material * GroundhogModel::addDefaultMaterial()
 }
 
 
-Material * GroundhogModel::addDefaultGlass()
+Material * EmpModel::addDefaultGlass()
 { 
   json j = {
       { "name" , "Default Glass" },
@@ -388,17 +388,17 @@ Material * GroundhogModel::addDefaultGlass()
 }
 
 
-size_t GroundhogModel::getNumMaterials()
+size_t EmpModel::getNumMaterials()
 {
 	return materials.size();
 }
 
-Material * GroundhogModel::getMaterialRef(size_t i)
+Material * EmpModel::getMaterialRef(size_t i)
 {
 	return materials[i];
 }
 
-Material *  GroundhogModel::getMaterialByName(std::string * materialName)
+Material *  EmpModel::getMaterialByName(std::string * materialName)
 {
     for (size_t i = 0; i < materials.size(); i++) {
         std::string name = materials[i]->getName();
@@ -412,24 +412,24 @@ Material *  GroundhogModel::getMaterialByName(std::string * materialName)
     return nullptr;
 }
 
-void GroundhogModel::addPhotosensor(Photosensor * p)
+void EmpModel::addPhotosensor(Photosensor * p)
 {
 	photosensors.push_back(p);
 }
 
 
-size_t GroundhogModel::countPhotosensors()
+size_t EmpModel::countPhotosensors()
 {
 	return photosensors.size();
 }
 
 
-Photosensor * GroundhogModel::getPhotosensorRef(size_t i)
+Photosensor * EmpModel::getPhotosensorRef(size_t i)
 {
 	return photosensors[i];
 }
 
-Photosensor * GroundhogModel::getPhotosensorRef(std::string name)
+Photosensor * EmpModel::getPhotosensorRef(std::string name)
 {
     for(auto p : photosensors){
         if(p->getName() == name)
@@ -438,23 +438,23 @@ Photosensor * GroundhogModel::getPhotosensorRef(std::string name)
     return nullptr;
 }
 
-Location * GroundhogModel::getLocation()
+Location * EmpModel::getLocation()
 {
 	return &location;
 }
 
-Date * GroundhogModel::getDate()
+Date * EmpModel::getDate()
 {
 	return &date;
 }
 
-RTraceOptions * GroundhogModel::getRTraceOptions()
+RTraceOptions * EmpModel::getRTraceOptions()
 {
 	return &rtraceOptions;
 }
 
 
-Material * GroundhogModel::hasMaterial(std::string * matName)
+Material * EmpModel::hasMaterial(std::string * matName)
 {
   size_t nMaterials = materials.size();
 
@@ -467,22 +467,22 @@ Material * GroundhogModel::hasMaterial(std::string * matName)
   return NULL;
 }
 
-void GroundhogModel::addTask(json task)
+void EmpModel::addTask(json task)
 {
     tasks.push_back(task);
 }
 
-size_t GroundhogModel::countTasks() const
+size_t EmpModel::countTasks() const
 {
     return tasks.size();
 }
 
-const json * GroundhogModel::getTask(size_t i) const
+const json * EmpModel::getTask(size_t i) const
 {
     return &tasks[i];
 }
 
-const json * GroundhogModel::getTask(std::string name) const
+const json * EmpModel::getTask(std::string name) const
 {
     size_t nTasks = tasks.size();
     for(size_t i=0; i<nTasks; i++){

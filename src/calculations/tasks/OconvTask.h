@@ -36,13 +36,13 @@ class OconvTask : public Task {
     
 public:
     
-    GroundhogModel * model; //!< The model to Oconv
+    EmpModel * model; //!< The model to Oconv
     OconvOptions options; //!< The Options passed to Oconv
     std::string octreeName; //!< The name of the created octree
     
     
     
-    OconvTask(GroundhogModel * theModel, OconvOptions * theOptions)
+    OconvTask(EmpModel * theModel, OconvOptions * theOptions)
     {
         options = *theOptions;
         std::string name = buildName();

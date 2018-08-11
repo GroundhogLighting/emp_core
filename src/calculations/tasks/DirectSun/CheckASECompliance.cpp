@@ -30,7 +30,7 @@ double aseScoreCalculator(double v, double minLux, double maxLux)
 
 
 
-CheckASECompliance::CheckASECompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int theMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
+CheckASECompliance::CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int theMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
 {
     model = theModel;
     minLux = theMinLux;
@@ -50,7 +50,7 @@ CheckASECompliance::CheckASECompliance(std::string name, GroundhogModel * theMod
     setName(&name);
 }
 
-CheckASECompliance::CheckASECompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
+CheckASECompliance::CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
 {
     
     model = theModel;

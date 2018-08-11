@@ -23,7 +23,7 @@
 #include "../../common/utilities/io.h"
 #include "../../common/utilities/file.h"
 #include "../../common/geometry/triangulation.h"
-#include "../../groundhogmodel/groundhogmodel.h"
+#include "../../emp_model/emp_model.h"
 #include "./radexporter.h"
 #include "../../os_definitions.h"
 #include "../../common/utilities/stringutils.h"
@@ -31,7 +31,7 @@
 #include <fstream>
 
 
-RadExporter::RadExporter(GroundhogModel * the_model)
+RadExporter::RadExporter(EmpModel * the_model)
 {
 	model = the_model;
 }

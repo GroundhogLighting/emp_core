@@ -25,7 +25,7 @@
 
 class CalculateDirectSolarIlluminance : public Task {
 public:
-    GroundhogModel * model; //!< The model
+    EmpModel * model; //!< The model
     int mf; //!< The Reinhart sky subdivition scheme for the sun
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
@@ -37,7 +37,7 @@ public:
     /*!
      @author German Molina
      */
-    CalculateDirectSolarIlluminance(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions, int interpolation)
+    CalculateDirectSolarIlluminance(EmpModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions, int interpolation)
     {
         std::string name = "Direct Sun Illuminance "+ wp->getName();
         setName(&name);
@@ -56,7 +56,7 @@ public:
     /*!
      @author German Molina
      */
-    CalculateDirectSolarIlluminance(GroundhogModel * theModel, std::vector<RAY> * theRays, int theMF, RTraceOptions * theOptions, int interpolation)
+    CalculateDirectSolarIlluminance(EmpModel * theModel, std::vector<RAY> * theRays, int theMF, RTraceOptions * theOptions, int interpolation)
     {
         std::string name = "DDC Direct Sun Illuminance";
         setName(&name);

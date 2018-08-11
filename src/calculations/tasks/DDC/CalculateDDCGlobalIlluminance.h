@@ -29,7 +29,7 @@
 class CalculateDDCGlobalIlluminance : public Task {
 
 private:
-    GroundhogModel * model; //!< The model
+    EmpModel * model; //!< The model
     int skyMF; //!< The Reinhart subdivition scheme for the sky
     int sunMF; //!< The Reinhart subdivition scheme for the sun
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
@@ -39,7 +39,7 @@ private:
     int interp; //!< The interpolation scheme
 
 public:
-    CalculateDDCGlobalIlluminance(GroundhogModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
+    CalculateDDCGlobalIlluminance(EmpModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
         
         std::string name = "DDC Illuminance "+wp->getName();
@@ -66,7 +66,7 @@ public:
     }
     
     
-    CalculateDDCGlobalIlluminance(GroundhogModel * theModel,  std::vector<RAY> * theRays, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
+    CalculateDDCGlobalIlluminance(EmpModel * theModel,  std::vector<RAY> * theRays, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
         
         std::string name = "DDC";

@@ -33,9 +33,9 @@ class CheckDACompliance : public CBDMTask {
     
 public:
     
-    CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime);
+    CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime);
     
-    CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime);
+    CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime);
 
     GET_DEP_RESULTS(Calculate2PhaseGlobalIlluminance);
     

@@ -66,11 +66,11 @@ using nlohmann::json;
 //! The main class, that contains all the Layer, Workplane and much more
 
 /*!
-The GroundhogModel contains all the information representing Geometry, Materials,
+The EmpModel contains all the information representing Geometry, Materials,
 Components, Weather, Luminaires, and more (see its private members for more info).
 */
 
-class GroundhogModel {
+class EmpModel {
 
 private:	
 	
@@ -92,21 +92,21 @@ private:
 
 public:
 
-	//! Creates a GroundhogModel object
+	//! Creates a EmpModel object
 	/*!
 	The object is absolutely empty, with a default date and location.
 
 	@author German Molina
 	*/
-	GroundhogModel();
+	EmpModel();
 
-	//! Destroys the GroundhogModel
+	//! Destroys the EmpModel
 	/*!
 	Deletes all the members inside of it
 
 	@author German Molina
 	*/
-	~GroundhogModel();
+	~EmpModel();
 
 	//! Adds a new empty Layer to the model
 	/*!
@@ -325,7 +325,7 @@ public:
 	*/
     Workplane * getWorkplaneByName(const std::string * const wp) const;
 
-	//! Adds a Material to the Groundhogmodel
+	//! Adds a Material to the emp_model
 	/*!
 	@author German Molina
 	@param[in] j The json that represents a material
@@ -333,7 +333,7 @@ public:
 	*/
 	Material * addMaterial(json * j);
 
-	//! Adds a Material to the Groundhogmodel
+	//! Adds a Material to the emp_model
 	/*!
 	@author German Molina
 	@param[in] m A pointer to a Material
@@ -381,7 +381,7 @@ public:
     Material *  getMaterialByName(std::string * materialName);
 
     
-	//! Adds a Photosensor to the GroundhogModel
+	//! Adds a Photosensor to the EmpModel
 	/*!
 	@author German Molina
 	@param[in] p The Photosensor
@@ -484,6 +484,6 @@ public:
 
 };
 
-extern GroundhogModel GHModel;
+extern EmpModel GHModel;
 
 #endif

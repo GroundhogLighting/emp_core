@@ -21,10 +21,10 @@
 #ifndef RAD_EXPORTER_H
 #define RAD_EXPORTER_H
 
-#include "../../groundhogmodel/groundhogmodel.h"
+#include "../../emp_model/emp_model.h"
 #include "../../common/geometry/transform.h"
 
-//! The main object for exporting a GroundhogModel in Radiance format.
+//! The main object for exporting a EmpModel in Radiance format.
 /*!
 The file distribution will be the one used by Groundhog (www.groundhoglighting.com).
 
@@ -32,7 +32,7 @@ The main function to be called is RadExporter::exportModel()
 */
 class RadExporter {
 private:	
-	GroundhogModel * model; //!< The GroundhogModel to export
+	EmpModel * model; //!< The EmpModel to export
 
 public:
 
@@ -42,7 +42,7 @@ public:
 
 	@author German Molina
 	*/
-	RadExporter(GroundhogModel * model);
+	RadExporter(EmpModel * model);
 	
 	
 	//! Writes the information of the model (north correction and location)

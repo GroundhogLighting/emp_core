@@ -26,10 +26,10 @@
 
 class CreateDDCGlobalOctree : public Task {
 public:
-    GroundhogModel * model; //!< The model to Oconv
+    EmpModel * model; //!< The model to Oconv
     std::string octreeName; //!< The name of the final octree    
     
-    CreateDDCGlobalOctree(GroundhogModel * theModel)
+    CreateDDCGlobalOctree(EmpModel * theModel)
     {
         
         std::string name = "DDC Global Octree";

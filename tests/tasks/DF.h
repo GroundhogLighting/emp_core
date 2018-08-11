@@ -8,7 +8,7 @@ TEST(DaylightFactorTest, singleExteriorSensor)
     TaskManager tm = TaskManager();
     
     // Create empty model
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     
     // Create Options
     RTraceOptions options = RTraceOptions();

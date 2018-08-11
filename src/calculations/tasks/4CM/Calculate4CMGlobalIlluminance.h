@@ -28,7 +28,7 @@
 
 class Calculate4CMGlobalIlluminance : public Task {
 public:
-    GroundhogModel * model; //!< The model
+    EmpModel * model; //!< The model
     int skyMF; //!< The Reinhart subdivition scheme for the sky
     int sunMF; //!< The Reinhart subdivition scheme for the sun
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
@@ -37,7 +37,7 @@ public:
     ColorMatrix result; //!< The resulting matrix
     int interp; //!< The interpolation scheme
     
-    Calculate4CMGlobalIlluminance(GroundhogModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
+    Calculate4CMGlobalIlluminance(EmpModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
         
         std::string name = "doDC4";
@@ -64,7 +64,7 @@ public:
     }
     
     
-    Calculate4CMGlobalIlluminance(GroundhogModel * theModel,  std::vector<RAY> * theRays, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
+    Calculate4CMGlobalIlluminance(EmpModel * theModel,  std::vector<RAY> * theRays, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
         
         std::string name = "Calculate4CMGlobalIlluminance";

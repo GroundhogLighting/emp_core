@@ -24,10 +24,10 @@
 
 class Create4CMDirectSkyOctree : public Task {
 public:
-    GroundhogModel * model; //!< The model to Oconv
+    EmpModel * model; //!< The model to Oconv
     std::string octreeName; //!< The name of the final octree
     
-    Create4CMDirectSkyOctree(GroundhogModel * theModel)
+    Create4CMDirectSkyOctree(EmpModel * theModel)
     {
         
         std::string name = "Create CreateDirectSkyOctree";

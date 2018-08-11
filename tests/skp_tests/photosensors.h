@@ -16,7 +16,7 @@ TEST(SKPRead, photosensors)
         ASSERT_EQ(model.getNumMaterials(),0);
         
         // Check number of photosensors
-        ASSERT_EQ(model.countPhotosensors(),2);
+        ASSERT_EQ(model.countPhotosensors(),3);
         
         // Check for photosensor 1
         Photosensor * origin = model.getPhotosensorRef("Origin");

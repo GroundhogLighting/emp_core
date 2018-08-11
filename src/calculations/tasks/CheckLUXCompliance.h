@@ -30,7 +30,7 @@ class CheckLUXCompliance : public StaticSimulationTask {
 public:
     
     
-    CheckLUXCompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, OconvOptions * theOconvOptions, std::string sky, double min, double max)
+    CheckLUXCompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, OconvOptions * theOconvOptions, std::string sky, double min, double max)
     {
         model = theModel;
         workplane = wp;
@@ -47,7 +47,7 @@ public:
         setName(&name);
     }
     
-    CheckLUXCompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, OconvOptions * theOconvOptions, std::string sky, double min, double max)
+    CheckLUXCompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, OconvOptions * theOconvOptions, std::string sky, double min, double max)
     {
         model = theModel;
         rays = theRays;

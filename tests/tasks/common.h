@@ -3,7 +3,7 @@
 #include "../../include/emp_core.h"
 
 
-void setOuterPercentage(GroundhogModel * model, float percent)
+void setOuterPercentage(EmpModel * model, float percent)
 {
     if(percent > 0.9 || percent < 0.0)
         throw "Outer percentage too big or too small in setOuterPercentage";
@@ -202,7 +202,7 @@ void setOuterPercentage(GroundhogModel * model, float percent)
 }
 
 #define CREATE_MODEL(x) \
-GroundhogModel model = GroundhogModel(); \
+EmpModel model = EmpModel(); \
 setOuterPercentage(&model,x); \
 Workplane * workplane = model.getWorkplaneRef(0);
 

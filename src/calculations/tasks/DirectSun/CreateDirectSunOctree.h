@@ -27,11 +27,11 @@
 
 class CreateDirectSunOctree : public Task {
 public:
-    GroundhogModel * model; //!< The model to Oconv
+    EmpModel * model; //!< The model to Oconv
     std::string octreeName; //!< The name of the final octree
     int mf = 1; //!< The reinhart subdivition sheme
     
-    CreateDirectSunOctree(GroundhogModel * theModel, int theMf)
+    CreateDirectSunOctree(EmpModel * theModel, int theMf)
     {
         
         std::string name = "Direct Sun Octree";

@@ -4,7 +4,7 @@
 TEST(FourCM, UnitDirectSkyLightSources)
 {
     TaskManager tm = TaskManager();
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     
     Location * location = model.getLocation();
     location->setLatitude(33.0);
@@ -45,7 +45,7 @@ TEST(FourCM, UnitDirectSkyLightSources)
 TEST(FourCM, DirectSkyMatrix)
 {
     
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     
     Create4CMDirectSkyOctree task =  Create4CMDirectSkyOctree(&model);
     task.solve();

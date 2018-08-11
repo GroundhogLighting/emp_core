@@ -22,16 +22,16 @@
 class WriteMaterials : public Task {
 public:
     std::string directory; //!< The name of the directory to write the Materials to
-    GroundhogModel * model; //!< The model to export
+    EmpModel * model; //!< The model to export
     std::string filename; //!< The name of the file that will reference all materials
     
     //! Constructor
     /*!
      @author German Molina
      @param[in] theFilename The file name
-     @param[in] theModel The GroundhogModel object
+     @param[in] theModel The EmpModel object
      */
-    WriteMaterials(std::string theDir, std::string theFilename, GroundhogModel * theModel)
+    WriteMaterials(std::string theDir, std::string theFilename, EmpModel * theModel)
     {
         std::string name = "Write materials";
         setName(&name);

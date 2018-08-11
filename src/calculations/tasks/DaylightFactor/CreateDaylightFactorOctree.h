@@ -27,10 +27,10 @@
 
 class CreateDaylightFactorOctree : public Task {
 public:
-    GroundhogModel * model; //!< The model to Oconv
+    EmpModel * model; //!< The model to Oconv
     std::string octreeName; //!< The name of the final octree
     
-    CreateDaylightFactorOctree(GroundhogModel * theModel)
+    CreateDaylightFactorOctree(EmpModel * theModel)
     {
         
         std::string name = "Direct Sun Octree";

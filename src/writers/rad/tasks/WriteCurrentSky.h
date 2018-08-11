@@ -22,16 +22,16 @@
 class WriteCurrentSky : public Task {
 public:
     std::string directory; //!< The name of the directory to write the Sky to
-    GroundhogModel * model; //!< The model to export
+    EmpModel * model; //!< The model to export
     std::string filename; //!< The name of the file for the sky data
     
     //! Constructor
     /*!
      @author German Molina
      @param[in] theFilename The file name
-     @param[in] theModel The GroundhogModel object
+     @param[in] theModel The EmpModel object
      */
-    WriteCurrentSky(std::string theDir, std::string theFilename, GroundhogModel * theModel)
+    WriteCurrentSky(std::string theDir, std::string theFilename, EmpModel * theModel)
     {
         
         std::string name = "Write current sky";

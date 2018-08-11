@@ -14,11 +14,11 @@
 #include "../src/taskmanager/taskmanager.h"
 class TaskManager;
 
-#include "../src/groundhogmodel/groundhogmodel.h"
-class GroundhogModel;
+#include "../src/emp_model/emp_model.h"
+class EmpModel;
 
 
-#include "../src/groundhogmodel/src/rtraceoptions.h"
+#include "../src/emp_model/src/rtraceoptions.h"
 class RTraceOptions;
 
 #include "../src/calculations/oconv_options.h"

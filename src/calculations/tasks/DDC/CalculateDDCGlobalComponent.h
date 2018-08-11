@@ -26,7 +26,7 @@
 
 class CalculateDDCGlobalComponent : public Task {
 public:
-    GroundhogModel * model; //!< The model
+    EmpModel * model; //!< The model
     int mf; //!< The Reinhart subdivition scheme for the sky
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
@@ -38,7 +38,7 @@ public:
     /*!
      @author German Molina
      */
-    CalculateDDCGlobalComponent(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions, int interpolation)
+    CalculateDDCGlobalComponent(EmpModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions, int interpolation)
     {
         std::string name = "DDC Global Component "+wp->getName();
         setName(&name);
@@ -57,7 +57,7 @@ public:
     /*!
      @author German Molina
      */
-    CalculateDDCGlobalComponent(GroundhogModel * theModel, std::vector<RAY> * theRays, int theMF, RTraceOptions * theOptions, int interpolation)
+    CalculateDDCGlobalComponent(EmpModel * theModel, std::vector<RAY> * theRays, int theMF, RTraceOptions * theOptions, int interpolation)
     {
         std::string name = "DDC Global Illuminance";
         setName(&name);

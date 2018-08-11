@@ -24,14 +24,14 @@
 
 class CalculateDirectSunMatrix : public Task {
 public:
-    GroundhogModel * model; //!< The model
+    EmpModel * model; //!< The model
     int mf; //!< The Reinhart sky subdivition scheme
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     ColorMatrix result; //!< The resulting matrix
     RTraceOptions options; //!< The options passed to rcontrib
     
-    CalculateDirectSunMatrix(GroundhogModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions)
+    CalculateDirectSunMatrix(EmpModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions)
     {
         
         std::string name = "Direct Sun Matrix "+ wp->getName();
@@ -52,7 +52,7 @@ public:
     }
     
     
-    CalculateDirectSunMatrix(GroundhogModel * theModel, std::vector<RAY> * theRays, int theMF, RTraceOptions * theOptions)
+    CalculateDirectSunMatrix(EmpModel * theModel, std::vector<RAY> * theRays, int theMF, RTraceOptions * theOptions)
     {
         
         std::string name = "Direct Sun Matrix";

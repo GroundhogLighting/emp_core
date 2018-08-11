@@ -24,11 +24,11 @@
 #include "../config_constants.h"
 #include "../common/utilities/io.h"
 #include "../common/utilities/stringutils.h"
-#include "../groundhogmodel/groundhogmodel.h"
-#include "../groundhogmodel/src/otype.h"
+#include "../emp_model/emp_model.h"
+#include "../emp_model/src/otype.h"
 #include "../common/geometry/polygon.h"
-#include "../groundhogmodel/src/photosensor.h"
-#include "../groundhogmodel/src/componentinstance.h"
+#include "../emp_model/src/photosensor.h"
+#include "../emp_model/src/componentinstance.h"
 
 
 #include <SketchUpAPI/initialize.h>
@@ -59,7 +59,7 @@
 
 #define ASSERT_SU_RESULT(x) if(!checkSUResult(x,"x",__LINE__)){ throw "Error when calling SKP API"; }
 
-SKPreader::SKPreader(GroundhogModel * ghmodel, bool newVerbose)
+SKPreader::SKPreader(EmpModel * ghmodel, bool newVerbose)
 {
 	
 	//initialize API
@@ -546,7 +546,7 @@ bool SKPreader::loadComponentDefinition(SUComponentDefinitionRef definition) con
         return true;
 
     if (label == SKP_PHOTOSENSOR) {
-        addPhotosensorsToModel(definition);
+        return addPhotosensorsToModel(definition);
     }
 
 
@@ -585,8 +585,6 @@ bool SKPreader::loadComponentDefinitions() const
     return true;
 }
 
-
-
 bool SKPreader::fillComponentDefinitions() const
 {
 	// count the component definitions
@@ -606,6 +604,16 @@ bool SKPreader::fillComponentDefinitions() const
 	// Now, load One by One
 	for (size_t i = 0; i < countDefinitions; i++) {
       
+        // Check if it has label
+        int label = getSUEntityLabel(SUComponentDefinitionToEntity(definitions[i]));
+        
+        // Skip
+        if (label == SKP_SOLVED_WORKPLANE)
+            continue;
+        
+        if (label == SKP_PHOTOSENSOR)
+            continue;
+        
         //get the name
         std::string definitionName;
         getSUComponentDefinitionName(definitions[i], &definitionName);
@@ -799,13 +807,28 @@ bool SKPreader::loadLayersContent() const
     ASSERT_SU_RESULT(SUEntitiesGetNumInstances(entities, &instanceCount));
 
     if (instanceCount > 0) {
-	  std::vector<SUComponentInstanceRef> instances(instanceCount);
+        std::vector<SUComponentInstanceRef> instances(instanceCount);
         ASSERT_SU_RESULT(SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount));
 
-	  // fill layers with the instances
-	  for (size_t i = 0; i < instanceCount; i++) {		
-        loadInstance(instances[i]);
-	  }      
+        // fill layers with the instances
+        for (size_t i = 0; i < instanceCount; i++) {
+            // Get parent
+            SUComponentDefinitionRef def;
+            ASSERT_SU_RESULT(SUComponentInstanceGetDefinition(instances[0], &def));
+            
+            // Check label of parent
+            int label = getSUEntityLabel(SUComponentDefinitionToEntity(def));
+            
+            if (label == SKP_SOLVED_WORKPLANE)
+                continue;
+            
+            if (label == SKP_PHOTOSENSOR) {
+                continue;
+            }
+            
+            // Load
+            loadInstance(instances[i]);
+        }
 
     } // end loading component instances.
 

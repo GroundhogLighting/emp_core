@@ -5,7 +5,7 @@
 #include "../include/emp_core.h"
 //#include "calculations/radiance.h"
 //#include "os_definitions.h"
-//#include "groundhogmodel/groundhogmodel.h"
+//#include "emp_model/emp_model.h"
 
 //#include "calculations/tasks/OconvTask.h"
 //#include "calculations/tasks/RTraceTask.h"
@@ -77,8 +77,8 @@ TEST(FourCM_SERIAL_BENCHMARK, 4CMvsDDC)
     globalOptions.setOption("lw",1e-7);
     globalOptions.setOption("lr",5);
     
-    // Build a GroundhogModel
-    GroundhogModel model = GroundhogModel();
+    // Build a EmpModel
+    EmpModel model = EmpModel();
     std::string layerName = "Layer 1";
     model.addLayer(&layerName);
     

@@ -1,5 +1,5 @@
 #include "../include/emp_core.h"
-//#include "groundhogmodel/groundhogmodel.h"
+//#include "emp_model/emp_model.h"
 
 
 
@@ -62,7 +62,7 @@ TEST(MaterialTest, Dielectric) {
     ASSERT_EQ(mat.hartmannConstant,newMat.hartmannConstant);
     
     // Add to model
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
     remove(fileName.c_str());
@@ -122,7 +122,7 @@ TEST(MaterialTest, Glass) {
     ASSERT_EQ(mat.b,newMat.b);
     
     // Add to model
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
     remove(fileName.c_str());
@@ -185,7 +185,7 @@ TEST(MaterialTest, Glow) {
     ASSERT_EQ(mat.maxRadius,newMat.maxRadius);
     
     // Add to model
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
     remove(fileName.c_str());
@@ -262,7 +262,7 @@ TEST(MaterialTest, Interface) {
     ASSERT_EQ(mat.refractionIndex2,newMat.refractionIndex2);
     
     // Add to model
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
     remove(fileName.c_str());
@@ -323,7 +323,7 @@ TEST(MaterialTest, Light) {
     ASSERT_EQ(mat.b,newMat.b);
     
     // Add to model
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
     remove(fileName.c_str());
@@ -390,7 +390,7 @@ TEST(MaterialTest, Metal) {
     ASSERT_EQ(mat.roughness,newMat.roughness);
     
     // Add to model
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
     remove(fileName.c_str());
@@ -455,7 +455,7 @@ TEST(MaterialTest, Plastic) {
     ASSERT_EQ(mat.roughness,newMat.roughness);
     
     // Add to model
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
     remove(fileName.c_str());
@@ -526,7 +526,7 @@ TEST(MaterialTest, Spotlight) {
     ASSERT_EQ(mat.direction.getZ(),newMat.direction.getZ());
     
     // Add to model
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
     remove(fileName.c_str());
@@ -597,7 +597,7 @@ TEST(MaterialTest, Trans) {
     ASSERT_EQ(mat.tspec,newMat.tspec);
     
     // Add to model
-    GroundhogModel model = GroundhogModel();
+    EmpModel model = EmpModel();
     ASSERT_TRUE(nullptr != model.addMaterial(&newJson));
     
     remove(fileName.c_str());

@@ -22,16 +22,16 @@
 class WriteRadianceSceneFile : public Task {
 public:
     std::string filename; //!< The name of the file to write
-    GroundhogModel * model; //!< The model to export
+    EmpModel * model; //!< The model to export
     OptionSet options;
     
     //! Constructor
     /*!
     @author German Molina
      @param[in] theFilename The file name
-     @param[in] theModel The GroundhogModel object
+     @param[in] theModel The EmpModel object
     */
-    WriteRadianceSceneFile(std::string theFilename, GroundhogModel * theModel, OptionSet * theOptions)
+    WriteRadianceSceneFile(std::string theFilename, EmpModel * theModel, OptionSet * theOptions)
     {
         std::string name = "Write Scene file";
         setName(&name);

@@ -27,7 +27,7 @@
 class CalculateStaticIlluminance : public Task {
     
 public:
-    GroundhogModel * model; //!< The model
+    EmpModel * model; //!< The model
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     Matrix result; //!< The resulting matrix
@@ -36,7 +36,7 @@ public:
     std::string ambientFileName; //!< The name of the ambient file used
     std::string sky; //!< The sky to add to the octree
     
-    CalculateStaticIlluminance(GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, OconvOptions * theOconvOptions, std::string theSky)
+    CalculateStaticIlluminance(EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, OconvOptions * theOconvOptions, std::string theSky)
     {
         model = theModel;
         rtraceOptions = theOptions;
@@ -58,7 +58,7 @@ public:
         setName(&name);
     }
     
-    CalculateStaticIlluminance(GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays , OconvOptions * theOconvOptions, std::string theSky)
+    CalculateStaticIlluminance(EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays , OconvOptions * theOconvOptions, std::string theSky)
     {
         model = theModel;
         rtraceOptions = theOptions;

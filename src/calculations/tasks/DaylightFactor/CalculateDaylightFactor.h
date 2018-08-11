@@ -29,14 +29,14 @@
 class CalculateDaylightFactor : public Task {
     
 public:
-    GroundhogModel * model; //!< The model
+    EmpModel * model; //!< The model
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     Matrix result; //!< The vector with the DF for each sensor
     RTraceOptions * rtraceOptions; //!< The options passed to rcontrib
     std::string ambientFileName; //!< The name of the ambient file used
     
-    CalculateDaylightFactor(GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp)
+    CalculateDaylightFactor(EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp)
     {
         generatesResults = false;
         
@@ -58,7 +58,7 @@ public:
         setName(&name);
     }
     
-    CalculateDaylightFactor(GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays)
+    CalculateDaylightFactor(EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays)
     {
         generatesResults = false;
         

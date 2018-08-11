@@ -26,7 +26,7 @@
 #ifndef SKP_READER_H
 #define SKP_READER_H
 
-#include "../groundhogmodel/groundhogmodel.h"
+#include "../emp_model/emp_model.h"
 #include "../common/geometry/polygon.h"
 #include "../common/geometry/loop.h"
 
@@ -64,10 +64,10 @@ using nlohmann::json;
 #define TO_DEGREE(x) x*180.0/3.141592654 
 
 
-//! Object that reads a a SketchUp model and fills a GroundhogModel
+//! Object that reads a a SketchUp model and fills a EmpModel
 /*!
 This object has a short life, and it is only meant to parse a SKP file
-into a GroundhogModel.
+into a EmpModel.
 
 The main function used by the Emp object is the parseSKPModel function.
 */
@@ -76,7 +76,7 @@ class SKPreader {
 private:
 	SUModelRef suModel; //!< The SketchUp model to be read.
 	SUStringRef groundhogDictionaryName; //!< The Groundhog Dictionary name (in SketchUp format)
-	GroundhogModel * model; //!< The model to be populated
+	EmpModel * model; //!< The model to be populated
 	bool verbose = true; //!< Should we inform progress?
 
     
@@ -129,6 +129,7 @@ private:
      @return success
      */
     bool loadModelInfo() const;
+        
     
     //! Transforms a SUCameraRef into a View
     /*!
@@ -155,7 +156,7 @@ private:
      */
     bool SUViewToView(SUSceneRef suView, View * view) const;
     
-    //! Loads all the SUSceneRef objects into the GroundhogModel object
+    //! Loads all the SUSceneRef objects into the EmpModel object
     /*!
      Loads all the SUSceneRef in the suModel, including the 'current one'
      (i.e. that view that was not saved, but that is the last used in the model)
@@ -170,7 +171,7 @@ private:
     
     //! Loads the information in the SULayerRef objects into the model
     /*!
-     Reads the layers, and loads them into the GroundhogModel. All the
+     Reads the layers, and loads them into the EmpModel. All the
      resulting Layer will be empty after this is done. After this function,
      the SKPReader::loadLayersContent() has to be called.
      
@@ -192,7 +193,7 @@ private:
     //! Creates a ComponentInstance from a SUComponentInstanceRef and adds it to the destination vector
     /*!
      Creates a ComponentInstance from a SUComponentInstanceRef and adds it to the destination vector.
-     The destination is a vector within a ComponentDefinition or a Layer; and the GroundhogModel provided
+     The destination is a vector within a ComponentDefinition or a Layer; and the EmpModel provided
      should contain the ComponentDefinition that contains the parent (checked by name).
      
      @author German Molina
@@ -212,7 +213,7 @@ private:
      */
     bool bulkFacesIntoVector(std::vector <Otype * > * const dest, SUEntitiesRef  entities) const;
     
-    //! Transforms a SUComponentDefinitionRef into a ComponentDefinition and adds it to a GroundhogModel
+    //! Transforms a SUComponentDefinitionRef into a ComponentDefinition and adds it to a EmpModel
     /*!
      @author German Molina
      @param[in] definition The SUComponentDefinitionRef to transform and import to model
@@ -220,7 +221,7 @@ private:
      */
     bool loadComponentDefinition(SUComponentDefinitionRef definition) const;
     
-    //! Loads all the SUComponentDefinitionRef in the suModel into a GroundhogModel
+    //! Loads all the SUComponentDefinitionRef in the suModel into a EmpModel
     /*!
      @author German Molina
      @return success
@@ -324,7 +325,7 @@ private:
     //! Retrieves all the SUComponentInstanceRef objects in entities and loads them into a ComponentInstance vector
     /*!
      Retrieves all the SUComponentInstanceRef objects in entities and loads them into a
-     ComponentInstance vector. The GroundhogModel inputed should contain the required
+     ComponentInstance vector. The EmpModel inputed should contain the required
      ComponentDefinitions (which are checked by name).
      
      @author German Molina
@@ -437,7 +438,7 @@ private:
     bool getFromSUTypedValue(SUTypedValueRef suValue, std::string * value) const;
     
     
-    //! Adds a Material to the Groundhogmodel
+    //! Adds a Material to the emp_model
     /*!
      Will add the material unless another material with the same name exists
      @author German Molina
@@ -551,10 +552,10 @@ public:
 	object with the correct name to find the information and initializes the SketchUp API
 
 	@author German Molina
-	@param[in] model The GroundhogModel to populate
+	@param[in] model The EmpModel to populate
 	@param[in] verbose Option for inform progress
 	*/
-	SKPreader(GroundhogModel * model, bool verbose);
+	SKPreader(EmpModel * model, bool verbose);
 
 	//! Destroys a SKPReader object
 	/*!
@@ -565,7 +566,7 @@ public:
 	*/
 	~SKPreader();
 
-    //! Reads the SKP model and fills a GroundhogModel
+    //! Reads the SKP model and fills a EmpModel
     /*!
      @author German Molina
      @param[in] inputFile The name of the SKP file to read

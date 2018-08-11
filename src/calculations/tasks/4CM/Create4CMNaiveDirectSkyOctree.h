@@ -25,11 +25,11 @@
 
 class Create4CMNaiveDirectSkyOctree : public Task {
 public:
-    GroundhogModel * model; //!< The model to Oconv
+    EmpModel * model; //!< The model to Oconv
     std::string octreeName; //!< The name of the final octree
     int mf = 1; //!< The reinhart subdivition sheme
     
-    Create4CMNaiveDirectSkyOctree(GroundhogModel * theModel, const int theMf)
+    Create4CMNaiveDirectSkyOctree(EmpModel * theModel, const int theMf)
     {
         
         std::string name = "Create CreateNaiveDirectSkyOctree";

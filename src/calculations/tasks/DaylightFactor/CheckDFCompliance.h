@@ -30,7 +30,7 @@ class CheckDFCompliance : public StaticSimulationTask {
 public:
     
     
-    CheckDFCompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, double min, double max)
+    CheckDFCompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, double min, double max)
     {
         model = theModel;
         workplane = wp;
@@ -48,7 +48,7 @@ public:
         setName(&the_name);
     }
     
-    CheckDFCompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, double min, double max)
+    CheckDFCompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, double min, double max)
     {
         model = theModel;
         rays = theRays;

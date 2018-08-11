@@ -27,7 +27,7 @@ double daScoreCalculator(double v, double minLux, double maxLux)
     return (v >= minLux ? 1 : 0);
 }
 
-CheckDACompliance::CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
+CheckDACompliance::CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
 {
     model = theModel;
     minLux = theMinLux;
@@ -51,7 +51,7 @@ CheckDACompliance::CheckDACompliance(std::string name, GroundhogModel * theModel
 
 
 
-CheckDACompliance::CheckDACompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
+CheckDACompliance::CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
 {
     
     model = theModel;

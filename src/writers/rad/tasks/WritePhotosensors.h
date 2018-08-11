@@ -22,16 +22,16 @@
 class WritePhotosensors : public Task {
 public:
     std::string directory; //!< The name of the directory to write the components to
-    GroundhogModel * model; //!< The model to export
+    EmpModel * model; //!< The model to export
     
     
     //! Constructor
     /*!
      @author German Molina
      @param[in] theFilename The file name
-     @param[in] theModel The GroundhogModel object
+     @param[in] theModel The EmpModel object
      */
-    WritePhotosensors(std::string theDir, GroundhogModel * theModel)
+    WritePhotosensors(std::string theDir, EmpModel * theModel)
     {
         std::string name = "Write photosensors";
         setName(&name);

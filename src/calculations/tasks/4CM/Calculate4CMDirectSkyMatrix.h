@@ -26,7 +26,7 @@
 
 class Calculate4CMDirectSkyMatrix : public Task {
 public:
-    GroundhogModel * model; //!< The model
+    EmpModel * model; //!< The model
     int mf; //!< The Reinhart sky subdivition scheme
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
@@ -36,7 +36,7 @@ public:
     /*!
      @author German Molina
      */
-    Calculate4CMDirectSkyMatrix(GroundhogModel * theModel, Workplane * wp, int theMF)
+    Calculate4CMDirectSkyMatrix(EmpModel * theModel, Workplane * wp, int theMF)
     {
         
         std::string name = "Create DirectSkyMatrix";
@@ -60,7 +60,7 @@ public:
     /*!
      @author German Molina
      */
-    Calculate4CMDirectSkyMatrix(GroundhogModel * theModel, std::vector<RAY> * theRays, int theMF)
+    Calculate4CMDirectSkyMatrix(EmpModel * theModel, std::vector<RAY> * theRays, int theMF)
     {
         
         std::string name = "Create DirectSkyMatrix";

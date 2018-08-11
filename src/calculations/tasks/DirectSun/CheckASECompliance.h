@@ -33,10 +33,10 @@ class CheckASECompliance : public CBDMTask {
     
 public:
    
-    CheckASECompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, Workplane * wp, int theMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime);
+    CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int theMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime);
     
     
-    CheckASECompliance(std::string name, GroundhogModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime);
+    CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime);
     
     
     GET_DEP_RESULTS(CalculateDirectSolarIlluminance);    

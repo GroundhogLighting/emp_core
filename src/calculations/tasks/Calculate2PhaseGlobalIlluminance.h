@@ -27,7 +27,7 @@
 class Calculate2PhaseGlobalIlluminance : public Task {
 
 private:
-    GroundhogModel * model; //!< The model
+    EmpModel * model; //!< The model
     int skyMF; //!< The Reinhart subdivition scheme for the sky
     int sunMF; //!< The Reinhart subdivition scheme for the sun
     Workplane * workplane = nullptr; //!< The workplane to which the matrix will be calculated
@@ -37,7 +37,7 @@ private:
     int interp; //!< The interpolation scheme
 
 public:
-    Calculate2PhaseGlobalIlluminance(GroundhogModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
+    Calculate2PhaseGlobalIlluminance(EmpModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
         
         std::string name = "2-Phase Illuminance "+wp->getName();
@@ -56,7 +56,7 @@ public:
     }
     
     
-    Calculate2PhaseGlobalIlluminance(GroundhogModel * theModel,  std::vector<RAY> * theRays, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
+    Calculate2PhaseGlobalIlluminance(EmpModel * theModel,  std::vector<RAY> * theRays, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
         
         std::string name = "2-Phase Iluminance";

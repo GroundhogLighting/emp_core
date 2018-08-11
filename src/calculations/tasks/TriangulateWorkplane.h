@@ -21,7 +21,7 @@
 
 #pragma once
 #include "../../common/geometry/triangle.h"
-#include "../../groundhogmodel/groundhogmodel.h"
+#include "../../emp_model/emp_model.h"
 #include "../../taskmanager/task.h"
 #include "tbb/tbb.h"
 #include "../../common/geometry/triangulation.h"

@@ -180,8 +180,8 @@ options.setOption("lw",0.000001);
 options.setOption("aa",0.1);
 
 // Create Models
-GroundhogModel simpleModel = GroundhogModel();
-GroundhogModel emptyModel = GroundhogModel();
+EmpModel simpleModel = EmpModel();
+EmpModel emptyModel = EmpModel();
 
 // Fill simple model
 std::string layerName = "Layer 1";

@@ -31,7 +31,7 @@ public:
     
     bool generatesResults = true; //!< Does generate results
     float compliance = 0; //!< Percentage of space that is over daylit
-    GroundhogModel * model; //!< The model
+    EmpModel * model; //!< The model
     Workplane * workplane = nullptr; //!< The workplane to which the metric will be calculated
     std::vector<RAY> * rays = nullptr; //!< The rays to process
     Matrix * depResults = nullptr; //!< The dependency results
