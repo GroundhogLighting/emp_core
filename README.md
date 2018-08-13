@@ -127,6 +127,48 @@ make. So, for building you should:
 
 ### Build Intel TBB
 
+Building IntelTBB is fairly easy in macOS, as the process has been automated in a premake command
+
+```
+# In macOS (and probably Linux... I have not tried)
+premake5 intelTBB
+```
+
+On Windows, however, it is more of a problem. This is because we need to use the Visual Studio command prompt... or, at least, I have not been able to find another way of doing this. 
+
+Instal MAKE for windows (http://gnuwin32.sourceforge.net/packages/make.htm)
+Add it to your PATH
+
+Then:
+
+```
+# Go to the emp_core folder
+cd 3rdparty/IntelTBB
+make stdlib=libc++ tbb_build_prefix=tbb tbb tbbmalloc
+cd ..
+cd ..
+
+# Delete old version
+rmdir libs\RELEASE\tbb\tbb_release
+rmdir libs\DEBUG\tbb\tbb_debug
+
+# Replace with new one
+md 3rdparty\IntelTBB\build\tbb_release libs\RELEASE\tbb
+md 3rdparty\IntelTBB\build\tbb_debug libs\DEBUG\tbb
+
+# Copy dynamic libr to the BIN directory
+copy libs\RELEASE\tbb\libtbb.dll bin\RELEASE\libtbb.dll
+copy libs\DEBUG\tbb\libtbb_debug.dll bin\DEBUG\libtbb_debug.dll 
+copy libs\RELEASE\tbb\libtbbmalloc.dll bin\RELEASE\libtbbmalloc.dll 
+copy libs\DEBUG\tbb\libtbbmalloc_debug.dll bin\DEBUG\libtbbmalloc_debug.dll 
+copy libs\RELEASE\tbb\libtbbmalloc_proxy.dll bin\RELEASE\libtbbmalloc_proxy.dll 
+copy libs\DEBUG\tbb\libtbbmalloc_proxy_debug.dll bin\DEBUG\libtbbmalloc_proxy_debug.dll 
+ 
+# Clean
+rmdir 3rdparty/IntelTBB/build/tbb_release
+rmdir 3rdparty/IntelTBB/build/tbb_debug
+
+```
 
 ### Create the project for your IDE
 
