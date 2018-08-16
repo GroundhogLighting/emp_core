@@ -42,4 +42,6 @@ libs
 premakescripts/obj
 premakescripts/*.make
 ./3rdparty/Radiance/src/rt/Version.c
+./3rdparty/SketchUp/MACOS/**
+./3rdparty/SketchUp/WIN/**
 ./tests/skp_files/**/**~.skp
