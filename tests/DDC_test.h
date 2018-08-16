@@ -1,3 +1,7 @@
+#pragma push_macro("max")
+#undef max
+
+
 
 #include "../include/emp_core.h"
 #include <algorithm>
@@ -100,7 +104,7 @@ TEST(DDC_TEST, Empty_global_DDC_vs_reference){
         double reference = emptyReference[i][0];
         
         //std::cout << value << "," << reference << std::endl;
-        ASSERT_NEAR(value,reference,max(reference * 0.05, 5.0));
+        ASSERT_NEAR(value,reference,std::max(reference * 0.05, 5.0));
     }
 }
 
@@ -135,7 +139,7 @@ TEST(DDC_TEST, Simple_global_DDC_vs_reference){
             msd += (v*v);
             count++;
         }
-        ASSERT_NEAR(value,reference,max(reference * 0.05, 5.0));
+        ASSERT_NEAR(value,reference,std::max(reference * 0.05, 5.0));
     }
     ASSERT_TRUE( std::sqrt(msd/(double)count) < 0.05);
 }
@@ -196,7 +200,7 @@ TEST(DDC_TEST, Simple_directSunPatch_DDC_vs_reference){
             msd += (v*v);
             count++;
         }
-        ASSERT_NEAR(value,reference, max(reference * 0.05, 5.0) );
+        ASSERT_NEAR(value,reference, std::max(reference * 0.05, 5.0) );
     }
     ASSERT_TRUE( std::sqrt(msd/(double)count) < 0.05);
     
@@ -259,7 +263,7 @@ TEST(DDC_TEST, Simple_directSharpSun_DDC_vs_reference){
             msd += (v*v);
             count++;
         }
-        ASSERT_NEAR(value,reference,max(reference * 0.05, 5.0));
+        ASSERT_NEAR(value,reference,std::max(reference * 0.05, 5.0));
     }
     ASSERT_TRUE( std::sqrt(msd/(double)count) < 0.05);
     
@@ -316,9 +320,12 @@ TEST(DDC_TEST,Simple_full_DDC_vs_RTRACE){
             msd += (v*v);
             count++;
         }
-        ASSERT_NEAR(value,reference,max(reference * 0.05, 5.0));
+        ASSERT_NEAR(value,reference,std::max(reference * 0.05, 5.0));
     }
     ASSERT_TRUE( std::sqrt(msd/(double)count) < 0.05);
     
 }
+
+
+#pragma pop_macro("max")
 

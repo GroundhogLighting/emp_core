@@ -43,14 +43,14 @@
 // We throw std:: bad_alloc() when scalable_malloc returns NULL
 //( we return NULL if it is a no-throw implementation)
 
-void* operator new (size_t size) throw (std:: bad_alloc)
+void* operator new (size_t size) noexcept(false)
 {
     if (size == 0) size = 1;
         if (void* ptr = scalable_malloc (size)) return ptr;
     throw std:: bad_alloc ();
 }
 
-void* operator new[] (size_t size) throw (std:: bad_alloc)
+void* operator new[] (size_t size) noexcept(false)
 {
     return operator new (size);
 }
