@@ -88,8 +88,15 @@ bool rcontrib(RTraceOptions * options, char * octname, bool do_irradiance, bool 
     PCLOSE(rt);
     
     std::ifstream in;
+#ifdef WIN
+#pragma push_macro("open")
+#undef open
+#endif
     in.open(rgbfile);
-    std::string line;
+#ifdef WIN
+#pragma pop_macro("open")
+#endif
+	std::string line;
     if(in.is_open())
     {
         size_t nsensors = rays->size();
@@ -404,8 +411,8 @@ void interpolatedDCTimestep(int interp, EmpModel * model, const ColorMatrix * DC
     const float albedo = location->getAlbedo();
     const float latitude = location->getLatitude();
     const float longitude = location-> getLongitude();
-    const float meridian = location->getTimeZone()*(-15.0);
-    const double rotation = model -> getNorthCorrection();
+    const float meridian = location->getTimeZone()*(-15.0f);
+    const float rotation = model -> getNorthCorrection();
     
     // Get sizes and resize
     const size_t nSensors = DC->nrows();
@@ -444,7 +451,7 @@ void interpolatedDCTimestep(int interp, EmpModel * model, const ColorMatrix * DC
                                       ColorMatrix skyVector = ColorMatrix(nBins,1);
                                       
                                       // Is day... calculate
-                                      int sharpPatch = genPerezSkyVector(now.month, now.day, now.hour, now.direct_normal, now.diffuse_horizontal, albedo, latitude, longitude, meridian, mf, sunOnly, sharpSun, rotation, &skyVector);
+                                      int sharpPatch = genPerezSkyVector(now.month, now.day, now.hour, (float)now.direct_normal, (float)now.diffuse_horizontal, albedo, latitude, longitude, meridian, mf, sunOnly, sharpSun, rotation, &skyVector);
                                       
                                       if(sharpSun && sunOnly){
                                           // In this case, we know that only one of the elements in the
@@ -468,7 +475,7 @@ void interpolatedDCTimestep(int interp, EmpModel * model, const ColorMatrix * DC
 }
 
 
-void calcCBDMScore(int interp, EmpModel * model, int firstMonth, int lastMonth, double early, double late, double minLux, double maxLux, const Matrix * input, Matrix * result, std::function<double(double v, double min, double max)> scoreCalculator)
+void calcCBDMScore(int interp, EmpModel * model, int firstMonth, int lastMonth, double early, double late, double minLux, double maxLux, const Matrix * input, Matrix * result, std::function<float(double v, double min, double max)> scoreCalculator)
 {
     
     // Get size
@@ -518,7 +525,7 @@ void calcCBDMScore(int interp, EmpModel * model, int firstMonth, int lastMonth, 
             for(int sensor = 0; sensor < nsensors; sensor++){
                 lux = input->getElement(sensor,nstep);
                 
-                double score = scoreCalculator(lux, minLux, maxLux);
+                auto score = scoreCalculator(lux, minLux, maxLux);
                 
                 result->setElement(sensor,0,result->getElement(sensor,0)+score);                
             }
@@ -526,7 +533,7 @@ void calcCBDMScore(int interp, EmpModel * model, int firstMonth, int lastMonth, 
     }
     
     // Normalize by the total number of timestep
-    float totalSteps = (float)nWorkingTsteps/100.0;
+    float totalSteps = (float)nWorkingTsteps/100.0f;
     
     for(size_t sensor = 0; sensor < nsensors; sensor++){
         result->setElement(sensor, 0, result->getElement(sensor,0)/totalSteps);

@@ -141,9 +141,9 @@ public:
         
         for(size_t col=0; col < nTimesteps; col++){
             for(size_t row=0; row < nSensors; row++){
-                double r = globalRed->getElement(row,col) - directSunPatchRed->getElement(row,col) + directSunRed->getElement(row,col);
-                double g = globalGreen->getElement(row,col) - directSunPatchGreen->getElement(row,col) + directSunGreen->getElement(row,col);
-                double b = globalBlue->getElement(row,col) - directSunPatchBlue->getElement(row,col) + directSunBlue->getElement(row,col);
+                auto r = globalRed->getElement(row,col) - directSunPatchRed->getElement(row,col) + directSunRed->getElement(row,col);
+				auto g = globalGreen->getElement(row,col) - directSunPatchGreen->getElement(row,col) + directSunGreen->getElement(row,col);
+				auto b = globalBlue->getElement(row,col) - directSunPatchBlue->getElement(row,col) + directSunBlue->getElement(row,col);
                 
                 red->setElement(row,col,r);
                 green->setElement(row,col,g);

@@ -75,9 +75,9 @@ public:
     
     int        rhsubdiv = 1;        /* Reinhart sky subdivisions */
     
-    COLOR        skycolor = {1.0, 1.0, 1.0}; //{.96, 1.004, 1.118};    /* sky coloration */
-    COLOR        suncolor = {1., 1., 1.};    /* sun color */
-    COLOR        grefl = {.2, .2, .2};        /* ground reflectance */
+    COLOR        skycolor = {1.0f, 1.0f, 1.0f}; //{.96, 1.004, 1.118};    /* sky coloration */
+    COLOR        suncolor = {1.0f, 1.0f, 1.0f};    /* sun color */
+    COLOR        grefl = {.2f, .2f, .2f};        /* ground reflectance */
     
     int        nskypatch;        /* number of Reinhart patches */
     float        *rh_palt;        /* sky patch altitudes (radians) */
@@ -100,10 +100,10 @@ public:
     double azimuth;                /* Solar azimuth (radians) */
     double apwc;                /* Atmospheric precipitable water content */
     double dew_point = 11.0;        /* Surface dew point temperature (deg. C) */
-    double diff_illum;            /* Diffuse illuminance */
-    double diff_irrad;            /* Diffuse irradiance */
-    double dir_illum;            /* Direct illuminance */
-    double dir_irrad;            /* Direct irradiance */
+    float diff_illum;            /* Diffuse illuminance */
+    float diff_irrad;            /* Diffuse irradiance */
+    float dir_illum;            /* Direct illuminance */
+    float dir_irrad;            /* Direct irradiance */
     int julian_date;            /* Julian date */
     double perez_param[5];            /* Perez sky model parameters */
     double sky_brightness;            /* Sky brightness */
@@ -264,7 +264,7 @@ public:
     ComputeSky(float *parr)
     {
         int index;			/* Category index */
-        double norm_diff_illum;		/* Normalized diffuse illuimnance */
+        float norm_diff_illum;		/* Normalized diffuse illuimnance */
         int i;
         
         /* Calculate atmospheric precipitable water content */
@@ -304,8 +304,8 @@ public:
         /* Compute ground radiance (include solar contribution if any) */
         parr[0] = diff_illum;
         if (altitude > 0)
-            parr[0] += dir_illum * sin(altitude);
-        parr[2] = parr[1] = parr[0] *= (1./PI/WHTEFFICACY);
+            parr[0] += dir_illum * (float)sin(altitude);
+        parr[2] = parr[1] = parr[0] *= (1.0f/ (float)PI/ (float)WHTEFFICACY);
         multcolor(parr, grefl);
 
         /* Calculate Perez sky model parameters */
@@ -315,20 +315,20 @@ public:
         CalcSkyPatchLumin(parr);
 
         /* Calculate relative horizontal illuminance */
-        norm_diff_illum = CalcRelHorzIllum(parr);
+        norm_diff_illum = (float)CalcRelHorzIllum(parr);
 
         /* Check for zero sky -- make uniform in that case */
         if (norm_diff_illum <= FTINY) {
             for (i = 1; i < nskypatch; i++)
                 setcolor(parr+3*i, 1., 1., 1.);
-            norm_diff_illum = PI;
+            norm_diff_illum = (float)PI;
         }
         /* Normalization coefficient */
         norm_diff_illum = diff_illum / norm_diff_illum;
 
         /* Apply to sky patches to get absolute radiance values */
         for (i = 1; i < nskypatch; i++) {
-            scalecolor(parr+3*i, norm_diff_illum*(1./WHTEFFICACY));
+            scalecolor(parr+3*i, norm_diff_illum*(1.0f/ (float)WHTEFFICACY));
             multcolor(parr+3*i, skycolor);
         }
     }
@@ -382,9 +382,9 @@ public:
                         /* add to nearest patch radiances */
         for (i = nsuns; i--; ) {
             float	*pdest = parr + 3*near_patch[i];
-            float	val_add = wta[i] * dir_illum / (WHTEFFICACY * wtot);
+            float	val_add = (float)wta[i] * dir_illum / (float)(WHTEFFICACY * wtot);
 
-            val_add /= (fixed_sun_sa > 0)	? fixed_sun_sa
+            val_add /= (fixed_sun_sa > 0)	? (float)fixed_sun_sa
                             : rh_dom[near_patch[i]] ;
             *pdest++ += val_add*suncolor[0];
             *pdest++ += val_add*suncolor[1];
@@ -417,21 +417,21 @@ public:
             exit(1);
         }
         
-        rh_palt[0] = -PI/2.;		/* ground & zenith patches */
-        rh_pazi[0] = 0.;
-        rh_dom[0] = 2.*PI;
-        rh_palt[nskypatch-1] = PI/2.;
-        rh_pazi[nskypatch-1] = 0.;
-        rh_dom[nskypatch-1] = 2.*PI*(1. - cos(alpha*.5));
+        rh_palt[0] = (float)(-PI/2.0);		/* ground & zenith patches */
+        rh_pazi[0] = 0.f;
+        rh_dom[0] = (float)(2.*PI);
+        rh_palt[nskypatch-1] = (float)(PI/2.0);
+        rh_pazi[nskypatch-1] = 0.0f;
+        rh_dom[nskypatch-1] = (float)(2.*PI*(1. - cos(alpha*.5)));
         p = 1;				/* "normal" patches */
         for (i = 0; i < NROW*rhsubdiv; i++) {
-            const float	ralt = alpha*(i + .5);
+            const float	ralt = (float)(alpha*(i + .5));
             const int	ninrow = tnaz[i/rhsubdiv]*rhsubdiv;
-            const float	dom = 2.*PI*(sin(alpha*(i+1)) - sin(alpha*i)) /
-                            (double)ninrow;
+            const float	dom = (float)(2.*PI*(sin(alpha*(i+1)) - sin(alpha*i)) /
+                            (double)ninrow);
             for (j = 0; j < ninrow; j++) {
                 rh_palt[p] = ralt;
-                rh_pazi[p] = 2.*PI * j / (double)ninrow;
+                rh_pazi[p] = (float)( 2.*PI * j / (double)ninrow);
                 rh_dom[p++] = dom;
             }
         }
@@ -476,15 +476,15 @@ public:
     /*				Irradiance Components from Direct and Global */
     /*				Irradiance,î Solar Energy 44(5):271-289, Eqn. 7. */
 
-    double CalcDiffuseIllumRatio( int index )
+    float CalcDiffuseIllumRatio( int index )
     {
         ModelCoeff const *pnle;	/* Category coefficient pointer */
         
         /* Get category coefficient pointer */
         pnle = &(DiffuseLumEff[index]);
 
-        return pnle->a + pnle->b * apwc + pnle->c * cos(sun_zenith) +
-                pnle->d * log(sky_brightness);
+        return (float)(pnle->a + pnle->b * apwc + pnle->c * cos(sun_zenith) +
+                pnle->d * log(sky_brightness));
     }
 
     /* Calculate direct illuminance to direct irradiance ratio */
@@ -494,7 +494,7 @@ public:
     /*				Irradiance Components from Direct and Global */
     /*				Irradiance,î Solar Energy 44(5):271-289, Eqn. 8. */
 
-    double CalcDirectIllumRatio( int index )
+    float CalcDirectIllumRatio( int index )
     {
         ModelCoeff const *pnle;	/* Category coefficient pointer */
 
@@ -503,9 +503,9 @@ public:
 
         /* Calculate direct illuminance from direct irradiance */
         
-        return dmax((pnle->a + pnle->b * apwc + pnle->c * exp(5.73 *
+        return (float)(dmax((pnle->a + pnle->b * apwc + pnle->c * exp(5.73 *
                 sun_zenith - 5.0) + pnle->d * sky_brightness),
-                0.0);
+                0.0));
     }
 
     /* Calculate sky brightness */
@@ -576,10 +576,10 @@ public:
         int index = 0;			/* Category index */
 
         /* Convert illuminance to irradiance */
-        diff_irrad = diff_illum * DC_SolarConstantE /
-                (DC_SolarConstantL * 1000.0);
-        dir_irrad = dir_illum * DC_SolarConstantE /
-                (DC_SolarConstantL * 1000.0);
+        diff_irrad = diff_illum * (float)DC_SolarConstantE /
+			(float)(DC_SolarConstantL * 1000.0);
+        dir_irrad = dir_illum * (float)DC_SolarConstantE /
+			(float)(DC_SolarConstantL * 1000.0);
 
         /* Calculate sky brightness and clearness */
         sky_brightness = CalcSkyBrightness();
@@ -794,7 +794,7 @@ public:
                     sin(zsa) * cos(aas));
 
             /* Calculate patch luminance */
-            parr[3*i] = CalcRelLuminance(sspa, zsa);
+            parr[3*i] = (float)CalcRelLuminance(sspa, zsa);
             if (parr[3*i] < 0) parr[3*i] = 0;
             parr[3*i+2] = parr[3*i+1] = parr[3*i];
         }

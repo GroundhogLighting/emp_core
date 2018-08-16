@@ -161,11 +161,11 @@ public:
                                                     [=](const tbb::blocked_range<size_t>& r2) {
                                                         for (size_t sens = r2.begin(); sens != r2.end(); ++sens) {
                                                             
-                                                            double r = globalRed->  getElement(sens,t) - directSunPatchRed->  getElement(sens,t) + directSunRed->  getElement(sens,t);
-                                                            double g = globalGreen->getElement(sens,t) - directSunPatchGreen->getElement(sens,t) + directSunGreen->getElement(sens,t);
-                                                            double b = globalBlue-> getElement(sens,t) - directSunPatchBlue-> getElement(sens,t) + directSunBlue-> getElement(sens,t);
+                                                            auto r = globalRed->  getElement(sens,t) - directSunPatchRed->  getElement(sens,t) + directSunRed->  getElement(sens,t);
+															auto g = globalGreen->getElement(sens,t) - directSunPatchGreen->getElement(sens,t) + directSunGreen->getElement(sens,t);
+															auto b = globalBlue-> getElement(sens,t) - directSunPatchBlue-> getElement(sens,t) + directSunBlue-> getElement(sens,t);
                                                             
-                                                            result.setElement(sens,t, 47.5*r + 119.95*g + 11.60*b);
+                                                            result.setElement(sens,t, 47.5f*r + 119.95f*g + 11.60f*b);
                                                             
                                                         }
                                                     },

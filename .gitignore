@@ -37,12 +37,9 @@ debug/*
 *.skb
 *.log
 **.vscode**
-
 test_outputs/*
 libs
 premakescripts/obj
 premakescripts/*.make
-
 ./3rdparty/Radiance/src/rt/Version.c
-
 ./tests/skp_files/**/**~.skp

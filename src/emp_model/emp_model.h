@@ -88,7 +88,7 @@ private:
 	Date date = Date(1, 1, 12, 12); //!< The current date
 	RTraceOptions rtraceOptions = RTraceOptions(); //< The options related to Ray Tracing (RTRACE program)
 	//Observers // **	
-	double northCorrection; //!< The north correction (i.e. the model should be rotated when calculating)
+	float northCorrection; //!< The north correction (i.e. the model should be rotated when calculating)
 
 public:
 
@@ -224,14 +224,14 @@ public:
 	@author German Molina
 	@param[in] nC the North Correction
 	*/
-	void setNorthCorrection(double nC);
+	void setNorthCorrection(float nC);
 
 	//! Retrieves the north correction
 	/*!
 	@author German Molina
 	@return The north correction
 	*/
-	double getNorthCorrection();
+	float getNorthCorrection();
 
 
 	//! Adds a new polygon to a certain workplane

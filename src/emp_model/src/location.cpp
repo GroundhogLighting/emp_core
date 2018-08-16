@@ -30,27 +30,27 @@ Location::Location() {
 	timeZone = 0;
 }
 
-double Location::getLatitude() const
+float Location::getLatitude() const
 {
 	return latitude;
 }
-void Location::setLatitude(double l)
+void Location::setLatitude(float l)
 {
 	latitude = l;
 }
-double Location::getLongitude() const
+float Location::getLongitude() const
 {
 	return longitude;
 }
-void Location::setLongitude(double l)
+void Location::setLongitude(float l)
 {
 	longitude = l;
 }
-double Location::getTimeZone() const
+float Location::getTimeZone() const
 {
 	return timeZone;
 }
-void Location::setTimeZone(double t)
+void Location::setTimeZone(float t)
 {
 	timeZone = t;
 }
@@ -75,24 +75,24 @@ void Location::setCountry(std::string c)
 	country = c;
 }
 
-void Location::setAlbedo(double a)
+void Location::setAlbedo(float a)
 {
 	albedo = a;
 }
 
-double Location::getAlbedo() const
+float Location::getAlbedo() const
 {
 	return albedo;
 }
 
 bool Location::fillWeatherFromJSON(json * j)
 {
-	elevation = j->at("elevation").get<double>();
+	elevation = j->at("elevation").get<float>();
 	return weather.fillFromJSON(j);
 }
 
 
-double Location::getElevation() const
+float Location::getElevation() const
 {
 	return elevation;
 }

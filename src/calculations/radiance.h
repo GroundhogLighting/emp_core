@@ -151,7 +151,7 @@ int genPerezSkyVector(int month, int day, float hour, float direct, float diffus
 
 void interpolatedDCTimestep(int interp, EmpModel * model, const ColorMatrix * DC, bool sunOnly, bool sharpSun, ColorMatrix * result);
 
-void calcCBDMScore(int interp, EmpModel * model, int firstMonth, int lastMonth, double early, double late, double minLux, double maxLux, const Matrix * input, Matrix * result, std::function<double(double v, double min, double max)> scoreCalculator);
+void calcCBDMScore(int interp, EmpModel * model, int firstMonth, int lastMonth, double early, double late, double minLux, double maxLux, const Matrix * input, Matrix * result, std::function<float(double v, double min, double max)> scoreCalculator);
     
 
 

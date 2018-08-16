@@ -133,10 +133,10 @@ void ColorMatrix::calcIrradiance(Matrix * result) const
                                                 [=](const tbb::blocked_range<size_t>& r2) {
                                                     for (size_t row = r2.begin(); row != r2.end(); ++row) {
                                                         
-                                                        double r = red.getElement(row,col);
-                                                        double g = green.getElement(row,col);
-                                                        double b = blue.getElement(row,col);
-                                                        result->setElement(row,col,0.265*r + 0.67*g + 0.065*b);
+                                                        auto r = red.getElement(row,col);
+														auto g = green.getElement(row,col);
+														auto b = blue.getElement(row,col);
+                                                        result->setElement(row,col,0.265f*r + 0.67f*g + 0.065f*b);
                                                         
                                 }
                             },
@@ -170,10 +170,10 @@ void ColorMatrix::calcIlluminance(Matrix * result) const
                                                 [=](const tbb::blocked_range<size_t>& r2) {
                                                     for (size_t row = r2.begin(); row != r2.end(); ++row) {
                                                         
-                                                        double r = red.getElement(row,col);
-                                                        double g = green.getElement(row,col);
-                                                        double b = blue.getElement(row,col);
-                                                        result->setElement(row,col,47.5*r + 119.95*g + 11.60*b);
+														auto r = red.getElement(row,col);
+														auto g = green.getElement(row,col);
+														auto b = blue.getElement(row,col);
+                                                        result->setElement(row,col,47.5f*r + 119.95f*g + 11.60f*b);
                                                         
                                                     }
                                                 },
@@ -193,18 +193,18 @@ void ColorMatrix::calcIlluminance(Matrix * result) const
 
 float ColorMatrix::calcIrradiance(size_t row, size_t col) const
 {
-    const double r = red.getElement(row,col);
-    const double g = green.getElement(row,col);
-    const double b = blue.getElement(row,col);
-    return 0.265*r + 0.67*g + 0.065*b;
+    const auto r = red.getElement(row,col);
+    const auto g = green.getElement(row,col);
+    const auto b = blue.getElement(row,col);
+    return 0.265f*r + 0.67f*g + 0.065f*b;
 }
 
 float ColorMatrix::calcIlluminance(size_t row, size_t col) const
 {
-    const double r = red.getElement(row,col);
-    const double g = green.getElement(row,col);
-    const double b = blue.getElement(row,col);
-    return 47.5*r + 119.95*g + 11.60*b;
+    const auto r = red.getElement(row,col);
+    const auto g = green.getElement(row,col);
+    const auto b = blue.getElement(row,col);
+    return 47.5f*r + 119.95f*g + 11.60f*b;
     
 }
 

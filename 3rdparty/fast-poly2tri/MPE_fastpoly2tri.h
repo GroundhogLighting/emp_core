@@ -149,6 +149,15 @@
 #define MPE_Assert assert
 #endif
 
+
+#ifndef ssize_t
+#ifdef WIN
+typedef size_t ssize_t;
+#endif
+#endif
+
+
+
 #ifndef uxx
 #include <stdint.h> // uint32_t
 typedef uint8_t u8;
@@ -163,11 +172,11 @@ typedef intptr_t imm;
 typedef uintptr_t umm;
 #endif
 
-#ifdef MPE_POLY2TRI_USE_DOUBLE
+//#ifdef MPE_POLY2TRI_USE_DOUBLE
 typedef double poly_float;
-#else
-typedef float poly_float;
-#endif
+//#else
+//typedef float poly_float;
+//#endif
 
 #ifndef internal_static
 #define internal_static static

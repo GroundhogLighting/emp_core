@@ -22,12 +22,12 @@
 
 #include "./CheckDACompliance.h"
 
-double daScoreCalculator(double v, double minLux, double maxLux)
+float daScoreCalculator(double v, double minLux, double maxLux)
 {
-    return (v >= minLux ? 1 : 0);
+    return (v >= minLux ? 1.0f : 0.0f);
 }
 
-CheckDACompliance::CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
+CheckDACompliance::CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime)
 {
     model = theModel;
     minLux = theMinLux;
@@ -51,7 +51,7 @@ CheckDACompliance::CheckDACompliance(std::string name, EmpModel * theModel, RTra
 
 
 
-CheckDACompliance::CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
+CheckDACompliance::CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime)
 {
     
     model = theModel;

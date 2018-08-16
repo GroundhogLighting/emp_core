@@ -64,17 +64,17 @@ TEST(GenPerezSkyVec, NoRadiation)
     for(int i=0;i<100;i++){
         int month = (rand() % 12) + 1;
         int day = (rand() % 28) + 1;
-        float hour = 12.0 + ((rand() % 8) - 4.0);
+        float hour = 12.0f + (float)((rand() % 8) - 4.0);
         
         float direct = 0;
         float diffuse = 0;
-        float albedo = (rand() % 100) / 100.0;
+        float albedo = (float)(rand() % 100) / 100.0f;
         
-        int latitude = (rand() % 180) - 90;
-        int longitude = (rand() % 360) - 180;
-        int meridian = longitude + ((rand() % 6) - 3);
+        float latitude = (float)(rand() % 180) - 90.0f;
+        float longitude = (float)(rand() % 360) - 180.0f;
+        float meridian = longitude + (float)((rand() % 6) - 3);
         
-        int rotation = rand()%360;
+        float rotation = (float)(rand()%360);
         int mf = (rand() % 5) + 1;
         size_t nbins = nReinhartBins(mf);
         
@@ -112,17 +112,17 @@ TEST(GenPerezSkyVec, DirectOnlySharpSun)
     for(int i=0;i<100;i++){
         int month = (rand() % 12) + 1;
         int day = (rand() % 28) + 1;
-        float hour = 12.0 + ((rand() % 8) - 4.0);
+        float hour = 12.0f + (float)((rand() % 8) - 4.0);
         
-        float direct = (rand() % 700);
-        float diffuse = (rand() % 500);
-        float albedo = (rand() % 100) / 100.0;
+        float direct = (float)(rand() % 700);
+        float diffuse = (float)(rand() % 500);
+        float albedo = (float)(rand() % 100) / 100.0f;
         
-        int latitude = (rand() % 180) - 90;
-        int longitude = (rand() % 360) - 180;
-        int meridian = longitude + ((rand() % 6) - 3);
+        float latitude = (float)(rand() % 180) - 90.0f;
+        float longitude = (float)(rand() % 360) - 180.0f;
+        float meridian = longitude + (float)((rand() % 6) - 3);
         
-        int rotation = rand()%360;
+        float rotation = (float)(rand()%360);
         
         int mf = (rand() % 5) + 1;
         size_t nbins = nReinhartBins(mf);
@@ -192,17 +192,17 @@ TEST(GenPerezSkyVec, DirectOnlyWideSun)
         std::cout << i << std::endl;
         int month = (rand() % 12) + 1;
         int day = (rand() % 28) + 1;
-        float hour = 12.0 + ((rand() % 8) - 4.0);
+        float hour = 12.0f + (float)((float)(rand() % 8) - 4.0f);
         
-        float direct = (rand() % 700);
-        float diffuse = (rand() % 500);
-        float albedo = (rand() % 100) / 100.0;
+        float direct = (float)(rand() % 700);
+        float diffuse = (float)(rand() % 500);
+        float albedo = (float)(rand() % 100) / 100.0f;
         
-        int latitude = (rand() % 180) - 90;
-        int longitude = (rand() % 360) - 180;
-        int meridian = longitude + ((rand() % 6) - 3);
+		float latitude = (float)(rand() % 180) - 90.0f;
+        float longitude = (float)(rand() % 360) - 180.0f;
+        float meridian = longitude + (float)((rand() % 6) - 3);
         
-        int rotation = rand()%360;
+        float rotation = (float)(rand()%360);
         
         int mf = (rand() % 4) + 1;
         size_t nbins = nReinhartBins(mf);
@@ -263,15 +263,15 @@ TEST(GenPerezSkyVec, FullSkyWideSun)
         std::cout << i << std::endl;
         int month = (rand() % 12) + 1;
         int day = (rand() % 28) + 1;
-        float hour = 12.0 + ((rand() % 8) - 4.0);
+        float hour = 12.0f + ((float)(rand() % 8) - 4.0f);
         
-        float direct = (rand() % 700);
-        float diffuse = (rand() % 500);
-        float albedo = (rand() % 100) / 100.0;
+        float direct = (float)(rand() % 700);
+        float diffuse = (float)(rand() % 500);
+        float albedo = (float)(rand() % 100) / 100.0f;
         
-        int latitude = (rand() % 180) - 90;
-        int longitude = (rand() % 360) - 180;
-        int meridian = longitude + ((rand() % 6) - 3);
+        float latitude = (float)(rand() % 180) - 90.0f;
+        float longitude = (float)(rand() % 360) - 180.0f;
+        float meridian = longitude + (float)((rand() % 6) - 3);
         
         
         int mf = (rand() % 5) + 1;
@@ -329,17 +329,17 @@ TEST(GenPerezSkyVec, FullSkySharpSun)
     for(int i=0;i<100;i++){
         int month = (rand() % 12) + 1;
         int day = (rand() % 28) + 1;
-        float hour = 12.0 + ((rand() % 8) - 4.0);
+        float hour = 12.0f + ((rand() % 8) - 4.0f);
         
-        float direct = (rand() % 700);
-        float diffuse = (rand() % 500);
-        float albedo = (rand() % 100) / 100.0;
+        float direct = (float)(rand() % 700);
+        float diffuse = (float)(rand() % 500);
+        float albedo = (float)(rand() % 100) / 100.0f;
         
-        int latitude = (rand() % 180) - 90;
-        int longitude = (rand() % 360) - 180;
-        int meridian = longitude + ((rand() % 6) - 3);
+        float latitude = (float)((rand() % 180) - 90);
+        float longitude = (float)((rand() % 360) - 180);
+        float meridian = (float)(longitude + ((rand() % 6) - 3));
         
-        int rotation = rand()%360;
+        float rotation = (float)(rand()%360);
         
         int mf = (rand() % 5) + 1;
         size_t nbins = nReinhartBins(mf);

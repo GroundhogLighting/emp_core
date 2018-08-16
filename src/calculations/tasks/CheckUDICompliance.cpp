@@ -22,12 +22,12 @@
 
 #include "./CheckUDICompliance.h"
 
-double udiScoreCalculator(double v, double minLux, double maxLux)
+float udiScoreCalculator(double v, double minLux, double maxLux)
 {
-    return ( (v >= minLux && v <= maxLux) ? 1 : 0);
+    return ( (v >= minLux && v <= maxLux) ? 1.0f : 0.0f);
 }
 
-CheckUDICompliance::CheckUDICompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theMaxLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
+CheckUDICompliance::CheckUDICompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theMaxLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime)
 {
     model = theModel;
     minLux = theMinLux;
@@ -50,7 +50,7 @@ CheckUDICompliance::CheckUDICompliance(std::string name, EmpModel * theModel, RT
     setName(&name);
 }
 
-CheckUDICompliance::CheckUDICompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theMaxLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
+CheckUDICompliance::CheckUDICompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theMaxLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime)
 {
     
     model = theModel;

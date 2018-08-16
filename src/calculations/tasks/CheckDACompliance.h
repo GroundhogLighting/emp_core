@@ -26,16 +26,15 @@
 #include "./Calculate2PhaseGlobalIlluminance.h"
 #include "../../taskmanager/cbdm_task.h"
 
-double daScoreCalculator(double v, double minLux, double maxLux);
 
 
 class CheckDACompliance : public CBDMTask {
     
 public:
     
-    CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime);
+    CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime);
     
-    CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime);
+    CheckDACompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime);
 
     GET_DEP_RESULTS(Calculate2PhaseGlobalIlluminance);
     

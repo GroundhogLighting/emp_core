@@ -25,6 +25,9 @@
 #include "../utilities/io.h"
 #include "../../config_constants.h"
 
+
+
+#define MPE_POLY2TRI_USE_DOUBLE
 #define MPE_POLY2TRI_IMPLEMENTATION
 #include "fast-poly2tri/MPE_fastpoly2tri.h"
 
@@ -297,7 +300,7 @@ void Triangulation::restoreDelaunay()
 		
 		// Check if it is worth flipping
 		int bestNeighbor = -1;
-		double bestAspectRatio = HUGE;
+		double bestAspectRatio = EMP_HUGE;
 		// Found an ugly triangle
 		for (int j = 0; j < 3; j++) { // Check three edges for flipping 
 			// calculate possible aspect ratio		

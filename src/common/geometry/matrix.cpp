@@ -30,13 +30,13 @@
 
 Matrix::Matrix()
 {
-    data = std::vector< std::vector <double> >(1);
-    data[0] = std::vector <double>(1);
+    data = std::vector< std::vector <float> >(1);
+    data[0] = std::vector <float>(1);
 }
 
 Matrix::Matrix(size_t nrows, size_t ncols)
 {
-    data = std::vector< std::vector <double> >(nrows,std::vector <double>(ncols,0.0));
+    data = std::vector< std::vector <float> >(nrows,std::vector <float>(ncols,0.0f));
 }
 
 
@@ -102,7 +102,7 @@ bool Matrix::multiply(const Matrix * m, Matrix * res) const
                                 [=](const tbb::blocked_range<size_t>& r2) {
                                     for (size_t col = r2.begin(); col != r2.end(); ++col) {
                                         
-                                        double v = 0;
+                                        float v = 0;
                                         for (int i = 0; i < aux; i++) {
                                             v += (getElement(row,i) * m->getElement(i,col)); // CHECK THIS!
                                         }
@@ -119,17 +119,6 @@ bool Matrix::multiply(const Matrix * m, Matrix * res) const
                       },
                       tbb::auto_partitioner()
       ); // end of loop in row
-    /*
-    for (int row = 0; row < NROWS; row++) {
-        for (int col = 0; col < ncols ; col++) {
-            double v = 0;
-            for (int i = 0; i < aux; i++) {
-                v += (getElement(row,i) * m->getElement(i,col)); // CHECK THIS!
-            }
-            res->setElement(row,col,v);
-        }
-    }
-     */
     
     return true;
 }
@@ -155,14 +144,14 @@ bool Matrix::multiplyRowToColumn( const Matrix * vec, size_t row, size_t col, Ma
     
     // Multiply
     const size_t nrows = NROWS;
-    const double vecValue = vec->getElement(row,0);
+    const auto vecValue = vec->getElement(row,0);
                        
     // Loop in rows
     tbb::parallel_for(tbb::blocked_range<size_t>(0, nrows),
                       [=](const tbb::blocked_range<size_t>& r1) {
                           for (size_t i = r1.begin(); i != r1.end(); ++i) {
                               
-                              double v = getElement(i,row) * vecValue;
+                              float v = getElement(i,row) * vecValue;
                               res->setElement(i,col,v);
                               
                           }
@@ -198,7 +187,7 @@ bool Matrix::multiplyToColumn( const Matrix * vec, size_t col, Matrix * res) con
                       [=](const tbb::blocked_range<size_t>& r1) {
                           for (size_t row = r1.begin(); row != r1.end(); ++row) {
                               
-                              double v = 0;
+                              float v = 0;
                               for (int i = 0; i < ncols; i++) {
                                   v += (getElement(row,i) * vec->getElement(i,0));
                               }
@@ -213,7 +202,7 @@ bool Matrix::multiplyToColumn( const Matrix * vec, size_t col, Matrix * res) con
     return true;
 }
 
-void Matrix::setElement(size_t row, size_t col, double value)
+void Matrix::setElement(size_t row, size_t col, float value)
 {
     if ( row >= NROWS || col >= NCOLS )
         throw std::invalid_argument("Trying to set element out of range in MATRIX");
@@ -222,7 +211,7 @@ void Matrix::setElement(size_t row, size_t col, double value)
 }
 
 
-double Matrix::getElement(size_t row, size_t col) const
+float Matrix::getElement(size_t row, size_t col) const
 {
     if ( row >= NROWS || col >= NCOLS )
         throw std::invalid_argument("Trying to get element out of range in MATRIX");

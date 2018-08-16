@@ -157,7 +157,7 @@ TEST(DaylightFactorTest, mostlyInterior_3_100)
     options.setOption("ad", 8000);
     
     // Create model without exterior
-    CREATE_MODEL(0.15);
+    CREATE_MODEL(0.15f);
     
     // Create Task
     CheckDFCompliance * task = new CheckDFCompliance("checkDF",&model, &options, workplane,3.0,100.0);

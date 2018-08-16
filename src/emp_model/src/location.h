@@ -32,14 +32,14 @@ This object contains the information required to place the sun somewhere
 
 class Location {
 private: 
-	double latitude; //!< The latitude in degrees North (use negative for South)
-	double longitude; //!< The longitude in degrees West (use negative for East)
-	double timeZone; //!< in GMT units
+	float latitude; //!< The latitude in degrees North (use negative for South)
+	float longitude; //!< The longitude in degrees West (use negative for East)
+	float timeZone; //!< in GMT units
 	std::string city; //!< The name of the city
 	std::string country; //!< The name of the country
-	double albedo = 0.2; //!< The albedo in the location
+	float albedo = 0.2f; //!< The albedo in the location
 	Weather weather = Weather(); //!< The weather of the location obtained from a weather file
-	double elevation = 0; //!< The elevation
+	float elevation = 0; //!< The elevation
 
 public:
 	
@@ -58,42 +58,42 @@ public:
 	@author German Molina
 	@return the latitude
 	*/
-	double getLatitude() const;
+	float getLatitude() const;
 
 	//! Sets the latitude
 	/*!
 	@author German Molina
 	@param[in] l The latitude
 	*/
-	void setLatitude(double l);
+	void setLatitude(float l);
 	
 	//! Retrieves the longitude
 	/*!
 	@author German Molina
 	@return the longitude
 	*/
-	double getLongitude() const;
+	float getLongitude() const;
 
 	//! Sets the Longitude
 	/*!
 	@author German Molina
 	@param[in] l The longitude
 	*/
-	void setLongitude(double l);
+	void setLongitude(float l);
 	
 	//! Retrieves the Time Zone
 	/*!
 	@author German Molina
 	@return the time zone
 	*/
-	double getTimeZone() const;
+	float getTimeZone() const;
 
 	//! Sets the Time zone
 	/*!
 	@author German Molina
 	@param[in] t The time zone
 	*/
-	void setTimeZone(double t);
+	void setTimeZone(float t);
 	
 	//! Retrieves the City name
 	/*!
@@ -128,14 +128,14 @@ public:
 	@author German Molina
 	@param[in] a The albedo
 	*/
-	void setAlbedo(double a);
+	void setAlbedo(float a);
 
 	//! Gets the albedo
 	/*!
 	@author German Molina
 	@return The albedo
 	*/
-	double getAlbedo() const;
+	float getAlbedo() const;
 
 	//! Fill Weather member from JSON object
 	/*!
@@ -150,7 +150,7 @@ public:
 	@author German Molina
 	@return The elevation
 	*/
-	double getElevation() const;
+	float getElevation() const;
 
 	//! Gets the HourlyData for some hour
 	/*!

@@ -22,10 +22,10 @@
 #include "../calculations/radiance.h"
 #include "../common/geometry/triangle.h"
 
-double calcRaysCompliance(const std::vector<RAY> * rays, double minTime, double maxTime, const Matrix * result);
+float calcRaysCompliance(const std::vector<RAY> * rays, double minTime, double maxTime, const Matrix * result);
 
 
-double calcWorkplaneCompliance(const std::vector <Triangle *> * triangles, double minTime, double maxTime, const Matrix * result);
+float calcWorkplaneCompliance(const std::vector <Triangle *> * triangles, double minTime, double maxTime, const Matrix * result);
 
 
 void bulkResultsIntoJSON(std::string taskName, std::string wpName, const Matrix * results, double compliance, json * j);

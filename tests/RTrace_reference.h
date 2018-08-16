@@ -2,9 +2,9 @@
 #include "../include/emp_core.h"
 
 // Santiago weather, but located in 70.78E instead of W, and in time zone GMT+4 instead of -4
-const double latitude = -33.38;
-const double longitude = 70.78;
-const int time_zone = -4;
+const float latitude = -33.38f;
+const float longitude = 70.78f;
+const float time_zone = -4.0f;
 
 int skyMF = 1;
 int sunMF = 6;
@@ -63,7 +63,7 @@ const float wea[48][5] = {
 
 
 // 0. Global DDC, 1. Direct Patch, 2. Direct sharp sun, 3. RTrace value
-const float emptyReference[48][4] = {
+const double emptyReference[48][4] = {
     {0,0,0,0},
     {0,0,0,0},
     {0,0,0,0},
@@ -115,7 +115,7 @@ const float emptyReference[48][4] = {
 };
 
 // 0. Global DDC, 1. Direct Patch, 2. Direct sharp sun, 3. RTrace value
-const float simpleReference[48][5] = {
+const double simpleReference[48][5] = {
     {0,0,0,0},
     {0,0,0,0},
     {0,0,0,0},
@@ -228,11 +228,11 @@ simpleModelLocation->markWeatherAsFilled();
 // Add some weather
 for(int i=0; i<48; i++){
     HourlyData h = HourlyData();
-    h.month = wea[i][0];
-    h.day = wea[i][1];
-    h.hour = wea[i][2];
-    h.direct_normal = wea[i][3];
-    h.diffuse_horizontal=wea[i][4];
+    h.month = (int)wea[i][0];
+    h.day = (int)wea[i][1];
+    h.hour = (float)wea[i][2];
+    h.direct_normal = (float)wea[i][3];
+    h.diffuse_horizontal= (float)wea[i][4];
     emptyModelLocation->addHourlyData(h);
     simpleModelLocation->addHourlyData(h);
 }

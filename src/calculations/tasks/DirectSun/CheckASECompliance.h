@@ -26,17 +26,15 @@
 #include "./CalculateDirectSolarIlluminance.h"
 #include "../../../taskmanager/cbdm_task.h"
 
-double aseScoreCalculator(double v, double minLux, double maxLux);
-
 
 class CheckASECompliance : public CBDMTask {
     
 public:
    
-    CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int theMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime);
+    CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int theMf, double theMinLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime);
     
     
-    CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime);
+    CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime);
     
     
     GET_DEP_RESULTS(CalculateDirectSolarIlluminance);    

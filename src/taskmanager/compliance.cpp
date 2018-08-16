@@ -20,9 +20,9 @@
 
 #include "./compliance.h"
 
-double calcRaysCompliance(const std::vector<RAY> * rays, double minTime, double maxTime, const Matrix * result)
+float calcRaysCompliance(const std::vector<RAY> * rays, double minTime, double maxTime, const Matrix * result)
 {
-    double compliance = 0;
+    float compliance = 0;
     
     // Analyse percentage of rays
     size_t nrays = rays->size();
@@ -35,12 +35,12 @@ double calcRaysCompliance(const std::vector<RAY> * rays, double minTime, double 
             compliance += 1.0;
     }
     
-    return compliance / ((float)nrays/100.0);
+    return compliance / ((float)nrays/100.0f);
 }
 
-double calcWorkplaneCompliance(const std::vector <Triangle *> * triangles, double minTime, double maxTime, const Matrix * result)
+float calcWorkplaneCompliance(const std::vector <Triangle *> * triangles, double minTime, double maxTime, const Matrix * result)
 {
-    double compliance = 0;
+    float compliance = 0;
     size_t nTriangles = triangles->size();
     float totalArea = 0;
     
@@ -48,14 +48,14 @@ double calcWorkplaneCompliance(const std::vector <Triangle *> * triangles, doubl
     for(size_t i = 0; i<nTriangles; i++){
         Triangle * t = triangles->at(i);
         double area = t->getArea();
-        totalArea += area;
+        totalArea += (float)area;
         v = result->getElement(i,0);
         
         if(v >= minTime && v <= maxTime)
-            compliance += area;
+            compliance += (float)area;
     }
     
-    return compliance / (totalArea/100.0);
+    return compliance / (totalArea/100.0f);
 }
 
 void bulkResultsIntoJSON(std::string taskName, std::string wpName, const Matrix * results, double compliance, json * j)

@@ -23,12 +23,12 @@
 #include <vector>
 #include "tbb/tbb.h"
 
-//! A matrix of double numbers
+//! A matrix of float numbers
 
 class Matrix {
     
 private:
-    std::vector< std::vector<double> > data; //!< The numerical data inside the matrix
+    std::vector< std::vector<float> > data; //!< The numerical data inside the matrix
     
 public:
     
@@ -74,7 +74,7 @@ public:
      @author German Molina
      @param nrow The row number to retrieve
      */
-    std::vector<double> * operator[](size_t nrow);
+    std::vector<float> * operator[](size_t nrow);
     
     //! Resizes the matrix to new sizes
     /*!
@@ -126,7 +126,7 @@ public:
     @param ncol The column number of the element
     @param value The value to set
     */
-    void setElement(size_t nrow, size_t ncol, double value);
+    void setElement(size_t nrow, size_t ncol, float value);
     
     //! Retrieves a certain element
     /*!
@@ -134,7 +134,7 @@ public:
      @param ncol The column number of the element
      @return the value of the element
      */
-    double getElement(size_t nrow, size_t ncol) const;
+    float getElement(size_t nrow, size_t ncol) const;
 };
 
 extern Matrix matrix;

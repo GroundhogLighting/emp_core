@@ -96,9 +96,9 @@ void setOuterPercentage(EmpModel * model, float percent)
     model -> addObjectToLayer(&layerName,west);
 
     /* SET LOCATION */
-    double latitude = -33.38;
-    double longitude = 70.78;
-    int time_zone = -4;
+    float latitude = -33.38f;
+    float longitude = 70.78f;
+    float time_zone = -4.0f;
     
     // 0. Month, 1. Day, 2. Hour, 3. Direct Normal, 4. Diffuse horizontal,
     float wea[48][5] = {
@@ -161,11 +161,11 @@ void setOuterPercentage(EmpModel * model, float percent)
     // Add some weather
     for(int i=0; i<48; i++){
         HourlyData h = HourlyData();
-        h.month = wea[i][0];
-        h.day = wea[i][1];
-        h.hour = wea[i][2];
-        h.direct_normal = wea[i][3];
-        h.diffuse_horizontal=wea[i][4];
+        h.month = (int)wea[i][0];
+        h.day = (int)wea[i][1];
+        h.hour = (float)wea[i][2];
+        h.direct_normal = (float)wea[i][3];
+        h.diffuse_horizontal= (float)wea[i][4];
         location->addHourlyData(h);
     }
     

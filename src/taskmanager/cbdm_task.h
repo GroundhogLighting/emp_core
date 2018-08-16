@@ -45,13 +45,13 @@ protected:
     Matrix * depResults = nullptr; //!< The dependency results
     double minLux = 0; //!< The minimum illuminance allowed
     double maxLux = EMP_HUGE; //!< The maximum illuminance allowed
-    float minTime = EMP_TINY; //!< The minimum percentage of time expected for each sensor
-    float maxTime = EMP_HUGE; //!< The maximum percentage of time expected for each sensor
+    float minTime = (float)EMP_TINY; //!< The minimum percentage of time expected for each sensor
+    float maxTime = (float)EMP_HUGE; //!< The maximum percentage of time expected for each sensor
     float early = 8; //!< Beggining of occupied hours
     float late = 18; //!< End of occupied hours
     int firstMonth = 1; //!< Beggining of occupied months
     int lastMonth = 12;  //!< End of occupied months
-    std::function <double (double , double , double )> scoreCalculator = nullptr; //!< The score calculator
+    std::function <float (double , double , double )> scoreCalculator = nullptr; //!< The score calculator
     
 public:
     

@@ -81,9 +81,9 @@ TEST(Matrix_TEST, MultiplyToColumn) {
     
     // Fill with random
     for(int row=0; row < nrows; row++){
-        b.setElement(row,0,rand());
+        b.setElement(row,0,(float)rand());
         for(int col=0; col < ncols; col++){
-            A.setElement(row,col,rand());
+            A.setElement(row,col, (float)rand());
         }
     }
     
@@ -122,10 +122,10 @@ TEST(Matrix_TEST, MultiplyRowToColumn) {
         
         // Fill only the corresponding matrix
         if(row == noZeroRow)
-            b.setElement(row,0,rand());
+            b.setElement(row,0, (float)rand());
         
         for(int col=0; col < ncols; col++){
-            A.setElement(row,col,rand());
+            A.setElement(row,col, (float)rand());
         }
     }
     

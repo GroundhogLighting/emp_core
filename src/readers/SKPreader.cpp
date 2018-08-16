@@ -80,7 +80,7 @@ SKPreader::~SKPreader()
 	
 	
 	//release dictionary
-    ASSERT_SU_RESULT(SUStringRelease(&groundhogDictionaryName));
+	SUStringRelease(&groundhogDictionaryName);
 	
 	// Must release the model or there will be memory leaks
 	SUModelRelease(&suModel);
@@ -162,7 +162,7 @@ bool SKPreader::checkSUResult(SUResult res, std::string functionName, int ln) co
 
 bool SKPreader::parseSKPModel(std::string inputFile)
 {
-	//Load model
+	//Load model	
 	ASSERT_SU_RESULT(SUModelCreateFromFile(&suModel, inputFile.c_str()));    
     
 	// Load layers	
@@ -252,7 +252,7 @@ bool SKPreader::loadModelInfo() const
 	// load north correction
 	double northC;
     ASSERT_SU_RESULT(SUModelGetNorthCorrection(suModel, &northC));
-	model->setNorthCorrection(northC);
+	model->setNorthCorrection((float)northC);
 
 	// load date, longitude and latitude.
 	SUShadowInfoRef shadowInfo;
@@ -264,17 +264,17 @@ bool SKPreader::loadModelInfo() const
 	// Set latitude
 	double latitude;
 	getDoubleFromShadowInfo(shadowInfo, "Latitude", &latitude);
-	loc->setLatitude(latitude);
+	loc->setLatitude((float)latitude);
 
 	// Set longitude
 	double longitude;
 	getDoubleFromShadowInfo(shadowInfo, "Longitude", &longitude);
-	loc->setLongitude(-longitude); // Negative due to conventions
+	loc->setLongitude(-(float)longitude); // Negative due to conventions
 
 	// Set time zone
 	double timeZone;
 	getDoubleFromShadowInfo(shadowInfo, "TZOffset", &timeZone);
-	loc->setTimeZone(timeZone);
+	loc->setTimeZone((float)timeZone);
 	
 	//set city
 	std::string city;
@@ -293,7 +293,7 @@ bool SKPreader::loadModelInfo() const
     
     double value;
     ASSERT_SU_RESULT(SUTypedValueGetDouble(albedo, &value));
-    loc->setAlbedo(value);
+    loc->setAlbedo((float)value);
 
 	// set time
 	int64_t epoch;

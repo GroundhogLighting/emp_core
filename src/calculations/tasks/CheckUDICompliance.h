@@ -27,17 +27,16 @@
 #include "./Calculate2PhaseGlobalIlluminance.h"
 #include "../../taskmanager/cbdm_task.h"
 
-double udiScoreCalculator(double v, double minLux, double maxLux);
 
 
 class CheckUDICompliance : public CBDMTask {
     
 public:
     
-    CheckUDICompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theMaxLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime);
+    CheckUDICompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int sunMf, int skyMf, double theMinLux, double theMaxLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime);
     
     
-    CheckUDICompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theMaxLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime);
+    CheckUDICompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int sunMf, int skyMf,double theMinLux, double theMaxLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime);
                     
     GET_DEP_RESULTS(Calculate2PhaseGlobalIlluminance);
 };

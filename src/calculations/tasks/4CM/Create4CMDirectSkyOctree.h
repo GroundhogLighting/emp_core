@@ -86,7 +86,7 @@ public:
         // Iterate going up
         int band = 0;
         while (altitude < 1.57079632679){
-            nSourcesInBand = floor(pi * cos(altitude) / tan(dAngle/2.0));
+            nSourcesInBand = (size_t)floor(pi * cos(altitude) / tan(dAngle/2.0));
             
             // Increase the solid angle
             elementWidth = desiredElementWidth;

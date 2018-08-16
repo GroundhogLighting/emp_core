@@ -35,9 +35,9 @@ class HourlyData {
 public:
 	int month; //!< The month
 	int day; //!< The day
-	double hour; //!< The hour
-	int diffuse_horizontal; //!< The diffuse horizontal radiation
-	int direct_normal; //!< The direct normal radiation
+	float hour; //!< The hour
+	float diffuse_horizontal; //!< The diffuse horizontal radiation
+	float direct_normal; //!< The direct normal radiation
 };
 
 //! Represents a whole weather

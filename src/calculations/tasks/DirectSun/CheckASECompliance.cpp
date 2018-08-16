@@ -23,14 +23,14 @@
 #include "./CheckASECompliance.h"
 
 
-double aseScoreCalculator(double v, double minLux, double maxLux)
+float aseScoreCalculator(double v, double minLux, double maxLux)
 {
-    return (v >= minLux ? 1 : 0);
+    return (v >= minLux ? 1.0f : 0.0f);
 }
 
 
 
-CheckASECompliance::CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int theMf, double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, float theMinTime)
+CheckASECompliance::CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, int theMf, double theMinLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime)
 {
     model = theModel;
     minLux = theMinLux;
@@ -50,7 +50,7 @@ CheckASECompliance::CheckASECompliance(std::string name, EmpModel * theModel, RT
     setName(&name);
 }
 
-CheckASECompliance::CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, double theEarly, double theLate, int minMonth, int maxMonth, double theMinTime)
+CheckASECompliance::CheckASECompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, int theMf,double theMinLux, float theEarly, float theLate, int minMonth, int maxMonth, float theMinTime)
 {
     
     model = theModel;

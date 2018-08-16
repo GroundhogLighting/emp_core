@@ -32,11 +32,11 @@ TEST(CBDMTest, CBDMfullInterior)
     // Create Task
     double minLux = 300;
     double maxLux = 3000;
-    double early = 8;
-    double late = 18;
+    float early = 8;
+    float late = 18;
     int firstMonth = 1;
     int lastMonth = 12;
-    double minTime = 10; // Percent of time
+    float minTime = 10; // Percent of time
     
     ASSERT_CBDM_TASKS(0,0,0);
     
@@ -64,11 +64,11 @@ TEST(CBDMTest, CBDMHalfExteriorDaytime)
     // Create Task
     double minLux = 300;
     double maxLux = 3000;
-    double early = 12;
-    double late = 15;
+    float early = 12;
+    float late = 15;
     int firstMonth = 1;
     int lastMonth = 12;
-    double minTime = 1; // Percent of time
+    float minTime = 1; // Percent of time
     
     ASSERT_CBDM_TASKS(50,50,0);
     
@@ -90,11 +90,11 @@ TEST(CBDMTest, CBDMHalfExteriorNightTime)
     // Create Task
     double minLux = 300;
     double maxLux = 3000;
-    double early = 20;
-    double late = 24;
+    float early = 20;
+    float late = 24;
     int firstMonth = 1;
     int lastMonth = 12;
-    double minTime = 1; // Percent of time
+    float minTime = 1; // Percent of time
     
     ASSERT_CBDM_TASKS(0.0,0.0,0);
     

@@ -198,11 +198,11 @@ size_t EmpModel::getNumViews()
 	return views.size();
 }
 
-void EmpModel::setNorthCorrection(double nC)
+void EmpModel::setNorthCorrection(float nC)
 {
 	northCorrection = nC;
 }
-double EmpModel::getNorthCorrection()
+float EmpModel::getNorthCorrection()
 {
 	return northCorrection;
 }
