@@ -127,6 +127,20 @@ make. So, for building you should:
 
 ### Build Intel TBB
 
+Building IntelTBB is fairly easy in macOS, as the process has been automated in a premake command
+
+```
+# In macOS (and probably Linux... I have not tried)
+premake5 intelTBB
+```
+
+On Windows, however, things have to be made "by hand"
+
+1. Open the 3rdparty/IntelTBB/build/vs2013/makefile file in Visual Studio
+2. Compile the solution in both DEBUG and RELEASE versions
+3. This creates a directory with the corresponding architecture (x64 or Win32). Inside, you should see a Debug and Release directories
+4. Move the Release directory to libs/RELEASE/tbb (i.e. changing the name), and the Debug to libs/DEBUG/tbb
+
 
 ### Create the project for your IDE
 
