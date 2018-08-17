@@ -88,7 +88,7 @@ private:
 	Date date = Date(1, 1, 12, 12); //!< The current date
 	RTraceOptions rtraceOptions = RTraceOptions(); //< The options related to Ray Tracing (RTRACE program)
 	//Observers // **	
-	float northCorrection; //!< The north correction (i.e. the model should be rotated when calculating)
+	float northCorrection = 0.0f; //!< The north correction (i.e. the model should be rotated when calculating)
 
 public:
 

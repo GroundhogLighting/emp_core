@@ -98,12 +98,13 @@ TEST(DDC_TEST, Empty_global_DDC_vs_reference){
     Matrix irradiance = Matrix(rays.size(),48);
     task->result.calcIrradiance(&irradiance);
     
+    
     // Compare to reference Solution
     for(int i=0; i<48; i++){
         double value = irradiance.getElement(0,i);
         double reference = emptyReference[i][0];
         
-        //std::cout << value << "," << reference << std::endl;
+        //std::cout << i << "," << value << "," << reference << std::endl;
         ASSERT_NEAR(value,reference,std::max(reference * 0.05, 5.0));
     }
 }
