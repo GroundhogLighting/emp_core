@@ -42,7 +42,7 @@ project "emp_tests"
                 libs_dir.."/%{cfg.buildcfg}/tbb/tbb.dll",                
                 libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc.dll",                
                 libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc_proxy.dll",
-                third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/sketchup.dll",   
+                third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/SketchUpCommonPreferences.dll",   
                 third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/SketchUpAPI.dll",
             }
 
