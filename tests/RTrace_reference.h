@@ -174,10 +174,12 @@ std::vector<RAY> rays = std::vector<RAY>(1);
 
 // Create options
 RTraceOptions options = RTraceOptions();
-options.setOption("ab",10);
+options.setOption("ab",5);
 options.setOption("ad",50000);
-options.setOption("lw",0.000001);
+options.setOption("lw",0.00001);
 options.setOption("aa",0.1);
+
+
 
 // Create Models
 EmpModel simpleModel = EmpModel();

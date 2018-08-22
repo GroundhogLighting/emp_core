@@ -129,14 +129,9 @@ TEST(Matrix_TEST, MultiplyRowToColumn) {
         }
     }
     
-    A.print();
-    b.print();
     
     A.multiply(&b,&res2);
     A.multiplyRowToColumn(&b,noZeroRow,destCol,&res);
-    
-    res.print();
-    res2.print();
     
     // Check results
     for(int row = 0; row<nrows; row++){

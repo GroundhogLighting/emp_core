@@ -57,7 +57,7 @@ project "emp_tests"
         
     elseif is_macos then
         defines { "MACOS" }        
-        buildoptions { '-std=c++11','-stdlib=libc++' }     
+        buildoptions { '-std=c++11','-stdlib=libc++',"-Wall" }     
         linkoptions {            
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb",  
             --"-Wl,-rpath,\\$ORIGIN"          
