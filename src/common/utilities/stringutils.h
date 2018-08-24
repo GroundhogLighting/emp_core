@@ -133,6 +133,16 @@ extern std::string size_tToString(size_t sz);
 */
 extern void tokenize(std::string * s, std::vector<std::string> * v);
 
+//! Splits a string into a vector of strings, divided by a blank space
+/*!
+ @author German Molina
+ @param[in] s The string to splot
+ @param[in] separator the separator
+ @param[out] v The vector to populate
+ */
+extern void tokenize(std::string * s, std::string separator, std::vector<std::string> * v);
+
+
 //! Checks if s string is a number
 /*
 @author Internet... https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c

@@ -22,6 +22,11 @@
 #include "./location.h"
 #include "../../common/utilities/io.h"
 
+#include "../../common/utilities/file.h"
+#include "../../common/utilities/stringutils.h"
+#include <fstream>
+
+
 Location::Location() {
 	city = "not specified";
 	country = "not specified";
@@ -91,10 +96,118 @@ bool Location::fillWeatherFromJSON(json * j)
 	return weather.fillFromJSON(j);
 }
 
+bool Location::fillWeatherFromEPWFile(std::string filename)
+{
+    if(!fexists(filename))
+        FATAL(e,"File "+filename+" does not exist");
+    
+    std::ifstream infile(filename);
+    
+    std::string line;
+    size_t lnCount = 0;
+    while (std::getline(infile, line))
+    {
+        std::vector < std::string> tokens = std::vector < std::string>();
+        tokenize(&line,",",&tokens);
+        
+        // Header information
+        if(lnCount == 0){
+            setCity(tokens.at(1));
+            setCountry(tokens.at(3));
+            setLatitude(atof(&tokens.at(6)[0]));
+            setLongitude(-atof(&tokens.at(7)[0]));
+            setTimeZone(atof(&tokens.at(8)[0]));
+            setElevation(atof(&tokens.at(9)[0]));
+        }else if(lnCount < 8){
+            // skip
+            
+        }
+        // weather data
+        else{
+            
+            HourlyData h = HourlyData();
+            
+            h.month = atoi(&tokens.at(1)[0]);
+            h.day = atoi(&tokens.at(2)[0]);
+            
+            h.hour = atof(&tokens.at(3)[0])-0.5;
+            h.direct_normal = atof(&tokens.at(14)[0]);
+            h.diffuse_horizontal = atof(&tokens.at(15)[0]);
+            
+            addHourlyData(h);
+        }
+        
+        
+        lnCount++;
+    }
+    
+    markWeatherAsFilled();
+    
+    return true;
+}
+
+
+bool Location::fillWeatherFromWEAFile(std::string filename)
+{
+    if(!fexists(filename))
+        FATAL(e,"File "+filename+" does not exist");
+    
+    std::ifstream infile(filename);
+    
+    std::string line;
+    size_t lnCount = 0;
+    while (std::getline(infile, line))
+    {
+        
+        std::vector < std::string> tokens = std::vector < std::string>();
+        tokenize(&line,&tokens);
+        
+        // Header information
+        if(lnCount == 0){
+            setCountry(tokens.at(1));
+        }else if(lnCount == 1){
+            setLatitude(atof(&tokens.at(1)[0]));
+        }else if(lnCount == 2){
+            setLongitude(atof(&tokens.at(1)[0]));
+        }else if(lnCount == 3){
+            setTimeZone(-atof(&tokens.at(1)[0])/15.0f);
+        }else if(lnCount == 4){
+            setElevation(atof(&tokens.at(1)[0]));
+        }else if(lnCount == 5){
+            // skip
+        }
+        // weather data
+        else{
+            HourlyData h = HourlyData();
+            
+            h.month = atoi(&tokens.at(0)[0]);
+            h.day = atoi(&tokens.at(1)[0]);
+            
+            h.hour = atof(&tokens.at(2)[0]);
+            h.direct_normal = atof(&tokens.at(3)[0]);
+            h.diffuse_horizontal = atof(&tokens.at(4)[0]);
+            
+            addHourlyData(h);
+        }
+        
+        
+        lnCount++;
+    }
+    
+    markWeatherAsFilled();
+    
+    return true;
+}
+
 
 float Location::getElevation() const
 {
 	return elevation;
+}
+
+void Location::setElevation(float a)
+{
+    elevation = a;
 }
 
 bool Location::hasWeather() const
@@ -127,7 +240,7 @@ void Location::getInterpolatedData(int beg,float i,HourlyData * data) const
     if(!weather.hasData())
         throw "Fatal: Cannot simulate because it has no data";
     
-    size_t weaSize = weather.data.size();
+    const size_t weaSize = weather.data.size();
     if(beg < 0 )
         throw "Impossible beggining data point in Weather File interpolation";
     
@@ -154,4 +267,28 @@ void Location::getInterpolatedData(int beg,float i,HourlyData * data) const
     
     // Deal with direct normal
     data->direct_normal = startData->direct_normal + i*(endData->direct_normal - startData->direct_normal);
+}
+
+void Location::getDataByDate(int month, int day, float hour, HourlyData * data) const
+{
+    const int weaSize = (int)weather.data.size();
+    
+    for(int i=0; i<weaSize; i++){
+        const HourlyData * now = &weather.data[i];
+        
+        // Skip if does not fit
+        if(month != now->month || day != now->day)
+            continue;
+        
+        // Lets get the hour now
+        const HourlyData * next = &weather.data[i+1];
+        if( now->hour <= hour && next->hour >= hour){
+            // We are in the correct band... interpolate
+            float x = (hour - now->hour)/(next->hour - now->hour);
+            getInterpolatedData(i,x,data);
+            return;
+        }
+    }
+    // If we get to this point, we have a problem
+    throw "Fatal: Your weather data does not have information for date "+std::to_string(day)+"/"+std::to_string(month);
 }

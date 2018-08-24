@@ -109,6 +109,12 @@ bool cSkyVault::LoadClimateFile(char *filename, cClimateFile::eClimateFileFormat
 	return m_ClimateFile.ReadClimateFile(filename,0, ClimateFileFormat);
 }
 
+void cSkyVault::loadModelWeather(EmpModel * model, cClimateFile::eClimateFileFormat ClimateFileFormat)
+{
+    return m_ClimateFile.loadModelWeather(model,ClimateFileFormat);
+}
+
+
 bool cSkyVault::SetLatitude(double latitude)
 {
 	if (latitude <= M_PI/2 && latitude >= -M_PI/2)
@@ -161,9 +167,7 @@ void cSkyVault::CalculateSky(cSkyVault::eSunType Suns, bool DoDiffuse, bool DoIl
 
 	double x,y,z,SolarRadiance;
 	double halfsolarangle=0.02665; //degrees
-//	double halfsolarangle=0.2665; //degrees
-//	double halfsolarangle=1.2665; //degrees
-double temp=0;
+    double temp=0;
 
 	// 5 degree bins of sun position
 	double SunRadiance[18][72];
@@ -185,9 +189,9 @@ double temp=0;
 		}
 	}
     // *** modified by J.KAEMPF to remove depreciated warning *** //
-	char *SunFileName;
-	strcpy(SunFileName,"SunFile.rad");
-	//char *SunFileName="SunFile.rad";
+	//char *SunFileName;
+	//strcpy(SunFileName,"SunFile.rad");
+	const char *SunFileName="SunFile.rad"; // back to this. Jerome's fix made it fail.
 	// ********************************************************** //
 	FILE *SunFile;
 	if (Suns==MANY_SUNS)
@@ -200,11 +204,9 @@ double temp=0;
 		}
 	}
 
-//	for (day=91; day<=273; day++)
+
 	for (day=1; day<=365; day++)
 	{
-//		if (day==80)
-//			day=264;
 
 		// setup sun position
 		m_Sun.SetDay(day);
@@ -213,7 +215,6 @@ double temp=0;
 		sunset=2*M_PI - sunrise;
 
 		for (hour=.5; hour<24; hour++)
-//		for (hour=12.5; hour<=16.5; hour++)
 		{
 			EIllum=0;
 			CosMinSunDist=-999;
@@ -225,11 +226,11 @@ double temp=0;
 			hourangle=(hour+hourshift+m_Sun.TimeDiff(m_longitude))*M_PI/12;
 			// TODO: UNCOMMENT THESE LINES
 			// if this is the first/last sun-up hour of the day, use the average position for while it is up
-			if (fabs(hourangle-sunrise)<M_PI/24)
-				hourangle=(hourangle+M_PI/24+sunrise)/2;
-			else if (fabs(hourangle-sunset)<M_PI/24)
-				hourangle=(hourangle-M_PI/24+sunset)/2;
-
+			if (fabs(hourangle-sunrise)<M_PI/24){
+                hourangle=(hourangle+M_PI/24+sunrise)/2;
+            }else if (fabs(hourangle-sunset)<M_PI/24){
+                hourangle=(hourangle-M_PI/24+sunset)/2;
+            }
 			m_Sun.SetHourAngle(hourangle);
 			m_Sun.GetPosition(SunAlt,SunAz);
 

@@ -24,6 +24,8 @@
 #include "./tests/materials_test.h"
 #include "./tests/skp_reader_test.h"
 #include "./tests/tasks_tests.h"
+#include "./tests/location_tests.h"
+#include "./tests/gencumulativesky_test.h"
 
 
 

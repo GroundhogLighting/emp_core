@@ -1,5 +1,6 @@
-#include "cPerezSkyModel.h"
-#include "ClimateFile.h"
+#include "./cPerezSkyModel.h"
+#include "./climateFile.h"
+#include "emp_model.h"
 
 /////////////////////////////////////////////
 // Check to see if cSkyVault has already been declared
@@ -23,7 +24,7 @@ public:
 	// Calculate the sky radiance distribution for the whole year
 	void CalculateSky(eSunType Suns=NO_SUN, bool DoDiffuse=true, bool DoIlluminance=false, double hourshift=0);
 
-	bool LoadClimateFile(char *filename, cClimateFile::eClimateFileFormat);
+	bool LoadClimateFile(char *filename, cClimateFile::eClimateFileFormat ClimateFileFormat);
 
 	bool SetLatitude(double latitude);
 	bool SetLongitude(double longitude);
@@ -32,6 +33,9 @@ public:
 	// Temporary function to return the cumulative sky
 	double* GetCumulativeSky();
 
+    // Added for Emp
+    void loadModelWeather(EmpModel * model, cClimateFile::eClimateFileFormat ClimateFileFormat);
+    
 private:
 	// number of patches in sky
 	int m_NumPatches;

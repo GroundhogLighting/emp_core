@@ -145,6 +145,22 @@ public:
 	*/
 	bool fillWeatherFromJSON(json * j);
 
+    //! Loads an EPW file into the weather.
+    /*!
+     @author German Molina
+     @param filename [String] The name of the file to read
+     @return success
+     */
+    bool fillWeatherFromEPWFile(std::string filename);
+    
+    //! Loads an WEA file into the weather.
+    /*!
+     @author German Molina
+     @param filename [String] The name of the file to read
+     @return success
+     */
+    bool fillWeatherFromWEAFile(std::string filename);
+    
 	//! Gets the elevation
 	/*!
 	@author German Molina
@@ -152,6 +168,13 @@ public:
 	*/
 	float getElevation() const;
 
+    //! Sets the elevation
+    /*!
+     @author German Molina
+     @param[in] a The elevation
+     */
+    void setElevation(float a);
+    
 	//! Gets the HourlyData for some hour
 	/*!
 	@author German Molina
@@ -195,4 +218,14 @@ public:
      @todo Consider interpolation at sunrise and sunset!
      */
     void getInterpolatedData(int step,float i,HourlyData * data) const;
+    
+    
+    //! Retrieves weather data by date and time
+    /*!
+     @author German Molina
+     @param month The month
+     @param day The day
+     @param hour The hour
+     */
+    void getDataByDate(int month, int day, float time, HourlyData * data) const;
 };

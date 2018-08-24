@@ -79,6 +79,9 @@ class CreateDDCGlobalOctree;
 #include "../src/calculations/tasks/DaylightFactor/CreateDaylightFactorOctree.h"
 class CreateDaylightFactorOctree;
 
+#include "../src/calculations/tasks/GenCumulativeSky/CreateSolarIrradiationOctree.h"
+class CreateSolarIrradiationOctree;
+
 #include "../src/calculations/tasks/DirectSun/CreateDirectSunOctree.h"
 class CreateDirectSunOctree;
 

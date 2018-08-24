@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "emp_model.h"
 
 class cClimateFile
 {
@@ -13,6 +14,8 @@ public:
 	// must specify the hour numbering convention -1 = hour beginning, 0 = centered, 1 = hour ending
 	bool ReadClimateFile(char *FileName, int HourConvention, eClimateFileFormat ClimateFileFormat);
 
+    void loadModelWeather(EmpModel * model, cClimateFile::eClimateFileFormat ClimateFileFormat);
+    
 	// check that the currently stored data is valid
 	bool ValidateData();
 

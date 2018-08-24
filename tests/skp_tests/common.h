@@ -3,7 +3,7 @@
 
 #include "../include/emp_core.h"
 
-#define RELATIVE_LOCATION "/Users/german/Documents/emp_core" // ../..
+#define RELATIVE_LOCATION "../.."
 
 #define ASSERT_LOAD_MODEL(modelName,version) \
 EmpModel model = EmpModel(); \
