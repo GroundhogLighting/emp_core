@@ -288,7 +288,7 @@ extern "C" {
     
     internal_static
     umm MPE_PolyMemoryRequired(u32 MaxPointCount);
-    
+    /*
     internal_static
     b32 MPE_PolyInitContext(MPEPolyContext* PolyContext, void* Memory, u32 MaxPointCount);
     
@@ -303,7 +303,7 @@ extern "C" {
     
     internal_static
     void MPE_PolyTriangulate(MPEPolyContext* PolyContext);
-    
+    */
     //SECTION: Required overrides
     
 #ifdef __cplusplus
@@ -1809,8 +1809,8 @@ void MPE_PolyAddEdge(MPEPolyContext* PolyContext)
             Edge->Q = B;
         }
         
-        MPE_Assert(fabsf(A->Y - B->Y) > MPE_POLY2TRI_EPSILON ||
-                   fabsf(A->X - B->X) > MPE_POLY2TRI_EPSILON);
+        MPE_Assert(fabsf((float)(A->Y - B->Y)) > MPE_POLY2TRI_EPSILON ||
+                   fabsf((float)(A->X - B->X)) > MPE_POLY2TRI_EPSILON);
         
         if (Edge->Q->FirstEdge)
         {

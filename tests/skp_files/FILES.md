@@ -139,7 +139,7 @@ Designed to test how window_groups are imported
 
 ## location.skp
 
-An empty model that has been located in Country: New Zealand; City: Wellington; Latitude: 41.1S; Longitude: 174.1W; TimeZone: UTC+12
+An empty model that has been located in Country: New Zealand; City: Wellington; Latitude: 41.1S; Longitude: +174.1; TimeZone: UTC+12
 
 ### Expected Behaviour
 
@@ -150,7 +150,7 @@ An empty model that has been located in Country: New Zealand; City: Wellington; 
 
 ## weather_file.skp
 
-An empty model that has been assigned a weather file located in Country: CHL; City: SANTIAGO; Latitude: -33.38; Longitude: -70.78; TimeZone: UTC-12
+An empty model that has been assigned a weather file located in Country: CHL; City: SANTIAGO; Latitude: -33.38; Longitude: 70.78E (-70.78); TimeZone: UTC-4
 
 ### Expected Behaviour
 
@@ -226,3 +226,15 @@ A single model with one component, which is a luminaire
 2. Manufacturer is ERCO GmbH
 3. Name of luminaire is Parscan Spotlight
 4. Lamp is LED 12W neutral white
+
+# Options
+
+## options.skp
+
+A single model with one layer and one component instance (the default one)
+
+### Expected Behaviour
+1. Option aa is 0.2
+2. Option ab is 9
+3. Option dj is 1
+4. Option lw is 0.00003

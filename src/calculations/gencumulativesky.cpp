@@ -41,8 +41,6 @@ void genCumulativeSky(EmpModel * model, bool DoIlluminance, bool DoDiffuse)
     int i,j, counter;
     
     double *CumSky;
-    double dx,dy,dz;
-    double alt,az,deltaalt,deltaaz;
     
     double rowdeltaaz[7]={12,12,15,15,20,30,60};
     int rowdeltaalt=12;

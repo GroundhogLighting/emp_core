@@ -101,8 +101,8 @@ bool cClimateFile::ReadClimateFile(char *FileName, int HourConvention, eClimateF
 void cClimateFile::loadModelWeather(EmpModel * model, cClimateFile::eClimateFileFormat ClimateFileFormat)
 {
     
-    int hour,day;
-    int i;
+    //int hour,day;
+    //int i;
     
     
     // get rid of old climate data
@@ -238,7 +238,7 @@ FILE* cClimateFile::LoadFile( char *fname)			/* find file and open for reading *
 	FILE  *fp;
 	char  pname[MAXPATH];
 	char *libpath=NULL;
-	register char  *sp, *cp;
+    char  *sp, *cp;
 
 	if (fname == NULL)
 		return(NULL);

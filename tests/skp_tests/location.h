@@ -12,7 +12,7 @@ TEST(SKPRead, location)
         ASSERT_EQ(loc->getCountry(),"New Zealand");
         ASSERT_EQ(loc->getCity(),"Wellington");
         ASSERT_EQ(loc->getLatitude(),-41.1f);
-        ASSERT_EQ(loc->getLongitude(),174.1f);
+        ASSERT_EQ(loc->getLongitude(),-174.1f);
         ASSERT_EQ(loc->getAlbedo(),0.2f);
         ASSERT_EQ(loc->getTimeZone(),12.0f);
     }
@@ -27,9 +27,9 @@ TEST(SKPRead, weather_file)
         Location * loc = model.getLocation();
         ASSERT_EQ(loc->getCountry(),"CHL");
         ASSERT_EQ(loc->getCity(),"SANTIAGO");
-        ASSERT_EQ(loc->getLatitude(),-33.38);
-        ASSERT_EQ(loc->getLongitude(),-70.78);
-        ASSERT_EQ(loc->getAlbedo(),0.17);
-        ASSERT_EQ(loc->getTimeZone(),-4);
+        ASSERT_EQ(loc->getLatitude(),-33.38f);
+        ASSERT_EQ(loc->getLongitude(),70.78f);
+        ASSERT_EQ(loc->getAlbedo(),0.17f);
+        ASSERT_EQ(loc->getTimeZone(),-4.0f);
     }
 }

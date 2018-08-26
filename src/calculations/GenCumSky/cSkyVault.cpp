@@ -519,8 +519,8 @@ Ibh=0.25;
 
 double* cSkyVault::GetCumulativeSky()
 {
-	int i;
-	int j;
+	//int i;
+	//int j;
 
 //	double *CumSky = new double[m_NumPatches];
 

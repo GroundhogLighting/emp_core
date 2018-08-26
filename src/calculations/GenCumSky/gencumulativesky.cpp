@@ -14,8 +14,8 @@ int main(int argc, char* argv[])
 	int i,j, counter;
 
 	double *CumSky;
-	double dx,dy,dz;
-	double alt,az,deltaalt,deltaaz;
+	//double dx,dy,dz;
+	//double alt,az,deltaalt,deltaaz;
 
 	double rowdeltaaz[7]={12,12,15,15,20,30,60};
 	//double rowdeltaaz[14]={6,6,6,6,7.5,7.5,7.5,7.5,10,10,15,15,30,30};

@@ -70,7 +70,7 @@ public:
     @author German Molina
     @return the number of options
     */
-    size_t size();
+    size_t size() const;
 
     //! Checks wether an option exists in an OptionSet
     /*!
@@ -78,7 +78,7 @@ public:
     @param[in] opt The option name
     @return true or false
     */
-    bool hasOption(std::string opt);
+    bool hasOption(std::string opt) const;
 
 	//! Sets an option value
 	/*!
@@ -111,7 +111,7 @@ public:
     @param[in] opt The option to retrieve
     */
     template<typename T>
-    T getOption(std::string opt)
+    T getOption(std::string opt) const
     {
       return data.at(opt).get<T>();
     }
@@ -122,14 +122,10 @@ public:
     @param[in] opt The option to retrieve
     */
     template<typename T>
-    T getOption(size_t i)
+    T getOption(size_t i) const
     {            
       return data.at(i).get<T>();
     }
-
-
-    
-
 
 	//! Prints the options
 	/*!
@@ -149,20 +145,20 @@ public:
     */
     bool isEqual(OptionSet * other);
 
-    //! Fills an OptionSet from a given Lua table
-    /*!
-    @author German Molina
-    @param[in] L the Lua state
-    @param[in] tablePosition The position of the table in the lua stack
-    @return success
-    */
-    //bool fillFromLuaTable(lua_State * L, int tablePosition);
-
+  
     //! Gets the inline version of the options (i.e. for Radiance commands)
     /*!
     @author German Molina
     */
     std::string getInlineVersion();
+    
+    //! Retrieves the option name by index
+    /*!
+     @author German Molina
+     @return the name of the option
+     @param i [size_t] the index of the option
+     */
+    std::string getOptionName(size_t i);
     
     json::iterator begin();
     

@@ -24,12 +24,12 @@
 #include "./optionset.h"
 #include <fstream>
 
-size_t OptionSet::size()
+size_t OptionSet::size() const
 {
   return data.size();
 }
 
-bool OptionSet::hasOption(std::string opt)
+bool OptionSet::hasOption(std::string opt) const
 {
   return (data.find(opt) != data.end());
 }
