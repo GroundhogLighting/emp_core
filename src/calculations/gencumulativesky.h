@@ -33,5 +33,5 @@
 #define M_PI 3.141592654
 #endif
 
-void genCumulativeSky(EmpModel * model, bool DoIlluminance, bool DoDiffuse);
+void genCumulativeSky(EmpModel * model, bool DoIlluminance, bool DoDiffuse, std::string filename);
 

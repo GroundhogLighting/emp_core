@@ -32,7 +32,7 @@
 
 #include "./GenCumSky/cSkyVault.h"
 
-void genCumulativeSky(EmpModel * model, bool DoIlluminance, bool DoDiffuse)
+void genCumulativeSky(EmpModel * model, bool DoIlluminance, bool DoDiffuse, std::string filename)
 {
     double hourshift = 0;
     
@@ -71,18 +71,20 @@ void genCumulativeSky(EmpModel * model, bool DoIlluminance, bool DoDiffuse)
     if(!location->hasWeather())
         throw "Your model requires weather data to calculate a cumulative sky";
     
-    // Set the default parameters
     SunType=cSkyVault::NO_SUN;
-    double latitude = location->getLatitude()*M_PI/180;
-    double longitude = -location->getLongitude()*M_PI/180; // EMP convention is latitude West (Santiago, Chile is about 73)
-    double meridian = 15.0 * location->getTimeZone()*M_PI/180;
     
+    double latitude = location->getLatitude()*M_PI/180;
     sky.SetLatitude(latitude);
+    
+    // EMP convention is latitude West (Santiago, Chile is about 73)... gencumulativesky is the other way around
+    double longitude = -location->getLongitude()*M_PI/180;
     sky.SetLongitude(longitude);
+    
+    double meridian = 15.0 * location->getTimeZone()*M_PI/180;
     sky.SetMeridian(meridian);
     
-    //ClimateFileFormat=cClimateFile::GLOBAL_DIFFUSE;
-    ClimateFileFormat=cClimateFile::DIRECTHORIZONTAL_DIFFUSE; // We will use this.
+    ClimateFileFormat=cClimateFile::GLOBAL_DIFFUSE;
+    //ClimateFileFormat=cClimateFile::DIRECTHORIZONTAL_DIFFUSE; // We will use this.
     
     
     sky.loadModelWeather(model, ClimateFileFormat);
@@ -95,38 +97,44 @@ void genCumulativeSky(EmpModel * model, bool DoIlluminance, bool DoDiffuse)
     CumSky=sky.GetCumulativeSky();
     sky.GetPatchDetails(patchData);
     
-    printf("{ This .cal file was generated automatically by gencumulativesky within Emp_core }\n");
-    printf("{ ");
+    // Open file
+    // We use this method to keep consistency with the original C-like code
+    
+    FILE * calFile;
+    calFile = fopen (&filename[0],"w");
+    
+    fprintf(calFile,"{ This .cal file was generated automatically by gencumulativesky within Emp_core }\n");
+    fprintf(calFile,"{ ");
     //for (j=0; j<argc; j++)
     //    printf("%s ",argv[j]);
-    printf(" }\n\n");
-    printf("skybright=");
+    fprintf(calFile," }\n\n");
+    fprintf(calFile,"skybright=");
     for (j=0; j<7; j++)
     {
-        printf("row%d+",j);
+        fprintf(calFile,"row%d+",j);
     }
-    printf("row7;\n\n");
+    fprintf(calFile,"row7;\n\n");
     
     counter=0;
     for (j=0; j<7; j++)
     {
         // note first patch split into two parts - first part (> 0 deg) and last patch (<360)
-        printf("row%d=if(and(alt-%d, %d-alt),select(floor(0.5+az/%5.2f)+1,\n",j,j*rowdeltaalt,(j+1)*rowdeltaalt,rowdeltaaz[j]);
+        fprintf(calFile,"row%d=if(and(alt-%d, %d-alt),select(floor(0.5+az/%5.2f)+1,\n",j,j*rowdeltaalt,(j+1)*rowdeltaalt,rowdeltaaz[j]);
         for (i=0+counter; i<counter+360/int(rowdeltaaz[j]); i++)
         {
-            printf("\t%f,\n",CumSky[i]);
+            fprintf(calFile,"\t%f,\n",CumSky[i]);
         }
-        printf("\t%f),0);\n\n",CumSky[counter]);
+        fprintf(calFile,"\t%f),0);\n\n",CumSky[counter]);
         counter+=(int)(360/rowdeltaaz[j]);
     }
     
-    printf("row7=if(alt-84,%f,0);\n\n",CumSky[144]);
+    fprintf(calFile,"row7=if(alt-84,%f,0);\n\n",CumSky[144]);
     
-    printf("alt=asin(Dz)*180/PI;\n\n");
+    fprintf(calFile,"alt=asin(Dz)*180/PI;\n\n");
     
-    printf("az=if(azi,azi,azi+360);\n");
-    printf("azi=atan2(Dx,Dy)*180/PI;\n\n");
+    fprintf(calFile,"az=if(azi,azi,azi+360);\n");
+    fprintf(calFile,"azi=atan2(Dx,Dy)*180/PI;\n\n");
     
-
+    fclose(calFile);
 }
 

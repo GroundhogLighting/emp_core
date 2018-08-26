@@ -8,7 +8,7 @@ TEST(GenCumulativeSkyTest, test1) {
     EmpModel model = EmpModel();
     Location * l = model.getLocation();
     l->fillWeatherFromEPWFile("../../tests/weather/Santiago.epw");
-    genCumulativeSky(&model,false,true);
+    genCumulativeSky(&model,false,true,"cumulative.cal");
     
 	ASSERT_TRUE(false);
 

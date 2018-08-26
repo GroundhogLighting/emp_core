@@ -112,8 +112,8 @@ void cClimateFile::loadModelWeather(EmpModel * model, cClimateFile::eClimateFile
     //Get data size
     Location * location = model->getLocation();
     double s_latitude = location->getLatitude()*M_PI/180.0;
-    double s_longitude = location->getLongitude()*M_PI/180.0;
-    double s_meridian = location->getTimeZone() * (-15*M_PI/180.0);
+    double s_longitude = -location->getLongitude()*M_PI/180.0;
+    double s_meridian = -location->getTimeZone() * (-15*M_PI/180.0);
     
     const size_t m_NumPoints = location->getWeatherSize();
     
@@ -124,7 +124,6 @@ void cClimateFile::loadModelWeather(EmpModel * model, cClimateFile::eClimateFile
     m_ptIdh = new double[m_NumPoints];
 
     // Translate the file
-    
     for(size_t i=0; i<m_NumPoints; i++){
         const HourlyData * now = location->getHourlyData(i);
         float diffuse_horizontal = now->diffuse_horizontal;
@@ -133,13 +132,14 @@ void cClimateFile::loadModelWeather(EmpModel * model, cClimateFile::eClimateFile
         // Calculate solar altitude
         int jd = jdate(now->month,now->day);
         double sd = sdec(jd);
-        double st = stadj(jd, s_longitude, s_meridian);
+        double st = now->hour + stadj(jd, -s_longitude, -s_meridian);
         double solar_altitude = salt(sd,st,s_latitude);
         
-        m_ptIgh[i]= (direct_normal * cos(solar_altitude) + diffuse_horizontal); // direct_horizontal + diffuse_horizontal = global_horizontal
-        m_ptIdh[i]=diffuse_horizontal;
+        m_ptIgh[i] = (direct_normal * sin(solar_altitude) + diffuse_horizontal); // direct_horizontal + diffuse_horizontal = global_horizontal
+        m_ptIdh[i] = diffuse_horizontal;
         
-        std::cerr << m_ptIgh[i] << " " << m_ptIdh[i] << std::endl;
+        // This is for generating the input for the standalone gencumulativesky
+        //std::cerr << m_ptIgh[i] << " " << m_ptIdh[i] << std::endl;
     }
     
     
