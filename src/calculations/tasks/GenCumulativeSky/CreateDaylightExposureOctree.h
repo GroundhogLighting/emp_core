@@ -25,18 +25,18 @@
 //#include "../../../config_constants.h"
 //#include "../../../taskmanager/mutexes.h"
 
-class CreateSolarIrradiationOctree : public Task {
+class CreateDaylightExposureOctree : public Task {
 public:
     EmpModel * model; //!< The model to Oconv
     std::string octreeName; //!< The name of the final octree
-    std::string calFileName = "annual_solar_irradiance.cal"; //!< The name of the cal file to write with the annual solar distributio
+    std::string calFileName = "annual_solar_exposure.cal"; //!< The name of the cal file to write with the annual solar distributio
     
-    CreateSolarIrradiationOctree(EmpModel * theModel)
+    CreateDaylightExposureOctree(EmpModel * theModel)
     {
         
         std::string name = "Common Octree";
         setName(&name);
-        model = theModel;      
+        model = theModel;
         
         // Add the dependency... black geometry, no sky, no lights
         OconvOptions oconvOptions = OconvOptions();
@@ -49,7 +49,7 @@ public:
         
     }
     
-    ~CreateSolarIrradiationOctree()
+    ~CreateDaylightExposureOctree()
     {
         remove(&octreeName[0]);
         remove(&calFileName[0]);
@@ -57,7 +57,7 @@ public:
     
     bool isEqual(Task * t)
     {
-        return model == static_cast<CreateSolarIrradiationOctree *>(t)->model;
+        return model == static_cast<CreateDaylightExposureOctree *>(t)->model;
     }
     
     bool solve()
@@ -65,7 +65,7 @@ public:
         tbb::mutex::scoped_lock lock(oconvMutex);
         std::string octName = (static_cast<OconvTask *>(getDependencyRef(0))->octreeName);
         
-        octreeName = "SOLAR_IRRADIANCE_" + octName;
+        octreeName = "SOLAR_EXPOSURE_" + octName;
         
         // Create the octree
         std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
@@ -77,9 +77,8 @@ public:
         
         fprintf(octree, RADIANCE_SKY_COMPLEMENT);
         PCLOSE(octree);
-        
         // Write the cal file
-        genCumulativeSky(model, false, true, calFileName);
+        genCumulativeSky(model, true, true, calFileName);
         
         return true;
     }
@@ -113,4 +112,5 @@ public:
     }
 };
 
-extern CreateSolarIrradiationOctree createSolarIrradiationOctree;
+extern CreateDaylightExposureOctree createDaylightExposureOctree;
+

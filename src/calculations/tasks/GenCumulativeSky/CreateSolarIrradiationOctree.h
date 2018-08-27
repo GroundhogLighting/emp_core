@@ -76,8 +76,7 @@ public:
                 0 \n", &calFileName[0]);
         
         fprintf(octree, RADIANCE_SKY_COMPLEMENT);
-        PCLOSE(octree);
-        
+        PCLOSE(octree);        
         // Write the cal file
         genCumulativeSky(model, false, true, calFileName);
         

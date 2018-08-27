@@ -330,7 +330,7 @@ NextHour:
 			continue;
 		}
 	}
-	fprintf(stderr,"There were %d sun up hours in this climate file\n",SunUpHourCount);
+	//fprintf(stderr,"There were %d sun up hours in this climate file\n",SunUpHourCount);
 
 	// work out cumulative sky
 	m_CumSky = new double[m_NumPatches];
@@ -512,7 +512,7 @@ Ibh=0.25;
 	//}
 //////////////
 
-	fprintf(stderr,"Total Ibh/Lbh: %f\n",temp);
+	//fprintf(stderr,"Total Ibh/Lbh: %f\n",temp);
 	m_SkyCalculated=true;
 	return;
 }

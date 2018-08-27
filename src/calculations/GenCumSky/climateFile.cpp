@@ -139,7 +139,7 @@ void cClimateFile::loadModelWeather(EmpModel * model, cClimateFile::eClimateFile
         m_ptIdh[i] = diffuse_horizontal;
         
         // This is for generating the input for the standalone gencumulativesky
-        //std::cerr << m_ptIgh[i] << " " << m_ptIdh[i] << std::endl;
+        std::cerr << m_ptIgh[i] << " " << m_ptIdh[i] << std::endl;
     }
     
     
