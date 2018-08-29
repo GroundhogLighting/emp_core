@@ -144,11 +144,26 @@ extern void tokenize(std::string * s, std::string separator, std::vector<std::st
 
 
 //! Checks if s string is a number
-/*
+/*!
 @author Internet... https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
 @param[in] s The string
 @return is number?
 */
 extern bool is_number(const std::string& s);
+
+//! Lowercases a string
+/*!
+ @author Internet
+ @param s The string to lowercase
+ @return Anothe string, lowercased
+ */
+extern std::string downCase(std::string s);
+
+//! Lowercases a string itself (i.e. not returning it)
+/*!
+ @author Internet
+ @param s The pointer to the string to lowercase
+ */
+extern void downCase(std::string * s);
 
 /* @} */
