@@ -109,7 +109,7 @@ public:
     
     bool isMutex(Task * t)
     {
-        return true; // Mutex with all Daylight Factor calculations
+        return false; 
     }
     
     bool submitResults(json * j)
@@ -119,7 +119,7 @@ public:
         return true;
     }
     
-    virtual Matrix * getDependencyResults() = 0;
+    virtual Matrix * getDependencyResults() = 0;    
     
 };
 

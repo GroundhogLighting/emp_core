@@ -65,6 +65,11 @@ public:
         setName(&name);
     }
     
+    Matrix * getDependencyResults()
+    {
+        return &(static_cast< CalculateDaylightFactor *>(getDependencyRef(0))->result);
+    }
+    
     
 };
 

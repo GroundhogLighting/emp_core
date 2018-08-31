@@ -46,6 +46,7 @@ public:
     
     bool solve()
     {
+        depResults = getDependencyResults();
         
         if(depResults == nullptr)
             throw "Trying to solve a StaticSimulatonTask task with NULL dependency results";
@@ -67,7 +68,7 @@ public:
     
     bool isMutex(Task * t)
     {
-        return true; // Mutex with all Daylight Factor calculations
+        return false; // Mutex with all Daylight Factor calculations
     }
     
     bool submitResults(json * results)
@@ -75,8 +76,10 @@ public:
         return true;
     }
     
+    virtual Matrix * getDependencyResults() = 0;    
+    
 };
 
-extern StaticSimulationTask staticSimulationTask;
+//extern StaticSimulationTask staticSimulationTask;
 
 

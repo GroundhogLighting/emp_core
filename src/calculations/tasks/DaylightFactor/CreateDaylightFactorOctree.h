@@ -33,7 +33,7 @@ public:
     CreateDaylightFactorOctree(EmpModel * theModel)
     {
         
-        std::string name = "Common Octree";
+        std::string name = "Daylight Factor Octree";
         setName(&name);
         model = theModel;      
         

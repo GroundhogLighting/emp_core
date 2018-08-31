@@ -80,7 +80,8 @@ size_t TaskManager::addTask(Task * t)
     // Check for mutex    
     for (size_t i = 0; i < currentIndex; i++) {
       if ( checkMutex(tasks[i],t) ) {
-        tasks[i]->addDependency(t);          
+        tasks[i]->addDependency(t);
+        //t->addDependency(tasks[i]);
       }
     }
     

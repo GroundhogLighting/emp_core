@@ -63,6 +63,11 @@ public:
         setName(&name);
     }
     
+    Matrix * getDependencyResults()
+    {
+        return &(static_cast< CalculateSolarIrradiation *>(getDependencyRef(0))->result);
+    }
+    
     
 };
 

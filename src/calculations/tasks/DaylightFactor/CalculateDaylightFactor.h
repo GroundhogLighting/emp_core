@@ -78,6 +78,7 @@ public:
     
     ~CalculateDaylightFactor()
     {
+        fixString(&ambientFileName);
         remove(&ambientFileName[0]);
     }
     
