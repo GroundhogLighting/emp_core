@@ -4,7 +4,7 @@
 #include "gtest/gtest.h"
 
 
-
+#include "./tests/string_test.h"
 #include "./tests/loop_test.h" 
 #include "./tests/point3d_test.h"
 #include "./tests/vector3d_test.h"

@@ -157,3 +157,14 @@ bool is_number(const std::string& s)
 	while (it != s.end() && (isdigit(*it) || *it == '.') ) ++it;
 	return !s.empty() && it == s.end();
 }
+
+std::string downCase(std::string s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+    return s;
+}
+
+void downCase(std::string * s)
+{
+    std::transform(s->begin(), s->end(), s->begin(), ::tolower);
+}
