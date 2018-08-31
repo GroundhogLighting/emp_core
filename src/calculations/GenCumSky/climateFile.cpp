@@ -135,11 +135,14 @@ void cClimateFile::loadModelWeather(EmpModel * model, cClimateFile::eClimateFile
         double st = now->hour + stadj(jd, -s_longitude, -s_meridian);
         double solar_altitude = salt(sd,st,s_latitude);
         
+        
         m_ptIgh[i] = (direct_normal * sin(solar_altitude) + diffuse_horizontal); // direct_horizontal + diffuse_horizontal = global_horizontal
         m_ptIdh[i] = diffuse_horizontal;
         
         // This is for generating the input for the standalone gencumulativesky
         std::cerr << m_ptIgh[i] << " " << m_ptIdh[i] << std::endl;
+        
+        
     }
     
     
