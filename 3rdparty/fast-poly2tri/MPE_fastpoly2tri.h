@@ -149,15 +149,6 @@
 #define MPE_Assert assert
 #endif
 
-
-#ifndef ssize_t
-#ifdef WIN
-typedef size_t ssize_t;
-#endif
-#endif
-
-
-
 #ifndef uxx
 #include <stdint.h> // uint32_t
 typedef uint8_t u8;
@@ -172,11 +163,11 @@ typedef intptr_t imm;
 typedef uintptr_t umm;
 #endif
 
-//#ifdef MPE_POLY2TRI_USE_DOUBLE
+#ifdef MPE_POLY2TRI_USE_DOUBLE
 typedef double poly_float;
-//#else
-//typedef float poly_float;
-//#endif
+#else
+typedef float poly_float;
+#endif
 
 #ifndef internal_static
 #define internal_static static
@@ -288,7 +279,7 @@ extern "C" {
     
     internal_static
     umm MPE_PolyMemoryRequired(u32 MaxPointCount);
-    /*
+    
     internal_static
     b32 MPE_PolyInitContext(MPEPolyContext* PolyContext, void* Memory, u32 MaxPointCount);
     
@@ -303,7 +294,7 @@ extern "C" {
     
     internal_static
     void MPE_PolyTriangulate(MPEPolyContext* PolyContext);
-    */
+    
     //SECTION: Required overrides
     
 #ifdef __cplusplus
@@ -1809,8 +1800,8 @@ void MPE_PolyAddEdge(MPEPolyContext* PolyContext)
             Edge->Q = B;
         }
         
-        MPE_Assert(fabsf((float)(A->Y - B->Y)) > MPE_POLY2TRI_EPSILON ||
-                   fabsf((float)(A->X - B->X)) > MPE_POLY2TRI_EPSILON);
+        MPE_Assert(fabsf(A->Y - B->Y) > MPE_POLY2TRI_EPSILON ||
+                   fabsf(A->X - B->X) > MPE_POLY2TRI_EPSILON);
         
         if (Edge->Q->FirstEdge)
         {
@@ -2208,4 +2199,3 @@ umm MPE_PolyMemoryRequired(u32 MaxPointCount)
 }
 
 #endif // MPE_POLY2TRI_IMPLEMENTATION
-
