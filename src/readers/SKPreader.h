@@ -532,6 +532,13 @@ private:
      */
     bool loadInstance(SUComponentInstanceRef instance) const;
     
+    //! Loads the options in the model
+    /*!
+     @author German Molina
+     @return success
+     */
+    bool loadRTraceOptions() const;
+    
     //! Loads the pixel sizes for the workplanes
     /*!
      @author German Molina

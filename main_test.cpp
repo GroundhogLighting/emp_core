@@ -4,7 +4,7 @@
 #include "gtest/gtest.h"
 
 
-
+#include "./tests/string_test.h"
 #include "./tests/loop_test.h" 
 #include "./tests/point3d_test.h"
 #include "./tests/vector3d_test.h"
@@ -24,6 +24,8 @@
 #include "./tests/materials_test.h"
 #include "./tests/skp_reader_test.h"
 #include "./tests/tasks_tests.h"
+#include "./tests/location_tests.h"
+#include "./tests/gencumulativesky_test.h"
 
 
 

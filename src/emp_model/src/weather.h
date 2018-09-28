@@ -79,6 +79,7 @@ public:
 	*/
 	bool fillFromJSON(json * j);
 
+   
 	//! Checks if the Weather file has been filled with data
 	/*!
 	@author German Molina

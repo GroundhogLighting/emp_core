@@ -196,6 +196,9 @@ bool SKPreader::parseSKPModel(std::string inputFile)
     // Load tasks
     loadTasks();
     
+    // Load options
+    loadRTraceOptions();
+    
 	
 	return true;
 };
@@ -1250,6 +1253,8 @@ bool SKPreader::getFromSUTypedValue(SUTypedValueRef suValue, std::string * value
 }
 
 
+
+
 Material * SKPreader::addMaterialToModel(SUMaterialRef material) const
 {	
 	
@@ -1496,7 +1501,7 @@ bool SKPreader::getValueFromModelGHDictionary(const char * key, SUTypedValueRef 
 
 	// if there are no dictionaries, then return.
 	if (dictionaryCount == 0)
-        throw "Groundhog Dictionary not found when parsing SKP model";
+        return false;
 
 	//retrieve dictionaries
 	std::vector <SUAttributeDictionaryRef> dictionaries(dictionaryCount);
@@ -1584,6 +1589,54 @@ void SKPreader::loadWorkplanesPreferences() const
         
     }
     
+}
+
+bool SKPreader::loadRTraceOptions() const
+{
+    RTraceOptions * options = model->getRTraceOptions();
+    
+    for (json::iterator it = options->begin(); it != options->end(); ++it) {
+        
+        // Name of the option
+        std::string key = it.key();
+        
+        // Retrieve the option from the model
+        SUTypedValueRef optionSU = SU_INVALID;
+        if (!getValueFromModelGHDictionary(&key[0], &optionSU))
+            continue; // next if no value or error.
+        
+        // Check type
+        SUTypedValueType type;
+        SUTypedValueGetType(optionSU,&type);        
+        
+        // Process it
+        if (type == SUTypedValueType_Int32 ) {
+            int value;
+            SU_RESULT res = SUTypedValueGetInt32(optionSU,&value);
+            if(res == SU_ERROR_NO_DATA)
+                continue;
+            
+            ASSERT_SU_RESULT(res);
+            options->setOption(key,value);
+        } else if(type != SUTypedValueType_Float || type != SUTypedValueType_Double){
+            
+            double value;
+            SU_RESULT res = SUTypedValueGetDouble(optionSU,&value);
+            if(res == SU_ERROR_NO_DATA)
+                continue;
+            
+            ASSERT_SU_RESULT(res);
+            options->setOption(key,value);
+        }
+        else {
+            FATAL(e,"Type mismatch when reading option "+key+" ... number expected");
+        }
+    }
+    
+    
+    
+    
+    return true;
 }
 
 #endif // #ifndef AVOID_SKP

@@ -24,9 +24,9 @@
 #include "../../radiance.h"
 #include "../../oconv_options.h"
 #include "../OconvTask.h"
-#include "./CreateDaylightFactorOctree.h"
+#include "./CreateDaylightExposureOctree.h"
 
-class CalculateDaylightFactor : public Task {
+class CalculateDaylightExposure : public Task {
     
 public:
     EmpModel * model; //!< The model
@@ -36,7 +36,7 @@ public:
     RTraceOptions * rtraceOptions; //!< The options passed to rcontrib
     std::string ambientFileName; //!< The name of the ambient file used
     
-    CalculateDaylightFactor(EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp)
+    CalculateDaylightExposure(EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp)
     {
         generatesResults = false;
         
@@ -45,7 +45,7 @@ public:
         workplane = wp;
         
         // Dependency 0
-        CreateDaylightFactorOctree * oconvTask = new CreateDaylightFactorOctree(model);
+        CreateDaylightExposureOctree * oconvTask = new CreateDaylightExposureOctree(model);
         addDependency(oconvTask);
         
         // Dependency 1
@@ -53,12 +53,12 @@ public:
         addDependency(triangulateWorkplaneTask);
         
         // Set the name
-        std::string name = "DaylightFactor "+wp->getName();
+        std::string name = "DaylightExposure"+wp->getName();
         ambientFileName = name + ".amb";
         setName(&name);
     }
     
-    CalculateDaylightFactor(EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays)
+    CalculateDaylightExposure(EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays)
     {
         generatesResults = false;
         
@@ -67,18 +67,17 @@ public:
         rays = theRays;
         
         // Dependency 0
-        CreateDaylightFactorOctree * oconvTask = new CreateDaylightFactorOctree(model);
+        CreateDaylightExposureOctree * oconvTask = new CreateDaylightExposureOctree(model);
         addDependency(oconvTask);
         
         // Set the name
-        std::string name = "DaylightFactor";
+        std::string name = "DaylightExposure";
         ambientFileName = name + ".amb";
         setName(&name);
     }
     
-    ~CalculateDaylightFactor()
+    ~CalculateDaylightExposure()
     {
-        fixString(&ambientFileName);
         remove(&ambientFileName[0]);
     }
     
@@ -86,19 +85,19 @@ public:
     {
         
         return (
-                rtraceOptions->isEqual(static_cast<CalculateDaylightFactor *>(t)->rtraceOptions) &&
-                workplane == static_cast<CalculateDaylightFactor *>(t)->workplane &&
-                rays == static_cast<CalculateDaylightFactor *>(t)->rays
+                rtraceOptions->isEqual(static_cast<CalculateDaylightExposure *>(t)->rtraceOptions) &&
+                workplane == static_cast<CalculateDaylightExposure *>(t)->workplane &&
+                rays == static_cast<CalculateDaylightExposure *>(t)->rays
                 );
     }
     
     bool solve()
     {
-                        
-        std::string octName = (static_cast<CreateDaylightFactorOctree *>(getDependencyRef(0))->octreeName);
+        
+        std::string octName = (static_cast<CreateDaylightExposureOctree *>(getDependencyRef(0))->octreeName);
         
         
-        if(workplane != NULL){
+        if(workplane != nullptr){
             TriangulateWorkplane * dep = static_cast<TriangulateWorkplane *>(getDependencyRef(1));
             rays = &(dep->rays);
         }
@@ -121,11 +120,13 @@ public:
     }
     
     bool submitResults(json * results)
-    {        
+    {
         return true;
     }
     
 };
 
-extern CalculateDaylightFactor calcDF;
+extern CalculateDaylightExposure calcDaylightExposure;
+
+
 

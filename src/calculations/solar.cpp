@@ -128,44 +128,5 @@ bool isInSolarTrajectory(const Vector3D dir, const double lat, const int mf)
     }// end of iterate year
     return false;
     
-    
-    /*
-    double phi = RADIANS(lat);
-    
-    double givenX = dir.getX();
-    double givenY = dir.getY();
-    
-    // Get both hour angles in which solstices are at the same X
-    const double maxW = getHourAngle(phi, givenX, MAX_DEC);
-    const double minW = getHourAngle(phi, givenX, MIN_DEC);
-    
-    // get Zenith angle (which is Z)
-    const double maxCosTheta = cos(phi)*cos(MAX_DEC)*cos(maxW) + sin(phi)*sin(MAX_DEC);
-    const double minCosTheta = cos(phi)*cos(MIN_DEC)*cos(minW) + sin(phi)*sin(MIN_DEC);
-    
-    // Calculate Y^2
-    const double maxY2 = (1 - maxCosTheta*maxCosTheta - givenX * givenX);
-    const double minY2 = (1 - minCosTheta*minCosTheta - givenX * givenX);
-    
-    // Sort them (do not necessarily match summer and winter)
-    const double summerY2 = (maxY2 >=  minY2 ? maxY2 : minY2);
-    const double winterY2 = (maxY2 <= minY2 ? maxY2 : minY2);
-    
-    double summerY, winterY;
-    if(summerY2 >= 0){
-        summerY = sqrt(summerY2);
-    }else{
-        return false;
-        summerY = -sqrt(-summerY2);
-    }
-    if(winterY2 >= 0){
-        winterY = sqrt(winterY2);
-    }else{
-        return false;
-        winterY = -sqrt(-winterY2);
-    }
-    
-    return (givenY <= summerY && givenY >= winterY);
-    
-    */
+  
 }

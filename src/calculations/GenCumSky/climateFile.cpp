@@ -1,9 +1,10 @@
 #include "climateFile.h"
 #include <stdio.h>
 #include <iostream>
+#include "../solar.h"
 
 // *** added by J.KAEMPF for compiling with MinGW *** //
-#include <cstring>
+//#include <cstring>
 // ************************************************** //
 
 #include "paths.h"
@@ -97,6 +98,60 @@ bool cClimateFile::ReadClimateFile(char *FileName, int HourConvention, eClimateF
 	return true;
 }
 
+void cClimateFile::loadModelWeather(EmpModel * model, cClimateFile::eClimateFileFormat ClimateFileFormat)
+{
+    
+    //int hour,day;
+    //int i;
+    
+    
+    // get rid of old climate data
+    delete[] m_ptIgh;
+    delete[] m_ptIdh;
+    
+    //Get data size
+    Location * location = model->getLocation();
+    double s_latitude = location->getLatitude()*M_PI/180.0;
+    double s_longitude = -location->getLongitude()*M_PI/180.0;
+    double s_meridian = -location->getTimeZone() * (-15*M_PI/180.0);
+    
+    const size_t m_NumPoints = location->getWeatherSize();
+    
+    if(m_NumPoints != 8760)
+        throw "Your model requires a full hourly 365-day weather to calculate cumulative sky";
+    
+    m_ptIgh = new double[m_NumPoints];
+    m_ptIdh = new double[m_NumPoints];
+
+    // Translate the file
+    for(size_t i=0; i<m_NumPoints; i++){
+        const HourlyData * now = location->getHourlyData(i);
+        float diffuse_horizontal = now->diffuse_horizontal;
+        float direct_normal = now->direct_normal;
+        
+        // Calculate solar altitude
+        int jd = jdate(now->month,now->day);
+        double sd = sdec(jd);
+        double st = now->hour + stadj(jd, -s_longitude, -s_meridian);
+        double solar_altitude = salt(sd,st,s_latitude);
+        
+        
+        m_ptIgh[i] = (direct_normal * sin(solar_altitude) + diffuse_horizontal); // direct_horizontal + diffuse_horizontal = global_horizontal
+        m_ptIdh[i] = diffuse_horizontal;
+        
+        // This is for generating the input for the standalone gencumulativesky
+        std::cerr << m_ptIgh[i] << " " << m_ptIdh[i] << std::endl;
+        
+        
+    }
+    
+    
+    
+    
+}
+
+
+
 
 bool cClimateFile::ValidateData()
 {
@@ -186,7 +241,7 @@ FILE* cClimateFile::LoadFile( char *fname)			/* find file and open for reading *
 	FILE  *fp;
 	char  pname[MAXPATH];
 	char *libpath=NULL;
-	register char  *sp, *cp;
+    char  *sp, *cp;
 
 	if (fname == NULL)
 		return(NULL);

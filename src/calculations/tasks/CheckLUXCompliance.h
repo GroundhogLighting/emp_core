@@ -64,6 +64,10 @@ public:
         setName(&name);
     }
     
+    Matrix * getDependencyResults()
+    {
+        return &(static_cast< CalculateStaticIlluminance *>(getDependencyRef(0))->result);
+    }
     
 };
 

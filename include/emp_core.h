@@ -55,6 +55,12 @@ class CalculateDDCGlobalMatrix;
 #include "../src/calculations/tasks/DaylightFactor/CalculateDaylightFactor.h"
 class CalculateDaylightFactor;
 
+#include "../src/calculations/tasks/GenCumulativeSky/CalculateSolarIrradiation.h"
+class CalculateSolarIrradiadiation;
+
+#include "../src/calculations/tasks/GenCumulativeSky/CalculateDaylightExposure.h"
+class CalculateDaylightExposure;
+
 #include "../src/calculations/tasks/DirectSun/CalculateDirectSolarIlluminance.h"
 class CalculateDirectSolarIlluminance;
 
@@ -79,6 +85,12 @@ class CreateDDCGlobalOctree;
 #include "../src/calculations/tasks/DaylightFactor/CreateDaylightFactorOctree.h"
 class CreateDaylightFactorOctree;
 
+#include "../src/calculations/tasks/GenCumulativeSky/CreateSolarIrradiationOctree.h"
+class CreateSolarIrradiationOctree;
+
+#include "../src/calculations/tasks/GenCumulativeSky/CreateDaylightExposureOctree.h"
+class CreateDaylightExposureOctree;
+
 #include "../src/calculations/tasks/DirectSun/CreateDirectSunOctree.h"
 class CreateDirectSunOctree;
 
@@ -99,6 +111,12 @@ class CalculateDDCGlobalIlluminance;
 
 #include "../src/calculations/tasks/DaylightFactor/CheckDFCompliance.h"
 class CheckDFCompliance;
+
+#include "../src/calculations/tasks/GenCumulativeSky/CheckDaylightExposureCompliance.h"
+class CheckDaylightExposureCompliance;
+
+#include "../src/calculations/tasks/GenCumulativeSky/CheckSolarIrradiationCompliance.h"
+class CheckSolarIrradiationCompliance;
 
 #include "../src/calculations/tasks/DirectSun/CheckASECompliance.h"
 class CheckASECompliance;

@@ -10,5 +10,5 @@
 #include "./skp_tests/workplanes.h"
 #include "./skp_tests/task_udi.h"
 #include "./skp_tests/photosensors.h"
-
+#include "./skp_tests/options.h"
 

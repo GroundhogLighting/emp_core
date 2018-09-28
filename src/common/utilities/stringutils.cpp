@@ -130,14 +130,19 @@ std::string size_tToString(size_t sz)
 	return ss.str();
 }
 
-void tokenize(std::string * s,std::vector<std::string> * v)
+void tokenize(std::string * s, std::vector<std::string> * v)
+{
+    return tokenize(s," ",v);
+}
+
+void tokenize(std::string * s,std::string separator, std::vector<std::string> * v)
 {
 	size_t start = 0;
-	size_t found = s->find(" ", start);
+	size_t found = s->find(separator, start);
 	while (found != std::string::npos) {
 		v->push_back(s->substr(start, found-start));
 		start = found+1;
-		found = s->find(" ", start+1);
+		found = s->find(separator, start+1);
 	}
     
     
@@ -151,4 +156,15 @@ bool is_number(const std::string& s)
 	std::string::const_iterator it = s.begin();
 	while (it != s.end() && (isdigit(*it) || *it == '.') ) ++it;
 	return !s.empty() && it == s.end();
+}
+
+std::string downCase(std::string s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+    return s;
+}
+
+void downCase(std::string * s)
+{
+    std::transform(s->begin(), s->end(), s->begin(), ::tolower);
 }

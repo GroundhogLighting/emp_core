@@ -21,21 +21,22 @@
 
 #pragma once
 
-#include "../../radiance.h"
-#include "../../../config_constants.h"
-#include "../../../taskmanager/mutexes.h"
+#include "../../gencumulativesky.h"
+//#include "../../../config_constants.h"
+//#include "../../../taskmanager/mutexes.h"
 
-class CreateDaylightFactorOctree : public Task {
+class CreateDaylightExposureOctree : public Task {
 public:
     EmpModel * model; //!< The model to Oconv
     std::string octreeName; //!< The name of the final octree
+    std::string calFileName = "annual_solar_exposure.cal"; //!< The name of the cal file to write with the annual solar distributio
     
-    CreateDaylightFactorOctree(EmpModel * theModel)
+    CreateDaylightExposureOctree(EmpModel * theModel)
     {
         
-        std::string name = "Daylight Factor Octree";
+        std::string name = "Common Octree";
         setName(&name);
-        model = theModel;      
+        model = theModel;
         
         // Add the dependency... black geometry, no sky, no lights
         OconvOptions oconvOptions = OconvOptions();
@@ -48,14 +49,15 @@ public:
         
     }
     
-    ~CreateDaylightFactorOctree()
+    ~CreateDaylightExposureOctree()
     {
         remove(&octreeName[0]);
+        remove(&calFileName[0]);
     }
     
     bool isEqual(Task * t)
     {
-        return model == static_cast<CreateDaylightFactorOctree *>(t)->model;
+        return model == static_cast<CreateDaylightExposureOctree *>(t)->model;
     }
     
     bool solve()
@@ -63,16 +65,20 @@ public:
         tbb::mutex::scoped_lock lock(oconvMutex);
         std::string octName = (static_cast<OconvTask *>(getDependencyRef(0))->octreeName);
         
-        octreeName = "DAYLIGHT_FACTOR_" + octName;
+        octreeName = "SOLAR_EXPOSURE_" + octName;
         
-        double albedo = model->getLocation()->getAlbedo();
-        
+        // Create the octree
         std::string command = "oconv -i " + std::string(octName) + " - > " + octreeName;
-        
         FILE *octree = POPEN(&command[0], "w");
-        fprintf(octree, "!gensky -ang 45 40 -c -B %f -g %f\n",100.0,albedo);
+        fprintf(octree, "void brightfunc skyfunc \
+                2 skybright ./%s \
+                0 \
+                0 \n", &calFileName[0]);
+        
         fprintf(octree, RADIANCE_SKY_COMPLEMENT);
         PCLOSE(octree);
+        // Write the cal file
+        genCumulativeSky(model, true, true, calFileName);
         
         return true;
     }
@@ -106,4 +112,5 @@ public:
     }
 };
 
-extern CreateDaylightFactorOctree createDaylightFactorOctree;
+extern CreateDaylightExposureOctree createDaylightExposureOctree;
+

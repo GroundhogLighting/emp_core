@@ -1,5 +1,3 @@
-
-
 /*****************************************************************************
  Emp
  
@@ -22,15 +20,15 @@
 
 #pragma once
 
-#include "./CalculateDaylightFactor.h"
+#include "./CalculateDaylightExposure.h"
 #include "taskmanager/static_simulation_task.h"
 
-class CheckDFCompliance : public StaticSimulationTask {
+class CheckDaylightExposureCompliance : public StaticSimulationTask {
     
 public:
     
     
-    CheckDFCompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, double min, double max)
+    CheckDaylightExposureCompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, Workplane * wp, double min, double max)
     {
         model = theModel;
         workplane = wp;
@@ -38,17 +36,17 @@ public:
         maxLux = max;
         
         // Dependency
-        CalculateDaylightFactor * dep = new CalculateDaylightFactor(theModel, theOptions, wp);
+        CalculateDaylightExposure * dep = new CalculateDaylightExposure(theModel, theOptions, wp);
         addDependency(dep);
         
-        depResults = &(dep->result); 
+        depResults = &(dep->result);
         
         // Set the name
         std::string the_name = name + " " + wp->getName();
         setName(&the_name);
     }
     
-    CheckDFCompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, double min, double max)
+    CheckDaylightExposureCompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, double min, double max)
     {
         model = theModel;
         rays = theRays;
@@ -56,7 +54,7 @@ public:
         maxLux = max;
         
         // Dependency
-        CalculateDaylightFactor * dep = new CalculateDaylightFactor(theModel, theOptions, theRays);
+        CalculateDaylightExposure * dep = new CalculateDaylightExposure(theModel, theOptions, theRays);
         addDependency(dep);
         
         depResults = &(dep->result);
@@ -67,11 +65,12 @@ public:
     
     Matrix * getDependencyResults()
     {
-        return &(static_cast< CalculateDaylightFactor *>(getDependencyRef(0))->result);
+        return &(static_cast< CalculateDaylightExposure *>(getDependencyRef(0))->result);
     }
     
     
 };
 
-extern CheckDFCompliance checkDF;
+extern CheckDaylightExposureCompliance checkDaylightExposure;
+
 

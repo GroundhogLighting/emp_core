@@ -1,6 +1,6 @@
 // GenCumulativeSky was conceived, developed and validated by Darren Robinson and Andrew Stone for efficient solar irradiation modelling using RADIANCE
 // When using GenCumulativeSky they would be pleased if you would ackowledge their work by referring to the following article: "Robinson, D., Stone, A., 
-// Irradiation modeling made simple – the cumulative sky approach and its applications, Proc. PLEA 2004, Eindhoven 2004."
+// Irradiation modeling made simple ï¿½ the cumulative sky approach and its applications, Proc. PLEA 2004, Eindhoven 2004."
 
 
 // gencumulativesky.cpp : Defines the entry point for the console application.
@@ -14,8 +14,8 @@ int main(int argc, char* argv[])
 	int i,j, counter;
 
 	double *CumSky;
-	double dx,dy,dz;
-	double alt,az,deltaalt,deltaaz;
+	//double dx,dy,dz;
+	//double alt,az,deltaalt,deltaaz;
 
 	double rowdeltaaz[7]={12,12,15,15,20,30,60};
 	//double rowdeltaaz[14]={6,6,6,6,7.5,7.5,7.5,7.5,10,10,15,15,30,30};
