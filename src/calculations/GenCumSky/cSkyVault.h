@@ -1,6 +1,6 @@
 #include "./cPerezSkyModel.h"
 #include "./climateFile.h"
-#include "emp_model.h"
+#include "../../emp_model/emp_model.h"
 
 /////////////////////////////////////////////
 // Check to see if cSkyVault has already been declared

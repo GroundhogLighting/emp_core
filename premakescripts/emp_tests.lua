@@ -33,7 +33,10 @@ project "emp_tests"
     -- Add the platform specific
     if is_windows then
         defines { "WIN" }            
-        buildoptions { '/std:c++17', '/permissive-' }
+        buildoptions { '/std:c++14' }
+        
+        
+
         includedirs {
             third_party_dir.."/SketchUp/WIN/headers"
         }
@@ -51,7 +54,7 @@ project "emp_tests"
                 libs_dir.."/%{cfg.buildcfg}/tbb/tbb_debug.dll",
                 libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc_debug.dll",
                 libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc_proxy_debug.dll",
-                third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/sketchup.dll",   
+                third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/SketchUpCommonPreferences.dll",   
                 third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/SketchUpAPI.dll",
             }
         

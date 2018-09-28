@@ -42,15 +42,15 @@ public:
     CalculateDDCGlobalMatrix(EmpModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions)
     {
         
-        std::string name = "DDC Global Matrix "+wp->getName();
-        setName(&name);
+        std::string n = "DDC Global Matrix "+wp->getName();
+        setName(&n);
         model = theModel;
         mf = theMF;
         options = *theOptions;
         
         // Dependency 0: oconv task
-        CreateDDCGlobalOctree * oconvTask = new CreateDDCGlobalOctree(model);
-        addDependency(oconvTask);
+        CreateDDCGlobalOctree * ot = new CreateDDCGlobalOctree(model);
+        addDependency(ot);
         
         // Dependecy 1: Triangulate workplane        
         TriangulateWorkplane * triangulateWorkplaneTask = new TriangulateWorkplane(wp);
@@ -68,15 +68,15 @@ public:
     CalculateDDCGlobalMatrix(EmpModel * theModel, std::vector<RAY> * theRays, int theMF, RTraceOptions * theOptions)
     {
         
-        std::string name = "DDC Global Matrix";
-        setName(&name);
+        std::string n = "DDC Global Matrix";
+        setName(&n);
         model = theModel;
         mf = theMF;
         options = *theOptions;
         
         // Dependency 0: oconv task
-        CreateDDCGlobalOctree * oconvTask = new CreateDDCGlobalOctree(model);
-        addDependency(oconvTask);
+        CreateDDCGlobalOctree * ot = new CreateDDCGlobalOctree(model);
+        addDependency(ot);
         
         // Set the rays
         rays = theRays;

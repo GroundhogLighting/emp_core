@@ -158,7 +158,11 @@ typedef uint32_t u32;
 typedef float f32;
 typedef double f64;
 typedef size_t uxx;
+#ifdef WIN // Needed to do this.
+typedef int bxx;
+#else
 typedef ssize_t bxx;
+#endif
 typedef intptr_t imm;
 typedef uintptr_t umm;
 #endif

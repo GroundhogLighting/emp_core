@@ -289,7 +289,7 @@ void cSkyVault::CalculateSky(cSkyVault::eSunType Suns, bool DoDiffuse, bool DoIl
 			{
 				if ((EIllum > 0) && DoDiffuse)
 				{
-					m_ptRadiance[index][i]=ptLv[i]*NormFac/EIllum;
+					m_ptRadiance[index][i]=(float)(ptLv[i]*NormFac/EIllum);
 				}
 				else
 					m_ptRadiance[index][i]=0;
@@ -306,7 +306,7 @@ void cSkyVault::CalculateSky(cSkyVault::eSunType Suns, bool DoDiffuse, bool DoIl
 			{
 				// add on direct radiation to patch with sun in
 				if (SunAlt > 0 && Ibn >0)
-					m_ptRadiance[index][SunPatch]+= NormFac/(m_ptPatchSolidAngle[SunPatch]);
+					m_ptRadiance[index][SunPatch]+= (float)(NormFac/(m_ptPatchSolidAngle[SunPatch]));
 			}
 			else if (Suns==MANY_SUNS && Ibn>0 && m_SkyModel.GetSkyClearness() > 1 )
 			{

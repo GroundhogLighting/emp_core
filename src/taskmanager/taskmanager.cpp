@@ -145,6 +145,7 @@ bool TaskManager::solve(json * results)
 
             }catch(std::out_of_range& ex) {
                 std::cout << "Exception: " << ex.what() << std::endl;
+				success = false;
             }
             
             return success;

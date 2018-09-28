@@ -18,8 +18,7 @@
 
 *****************************************************************************/
 
-#ifndef TRIANGULATION_H
-#define TRIANGULATION_H
+#pragma once
 
 #include <vector>
 
@@ -293,4 +292,3 @@ public:
 
 extern Triangulation triangulation;
 
-#endif
