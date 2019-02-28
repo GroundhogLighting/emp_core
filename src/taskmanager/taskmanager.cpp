@@ -108,7 +108,7 @@ bool TaskManager::solve(json * results)
 {
 
     if(results != nullptr && !results->empty())
-        throw "Solving a task manager that is non-empty";
+        throw "Solving a task manager into a JSON file that is non-empty";
     
     if(tasks.size() == 0){
 #ifndef AVOID_EMP_CORE_WARNINGS
