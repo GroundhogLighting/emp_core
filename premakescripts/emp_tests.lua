@@ -31,7 +31,8 @@ project "emp_tests"
 
 
     -- Add the platform specific
-    if is_windows then
+    
+    filter "system:windows"
         defines { "WIN" }            
         buildoptions { '/std:c++14' }
         
@@ -58,12 +59,11 @@ project "emp_tests"
                 third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/SketchUpAPI.dll",
             }
         
-    elseif is_macos then
+    
+    filter "system:macosx"
         defines { "MACOS" }        
-        buildoptions { '-std=c++11','-stdlib=libc++',"-Wall" }     
         linkoptions {            
-            "-L "..libs_dir.."/%{cfg.buildcfg}/tbb",  
-            --"-Wl,-rpath,\\$ORIGIN"          
+            "-L "..libs_dir.."/%{cfg.buildcfg}/tbb",              
         }   
         buildoptions {
             "-F /Library/Frameworks",
@@ -83,13 +83,14 @@ project "emp_tests"
             }
         
         
-    elseif is_linux then
+    
+    filter "system:linux"
         defines { "LINUX", "AVOID_SKP" }    
         links {            
             third_party_dir.."/intelTBB/lib/intel64/vc14/*",            
         }
 
-    end
+    
 
     
     
