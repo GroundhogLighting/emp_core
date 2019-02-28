@@ -64,6 +64,7 @@ void genCumulativeSky(EmpModel * model, bool DoIlluminance, bool DoDiffuse, std:
     }
      */
     
+    std::cerr << "EMP_CORE WARNING: gencumulativesky is not yet working... Line: " << __LINE__ <<  " File:" << __FILE__ << std::endl;
     
     // Get model location
     Location * location = model->getLocation();

@@ -34,8 +34,9 @@ Matrix * getDependencyResults() \
 class CBDMTask : public Task {
 private:
     
-    Matrix result; //!< The vector with the ASE for each sensor
+    Matrix result; //!< The vector with the result for each sensor
     float compliance = 0; //!< Percentage of space that is over daylit
+    
 
 protected:
     int interp = EMP_TIME_INTERPOLATION; //!< The interpolation scheme

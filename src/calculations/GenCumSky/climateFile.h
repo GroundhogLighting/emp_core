@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "emp_model.h"
+#include "../../emp_model/emp_model.h"
 
 class cClimateFile
 {

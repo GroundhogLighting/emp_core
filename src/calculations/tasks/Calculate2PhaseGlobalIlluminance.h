@@ -40,8 +40,8 @@ public:
     Calculate2PhaseGlobalIlluminance(EmpModel * theModel, Workplane * wp, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
         
-        std::string name = "2-Phase Illuminance "+wp->getName();
-        setName(&name);
+        std::string n = "2-Phase Illuminance "+wp->getName();
+        setName(&n);
         model = theModel;
         sunMF = theSunMF;
         skyMF = theSkyMF;
@@ -59,8 +59,8 @@ public:
     Calculate2PhaseGlobalIlluminance(EmpModel * theModel,  std::vector<RAY> * theRays, int theSunMF, int theSkyMF, RTraceOptions * theOptions, int interpolation)
     {
         
-        std::string name = "2-Phase Iluminance";
-        setName(&name);
+        std::string n = "2-Phase Iluminance";
+        setName(&n);
         model = theModel;
         sunMF = theSunMF;
         skyMF = theSkyMF;

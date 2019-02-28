@@ -33,7 +33,9 @@
 /* Radiuans into degrees */
 #define RadToDeg(rad)    ((rad)*(180./PI))
 
-
+#ifndef PI
+#define PI 3.141592654
+#endif
 /* Julian date (days into year) */
 int jdate(int month,int day);
 

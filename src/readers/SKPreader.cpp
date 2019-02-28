@@ -1612,7 +1612,8 @@ bool SKPreader::loadRTraceOptions() const
         // Process it
         if (type == SUTypedValueType_Int32 ) {
             int value;
-            SU_RESULT res = SUTypedValueGetInt32(optionSU,&value);
+			SU_RESULT res;
+			res = SUTypedValueGetInt32(optionSU, &value);
             if(res == SU_ERROR_NO_DATA)
                 continue;
             
@@ -1621,7 +1622,8 @@ bool SKPreader::loadRTraceOptions() const
         } else if(type != SUTypedValueType_Float || type != SUTypedValueType_Double){
             
             double value;
-            SU_RESULT res = SUTypedValueGetDouble(optionSU,&value);
+			SU_RESULT res;
+			res = SUTypedValueGetDouble(optionSU, &value);
             if(res == SU_ERROR_NO_DATA)
                 continue;
             

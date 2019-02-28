@@ -22,12 +22,14 @@
 
 
 #ifdef WIN
+
 #define	POPEN(x,y) _popen(x,y)
 #define PCLOSE(x) _pclose(x)
 #define FOPEN(varname,filename,mode) FILE * varname; fopen_s(&varname,filename,mode)
 #define FSCANF fscanf_s
 #define MKDIR(x) _mkdir(x)
 #define ACCESS(x,y) _access(x,y)
+
 #else
 #include <unistd.h>
 #include <sys/stat.h>

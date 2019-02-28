@@ -47,7 +47,7 @@ size_t TaskManager::addTask(Task * t)
 {
 	size_t currentIndex = tasks.size();
 
-	// Check if the Task exists
+	// Check if the Task exists already
 	size_t n = currentIndex;
 	for (size_t i = 0; i < n; i++) {
 		if (compareTasks(tasks[i], t)) {
@@ -80,8 +80,7 @@ size_t TaskManager::addTask(Task * t)
     // Check for mutex    
     for (size_t i = 0; i < currentIndex; i++) {
       if ( checkMutex(tasks[i],t) ) {
-        tasks[i]->addDependency(t);
-        //t->addDependency(tasks[i]);
+        tasks[i]->addDependency(t);        
       }
     }
     
@@ -108,7 +107,7 @@ bool TaskManager::solve(json * results)
 {
 
     if(results != nullptr && !results->empty())
-        throw "Solving a task manager into a JSON file that is non-empty";
+        throw "Cannot solve a task manager that already has results in it";
     
     if(tasks.size() == 0){
 #ifndef AVOID_EMP_CORE_WARNINGS
@@ -145,6 +144,7 @@ bool TaskManager::solve(json * results)
 
             }catch(std::out_of_range& ex) {
                 std::cout << "Exception: " << ex.what() << std::endl;
+				success = false;
             }
             
             return success;

@@ -111,9 +111,9 @@ void cClimateFile::loadModelWeather(EmpModel * model, cClimateFile::eClimateFile
     
     //Get data size
     Location * location = model->getLocation();
-    double s_latitude = location->getLatitude()*M_PI/180.0;
-    double s_longitude = -location->getLongitude()*M_PI/180.0;
-    double s_meridian = -location->getTimeZone() * (-15*M_PI/180.0);
+    double s_latitude = location->getLatitude()*PI/180.0;
+    double s_longitude = -location->getLongitude()*PI/180.0;
+    double s_meridian = -location->getTimeZone() * (-15*PI/180.0);
     
     const size_t m_NumPoints = location->getWeatherSize();
     
@@ -178,9 +178,9 @@ double cClimateFile::GetDirectRad(double hour, int day)
 
 	float ratio, diff;
 
-	ratio=hour-hour1;
+	ratio=(float)(hour-hour1);
 	// TODO: CHeck this (first/last hours of day)
-	diff=(m_ptIgh[pointer+1]-m_ptIdh[pointer+1])-(m_ptIgh[pointer]-m_ptIdh[pointer]);
+	diff= (float)((m_ptIgh[pointer+1]-m_ptIdh[pointer+1])-(m_ptIgh[pointer]-m_ptIdh[pointer]));
 
 	return (m_ptIgh[pointer]-m_ptIdh[pointer]) + diff*ratio;
 }
@@ -192,8 +192,8 @@ double cClimateFile::GetDiffuseRad(double hour, int day)
 	int pointer;
 
 	// find the half hour before current time (climate file has data for 0:30, 1:30,2:30, etc...)
-	hour1=int(hour);
-	hourdiff=hour-hour1;
+	hour1= (float)(hour);
+	hourdiff= (float)(hour-hour1);
 	if (hourdiff >= 0.5) hour1+= 0.5;
 	else hour1-=0.5;
 
@@ -204,8 +204,8 @@ double cClimateFile::GetDiffuseRad(double hour, int day)
 
 	float ratio, diff;
 
-	ratio=hour-hour1;
-	diff=m_ptIdh[pointer+1]-m_ptIdh[pointer];
+	ratio= (float)(hour-hour1);
+	diff= (float)(m_ptIdh[pointer+1]-m_ptIdh[pointer]);
 
 	return m_ptIdh[pointer] + diff*ratio;
 }
@@ -217,8 +217,8 @@ double cClimateFile::GetGlobalRad(double hour, int day)
 	int pointer;
 
 	// find the half hour before current time (climate file has data for 0:30, 1:30,2:30, etc...)
-	hour1=int(hour);
-	hourdiff=hour-hour1;
+	hour1= (float)(hour);
+	hourdiff= (float)(hour-hour1);
 	if (hourdiff >= 0.5) hour1+= 0.5;
 	else hour1-=0.5;
 
@@ -229,8 +229,8 @@ double cClimateFile::GetGlobalRad(double hour, int day)
 
 	float ratio, diff;
 
-	ratio=hour-hour1;
-	diff=m_ptIgh[pointer+1]-m_ptIgh[pointer];
+	ratio= (float)(hour-hour1);
+	diff= (float)(m_ptIgh[pointer+1]-m_ptIgh[pointer]);
 	return m_ptIgh[pointer] + diff*ratio;
 }
 

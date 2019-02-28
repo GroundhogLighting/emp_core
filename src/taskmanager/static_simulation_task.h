@@ -28,8 +28,7 @@
 class StaticSimulationTask : public Task {
     
 public:
-    
-    bool generatesResults = true; //!< Does generate results
+        
     float compliance = 0; //!< Percentage of space that is over daylit
     EmpModel * model; //!< The model
     Workplane * workplane = nullptr; //!< The workplane to which the metric will be calculated
@@ -37,6 +36,11 @@ public:
     Matrix * depResults = nullptr; //!< The dependency results
     double minLux = 0; //!< The minimum illuminance allowed
     double maxLux = EMP_HUGE; //!< The maximum illuminance allowed
+    
+    StaticSimulationTask()
+    {
+        generatesResults = true;
+    }
     
     bool isEqual(Task * t)
     {
@@ -71,8 +75,10 @@ public:
         return false; // Mutex with all Daylight Factor calculations
     }
     
-    bool submitResults(json * results)
+    bool submitResults(json * j)
     {
+        std::string wpName = workplane->getName();
+        bulkResultsIntoJSON(getName(), wpName, depResults, compliance, j);
         return true;
     }
     

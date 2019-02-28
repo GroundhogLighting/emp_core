@@ -32,15 +32,15 @@ public:
     CreateDDCGlobalOctree(EmpModel * theModel)
     {
         
-        std::string name = "DDC Global Octree";
-        setName(&name);
+        std::string n = "DDC Global Octree";
+        setName(&n);
         model = theModel;     
         
         // Add the Octree dependency... standard octree
         OconvOptions oconvOptions = OconvOptions();        
         
-        OconvTask * oconvTask = new OconvTask(model,&oconvOptions);
-        addDependency(oconvTask);// --> Dependency 0
+        OconvTask * ot = new OconvTask(model,&oconvOptions);
+        addDependency(ot);// --> Dependency 0
     }
     
     ~CreateDDCGlobalOctree()

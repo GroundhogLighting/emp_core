@@ -10,6 +10,9 @@ workspace "Emp_core"
     architecture "x86_64"
     configurations { "DEBUG", "RELEASE" } 
     defines { "EMP_CORE" }   
+    staticruntime "On"
+    cppdialect "C++17"
+    systemversion "latest"
 
 filter "configurations:DEBUG"
     symbols "On" 

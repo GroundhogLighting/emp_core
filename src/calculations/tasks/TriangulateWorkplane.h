@@ -59,8 +59,8 @@ public:
         // It Does generate results
         generatesResults = true;
         
-        std::string name = "Triangulate workplane " + aWorkplane->getName();
-        setName(&name);
+        std::string n = "Triangulate workplane " + aWorkplane->getName();
+        setName(&n);
         
     }
     
@@ -70,8 +70,8 @@ public:
      */
     ~TriangulateWorkplane()
     {
-        for(auto triangle : triangles)
-            delete triangle;
+        for(auto t : triangles)
+            delete t;
     }
     
     //! Compares two of these tasks
@@ -134,14 +134,14 @@ public:
                 rays.push_back(RAY());
                 
                 // Get the Triangle
-                Triangle * triangle = t->getTriangleRef(j);
+                Triangle * tri = t->getTriangleRef(j);
                 
                 // Add the Triangle
                 //triangles.push_back(*triangle);
-                triangles.push_back(new Triangle(triangle));
+                triangles.push_back(new Triangle(tri));
                 
                 // Add the center to the ray
-                Point3D o = triangle->getCenter();
+                Point3D o = tri->getCenter();
                 Vector3D n = t->getPolygon()->getNormal();
                 
                 FVECT origin = {(float)o.getX(),(float)o.getY(),(float)o.getZ()};
@@ -188,7 +188,7 @@ public:
     {
         std::string wp = workplane->getName();
         size_t nrows = triangles.size();
-        std::string name = workplane->getName();
+        std::string n = workplane->getName();
         
         auto workplanes = (*j)["workplanes"];
         if( workplanes.is_null() )
@@ -206,7 +206,7 @@ public:
             a = t->getVertex(0);
             b = t->getVertex(1);
             c = t->getVertex(2);
-            (*j)["workplanes"][name].push_back({
+            (*j)["workplanes"][n].push_back({
                 {a.getX(), a.getY() ,a.getZ() },
                 {b.getX(), b.getY() ,b.getZ() },
                 {c.getX(), c.getY() ,c.getZ() },

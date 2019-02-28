@@ -25,10 +25,10 @@ project "emp_core"
     }  
 
 
-    -- Add the platform specific
-    if is_windows then
-        defines { "WIN" }                                  
-        buildoptions { '/std:c++17', '/permissive-' }
+    -- Add the platform specific    
+    filter "system:windows"
+        defines { "WIN", "_CRT_SECURE_NO_WARNINGS" }                                  
+        buildoptions { '/std:c++14' }
         includedirs {
             third_party_dir.."/SketchUp/WIN/headers"
         }
@@ -38,7 +38,7 @@ project "emp_core"
             libs_dir.."/%{cfg.buildcfg}/tbb/tbb.dll",                
             libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc.dll",                
             libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc_proxy.dll",
-            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/sketchup.dll",   
+            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/SketchUpCommonPreferences.dll",   
             third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/SketchUpAPI.dll",
         }
         
@@ -47,14 +47,14 @@ project "emp_core"
             libs_dir.."/%{cfg.buildcfg}/tbb/tbb_debug.dll",
             libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc_debug.dll",
             libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc_proxy_debug.dll",
-            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/sketchup.dll",   
+            third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/SketchUpCommonPreferences.dll",   
             third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/SketchUpAPI.dll",
         }
     
         
-    elseif is_macos then
-        defines { "MACOS" }       
-        buildoptions { '-std=c++11','-stdlib=libc++',"-Wall" }              
+    --elseif is_macos then
+    filter "system:macosx"
+        defines { "MACOS" }               
         linkoptions {            
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb",                                                      
         }    
@@ -74,13 +74,14 @@ project "emp_core"
             links {
                 "tbb_debug","tbbmalloc_debug","tbbmalloc_proxy_debug"
             }
-    elseif is_linux then
+
+    filter "system:linux"
         defines { "LINUX", "AVOID_SKP" }    
         links {            
             third_party_dir.."/intelTBB/lib/intel64/vc14/*",            
         }
 
-    end
+
 
    
 

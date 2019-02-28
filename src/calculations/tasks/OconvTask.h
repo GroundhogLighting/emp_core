@@ -45,8 +45,8 @@ public:
     OconvTask(EmpModel * theModel, OconvOptions * theOptions)
     {
         options = *theOptions;
-        std::string name = buildName();
-        setName(&name);
+        std::string n = buildName();
+        setName(&n);
         model = theModel;
         octreeName = getName() + ".oct";
         fixString(&octreeName);

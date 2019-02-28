@@ -24,10 +24,9 @@
 #include "./triangulation.h"
 #include "../utilities/io.h"
 #include "../../config_constants.h"
+#include "../../os_definitions.h"
 
 
-
-#define MPE_POLY2TRI_USE_DOUBLE
 #define MPE_POLY2TRI_IMPLEMENTATION
 #include "fast-poly2tri/MPE_fastpoly2tri.h"
 
@@ -676,8 +675,8 @@ bool Triangulation::doCDT() {
 			// TRANSFORM TO 2D;
 			// for now we assume the plane is on the XZ plane
 			MPEPolyPoint* Point = MPE_PolyPushPoint(&PolyContext);
-			Point->X = p->getX();
-			Point->Y = p->getY();
+			Point->X = (poly_float)(p->getX());
+			Point->Y = (poly_float)(p->getY());
 		}
 
 
@@ -698,8 +697,8 @@ bool Triangulation::doCDT() {
 				if (p == NULL)
 					continue;
 
-				Hole[j].X = p->getX();
-				Hole[j].Y = p->getY();
+				Hole[j].X = (poly_float)(p->getX());
+				Hole[j].Y = (poly_float)(p->getY());
 			}
 
 			MPE_PolyAddHole(&PolyContext);

@@ -58,8 +58,8 @@ public:
     Interface(json * j)
     {
         setType("interface");
-        std::string name = j->at("name").get<std::string>();
-        setName(&name);
+        std::string n = j->at("name").get<std::string>();
+        setName(&n);
         
         json color1 = j->at("color1").get<json>();
         r1 = getFromJSON("r",&color1);

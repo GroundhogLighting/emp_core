@@ -40,8 +40,8 @@ public:
      */
     CalculateDDCGlobalComponent(EmpModel * theModel, Workplane * wp, int theMF, RTraceOptions * theOptions, int interpolation)
     {
-        std::string name = "DDC Global Component "+wp->getName();
-        setName(&name);
+        std::string n = "DDC Global Component "+wp->getName();
+        setName(&n);
         model = theModel;
         mf = theMF;
         workplane = wp;
@@ -59,8 +59,8 @@ public:
      */
     CalculateDDCGlobalComponent(EmpModel * theModel, std::vector<RAY> * theRays, int theMF, RTraceOptions * theOptions, int interpolation)
     {
-        std::string name = "DDC Global Illuminance";
-        setName(&name);
+        std::string n = "DDC Global Illuminance";
+        setName(&n);
         model = theModel;
         mf = theMF;
         options = theOptions;

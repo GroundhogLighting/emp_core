@@ -23,7 +23,6 @@
 #include <math.h>
 #include "../common/utilities/io.h"
 
-#define PI 3.141592654
 #define MAX_DEC 0.4092797096461111 // 23.45 degrees in Radians
 #define MIN_DEC -MAX_DEC
 

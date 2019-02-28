@@ -55,8 +55,8 @@ public:
     Dielectric(json * j)
     {
         setType("dielectric");
-        std::string name = j->at("name").get<std::string>();
-        setName(&name);
+        std::string n = j->at("name").get<std::string>();
+        setName(&n);
         
         json color = j->at("color").get<json>();
         r = getFromJSON("r",&color);
