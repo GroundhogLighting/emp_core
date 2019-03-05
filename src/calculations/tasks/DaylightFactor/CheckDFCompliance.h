@@ -44,8 +44,7 @@ public:
         depResults = &(dep->result); 
         
         // Set the name
-        std::string the_name = name + " " + wp->getName();
-        setName(&the_name);
+        setName(&name);
     }
     
     CheckDFCompliance(std::string name, EmpModel * theModel, RTraceOptions * theOptions, std::vector<RAY> * theRays, double min, double max)
