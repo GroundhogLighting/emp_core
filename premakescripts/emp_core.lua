@@ -26,14 +26,13 @@ project "emp_core"
 
 
     -- Add the platform specific    
-    filter "system:windows"
+    filter {"system:windows"}
         defines { "WIN", "_CRT_SECURE_NO_WARNINGS" }                                  
-        buildoptions { '/std:c++14' }
         includedirs {
             third_party_dir.."/SketchUp/WIN/headers"
         }
         
-        filter "configurations:RELEASE"    
+        filter {"configurations:RELEASE", "system:windows"}    
         links {
             libs_dir.."/%{cfg.buildcfg}/tbb/tbb.dll",                
             libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc.dll",                
@@ -42,7 +41,7 @@ project "emp_core"
             third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/SketchUpAPI.dll",
         }
         
-        filter "configurations:DEBUG"    
+        filter {"configurations:DEBUG" , "system:windows"}   
         links {
             libs_dir.."/%{cfg.buildcfg}/tbb/tbb_debug.dll",
             libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc_debug.dll",
@@ -65,12 +64,12 @@ project "emp_core"
         links {
             "SketchUpAPI.framework",
         }
-        filter "configurations:RELEASE"    
+        filter {"configurations:RELEASE","system:macosx"}    
             links {
                 "tbb","tbbmalloc","tbbmalloc_proxy"
             }
     
-        filter "configurations:DEBUG"    
+        filter {"configurations:DEBUG","system:macosx"}     
             links {
                 "tbb_debug","tbbmalloc_debug","tbbmalloc_proxy_debug"
             }

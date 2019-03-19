@@ -110,7 +110,7 @@ public:
         
         rtrace_I(rtraceOptions, &octname[0], ambientFileName, rays, &aux);
         
-        aux.calcIrradiance(&result);
+        aux.calcIlluminance(&result);
         
         return true;
     }

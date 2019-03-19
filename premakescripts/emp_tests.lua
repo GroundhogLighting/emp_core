@@ -33,15 +33,12 @@ project "emp_tests"
     -- Add the platform specific
     
     filter "system:windows"
-        defines { "WIN" }            
-        buildoptions { '/std:c++14' }
-        
-        
+        defines { "WIN" }                                    
 
         includedirs {
             third_party_dir.."/SketchUp/WIN/headers"
         }
-        filter "configurations:RELEASE"    
+        filter {"configurations:RELEASE","system:windows"}    
             links {
                 libs_dir.."/%{cfg.buildcfg}/tbb/tbb.dll",                
                 libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc.dll",                
@@ -50,7 +47,7 @@ project "emp_tests"
                 third_party_dir.."/SketchUp/WIN/binaries/sketchup/x64/SketchUpAPI.dll",
             }
 
-        filter "configurations:DEBUG"    
+        filter {"configurations:DEBUG","system:windows"}
             links {
                 libs_dir.."/%{cfg.buildcfg}/tbb/tbb_debug.dll",
                 libs_dir.."/%{cfg.buildcfg}/tbb/tbbmalloc_debug.dll",
@@ -60,7 +57,7 @@ project "emp_tests"
             }
         
     
-    filter "system:macosx"
+    filter {"system:macosx"}
         defines { "MACOS" }        
         linkoptions {            
             "-L "..libs_dir.."/%{cfg.buildcfg}/tbb",              
@@ -72,12 +69,12 @@ project "emp_tests"
         links {
             "SketchUpAPI.framework",
         } 
-        filter "configurations:RELEASE"    
+        filter {"configurations:RELEASE", "system:macosx"}    
             links {
                 "tbb","tbbmalloc","tbbmalloc_proxy"
             }
 
-        filter "configurations:DEBUG"    
+        filter {"configurations:DEBUG","system:macosx"}    
             links {
                 "tbb_debug","tbbmalloc_debug","tbbmalloc_proxy_debug"
             }
