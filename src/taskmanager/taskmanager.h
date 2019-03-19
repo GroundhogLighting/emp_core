@@ -92,6 +92,9 @@ public:
 
     //! Solve all the tasks, but does not put results anywhere
     /*!
+     This is useful because, sometimes, we will solve tasks that do not generate results
+     (e.g. rvu)
+     
      @author German molina
      @return succes
      */
